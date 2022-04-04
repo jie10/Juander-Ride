@@ -1,0 +1,29 @@
+{
+  "name": "juander",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass-develop": "npx sass --watch styles/scss/index.scss  styles/css/index.css",
+    "sass-build": "npx sass styles/scss/index.scss styles/css/index.css",
+    "develop": "npx tsc -w",
+    "build": "npx tsc",
+    "start": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rdramirez/Juander.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rdramirez/Juander/issues"
+  },
+  "homepage": "https://github.com/rdramirez/Juander#readme",
+  "devDependencies": {
+    "lite-server": "^2.6.1",
+    "sass": "^1.49.11",
+    "typescript": "^4.6.3"
+  }
+}
