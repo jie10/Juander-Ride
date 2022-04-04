@@ -1,0 +1,34 @@
+/** Font */
+@mixin font-size($sizeValue: 1.6) {
+    font-size: $sizeValue + px;
+    font-size: calc($sizeValue / 16) + rem;
+}
+
+/** Alignment */
+@mixin full-center-on-page {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/** Screen Size Resolution */
+@mixin for-screen-size-extra-small {
+    @media (max-width: 480px) { @content; }
+}
+
+@mixin for-screen-size-small {
+    @media (max-width: 600px) { @content; }
+}
+
+@mixin for-screen-size-medium {
+    @media (max-width: 900px) { @content; }
+}
+
+@mixin for-screen-size-large {
+    @media (max-width: 1200px) { @content; }
+}
+
+@mixin for-screen-size-extra-large {
+    @media (min-width: 1201px) { @content; }
+}

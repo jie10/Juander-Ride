@@ -1,3 +1,237 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap");
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
 
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/** Font */
+/** Alignment */
+/** Screen Size Resolution */
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-size: 1rem;
+  color: #000000;
+}
+
+h1 {
+  font-size: 32px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 18.72px;
+  font-size: 1.17rem;
+  font-weight: 700;
+}
+
+h4 {
+  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+h5 {
+  font-size: 13.28px;
+  font-size: 0.83rem;
+  font-weight: 700;
+}
+
+h6 {
+  font-size: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+input[type=text], input[type=email], input[type=password] {
+  font-size: 14px;
+  font-size: 0.875rem;
+  color: #000000;
+}
+
+button {
+  font-size: 16px;
+  font-size: 1rem;
+  color: #000000;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.row {
+  padding: 8px;
+  width: 80%;
+  margin: auto;
+}
+
+/** Font */
+/** Alignment */
+/** Screen Size Resolution */
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
+.login-header {
+  width: 80%;
+  margin: 24px auto 36px auto;
+  color: #007ACC;
+}
+.login-header h1 {
+  text-align: center;
+}
+
+/** Font */
+/** Alignment */
+/** Screen Size Resolution */
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
+.login-form-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@media (min-width: 1201px) {
+  .login-form-container {
+    width: 400px;
+  }
+}
+@media (max-width: 1200px) {
+  .login-form-container {
+    width: 450px;
+  }
+}
+@media (max-width: 900px) {
+  .login-form-container {
+    width: 500px;
+  }
+}
+@media (max-width: 600px) {
+  .login-form-container {
+    width: 80%;
+  }
+}
+@media (max-width: 480px) {
+  .login-form-container {
+    width: 85%;
+  }
+}
+
+.login-form {
+  background-color: #FFFFFF;
+  border: 1px solid #C9C9CA;
+  padding: 36px 24px;
+  overflow: hidden;
+}
+
+/** Font */
+/** Alignment */
+/** Screen Size Resolution */
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
+.form-button {
+  border: none;
+  outline: none;
+  padding: 12px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.form-button-primary {
+  background-color: #007ACC;
+  border: 1px solid transparent;
+  color: #FFFFFF;
+}
+
+.form-button-outlined {
+  border: 1px solid #007ACC;
+  color: #007ACC;
+}
+
+/** Font */
+/** Alignment */
+/** Screen Size Resolution */
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
+.form-input {
+  padding: 8px 0;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #000000;
+}
+
+.whitespace {
+  width: 100%;
+  height: 30px;
+}
+
+/** Font */
+/** Alignment */
+/** Screen Size Resolution */
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
+.login-page {
+  width: 100%;
+  height: 100vh;
+  background-color: #EDEDED;
+}
 
 /*# sourceMappingURL=index.css.map */

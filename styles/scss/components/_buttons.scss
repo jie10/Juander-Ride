@@ -1,0 +1,21 @@
+@import '../abstracts/mixins';
+@import '../abstracts/variables';
+
+.form-button {
+    border: none;
+    outline: none;
+    padding: 12px;
+    background-color: $background-color-transparent;
+    cursor: pointer;
+}
+
+.form-button-primary {
+    background-color: $background-color-blue-light;
+    border: 1px solid $border-color-transparent;
+    color: $font-color-white;
+}
+
+.form-button-outlined {
+    border: 1px solid $background-color-blue-light;
+    color: $font-color-blue-light;
+}

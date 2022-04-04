@@ -1,0 +1,48 @@
+@import '../abstracts/mixins';
+@import '../abstracts/variables';
+
+body {
+    font-family: $default-font-family;
+    @include font-size(16);
+    color: $font-color-black;
+}
+
+h1 {
+    @include font-size(32);
+    font-weight: $font-weight-bold;
+}
+
+h2 {
+    @include font-size(24);
+    font-weight: $font-weight-bold;
+}
+
+h3 {
+    @include font-size(18.72);
+    font-weight: $font-weight-bold;
+}
+
+h4 {
+    @include font-size(16);
+    font-weight: $font-weight-bold;
+}
+
+h5 {
+    @include font-size(13.28);
+    font-weight: $font-weight-bold;
+}
+
+h6 {
+    @include font-size(12);
+    font-weight: $font-weight-bold;
+}
+
+input[type=text], input[type=email], input[type=password] {
+    @include font-size(14);
+    color: $font-color-black;
+}
+
+button {
+    @include font-size(16);
+    color: $font-color-black;
+}

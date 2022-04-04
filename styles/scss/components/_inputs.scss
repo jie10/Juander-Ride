@@ -1,0 +1,9 @@
+@import '../abstracts/mixins';
+@import '../abstracts/variables';
+
+.form-input {
+    padding: 8px 0;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid $font-color-black;
+}
