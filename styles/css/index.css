@@ -134,6 +134,15 @@ button {
   text-align: center;
 }
 
+.register-header {
+  width: 80%;
+  margin: 24px auto 36px auto;
+  color: #007ACC;
+}
+.register-header h1 {
+  text-align: center;
+}
+
 /** Font */
 /** Alignment */
 /** Screen Size Resolution */
@@ -173,6 +182,45 @@ button {
 }
 
 .login-form {
+  background-color: #FFFFFF;
+  border: 1px solid #C9C9CA;
+  padding: 36px 24px;
+  overflow: hidden;
+}
+
+.register-form-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@media (min-width: 1201px) {
+  .register-form-container {
+    width: 400px;
+  }
+}
+@media (max-width: 1200px) {
+  .register-form-container {
+    width: 450px;
+  }
+}
+@media (max-width: 900px) {
+  .register-form-container {
+    width: 500px;
+  }
+}
+@media (max-width: 600px) {
+  .register-form-container {
+    width: 80%;
+  }
+}
+@media (max-width: 480px) {
+  .register-form-container {
+    width: 85%;
+  }
+}
+
+.register-form {
   background-color: #FFFFFF;
   border: 1px solid #C9C9CA;
   padding: 36px 24px;

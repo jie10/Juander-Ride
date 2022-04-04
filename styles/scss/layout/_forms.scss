@@ -31,3 +31,34 @@
     padding: 36px 24px;
     overflow: hidden;
 }
+
+.register-form-container {
+    @include full-center-on-page;
+
+    @include for-screen-size-extra-large {
+        width: 400px
+    }
+
+    @include for-screen-size-large {
+        width: 450px
+    }
+
+    @include for-screen-size-medium {
+        width: 500px
+    }
+
+    @include for-screen-size-small {
+        width: 80%;
+    }
+
+    @include for-screen-size-extra-small {
+        width: 85%;
+    }
+}
+
+.register-form {
+    background-color: $background-color-white;
+    border: 1px solid $border-color-gray;
+    padding: 36px 24px;
+    overflow: hidden;
+}
