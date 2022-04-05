@@ -7,6 +7,16 @@ body {
     color: $font-color-black;
 }
 
+a {
+    color: $font-color-blue-light;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 h1 {
     @include font-size(32);
     font-weight: $font-weight-bold;

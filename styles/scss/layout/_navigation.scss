@@ -1,0 +1,12 @@
+@import '../abstracts/mixins';
+@import '../abstracts/variables';
+
+.navigation-bar {
+    display: flex;
+    display: -webkit-flex;
+    height: 48px;
+    background-color: $background-color-blue-light;
+    @include display-flex-row--with-aligned-centered-vertically;
+    justify-content: space-between;
+    z-index: 999;
+}

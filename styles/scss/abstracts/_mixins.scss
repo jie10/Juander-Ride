@@ -12,6 +12,16 @@
     transform: translate(-50%, -50%);
 }
 
+/** Display */
+@mixin display-flex-row--with-aligned-centered-vertically {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: row;
+    -ms-flex-direction: row;
+    align-items: center;
+}
+
 /** Screen Size Resolution */
 @mixin for-screen-size-extra-small {
     @media (max-width: 480px) { @content; }

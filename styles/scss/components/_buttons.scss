@@ -1,12 +1,44 @@
 @import '../abstracts/mixins';
 @import '../abstracts/variables';
 
-.form-button {
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: default;
+}
+
+.navigation-menu-button {
+    border: none;
+    outline: none;
+    padding: 12px;
+    background-color: $background-color-transparent;
+
+    .svg-icon {
+        color: $font-color-white;
+        fill: $font-color-white;
+    }
+}
+
+.search-service-button {
     border: none;
     outline: none;
     padding: 12px;
     background-color: $background-color-transparent;
     cursor: pointer;
+
+    .svg-icon {
+        color: $font-color-white;
+        fill: $font-color-white;
+    }
+}
+
+.form-button {
+    border: none;
+    outline: none;
+    padding: 12px;
+    background-color: $background-color-transparent;
 }
 
 .form-button-primary {

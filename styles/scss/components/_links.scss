@@ -1,0 +1,12 @@
+@import '../abstracts/mixins';
+@import '../abstracts/variables';
+
+.brand-name-link {
+    display: block;
+
+    .brand-name-title {
+        font-weight: $font-weight-bold;
+        color: $font-color-white;
+        @include font-size(24);
+    }
+}

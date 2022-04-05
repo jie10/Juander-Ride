@@ -5,11 +5,15 @@
 
 @use 'layout/headers';
 @use 'layout/forms';
+@use 'layout/navigation';
 
 @use 'components/buttons';
 @use 'components/inputs';
 @use 'components/spaces';
+@use 'components/icons';
+@use 'components/links';
 
 @use 'pages/login';
+@use 'pages/home';
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');

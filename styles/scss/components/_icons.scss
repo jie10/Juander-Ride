@@ -1,0 +1,8 @@
+@import '../abstracts/mixins';
+@import '../abstracts/variables';
+
+.svg-icon {
+    height: 24px;
+    color: $font-color-black;
+    fill: $font-color-black;
+}
