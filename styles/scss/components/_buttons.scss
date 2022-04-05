@@ -16,8 +16,8 @@ button:disabled {
     background-color: $background-color-transparent;
 
     .svg-icon {
-        color: $font-color-white;
-        fill: $font-color-white;
+        color: $font-color-black;
+        fill: $font-color-black;
     }
 }
 
@@ -29,8 +29,8 @@ button:disabled {
     cursor: pointer;
 
     .svg-icon {
-        color: $font-color-white;
-        fill: $font-color-white;
+        color: $font-color-black;
+        fill: $font-color-black;
     }
 }
 
@@ -50,4 +50,37 @@ button:disabled {
 .form-button-outlined {
     border: 1px solid $background-color-blue-light;
     color: $font-color-blue-light;
+}
+
+.close-nav-side-bar-button {
+    border: none;
+    outline: none;
+    padding: 12px;
+    background-color: $background-color-transparent;
+
+    .svg-icon {
+        color: $font-color-white;
+        fill: $font-color-white;
+    }
+}
+
+.nav-menu {
+    .nav-item {
+        .nav-side-button {
+            border: none;
+            outline: none;
+            padding: 6px;
+            background-color: $background-color-transparent;
+            @include font-size(16);
+            color: $font-color-white;
+            border-bottom: 1px solid $border-color-gray;
+        }
+
+        &:nth-child(4)  {
+            .nav-side-button {
+                border-top: 1px solid $border-color-gray;
+                border-bottom: 1px solid $border-color-gray;
+            }
+        }
+    }
 }

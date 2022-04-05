@@ -50,6 +50,7 @@ table {
 
 /** Font */
 /** Alignment */
+/** String Manipulation */
 /** Display */
 /** Screen Size Resolution */
 /** FONT */
@@ -123,6 +124,10 @@ button {
   width: 100%;
 }
 
+.full-height {
+  height: 100vh;
+}
+
 .row {
   padding: 8px;
   width: 80%;
@@ -136,8 +141,16 @@ button {
   right: 0;
 }
 
+.fixed-on-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
 /** Font */
 /** Alignment */
+/** String Manipulation */
 /** Display */
 /** Screen Size Resolution */
 /** FONT */
@@ -163,6 +176,7 @@ button {
 
 /** Font */
 /** Alignment */
+/** String Manipulation */
 /** Display */
 /** Screen Size Resolution */
 /** FONT */
@@ -248,16 +262,15 @@ button {
 
 /** Font */
 /** Alignment */
+/** String Manipulation */
 /** Display */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
 /** COLORS */
 .navigation-bar {
-  display: flex;
-  display: -webkit-flex;
   height: 48px;
-  background-color: #007ACC;
+  background-color: #FFFFFF;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -268,8 +281,51 @@ button {
   z-index: 999;
 }
 
+.navigation-side-bar-container {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.navigation-side-bar {
+  width: 50%;
+  height: 100vh;
+  background-color: #007ACC;
+}
+@media (min-width: 1201px) {
+  .navigation-side-bar {
+    width: 200px;
+  }
+}
+@media (max-width: 1200px) {
+  .navigation-side-bar {
+    width: 250px;
+  }
+}
+@media (max-width: 900px) {
+  .navigation-side-bar {
+    width: 300px;
+  }
+}
+@media (max-width: 600px) {
+  .navigation-side-bar {
+    width: 350px;
+  }
+}
+@media (max-width: 480px) {
+  .navigation-side-bar {
+    width: 80%;
+  }
+}
+.navigation-side-bar .nav-menu .nav-item .nav-side-button {
+  text-align: left;
+  width: 100%;
+  padding: 8px 36px;
+}
+
 /** Font */
 /** Alignment */
+/** String Manipulation */
 /** Display */
 /** Screen Size Resolution */
 /** FONT */
@@ -290,8 +346,8 @@ button:disabled {
   background-color: transparent;
 }
 .navigation-menu-button .svg-icon {
-  color: #FFFFFF;
-  fill: #FFFFFF;
+  color: #000000;
+  fill: #000000;
 }
 
 .search-service-button {
@@ -302,8 +358,8 @@ button:disabled {
   cursor: pointer;
 }
 .search-service-button .svg-icon {
-  color: #FFFFFF;
-  fill: #FFFFFF;
+  color: #000000;
+  fill: #000000;
 }
 
 .form-button {
@@ -324,8 +380,35 @@ button:disabled {
   color: #007ACC;
 }
 
+.close-nav-side-bar-button {
+  border: none;
+  outline: none;
+  padding: 12px;
+  background-color: transparent;
+}
+.close-nav-side-bar-button .svg-icon {
+  color: #FFFFFF;
+  fill: #FFFFFF;
+}
+
+.nav-menu .nav-item .nav-side-button {
+  border: none;
+  outline: none;
+  padding: 6px;
+  background-color: transparent;
+  font-size: 16px;
+  font-size: 1rem;
+  color: #FFFFFF;
+  border-bottom: 1px solid #C9C9CA;
+}
+.nav-menu .nav-item:nth-child(4) .nav-side-button {
+  border-top: 1px solid #C9C9CA;
+  border-bottom: 1px solid #C9C9CA;
+}
+
 /** Font */
 /** Alignment */
+/** String Manipulation */
 /** Display */
 /** Screen Size Resolution */
 /** FONT */
@@ -345,6 +428,7 @@ button:disabled {
 
 /** Font */
 /** Alignment */
+/** String Manipulation */
 /** Display */
 /** Screen Size Resolution */
 /** FONT */
@@ -358,6 +442,7 @@ button:disabled {
 
 /** Font */
 /** Alignment */
+/** String Manipulation */
 /** Display */
 /** Screen Size Resolution */
 /** FONT */
@@ -368,13 +453,35 @@ button:disabled {
 }
 .brand-name-link .brand-name-title {
   font-weight: 700;
-  color: #FFFFFF;
+  color: #007ACC;
   font-size: 24px;
   font-size: 1.5rem;
 }
 
 /** Font */
 /** Alignment */
+/** String Manipulation */
+/** Display */
+/** Screen Size Resolution */
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
+.display-user-email {
+  padding: 8px 36px;
+  color: #FFFFFF;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.display-user-email .user-email {
+  color: #FFFFFF;
+}
+
+/** Font */
+/** Alignment */
+/** String Manipulation */
 /** Display */
 /** Screen Size Resolution */
 /** FONT */
@@ -388,6 +495,7 @@ button:disabled {
 
 /** Font */
 /** Alignment */
+/** String Manipulation */
 /** Display */
 /** Screen Size Resolution */
 /** FONT */

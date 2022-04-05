@@ -12,6 +12,15 @@
     transform: translate(-50%, -50%);
 }
 
+/** String Manipulation */
+@mixin truncate-string {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /** Display */
 @mixin display-flex-row--with-aligned-centered-vertically {
     display: -webkit-flex;

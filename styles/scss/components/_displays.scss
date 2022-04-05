@@ -1,0 +1,12 @@
+@import '../abstracts/mixins';
+@import '../abstracts/variables';
+
+.display-user-email {
+    padding: 8px 36px;
+    color: $font-color-white;
+    @include truncate-string;
+
+    .user-email {
+        color: $font-color-white;
+    }
+}

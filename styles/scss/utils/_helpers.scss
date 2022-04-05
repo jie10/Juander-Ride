@@ -2,6 +2,10 @@
     width: 100%;
 }
 
+.full-height {
+    height: 100vh;
+}
+
 .row {
     padding: 8px;
     width: 80%;
@@ -13,4 +17,11 @@
     top: 0;
     left: 0;
     right: 0;
+}
+
+.fixed-on-left {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
 }
