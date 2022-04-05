@@ -31,6 +31,15 @@
     align-items: center;
 }
 
+@mixin display-flex-coluimn--with-aligned-centered-horizontally {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+    -ms-flex-direction: column;
+    justify-content: center;
+}
+
 /** Borders */
 @mixin borderless-element {
     border: none;

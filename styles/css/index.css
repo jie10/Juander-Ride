@@ -532,7 +532,7 @@ button:disabled {
 /** FONT */
 /** FONT WEIGHT */
 /** COLORS */
-.display-user-email {
+.display-user-name {
   padding: 8px 36px;
   color: #FFFFFF;
   overflow: hidden;
@@ -540,9 +540,25 @@ button:disabled {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
   white-space: nowrap;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+  -ms-flex-direction: column;
+  justify-content: center;
 }
-.display-user-email .user-email {
+.display-user-name .user-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 16px auto;
+  border: 1px solid #C9C9CA;
+  border-radius: 50%;
+}
+.display-user-name .user-name {
   color: #FFFFFF;
+  text-align: center;
+  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 /** Font */

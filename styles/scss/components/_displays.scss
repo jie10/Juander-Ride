@@ -1,12 +1,23 @@
 @import '../abstracts/mixins';
 @import '../abstracts/variables';
 
-.display-user-email {
+.display-user-name {
     padding: 8px 36px;
     color: $font-color-white;
     @include truncate-string;
+    @include display-flex-coluimn--with-aligned-centered-horizontally;
 
-    .user-email {
+    .user-avatar {
+        width: 100px;
+        height: 100px;
+        margin: 16px auto;
+        border: 1px solid $border-color-gray;
+        border-radius: 50%;
+    }
+
+    .user-name {
         color: $font-color-white;
+        text-align: center;
+        @include font-size(12);
     }
 }
