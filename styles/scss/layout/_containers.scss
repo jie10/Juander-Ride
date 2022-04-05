@@ -1,0 +1,13 @@
+@import '../abstracts/mixins';
+@import '../abstracts/variables';
+
+.map-navigation-container {
+    @include position-fixed-from-top;
+    padding: 48px 0 0 0;
+}
+
+.user-profile-container {
+    @include position-fixed-from-top;
+    padding: 48px 0 0 0;
+    overflow: auto;
+}

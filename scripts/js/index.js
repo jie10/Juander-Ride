@@ -2,6 +2,8 @@
 var pageLogin = document.querySelector('.login-page');
 var pageHome = document.querySelector('.home-page');
 var navigationSidebarContainer = document.querySelector('.navigation-side-bar-container');
+var mapNavigationContainer = document.querySelector('.map-navigation-container');
+var userProfileContainer = document.querySelector('.user-profile-container');
 var buttonGoToLoginForm = document.getElementById('go_to_login_form');
 var buttonGoToRegiterForm = document.getElementById('go_to_register_form');
 var buttonUserLogin = document.getElementById('login_button');
@@ -9,6 +11,8 @@ var buttonUserRegister = document.getElementById('register_button');
 var buttonNavigationMenu = document.getElementById('navigation_menu_button');
 var buttonCloseNavSidebar = document.getElementById('close_nav_side_bar_button');
 var buttonUserLogout = document.getElementById('logout_button');
+var buttonUserHome = document.getElementById('home_button');
+var buttonUserProfile = document.getElementById('profile_button');
 var formLogin = document.querySelector('.login-form');
 var formRegister = document.querySelector('.register-form');
 var showLoginForm = function () {
@@ -41,6 +45,26 @@ var showHomepage = function () {
 var hideHomepage = function () {
     pageHome.style.display = "none";
 };
+var showMapNavigationContainer = function () {
+    mapNavigationContainer.style.display = "block";
+};
+var hideMapNavigationContainer = function () {
+    mapNavigationContainer.style.display = "none";
+};
+var showUserProfileContainer = function () {
+    userProfileContainer.style.display = "block";
+};
+var hideUserProfileContainer = function () {
+    userProfileContainer.style.display = "none";
+};
+var displayMapNavigation = function () {
+    showMapNavigationContainer();
+    hideUserProfileContainer();
+};
+var displayUserProfile = function () {
+    showUserProfileContainer();
+    hideMapNavigationContainer();
+};
 var displayLoginForm = function () {
     showLoginForm();
     hideRegisterForm();
@@ -56,6 +80,7 @@ var goToLoginPage = function () {
 var goToHomePage = function () {
     hideLoginPage();
     showHomepage();
+    displayMapNavigation();
 };
 var loginUser = function () {
     goToHomePage();
@@ -63,6 +88,7 @@ var loginUser = function () {
 var logoutUser = function () {
     hideNavSidebar();
     goToLoginPage();
+    displayLoginForm();
 };
 buttonUserLogin.addEventListener('click', function () {
     loginUser();
@@ -85,6 +111,14 @@ buttonNavigationMenu.addEventListener('click', function (e) {
 buttonCloseNavSidebar.addEventListener('click', function (e) {
     e.preventDefault();
     hideNavSidebar();
+});
+buttonUserHome.addEventListener('click', function (e) {
+    e.preventDefault();
+    displayMapNavigation();
+});
+buttonUserProfile.addEventListener('click', function (e) {
+    e.preventDefault();
+    displayUserProfile();
 });
 buttonUserLogout.addEventListener('click', function (e) {
     e.preventDefault();

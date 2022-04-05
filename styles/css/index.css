@@ -50,6 +50,7 @@ table {
 
 /** Font */
 /** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */
@@ -158,6 +159,7 @@ button {
 
 /** Font */
 /** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */
@@ -185,6 +187,7 @@ button {
 
 /** Font */
 /** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */
@@ -270,8 +273,47 @@ button {
   overflow: hidden;
 }
 
+.update-profile-form-container {
+  position: relative;
+  margin: auto;
+  overflow: auto;
+}
+@media (min-width: 1201px) {
+  .update-profile-form-container {
+    width: 400px;
+  }
+}
+@media (max-width: 1200px) {
+  .update-profile-form-container {
+    width: 450px;
+  }
+}
+@media (max-width: 900px) {
+  .update-profile-form-container {
+    width: 500px;
+  }
+}
+@media (max-width: 600px) {
+  .update-profile-form-container {
+    width: 80%;
+  }
+}
+@media (max-width: 480px) {
+  .update-profile-form-container {
+    width: 85%;
+  }
+}
+
+.update-profile-form {
+  background-color: #FFFFFF;
+  border: 1px solid #C9C9CA;
+  padding: 36px 24px;
+  overflow: hidden;
+}
+
 /** Font */
 /** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */
@@ -336,6 +378,34 @@ button {
 
 /** Font */
 /** Alignment */
+/** Element Position */
+/** String Manipulation */
+/** Display */
+/** Borders */
+/** Screen Size Resolution */
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
+.map-navigation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 48px 0 0 0;
+}
+
+.user-profile-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 48px 0 0 0;
+  overflow: auto;
+}
+
+/** Font */
+/** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */
@@ -470,6 +540,7 @@ button:disabled {
 
 /** Font */
 /** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */
@@ -491,6 +562,7 @@ button:disabled {
 
 /** Font */
 /** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */
@@ -506,6 +578,7 @@ button:disabled {
 
 /** Font */
 /** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */
@@ -525,6 +598,7 @@ button:disabled {
 
 /** Font */
 /** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */
@@ -563,6 +637,7 @@ button:disabled {
 
 /** Font */
 /** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */
@@ -578,6 +653,7 @@ button:disabled {
 
 /** Font */
 /** Alignment */
+/** Element Position */
 /** String Manipulation */
 /** Display */
 /** Borders */

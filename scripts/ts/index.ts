@@ -2,6 +2,8 @@
 const pageLogin = document.querySelector('.login-page') as HTMLDivElement;
 const pageHome = document.querySelector('.home-page') as HTMLDivElement;
 const navigationSidebarContainer = document.querySelector('.navigation-side-bar-container') as HTMLDivElement;
+const mapNavigationContainer = document.querySelector('.map-navigation-container') as HTMLDivElement;
+const userProfileContainer = document.querySelector('.user-profile-container') as HTMLDivElement;
 
 const buttonGoToLoginForm = document.getElementById('go_to_login_form') as HTMLButtonElement;
 const buttonGoToRegiterForm = document.getElementById('go_to_register_form') as HTMLButtonElement;
@@ -10,6 +12,8 @@ const buttonUserRegister = document.getElementById('register_button') as HTMLBut
 const buttonNavigationMenu = document.getElementById('navigation_menu_button') as HTMLButtonElement;
 const buttonCloseNavSidebar = document.getElementById('close_nav_side_bar_button') as HTMLButtonElement;
 const buttonUserLogout = document.getElementById('logout_button') as HTMLButtonElement;
+const buttonUserHome = document.getElementById('home_button') as HTMLButtonElement;
+const buttonUserProfile = document.getElementById('profile_button') as HTMLButtonElement;
 
 const formLogin = document.querySelector('.login-form') as HTMLDivElement;
 const formRegister = document.querySelector('.register-form') as HTMLDivElement;
@@ -56,6 +60,32 @@ const hideHomepage = () => {
     pageHome.style.display = "none";
 }
 
+const showMapNavigationContainer = () => {
+    mapNavigationContainer.style.display = "block";
+}
+
+const hideMapNavigationContainer = () => {
+    mapNavigationContainer.style.display = "none";
+}
+
+const showUserProfileContainer = () => {
+    userProfileContainer.style.display = "block";
+}
+
+const hideUserProfileContainer = () => {
+    userProfileContainer.style.display = "none";
+}
+
+const displayMapNavigation = () => {
+    showMapNavigationContainer();
+    hideUserProfileContainer();
+}
+
+const displayUserProfile = () => {
+    showUserProfileContainer();
+    hideMapNavigationContainer();
+}
+
 const displayLoginForm = () => {
     showLoginForm();
     hideRegisterForm();
@@ -74,6 +104,7 @@ const goToLoginPage = () => {
 const goToHomePage = () => {
     hideLoginPage();
     showHomepage();
+    displayMapNavigation();
 }
 
 const loginUser = () => {
@@ -83,6 +114,7 @@ const loginUser = () => {
 const logoutUser = () => {
     hideNavSidebar();
     goToLoginPage();
+    displayLoginForm();
 }
 
 
@@ -113,6 +145,16 @@ buttonNavigationMenu.addEventListener('click', (e) => {
 buttonCloseNavSidebar.addEventListener('click', (e) => {
     e.preventDefault();
     hideNavSidebar();
+});
+
+buttonUserHome.addEventListener('click', (e) => {
+    e.preventDefault();
+    displayMapNavigation();
+});
+
+buttonUserProfile.addEventListener('click', (e) => {
+    e.preventDefault();
+    displayUserProfile();
 });
 
 buttonUserLogout.addEventListener('click', (e) => {

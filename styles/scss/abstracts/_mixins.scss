@@ -12,6 +12,14 @@
     transform: translate(-50%, -50%);
 }
 
+/** Element Position */
+@mixin position-fixed-from-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
 /** String Manipulation */
 @mixin truncate-string {
     overflow: hidden;
