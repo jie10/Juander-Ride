@@ -3,7 +3,6 @@
 
 .form-input {
     padding: 8px 0;
-    border: none;
-    outline: none;
+    @include borderless-element;
     border-bottom: 1px solid $font-color-black;
 }

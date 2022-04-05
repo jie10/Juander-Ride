@@ -52,6 +52,7 @@ table {
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
@@ -148,10 +149,18 @@ button {
   bottom: 0;
 }
 
+.fixed-on-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 /** Font */
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
@@ -178,6 +187,7 @@ button {
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
@@ -264,6 +274,7 @@ button {
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
@@ -327,6 +338,7 @@ button {
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
@@ -406,10 +418,61 @@ button:disabled {
   border-bottom: 1px solid #C9C9CA;
 }
 
+.scan-qr-code-button {
+  border: none;
+  outline: none;
+  padding: 12px;
+  background-color: #007ACC;
+  border: 1px solid transparent;
+  color: #FFFFFF;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: row;
+  -ms-flex-direction: row;
+  align-items: center;
+  margin: 24px auto;
+}
+@media (min-width: 1201px) {
+  .scan-qr-code-button {
+    width: 250px;
+  }
+}
+@media (max-width: 1200px) {
+  .scan-qr-code-button {
+    width: 280px;
+  }
+}
+@media (max-width: 900px) {
+  .scan-qr-code-button {
+    width: 300px;
+  }
+}
+@media (max-width: 600px) {
+  .scan-qr-code-button {
+    width: 60%;
+  }
+}
+@media (max-width: 480px) {
+  .scan-qr-code-button {
+    width: 80%;
+  }
+}
+.scan-qr-code-button .svg-icon {
+  flex-basis: 40px;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+}
+.scan-qr-code-button .label {
+  display: block;
+  margin: auto;
+}
+
 /** Font */
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
@@ -430,6 +493,7 @@ button:disabled {
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
@@ -444,6 +508,7 @@ button:disabled {
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
@@ -462,6 +527,7 @@ button:disabled {
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
@@ -483,6 +549,7 @@ button:disabled {
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */
@@ -497,6 +564,7 @@ button:disabled {
 /** Alignment */
 /** String Manipulation */
 /** Display */
+/** Borders */
 /** Screen Size Resolution */
 /** FONT */
 /** FONT WEIGHT */

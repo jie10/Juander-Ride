@@ -10,8 +10,7 @@ button:disabled {
 }
 
 .navigation-menu-button {
-    border: none;
-    outline: none;
+    @include borderless-element;
     padding: 12px;
     background-color: $background-color-transparent;
 
@@ -22,8 +21,7 @@ button:disabled {
 }
 
 .search-service-button {
-    border: none;
-    outline: none;
+    @include borderless-element;
     padding: 12px;
     background-color: $background-color-transparent;
     cursor: pointer;
@@ -35,8 +33,7 @@ button:disabled {
 }
 
 .form-button {
-    border: none;
-    outline: none;
+    @include borderless-element;
     padding: 12px;
     background-color: $background-color-transparent;
 }
@@ -53,8 +50,7 @@ button:disabled {
 }
 
 .close-nav-side-bar-button {
-    border: none;
-    outline: none;
+    @include borderless-element;
     padding: 12px;
     background-color: $background-color-transparent;
 
@@ -82,5 +78,46 @@ button:disabled {
                 border-bottom: 1px solid $border-color-gray;
             }
         }
+    }
+}
+
+.scan-qr-code-button {
+    @include borderless-element;
+    padding: 12px;
+    background-color: $background-color-blue-light;
+    border: 1px solid $border-color-transparent;
+    color: $font-color-white;
+    @include display-flex-row--with-aligned-centered-vertically;
+    margin: 24px auto;
+
+    @include for-screen-size-extra-large {
+        width: 250px
+    }
+
+    @include for-screen-size-large {
+        width: 280px;
+    }
+
+    @include for-screen-size-medium {
+        width: 300px
+    }
+
+    @include for-screen-size-small {
+        width: 60%;
+    }
+
+    @include for-screen-size-extra-small {
+        width: 80%;
+    }
+
+    .svg-icon {
+        flex-basis: 40px;
+        color: $font-color-white;
+        fill: $font-color-white;
+    }
+
+    .label {
+        display: block;
+        margin: auto;
     }
 }
