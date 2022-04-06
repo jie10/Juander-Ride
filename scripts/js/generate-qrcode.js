@@ -1,4 +1,4 @@
-const userQRCode = document.getElementById('user_qr_code');
+var userQRCode = document.getElementById('user_qr_code');
 
 /** PAGE LOAD INITIALIZATION */
 document.addEventListener('DOMContentLoaded', function() {

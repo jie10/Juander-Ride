@@ -4,6 +4,8 @@ var pageHome = document.querySelector('.home-page');
 var navigationSidebarContainer = document.querySelector('.navigation-side-bar-container');
 var mapNavigationContainer = document.querySelector('.map-navigation-container');
 var userProfileContainer = document.querySelector('.user-profile-container');
+var userQRCodeContainer = document.querySelector('.user-qr-code-container');
+var rideQRCodeContainer = document.querySelector('.ride-qr-code-container');
 var buttonGoToLoginForm = document.getElementById('go_to_login_form');
 var buttonGoToRegiterForm = document.getElementById('go_to_register_form');
 var buttonUserLogin = document.getElementById('login_button');
@@ -13,6 +15,7 @@ var buttonCloseNavSidebar = document.getElementById('close_nav_side_bar_button')
 var buttonUserLogout = document.getElementById('logout_button');
 var buttonUserHome = document.getElementById('home_button');
 var buttonUserProfile = document.getElementById('profile_button');
+var buttonScanQRCode = document.getElementById('scan_qr_code_button');
 var formLogin = document.querySelector('.login-form');
 var formRegister = document.querySelector('.register-form');
 var showLoginForm = function () {
@@ -57,6 +60,18 @@ var showUserProfileContainer = function () {
 var hideUserProfileContainer = function () {
     userProfileContainer.style.display = "none";
 };
+var showRideQRCodeContainer = function () {
+    rideQRCodeContainer.style.display = "block";
+};
+var hideRideQRCodeContainer = function () {
+    rideQRCodeContainer.style.display = "none";
+};
+var showUserQRCodeContainer = function () {
+    userQRCodeContainer.style.display = "block";
+};
+var hideUserQRCodeContainer = function () {
+    userQRCodeContainer.style.display = "none";
+};
 var displayMapNavigation = function () {
     showMapNavigationContainer();
     hideUserProfileContainer();
@@ -72,6 +87,14 @@ var displayLoginForm = function () {
 var displayRegisterForm = function () {
     showRegisterForm();
     hideLoginForm();
+};
+var displayRideQRCodeContainer = function () {
+    showRideQRCodeContainer();
+    hideUserQRCodeContainer();
+};
+var displayUserQRCodeContainer = function () {
+    showUserQRCodeContainer();
+    hideRideQRCodeContainer();
 };
 var goToLoginPage = function () {
     showLoginPage();
@@ -103,6 +126,10 @@ buttonGoToLoginForm.addEventListener('click', function (e) {
 buttonGoToRegiterForm.addEventListener('click', function (e) {
     e.preventDefault();
     displayRegisterForm();
+});
+buttonScanQRCode.addEventListener('click', function (e) {
+    e.preventDefault();
+    displayRideQRCodeContainer();
 });
 buttonNavigationMenu.addEventListener('click', function (e) {
     e.preventDefault();

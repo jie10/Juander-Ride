@@ -7,9 +7,12 @@
     <title>Juander | Shuttle Service Ride Application </title>
     <link rel="icon" type="image/x-icon" href="./images/icons/juander-icon.ico">
     <link href="./styles/css/index.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.2.0/html5-qrcode.min.js" defer></script>
     <script src="./scripts/js/libraries/qrcode.min.js" defer></script>
+    <script src="./scripts/js/libraries/html5-qrcode.min.js" defer></script>
     <script src="./scripts/js/generate-qrcode.js" defer></script>
+    <script src="./scripts/js/scan-qrcode.js" defer></script>
     <script src="./scripts/js/index.js" defer></script>
 </head>
 <body>
@@ -103,6 +106,10 @@
                 <h2 class="user-display-name">John Smith</h2>
                 <div class="user-qr-code" id="user_qr_code"></div>
                 <span class="qr-details">You may ask driver to scan your QR-Code for employee identification</span>
+            </div>
+            <div class="ride-qr-code-container full-width full-height" style="display: none;">
+                <div id="qr-code-scanner"></div>
+                <div id="qr-code-results"></div>                
             </div>
             <button class="scan-qr-code-button fixed-on-bottom" id="scan_qr_code_button">
                 <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

@@ -4,6 +4,8 @@ const pageHome = document.querySelector('.home-page') as HTMLDivElement;
 const navigationSidebarContainer = document.querySelector('.navigation-side-bar-container') as HTMLDivElement;
 const mapNavigationContainer = document.querySelector('.map-navigation-container') as HTMLDivElement;
 const userProfileContainer = document.querySelector('.user-profile-container') as HTMLDivElement;
+const userQRCodeContainer = document.querySelector('.user-qr-code-container') as HTMLDivElement;
+const rideQRCodeContainer = document.querySelector('.ride-qr-code-container') as HTMLDivElement;
 
 const buttonGoToLoginForm = document.getElementById('go_to_login_form') as HTMLButtonElement;
 const buttonGoToRegiterForm = document.getElementById('go_to_register_form') as HTMLButtonElement;
@@ -14,6 +16,7 @@ const buttonCloseNavSidebar = document.getElementById('close_nav_side_bar_button
 const buttonUserLogout = document.getElementById('logout_button') as HTMLButtonElement;
 const buttonUserHome = document.getElementById('home_button') as HTMLButtonElement;
 const buttonUserProfile = document.getElementById('profile_button') as HTMLButtonElement;
+const buttonScanQRCode = document.getElementById('scan_qr_code_button') as HTMLButtonElement;
 
 const formLogin = document.querySelector('.login-form') as HTMLDivElement;
 const formRegister = document.querySelector('.register-form') as HTMLDivElement;
@@ -76,6 +79,22 @@ const hideUserProfileContainer = () => {
     userProfileContainer.style.display = "none";
 }
 
+const showRideQRCodeContainer = () => {
+    rideQRCodeContainer.style.display = "block";
+}
+
+const hideRideQRCodeContainer = () => {
+    rideQRCodeContainer.style.display = "none";
+}
+
+const showUserQRCodeContainer = () => {
+    userQRCodeContainer.style.display = "block";
+}
+
+const hideUserQRCodeContainer = () => {
+    userQRCodeContainer.style.display = "none";
+}
+
 const displayMapNavigation = () => {
     showMapNavigationContainer();
     hideUserProfileContainer();
@@ -94,6 +113,16 @@ const displayLoginForm = () => {
 const displayRegisterForm = () => {
     showRegisterForm();
     hideLoginForm();
+}
+
+const displayRideQRCodeContainer = () => {
+    showRideQRCodeContainer();
+    hideUserQRCodeContainer();
+}
+
+const displayUserQRCodeContainer = () => {
+    showUserQRCodeContainer();
+    hideRideQRCodeContainer();
 }
 
 const goToLoginPage = () => {
@@ -135,6 +164,11 @@ buttonGoToLoginForm.addEventListener('click', (e) => {
 buttonGoToRegiterForm.addEventListener('click', (e) => {
     e.preventDefault();
     displayRegisterForm();
+});
+
+buttonScanQRCode.addEventListener('click', (e) => {
+    e.preventDefault();
+    displayRideQRCodeContainer();
 });
 
 buttonNavigationMenu.addEventListener('click', (e) => {

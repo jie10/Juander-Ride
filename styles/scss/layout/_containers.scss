@@ -12,6 +12,16 @@
     overflow: auto;
 }
 
+.ride-qr-code-container {
+    @include full-center-on-page;
+    top: 40%;
+    border: 2px solid $border-color-gray;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    height: auto;
+}
+
 .user-qr-code-container {
     @include full-center-on-page;
     top: 40%;
