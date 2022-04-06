@@ -160,4 +160,4 @@ buttonUserProfile.addEventListener('click', (e) => {
 buttonUserLogout.addEventListener('click', (e) => {
     e.preventDefault();
     logoutUser();
-})
+});
