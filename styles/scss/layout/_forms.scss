@@ -66,18 +66,18 @@
 .update-profile-form-container {
     position: relative;
     margin: auto;
-    overflow: auto;
+    height: 100%;
 
     @include for-screen-size-extra-large {
-        width: 400px
+        width: 400px;
     }
 
     @include for-screen-size-large {
-        width: 450px
+        width: 450px;
     }
 
     @include for-screen-size-medium {
-        width: 500px
+        width: 500px;
     }
 
     @include for-screen-size-small {
@@ -85,7 +85,7 @@
     }
 
     @include for-screen-size-extra-small {
-        width: 85%;
+        width: 100%;
     }
 }
 

@@ -115,30 +115,50 @@
                         </div>
                     </div>
                     <div class="row">
+                        <label class="input-label" for="update_display_name">Name</label>
                         <input class="form-input full-width" id="update_display_name" name="display_name" type="text" placeholder="Name" autocomplete="off" value="John Smith"/>
                     </div>
                     <div class="row">
+                        <label class="input-label" for="update_department">Department</label>
                         <input class="form-input full-width" id="update_department" name="department" type="text" placeholder="Department" autocomplete="off" value="Information Technology"/>
                     </div>
                     <div class="row">
+                        <label class="input-label" for="update_point_of_origin">Point of Origin</label>
                         <input class="form-input full-width" id="update_point_of_origin" name="point_of_origin" type="text" placeholder="Point of Origin" autocomplete="off" value="Pasay City"/>
                     </div>
                     <div class="row">
-                        <input class="form-input full-width" id="update_onsite_schedule" name="onsite_schedule" type="text" placeholder="Onsite Schedule" autocomplete="off" value="Option A"/>
+                        <label class="input-label" for="update_onsite_schedule">Onsite Schedule</label>
+                        <select class="form-input-select full-width" id="update_onsite_schedule" name="onsite_schedule">
+                            <option value="a" selected>Two days in a week</option>
+                            <option value="b">Two consecutive weeks</option>
+                            <option value="c">Daily every other week</option>
+                            <option value="d">Daily</option>
+                            <option value="e">Others</option>
+                        </select>
                     </div>
                     <div class="row">
-                        <input class="form-input full-width" id="update_specific_onsite_days" name="specific_onsite_days" type="text" placeholder="Point of Origin" autocomplete="off" value="Tuesday, Wednesday"/>
+                        <label class="input-label" for="update_specific_onsite_days">Onsite Days</label>
+                        <select class="form-input-select full-width" id="update_specific_onsite_days" name="specific_onsite_days[]" multiple>
+                            <option value="monday">Monday</option>
+                            <option value="tuesday">Tuesday</option>
+                            <option value="wednesday">Wednesday</option>
+                            <option value="thursday">Thursday</option>
+                            <option value="friday">Friday</option>
+                        </select>
                     </div>
                     <div class="row">
+                        <label class="input-label" for="update_email">Email</label>
                         <input class="form-input full-width" id="update_email" name="email" type="email" placeholder="Email" autocomplete="off" value="john.smith@email.com"/>
                     </div>
                     <div class="row">
+                        <label class="input-label" for="update_email">Password</label>
                         <input class="form-input full-width" id="update_password" name="password" type="password" placeholder="Password" value="Password@123" />
                     </div>
                     <div class="whitespace"></div>
                     <div class="row">
                         <button class="form-button form-button-primary full-width" id="update_profile_button" type="button" disabled>Update</button>
                     </div>
+                    <div class="whitespace"></div>
                 </div>
             </div>
         </div>
