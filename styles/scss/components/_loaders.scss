@@ -1,0 +1,9 @@
+@import '../abstracts/mixins';
+@import '../abstracts/variables';
+
+.page-loader {
+    @include full-center-on-page;
+    @include font-size(16);
+    font-weight: $font-weight-bold;
+    letter-spacing: 1.5px;
+}

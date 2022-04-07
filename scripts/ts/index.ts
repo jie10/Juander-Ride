@@ -6,6 +6,7 @@ const mapNavigationContainer = document.querySelector('.map-navigation-container
 const userProfileContainer = document.querySelector('.user-profile-container') as HTMLDivElement;
 const userQRCodeContainer = document.querySelector('.user-qr-code-container') as HTMLDivElement;
 const rideQRCodeContainer = document.querySelector('.ride-qr-code-container') as HTMLDivElement;
+const loaderPage = document.getElementById('page_loader') as HTMLDivElement;
 
 const buttonGoToLoginForm = document.getElementById('go_to_login_form') as HTMLButtonElement;
 const buttonGoToRegiterForm = document.getElementById('go_to_register_form') as HTMLButtonElement;
@@ -17,12 +18,17 @@ const buttonUserLogout = document.getElementById('logout_button') as HTMLButtonE
 const buttonUserHome = document.getElementById('home_button') as HTMLButtonElement;
 const buttonUserProfile = document.getElementById('profile_button') as HTMLButtonElement;
 const buttonScanQRCode = document.getElementById('scan_qr_code_button') as HTMLButtonElement;
+const buttonStopScanQRCode = document.getElementById('stop_scan_qr_code_button') as HTMLButtonElement;
 
 const formLogin = document.querySelector('.login-form') as HTMLDivElement;
 const formRegister = document.querySelector('.register-form') as HTMLDivElement;
 
 
 /** Functions */
+const delay = (callback: any, DELAY_TIMEOUT_IN_MILLISECONDS: number) => {
+    setTimeout(callback, DELAY_TIMEOUT_IN_MILLISECONDS);
+}
+
 const showLoginForm = () => {
     formLogin.style.display = "block";
 }
@@ -95,6 +101,30 @@ const hideUserQRCodeContainer = () => {
     userQRCodeContainer.style.display = "none";
 }
 
+const showUserScanQRCodeButton = () => {
+    buttonScanQRCode.style.display = "flex";
+}
+
+const hideUserScanQRCodeButton = () => {
+    buttonScanQRCode.style.display = "none";
+}
+
+const showStopUserScanQRCodeButton = () => {
+    buttonStopScanQRCode.style.display = "flex";
+}
+
+const hideStopUserScanQRCodeButton = () => {
+    buttonStopScanQRCode.style.display = "none";
+}
+
+const showPageLoader = () => {
+    loaderPage.style.display = "block";
+}
+
+const hidePageLoader = () => {
+    loaderPage.style.display = "none";
+}
+
 const displayMapNavigation = () => {
     showMapNavigationContainer();
     hideUserProfileContainer();
@@ -123,6 +153,34 @@ const displayRideQRCodeContainer = () => {
 const displayUserQRCodeContainer = () => {
     showUserQRCodeContainer();
     hideRideQRCodeContainer();
+}
+
+const startUserQRCodeScan = () => {
+    buttonScanQRCode.disabled = true;
+    hideUserQRCodeContainer();
+    showPageLoader();
+
+    delay(() => {
+        hidePageLoader();
+        buttonStopScanQRCode.disabled = false;
+        hideUserScanQRCodeButton();
+        showStopUserScanQRCodeButton();
+        displayRideQRCodeContainer();
+    }, 1500);
+}
+
+const stopUserQRCodeScan = () => {
+    buttonStopScanQRCode.disabled = true;
+    hideRideQRCodeContainer();
+    showPageLoader();
+
+    delay(() => {
+        hidePageLoader();
+        buttonScanQRCode.disabled = false;
+        showUserScanQRCodeButton();
+        hideStopUserScanQRCodeButton();
+        displayUserQRCodeContainer();
+    }, 1500);
 }
 
 const goToLoginPage = () => {
@@ -164,11 +222,6 @@ buttonGoToLoginForm.addEventListener('click', (e) => {
 buttonGoToRegiterForm.addEventListener('click', (e) => {
     e.preventDefault();
     displayRegisterForm();
-});
-
-buttonScanQRCode.addEventListener('click', (e) => {
-    e.preventDefault();
-    displayRideQRCodeContainer();
 });
 
 buttonNavigationMenu.addEventListener('click', (e) => {

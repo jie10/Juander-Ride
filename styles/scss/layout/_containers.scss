@@ -14,12 +14,28 @@
 
 .ride-qr-code-container {
     @include full-center-on-page;
-    top: 40%;
     border: 2px solid $border-color-gray;
     border-radius: 8px;
+    width: 600px;
+    height: fit-content;
+    top: 40%;
     padding: 16px;
-    width: 300px;
-    height: auto;
+
+    @include for-screen-size-small {
+        width: 80%;
+    }
+
+    .qr-details {
+        display: inherit;
+        text-align: center;
+        @include font-size(14);
+    }
+
+    video {
+        margin: 16px auto;
+        width: 100% !important;
+        height: auto !important;
+    }
 }
 
 .user-qr-code-container {

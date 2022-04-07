@@ -6,6 +6,7 @@ var mapNavigationContainer = document.querySelector('.map-navigation-container')
 var userProfileContainer = document.querySelector('.user-profile-container');
 var userQRCodeContainer = document.querySelector('.user-qr-code-container');
 var rideQRCodeContainer = document.querySelector('.ride-qr-code-container');
+var loaderPage = document.getElementById('page_loader');
 var buttonGoToLoginForm = document.getElementById('go_to_login_form');
 var buttonGoToRegiterForm = document.getElementById('go_to_register_form');
 var buttonUserLogin = document.getElementById('login_button');
@@ -16,8 +17,12 @@ var buttonUserLogout = document.getElementById('logout_button');
 var buttonUserHome = document.getElementById('home_button');
 var buttonUserProfile = document.getElementById('profile_button');
 var buttonScanQRCode = document.getElementById('scan_qr_code_button');
+var buttonStopScanQRCode = document.getElementById('stop_scan_qr_code_button');
 var formLogin = document.querySelector('.login-form');
 var formRegister = document.querySelector('.register-form');
+var delay = function (callback, DELAY_TIMEOUT_IN_MILLISECONDS) {
+    setTimeout(callback, DELAY_TIMEOUT_IN_MILLISECONDS);
+};
 var showLoginForm = function () {
     formLogin.style.display = "block";
 };
@@ -72,6 +77,24 @@ var showUserQRCodeContainer = function () {
 var hideUserQRCodeContainer = function () {
     userQRCodeContainer.style.display = "none";
 };
+var showUserScanQRCodeButton = function () {
+    buttonScanQRCode.style.display = "flex";
+};
+var hideUserScanQRCodeButton = function () {
+    buttonScanQRCode.style.display = "none";
+};
+var showStopUserScanQRCodeButton = function () {
+    buttonStopScanQRCode.style.display = "flex";
+};
+var hideStopUserScanQRCodeButton = function () {
+    buttonStopScanQRCode.style.display = "none";
+};
+var showPageLoader = function () {
+    loaderPage.style.display = "block";
+};
+var hidePageLoader = function () {
+    loaderPage.style.display = "none";
+};
 var displayMapNavigation = function () {
     showMapNavigationContainer();
     hideUserProfileContainer();
@@ -95,6 +118,30 @@ var displayRideQRCodeContainer = function () {
 var displayUserQRCodeContainer = function () {
     showUserQRCodeContainer();
     hideRideQRCodeContainer();
+};
+var startUserQRCodeScan = function () {
+    buttonScanQRCode.disabled = true;
+    hideUserQRCodeContainer();
+    showPageLoader();
+    delay(function () {
+        hidePageLoader();
+        buttonStopScanQRCode.disabled = false;
+        hideUserScanQRCodeButton();
+        showStopUserScanQRCodeButton();
+        displayRideQRCodeContainer();
+    }, 1500);
+};
+var stopUserQRCodeScan = function () {
+    buttonStopScanQRCode.disabled = true;
+    hideRideQRCodeContainer();
+    showPageLoader();
+    delay(function () {
+        hidePageLoader();
+        buttonScanQRCode.disabled = false;
+        showUserScanQRCodeButton();
+        hideStopUserScanQRCodeButton();
+        displayUserQRCodeContainer();
+    }, 1500);
 };
 var goToLoginPage = function () {
     showLoginPage();
@@ -126,10 +173,6 @@ buttonGoToLoginForm.addEventListener('click', function (e) {
 buttonGoToRegiterForm.addEventListener('click', function (e) {
     e.preventDefault();
     displayRegisterForm();
-});
-buttonScanQRCode.addEventListener('click', function (e) {
-    e.preventDefault();
-    displayRideQRCodeContainer();
 });
 buttonNavigationMenu.addEventListener('click', function (e) {
     e.preventDefault();

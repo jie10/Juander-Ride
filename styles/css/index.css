@@ -408,12 +408,28 @@ button {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  top: 40%;
   border: 2px solid #C9C9CA;
   border-radius: 8px;
+  width: 600px;
+  height: fit-content;
+  top: 40%;
   padding: 16px;
-  width: 300px;
-  height: auto;
+}
+@media (max-width: 600px) {
+  .ride-qr-code-container {
+    width: 80%;
+  }
+}
+.ride-qr-code-container .qr-details {
+  display: inherit;
+  text-align: center;
+  font-size: 14px;
+  font-size: 0.875rem;
+}
+.ride-qr-code-container video {
+  margin: 16px auto;
+  width: 100% !important;
+  height: auto !important;
 }
 
 .user-qr-code-container {
@@ -572,8 +588,64 @@ button:disabled {
   fill: #FFFFFF;
 }
 .scan-qr-code-button .label {
-  display: block;
+  display: inline;
   margin: auto;
+}
+.scan-qr-code-button:disabled {
+  background-color: rgba(0, 122, 204, 0.5);
+}
+
+.stop-scan-qr-code-button {
+  border: none;
+  outline: none;
+  padding: 12px;
+  background-color: #007ACC;
+  border: 1px solid transparent;
+  color: #FFFFFF;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: row;
+  -ms-flex-direction: row;
+  align-items: center;
+  margin: 24px auto;
+}
+@media (min-width: 1201px) {
+  .stop-scan-qr-code-button {
+    width: 250px;
+  }
+}
+@media (max-width: 1200px) {
+  .stop-scan-qr-code-button {
+    width: 280px;
+  }
+}
+@media (max-width: 900px) {
+  .stop-scan-qr-code-button {
+    width: 300px;
+  }
+}
+@media (max-width: 600px) {
+  .stop-scan-qr-code-button {
+    width: 60%;
+  }
+}
+@media (max-width: 480px) {
+  .stop-scan-qr-code-button {
+    width: 80%;
+  }
+}
+.stop-scan-qr-code-button .svg-icon {
+  flex-basis: 40px;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+}
+.stop-scan-qr-code-button .label {
+  display: inline;
+  margin: auto;
+}
+.stop-scan-qr-code-button:disabled {
+  background-color: rgba(0, 122, 204, 0.5);
 }
 
 /** Font */
@@ -687,6 +759,27 @@ button:disabled {
   text-align: center;
   font-size: 12px;
   font-size: 0.75rem;
+}
+
+/** Font */
+/** Alignment */
+/** Element Position */
+/** String Manipulation */
+/** Display */
+/** Borders */
+/** Screen Size Resolution */
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
+.page-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
 }
 
 /** Font */
