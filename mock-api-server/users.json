@@ -1,0 +1,53 @@
+[
+    {
+        "_id": "2fc22f06-0bbb-49da-ad23-85a42aeb873c",
+        "employee_id": "00654123",
+        "name": "John Smith",
+        "department": "Information Technology",
+        "job_role": "Software Engineer",
+        "profile": {
+            "point_of_origin": "Makati City",
+            "onsite_schedule": "a",
+            "onsite_days": "tuesday,wednesday"
+        },
+        "account": {
+            "email": "john.smith@cebupacificair.com",
+            "password": "p@ssword12345",
+            "access_role": "rider"
+        }
+    },
+    {
+        "_id": "04cfc413-7dfe-468a-9cb4-e5b5120e5760",
+        "employee_id": "00765234",
+        "name": "Rachel Reyes",
+        "department": "HR Department",
+        "job_role": "HR Specialist",
+        "profile": {
+            "point_of_origin": "Bacoor, Cavite",
+            "onsite_schedule": "c",
+            "onsite_days": "monday,tuesday,wednesy,thursday,friday"
+        },
+        "account": {
+            "email": "rachel.reyes@cebupacificair.com",
+            "password": "p@ssword12345",
+            "access_role": "rider"
+        }
+    },
+    {
+        "_id": "f070eb4d-21d3-423d-8a90-9655084c922c",
+        "employee_id": "00208245",
+        "name": "Bob Santos",
+        "department": "Admin",
+        "job_role": "Shuttle Service Rider",
+        "profile": {
+            "point_of_origin": "Pasay City",
+            "onsite_schedule": "d",
+            "onsite_days": "monday,tuesday,wednesy,thursday,friday"
+        },
+        "account": {
+            "email": "bob.santos@cebupacificair.com",
+            "password": "p@ssword12345",
+            "access_role": "driver"
+        }
+    }
+]
