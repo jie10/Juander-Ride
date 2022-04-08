@@ -42,9 +42,15 @@ function scanUserQRCode (cameraId) {
         cameraId, 
         { fps: 10 },
         (decodedText, decodedResult) => {
-            console.log(decodedResult, decodedText);
-            stopUserQRCodeScan();
-            displayQRCodeScanToRideSuccess();
+            if (decodedText !== lastResult) {
+                ++countResults;
+                lastResult = decodedText;
+                // Handle on success condition with the decoded message.
+                console.log(decodedResult, decodedText);
+                stopUserQRCodeScan();
+                displayQRCodeScanToRideSuccess();
+            }
+
         }
     )
     .catch((err) => {
