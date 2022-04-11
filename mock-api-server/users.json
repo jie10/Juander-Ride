@@ -25,7 +25,7 @@
         "profile": {
             "point_of_origin": "Bacoor, Cavite",
             "onsite_schedule": "c",
-            "onsite_days": "monday,tuesday,wednesy,thursday,friday"
+            "onsite_days": "monday,tuesday,wednesday,thursday,friday"
         },
         "account": {
             "email": "rachel.reyes@cebupacificair.com",
@@ -42,7 +42,7 @@
         "profile": {
             "point_of_origin": "Pasay City",
             "onsite_schedule": "d",
-            "onsite_days": "monday,tuesday,wednesy,thursday,friday"
+            "onsite_days": "monday,tuesday,wednesday,thursday,friday"
         },
         "account": {
             "email": "bob.santos@cebupacificair.com",

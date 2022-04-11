@@ -1,0 +1,12 @@
+[
+    {
+        "_id": "e29a0062-d98c-4f30-a44d-3c0ca1f2204c",
+        "vehicle_id": "11188999",
+        "vehicle_plate_number": "CEB 1234",
+        "vehicle_type": "bus",
+        "vehicle_color": "white",
+        "schedule": "daily",
+        "schedule_days": "monday,tuesday,wednesday,thursday,friday",
+        "driver_id": "00208245"
+    }
+]

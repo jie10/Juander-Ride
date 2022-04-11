@@ -1,0 +1,37 @@
+[
+    {
+        "_id": "4ca39a7d-1515-499e-8600-87d84bafed84",
+        "email": "john.smith@cebupacificair.com",
+        "employee_id": "00654123",
+        "shuttle_service_id": "11188999",
+        "log_datetime": "2022-04-05T08:54:57Z"
+    },
+    {
+        "_id": "0bbd01bb-ab22-43a0-91e2-57a949d2f5ff",
+        "email": "rachel.reyes@cebupacificair.com",
+        "employee_id": "00765234",
+        "shuttle_service_id": "11188999",
+        "log_datetime": "2022-04-06T08:54:57Z"
+    },
+    {
+        "_id": "81a1fc5c-2d54-478d-a2a7-a109405005e2",
+        "email": "rachel.reyes@cebupacificair.com",
+        "employee_id": "00765234",
+        "shuttle_service_id": "11188999",
+        "log_datetime": "2022-04-07T08:54:57Z"
+    },
+    {
+        "_id": "e715afd6-e038-4c61-b69e-c312f7116b72",
+        "email": "john.smith@cebupacificair.com",
+        "employee_id": "00654123",
+        "shuttle_service_id": "11188999",
+        "log_datetime": "2022-04-06T08:54:57Z"
+    },
+    {
+        "_id": "31c0d745-6420-4309-8aed-1a575f6bbc69",
+        "email": "rachel.reyes@cebupacificair.com",
+        "employee_id": "00765234",
+        "shuttle_service_id": "11188999",
+        "log_datetime": "2022-04-08T08:54:57Z"
+    }
+]

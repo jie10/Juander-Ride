@@ -3,13 +3,13 @@ const path = require('path');
 const fs = require('fs');
 const methodOverride = require('method-override');
 const session = require('express-session');
-const { uuid } = require('uuidv4');
+const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
-const req = require('express/lib/request');
-const res = require('express/lib/response');
+const moment = require('moment');
 
 const PORT = process.env.PORT || 8000;
 const users = JSON.parse(fs.readFileSync(__dirname + '/users.json'));
+const rideLogs = JSON.parse(fs.readFileSync(__dirname + '/ride-logs.json'));
 
 const app = express();
 
@@ -67,7 +67,7 @@ const register = (req, email, password) => {
                     resolve({ "status": 409, "title": "User already exists", "message": "Please try another email to register" });
                 } else {
                     users.push({
-                        "_id": uuid(),
+                        "_id": uuidv4(),
                         "employee_id": "",
                         "name": "",
                         "department": "",
@@ -184,7 +184,9 @@ const scanUserQRCode = (email) => {
             if (email) {
                 const user = users && users.length > 0 ? users.filter(user => {
                     return user.account.email === email;
-                }).map(user => ({
+                }) : null;
+
+                const result = user && user.length > 0 ? { "status": 200, "title": "Scan succesful", "message": "User foundU from our database", "data": user.map(user => ({
                     "employee_id": user.employee_id,
                     "name": user.name,
                     "department": user.department,
@@ -192,15 +194,53 @@ const scanUserQRCode = (email) => {
                     "point_of_origin": user.profile.point_of_origin,
                     "onsite_schedule": user.profile.onsite_schedule,
                     "onsite_days": user.profile.onsite_days
-                })) : null;
-
-                const result = user && user.length > 0 ? { "status": 200, "title": "User found", "message": "User exists from our database", "data": user[0] } : {
+                }))[0] } : {
                     "status": 404,
-                    "title": "User not found",
-                    "message": "Please login and try again."
+                    "title": "Scan failed",
+                    "message": "User not found. Please login and try again."
                 };
         
                 resolve(result);
+            } else {
+                resolve({ "status": 400, "title": "Incomplete request", "message": "Please make sure you indicate user email to retrieve their data" })
+            }
+
+        } catch(err) {
+            reject(err);
+        }
+    });
+}
+
+const scanQRCodeToRide = (email, shuttleServiceId) => {
+    return new Promise((resolve, reject) => {
+        try {
+            if (email) {
+                const user = users && users.length > 0 ? users.filter(user => {
+                    return user.account.email === email;
+                }) : null;
+
+                if (user && user.length > 0) {
+                    rideLogs.push({
+                        "_id": uuidv4(),
+                        "email": users[0].account.email,
+                        "employee_id": users[0].employee_id,
+                        "shuttle_service_id": shuttleServiceId,
+                        "log_datetime": moment.utc().format()
+                    });
+
+                    resolve({
+                                "status": 200,
+                                "title": "Scan successful",
+                                "message": "You can now use the shuttle service",
+                                "data": rideLogs
+                            });
+                } else {
+                    resolve({
+                        "status": 404,
+                        "title": "Scan failed",
+                        "message": "User not found. Please login and try again."
+                    });
+                }
             } else {
                 resolve({ "status": 400, "title": "Incomplete request", "message": "Please make sure you indicate user email to retrieve their data" })
             }
@@ -244,7 +284,7 @@ app.delete('/logout', (req, res) => {
         });
 });
 
-app.get('/user/scan', (req, res) => {
+app.post('/user/scan', (req, res) => {
     scanUserQRCode(req.body.email)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
@@ -252,6 +292,16 @@ app.get('/user/scan', (req, res) => {
             console.error(err);
         });
 });
+
+app.route('/user/ride')
+    .post((req, res) => {
+        scanQRCodeToRide(req.body.email, req.body.shuttle_service_id)
+            .then(result => res.status(result.status).json(result))
+            .catch(err => {
+                res.status(500).json(err);
+                console.error(err);
+            });
+    });
 
 app.get('/user/view', (req, res) => {
     viewUser(req.body.email)
@@ -273,7 +323,6 @@ app.patch('/user/update', (req, res) => {
 
 app.route('/users')
     .get((req, res) => {
-        console.log(users)
         res.json(users)
     });
 
