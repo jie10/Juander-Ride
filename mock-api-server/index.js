@@ -10,6 +10,7 @@ const moment = require('moment');
 const PORT = process.env.PORT || 8000;
 const users = JSON.parse(fs.readFileSync(__dirname + '/users.json'));
 const rideLogs = JSON.parse(fs.readFileSync(__dirname + '/ride-logs.json'));
+const rides = JSON.parse(fs.readFileSync(__dirname + '/rides.json'));
 
 const app = express();
 
@@ -251,6 +252,55 @@ const scanQRCodeToRide = (email, shuttleServiceId) => {
     });
 }
 
+const searchAvailableRide = (email, query, filter) => {
+    return new Promise((resolve, reject) => {
+        try {
+            if (query) {
+                const matches = rides && rides.length > 0 ? rides.filter(ride => {
+                    return ride.vehicle_id === query || ride.vehicle_plate_number === query;
+                }) : null;
+
+                if (matches && matches.length > 0) {
+                    let matchWithFilter = filter ? filter.split(',').filter(day => {
+                        return matches[0].schedule_days.split(',').filter(d => {
+                            return new RegExp(day, 'gi').test(d)
+                        });
+                    }) : null;
+
+
+                    if (matchWithFilter) {
+                        resolve({
+                                "status": 200,
+                                "title": "Search succesful",
+                                "message": "Found " + matches.length + (matches.length > 0 ? " match" : " matches") + " for keyword: " + query,
+                                "result": matchWithFilter.length > 0 ? matchWithFilter : matches
+                        });  
+                    } else {
+                        resolve({
+                                "status": 200,
+                                "title": "Search succesful",
+                                "message": "Found " + matches.length + (matches.length > 0 ? " match" : " matches") + " for keyword: " + query,
+                                "result": matches
+                        });  
+                    }
+
+                } else {
+                    resolve({
+                        "status": 404,
+                        "title": "Search failed",
+                        "message": "No match found with keyword " + query
+                    });
+                }
+            } else {
+                resolve(rides.filter(ride => ride.email === email));  
+            }
+
+        } catch(err) {
+            reject(err);
+        }
+    });
+}
+
 app.post('/login', (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
@@ -294,6 +344,17 @@ app.post('/user/scan', (req, res) => {
 });
 
 app.route('/user/ride')
+    .get((req, res) => {
+        let query = req.query.q;
+        let filter = req.query.f;
+
+        searchAvailableRide(query, filter)
+            .then(result => res.status(result.status).json(result))
+            .catch(err => {
+                res.status(500).json(err);
+                console.error(err);
+            });
+    })
     .post((req, res) => {
         scanQRCodeToRide(req.body.email, req.body.shuttle_service_id)
             .then(result => res.status(result.status).json(result))

@@ -7,6 +7,18 @@
         "vehicle_color": "white",
         "schedule": "daily",
         "schedule_days": "monday,tuesday,wednesday,thursday,friday",
+        "isAvailable": true,
         "driver_id": "00208245"
+    },
+    {
+        "_id": "bbb4bed8-b907-4886-a60a-d27398a855de",
+        "vehicle_id": "22299111",
+        "vehicle_plate_number": "CEB 5678",
+        "vehicle_type": "bus",
+        "vehicle_color": "yellow",
+        "schedule": "daily",
+        "schedule_days": "monday,tuesday,wednesday,thursday,friday",
+        "isAvailable": false,
+        "driver_id": "00309356"
     }
 ]
