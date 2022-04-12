@@ -239,3 +239,12 @@ buttonUserLogout.addEventListener('click', function (e) {
     e.preventDefault();
     logoutUser();
 });
+document.addEventListener('DOMContentLoaded', function () {
+    var currentSession = retrieveCurrentSession();
+    if (currentSession) {
+        goToHomePage();
+    }
+    else {
+        goToLoginPage();
+    }
+});

@@ -303,3 +303,14 @@ buttonUserLogout.addEventListener('click', (e) => {
     e.preventDefault();
     logoutUser();
 });
+
+/** PAGE LOAD INITIALIZATION */
+document.addEventListener('DOMContentLoaded', function() {
+    let currentSession = retrieveCurrentSession();
+
+    if (currentSession) {
+        goToHomePage();
+    } else {
+        goToLoginPage();
+    }
+});

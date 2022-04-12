@@ -44,9 +44,18 @@ button:disabled {
     color: $font-color-white;
 }
 
+.form-button-primary:disabled {
+    background-color: $background-color-blue-light-translucent;
+}
+
 .form-button-outlined {
     border: 1px solid $background-color-blue-light;
     color: $font-color-blue-light;
+}
+
+.form-button-outlined:disabled {
+    border: 1px solid $background-color-blue-light-translucent;
+    color: $font-color-blue-light-translucent;
 }
 
 .close-nav-side-bar-button {

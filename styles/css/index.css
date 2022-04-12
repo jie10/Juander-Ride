@@ -511,9 +511,18 @@ button:disabled {
   color: #FFFFFF;
 }
 
+.form-button-primary:disabled {
+  background-color: rgba(0, 122, 204, 0.5);
+}
+
 .form-button-outlined {
   border: 1px solid #007ACC;
   color: #007ACC;
+}
+
+.form-button-outlined:disabled {
+  border: 1px solid rgba(0, 122, 204, 0.5);
+  color: rgba(0, 122, 204, 0.5);
 }
 
 .close-nav-side-bar-button {

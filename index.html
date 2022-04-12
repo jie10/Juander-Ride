@@ -19,7 +19,7 @@
     <script src="./scripts/js/scan-qrcode.js" defer></script>
 </head>
 <body>
-    <div class="login-page" style="display: block;">
+    <div class="login-page" style="display: none;">
         <div class="login-form-container">
             <header class="login-header">
                 <h1>Juander</h1>
@@ -39,7 +39,7 @@
                     <button class="form-button form-button-primary full-width" id="login_button" type="button">Login</button>
                 </div>
                 <div class="row">
-                    <button class="form-button form-button-outlined full-width" id="go_to_register_form" type="button">Register</button>
+                    <button class="form-button form-button-outlined full-width" id="go_to_register_form" type="button" disabled>Register</button>
                 </div>
             </div>
             <div class="register-form" style="display: none;">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="whitespace"></div>
                 <div class="row">
-                    <button class="form-button form-button-primary full-width" id="register_button" type="button">Register</button>
+                    <button class="form-button form-button-primary full-width" id="register_button" type="button" disabled>Register</button>
                 </div>
                 <div class="row">
                     <button class="form-button form-button-outlined full-width" id="go_to_login_form" type="button">Login</button>
