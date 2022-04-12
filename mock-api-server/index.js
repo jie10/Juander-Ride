@@ -20,6 +20,32 @@ app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+const checkLoginSession = (req, res, next) => {
+    if (!req.session.user) {
+        next();
+    } else {
+        res.status(400).json({
+            "status": 400,
+            "title": "User already logged in",
+            "message": "Current user has existing session. Please logout to login again.",
+            "inCurrentSession": true
+        });
+    }
+};
+
+const checkCurrentSession = (req, res, next) => {
+    if (req.session.user) {
+        next();
+    } else {
+        res.status(401).json({
+            "status": 401,
+            "title": "Unauthorized Access",
+            "message": "Please redirect to login page and try again.",
+            "inCurrentSession": true
+        });
+    }
+};
+
 const login = (req, email, password) => {
     return new Promise((resolve, reject) => {
         try {
@@ -395,7 +421,7 @@ const viewRideLogs = (email) => {
     });
 }
 
-app.post('/login', (req, res) => {
+app.post('/login', checkLoginSession, (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
 
@@ -407,7 +433,7 @@ app.post('/login', (req, res) => {
         });
 });
 
-app.post('/register', (req, res) => {
+app.post('/register', checkLoginSession, (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
 
@@ -419,7 +445,7 @@ app.post('/register', (req, res) => {
         });
 });
 
-app.delete('/logout', (req, res) => {
+app.delete('/logout', checkCurrentSession, (req, res) => {
     logout(req)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
@@ -428,7 +454,7 @@ app.delete('/logout', (req, res) => {
         });
 });
 
-app.post('/user/scan', (req, res) => {
+app.post('/user/scan', checkCurrentSession, (req, res) => {
     scanUserQRCode(req.body.email)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
@@ -437,7 +463,7 @@ app.post('/user/scan', (req, res) => {
         });
 });
 
-app.get('/user/rides', (req, res) => {
+app.get('/user/rides', checkCurrentSession, (req, res) => {
     viewRideLogs(req.body.email)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
@@ -447,7 +473,7 @@ app.get('/user/rides', (req, res) => {
 });
 
 app.route('/user/ride')
-    .get((req, res) => {
+    .get(checkCurrentSession, (req, res) => {
         let query = req.query.q;
         let filterByDays = req.query.fdays;
         let filterByAvailability = req.query.favail;
@@ -459,7 +485,7 @@ app.route('/user/ride')
                 console.error(err);
             });
     })
-    .post((req, res) => {
+    .post(checkCurrentSession, (req, res) => {
         scanQRCodeToRide(req.body.email, req.body.shuttle_service_id)
             .then(result => res.status(result.status).json(result))
             .catch(err => {
@@ -468,7 +494,7 @@ app.route('/user/ride')
             });
     });
 
-app.get('/user/view', (req, res) => {
+app.get('/user/view', checkCurrentSession, (req, res) => {
     viewUser(req.body.email)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
@@ -477,7 +503,7 @@ app.get('/user/view', (req, res) => {
         });
 });
 
-app.patch('/user/update', (req, res) => {
+app.patch('/user/update', checkCurrentSession, (req, res) => {
     updateUser(req.body)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
@@ -487,7 +513,7 @@ app.patch('/user/update', (req, res) => {
 });
 
 app.route('/users')
-    .get((req, res) => {
+    .get(checkCurrentSession, (req, res) => {
         res.json(users)
     });
 
