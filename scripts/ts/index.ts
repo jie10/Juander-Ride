@@ -8,6 +8,9 @@ const userQRCodeContainer = document.querySelector('.user-qr-code-container') as
 const rideQRCodeContainer = document.querySelector('.ride-qr-code-container') as HTMLDivElement;
 const loaderPage = document.getElementById('page_loader') as HTMLDivElement;
 
+const inputLoginEmail = document.getElementById('login_email') as HTMLInputElement;
+const inputLoginPassword = document.getElementById('login_password') as HTMLInputElement;
+
 const buttonGoToLoginForm = document.getElementById('go_to_login_form') as HTMLButtonElement;
 const buttonGoToRegiterForm = document.getElementById('go_to_register_form') as HTMLButtonElement;
 const buttonUserLogin = document.getElementById('login_button') as HTMLButtonElement;
@@ -24,10 +27,24 @@ const formLogin = document.querySelector('.login-form') as HTMLDivElement;
 const formRegister = document.querySelector('.register-form') as HTMLDivElement;
 
 
+/** Variables */
+const BASE_LOCAL_URL = 'http://localhost:8000';
+
+
 /** Functions */
 const delay = (callback: any, DELAY_TIMEOUT_IN_MILLISECONDS: number) => {
     setTimeout(callback, DELAY_TIMEOUT_IN_MILLISECONDS);
 }
+
+const stringifyJSON = (obj: Object) => JSON.stringify(obj);
+
+const parseJSON = (str: string) => JSON.parse(str);
+
+const retrieveCurrentSession = () => localStorage.getItem('user');
+
+const storeCurrentSession = (user: string) => localStorage.setItem('user', user);
+
+const destroyCurrentSession = () => localStorage.removeItem('user');
 
 const showLoginForm = () => {
     formLogin.style.display = "block";
@@ -195,13 +212,51 @@ const goToHomePage = () => {
 }
 
 const loginUser = () => {
-    goToHomePage();
+    let input = {
+        "email": inputLoginEmail.value,
+        "password": inputLoginPassword.value
+    };
+
+    fetch(BASE_LOCAL_URL + "/login", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON(input)
+    })
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            if (data.status === 200) {
+                let user = data.data.email;
+                storeCurrentSession(user);
+                goToHomePage();
+            } else {
+                showAlertStatus(data.title, data.message, 'error');
+                goToLoginPage();
+            }
+        })
+        .catch(function (error) {
+            showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+            console.error(error);
+        });
+    
 }
 
 const logoutUser = () => {
-    hideNavSidebar();
-    goToLoginPage();
-    displayLoginForm();
+    fetch(BASE_LOCAL_URL + '/logout?_method=DELETE')
+        .then(() => {
+            destroyCurrentSession();
+            hideNavSidebar();
+            goToLoginPage();
+            displayLoginForm();
+        })
+        .catch(function (error) {
+            showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+            console.error(error);
+        });
 }
 
 

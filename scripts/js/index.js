@@ -7,6 +7,8 @@ var userProfileContainer = document.querySelector('.user-profile-container');
 var userQRCodeContainer = document.querySelector('.user-qr-code-container');
 var rideQRCodeContainer = document.querySelector('.ride-qr-code-container');
 var loaderPage = document.getElementById('page_loader');
+var inputLoginEmail = document.getElementById('login_email');
+var inputLoginPassword = document.getElementById('login_password');
 var buttonGoToLoginForm = document.getElementById('go_to_login_form');
 var buttonGoToRegiterForm = document.getElementById('go_to_register_form');
 var buttonUserLogin = document.getElementById('login_button');
@@ -20,9 +22,15 @@ var buttonScanQRCode = document.getElementById('scan_qr_code_button');
 var buttonStopScanQRCode = document.getElementById('stop_scan_qr_code_button');
 var formLogin = document.querySelector('.login-form');
 var formRegister = document.querySelector('.register-form');
+var BASE_LOCAL_URL = 'http://localhost:8000';
 var delay = function (callback, DELAY_TIMEOUT_IN_MILLISECONDS) {
     setTimeout(callback, DELAY_TIMEOUT_IN_MILLISECONDS);
 };
+var stringifyJSON = function (obj) { return JSON.stringify(obj); };
+var parseJSON = function (str) { return JSON.parse(str); };
+var retrieveCurrentSession = function () { return localStorage.getItem('user'); };
+var storeCurrentSession = function (user) { return localStorage.setItem('user', user); };
+var destroyCurrentSession = function () { return localStorage.removeItem('user'); };
 var showLoginForm = function () {
     formLogin.style.display = "block";
 };
@@ -153,12 +161,49 @@ var goToHomePage = function () {
     displayMapNavigation();
 };
 var loginUser = function () {
-    goToHomePage();
+    var input = {
+        "email": inputLoginEmail.value,
+        "password": inputLoginPassword.value
+    };
+    fetch(BASE_LOCAL_URL + "/login", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON(input)
+    })
+        .then(function (result) {
+        return result.json();
+    })
+        .then(function (data) {
+        if (data.status === 200) {
+            var user = data.data.email;
+            storeCurrentSession(user);
+            goToHomePage();
+        }
+        else {
+            showAlertStatus(data.title, data.message, 'error');
+            goToLoginPage();
+        }
+    })
+        .catch(function (error) {
+        showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+        console.error(error);
+    });
 };
 var logoutUser = function () {
-    hideNavSidebar();
-    goToLoginPage();
-    displayLoginForm();
+    fetch(BASE_LOCAL_URL + '/logout?_method=DELETE')
+        .then(function () {
+        destroyCurrentSession();
+        hideNavSidebar();
+        goToLoginPage();
+        displayLoginForm();
+    })
+        .catch(function (error) {
+        showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+        console.error(error);
+    });
 };
 buttonUserLogin.addEventListener('click', function () {
     loginUser();

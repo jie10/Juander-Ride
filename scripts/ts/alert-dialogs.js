@@ -1,5 +1,4 @@
-"use strict";
-function showAlertStatus(title, text, status) {
+function showAlertStatus (title, text, status) {
     Swal.fire({
         title: title,
         text: text,

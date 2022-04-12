@@ -424,6 +424,7 @@ const viewRideLogs = (email) => {
 app.post('/login', checkLoginSession, (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
+    console.log(req.body)
 
     login(req, email, password)
         .then(result => res.status(result.status).json(result))
