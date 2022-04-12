@@ -6,7 +6,7 @@
         "vehicle_type": "bus",
         "vehicle_color": "white",
         "schedule": "daily",
-        "schedule_days": "monday,tuesday,wednesday,thursday,friday",
+        "schedule_days": "mon,tues,wed,thurs,fri",
         "isAvailable": true,
         "driver_id": "00208245"
     },
@@ -17,7 +17,7 @@
         "vehicle_type": "bus",
         "vehicle_color": "yellow",
         "schedule": "daily",
-        "schedule_days": "monday,tuesday,wednesday,thursday,friday",
+        "schedule_days": "mon,tues,wed,thurs,fri",
         "isAvailable": false,
         "driver_id": "00309356"
     }

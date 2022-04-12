@@ -245,14 +245,13 @@ const scanQRCodeToRide = (email, shuttleServiceId) => {
             } else {
                 resolve({ "status": 400, "title": "Incomplete request", "message": "Please make sure you indicate user email to retrieve their data" })
             }
-
         } catch(err) {
             reject(err);
         }
     });
 }
 
-const searchAvailableRide = (email, query, filter) => {
+const searchRide = (query, filterByDays, filterByAvailability) => {
     return new Promise((resolve, reject) => {
         try {
             if (query) {
@@ -261,29 +260,65 @@ const searchAvailableRide = (email, query, filter) => {
                 }) : null;
 
                 if (matches && matches.length > 0) {
-                    let matchWithFilter = filter ? filter.split(',').filter(day => {
-                        return matches[0].schedule_days.split(',').filter(d => {
-                            return new RegExp(day, 'gi').test(d)
-                        });
+                    let matchWithFilter = filterByDays ? matches.filter(match => {
+                        return match.schedule_days.split(',').filter(d => {
+                            return filterByDays.split(',').some(day => {
+                                return new RegExp(day, 'gi').test(d)
+                            })
+                        }).length > 0
                     }) : null;
 
+                    matchWithFilter = filterByAvailability ? matchWithFilter.filter(match => String(match.isAvailable) === filterByAvailability) : matchWithFilter;
 
                     if (matchWithFilter) {
                         resolve({
                                 "status": 200,
                                 "title": "Search succesful",
-                                "message": "Found " + matches.length + (matches.length > 0 ? " match" : " matches") + " for keyword: " + query,
-                                "result": matchWithFilter.length > 0 ? matchWithFilter : matches
+                                "message": "Found " + matchWithFilter.length + (matchWithFilter.length > 1 ? " matches" : " match") + " for keyword: " + query,
+                                "result": matchWithFilter.length > 0 ? matchWithFilter.map(driver => {
+                                    driver.isAvailable = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
+                                    return driver;
+                                }) : []
                         });  
                     } else {
                         resolve({
                                 "status": 200,
                                 "title": "Search succesful",
                                 "message": "Found " + matches.length + (matches.length > 0 ? " match" : " matches") + " for keyword: " + query,
-                                "result": matches
+                                "result": matches.map(driver => {
+                                    driver.isAvailable = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
+                                    return driver;
+                                })
                         });  
                     }
+                } else {
+                    resolve({
+                        "status": 404,
+                        "title": "Search failed",
+                        "message": "No match found with keyword " + query
+                    });
+                }
+            } else if (filterByDays || filterByAvailability) {
+                let matchWithFilter = filterByDays ? rides.filter(match => {
+                    return match.schedule_days.split(',').filter(d => {
+                        return filterByDays.split(',').some(day => {
+                            return new RegExp(day, 'gi').test(d)
+                        })
+                    }).length > 0
+                }) : rides;
 
+                matchWithFilter = filterByAvailability ? matchWithFilter.filter(match => String(match.isAvailable) === filterByAvailability) : matchWithFilter;
+
+                if (matchWithFilter) {
+                    resolve({
+                            "status": 200,
+                            "title": "Search succesful",
+                            "message": "Found " + matchWithFilter.length + (matchWithFilter.length > 1 ? " matches" : " match") + " for keyword: " + query,
+                            "result": matchWithFilter.length > 0 ? matchWithFilter.map(driver => {
+                                driver.isAvailable = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
+                                return driver;
+                            }) : []
+                    });  
                 } else {
                     resolve({
                         "status": 404,
@@ -292,9 +327,68 @@ const searchAvailableRide = (email, query, filter) => {
                     });
                 }
             } else {
-                resolve(rides.filter(ride => ride.email === email));  
+                resolve(rides && rides.length > 0 ? {
+                    "status": 200,
+                    "title": "Load Successful",
+                    "message": rides.length + " rides found",
+                    "data": rides.map(driver => {
+                        driver.isAvailable = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
+                        return driver;
+                    })
+                } : {
+                    "status": 200,
+                    "title": "Load Successful",
+                    "message": "No rides found"
+                });  
             }
 
+        } catch(err) {
+            reject(err);
+        }
+    });
+}
+
+const viewRideLogs = (email) => {
+    return new Promise((resolve, reject) => {
+        try {
+            if (email) {
+                const logs = rideLogs && rideLogs.length > 0 ? rideLogs.filter(rideLog => {
+                    return rideLog.email === email;
+                }) : null;
+
+                if (logs && logs.length > 0) {
+                    let driverInfo = rides.filter(driver => {
+                        return driver.vehicle_id === logs[0].shuttle_service_id;
+                    });
+
+                    resolve({
+                        "status": 200,
+                        "title": "Ride logs found",
+                        "message": "Found logs from current user",
+                        "data": logs.map(log => {
+                                let { log_datetime } = log;
+                                let driver = driverInfo[0];
+                                return {
+                                    "vehicle_id": driver.vehicle_id,
+                                    "vehicle_plate_number": driver.vehicle_plate_number,
+                                    "vehicle_type": driver.vehicle_type,
+                                    "vehicle_color": driver.vehicle_color,
+                                    "driver_id": driver.driver_id,
+                                    "log_datetime": moment(log_datetime).format('MM-DD-YYYY h:mm A'),
+                                    "log_timestamp": log_datetime
+                                }
+                            })
+                    });
+                } else {
+                    resolve({
+                        "status": 404,
+                        "title": "No ride logs yet",
+                        "message": "No logs found from current user"
+                    });
+                }
+            } else {
+                resolve({ "status": 400, "title": "Incomplete request", "message": "Please make sure you indicate user email to retrieve their data" })
+            }
         } catch(err) {
             reject(err);
         }
@@ -343,12 +437,22 @@ app.post('/user/scan', (req, res) => {
         });
 });
 
+app.get('/user/rides', (req, res) => {
+    viewRideLogs(req.body.email)
+        .then(result => res.status(result.status).json(result))
+        .catch(err => {
+            res.status(500).json(err);
+            console.error(err);
+        });
+});
+
 app.route('/user/ride')
     .get((req, res) => {
         let query = req.query.q;
-        let filter = req.query.f;
+        let filterByDays = req.query.fdays;
+        let filterByAvailability = req.query.favail;
 
-        searchAvailableRide(query, filter)
+        searchRide(query, filterByDays, filterByAvailability)
             .then(result => res.status(result.status).json(result))
             .catch(err => {
                 res.status(500).json(err);

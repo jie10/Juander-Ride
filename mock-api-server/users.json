@@ -8,7 +8,7 @@
         "profile": {
             "point_of_origin": "Makati City",
             "onsite_schedule": "a",
-            "onsite_days": "tuesday,wednesday"
+            "onsite_days": "tues,wed"
         },
         "account": {
             "email": "john.smith@cebupacificair.com",
@@ -25,7 +25,7 @@
         "profile": {
             "point_of_origin": "Bacoor, Cavite",
             "onsite_schedule": "c",
-            "onsite_days": "monday,tuesday,wednesday,thursday,friday"
+            "onsite_days": "mon,tues,wed,thurs,fri"
         },
         "account": {
             "email": "rachel.reyes@cebupacificair.com",
@@ -42,7 +42,7 @@
         "profile": {
             "point_of_origin": "Pasay City",
             "onsite_schedule": "d",
-            "onsite_days": "monday,tuesday,wednesday,thursday,friday"
+            "onsite_days": "mon,tues,wed,thurs,fri"
         },
         "account": {
             "email": "bob.santos@cebupacificair.com",

@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         department: "Information Technology",
                         point_of_origin: "Pasay City",
                         onsite_schedule: "a",
-                        onsite_days: "tuesday,wednesday",
+                        onsite_days: "tues,wed",
                         email: "john.smith@email.com",
                     };
     qrcode.makeCode(JSON.stringify(sampleData, null, 2));
