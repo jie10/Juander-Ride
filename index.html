@@ -87,7 +87,7 @@
                 </button>
                 <div class="nav-menu">
                     <div class="whitespace"></div>
-                    <div class="display-user-name">
+                    <div class="display-user-name" id="display_user_name">
                         <img class="user-avatar" src="./images/sample/avatar.jpg" alt="john.smith"></img>
                         <span class="user-name" title="john.smith@email.com">john.smith@email.com</span>
                     </div>
@@ -106,7 +106,7 @@
         </div>
         <div class="map-navigation-container full-width full-height" style="display: block;">
             <div class="user-qr-code-container">
-                <h2 class="user-display-name">John Smith</h2>
+                <h2 class="user-display-name" id="user_display_name">John Smith</h2>
                 <div class="user-qr-code" id="user_qr_code"></div>
                 <span class="qr-details">You may ask driver to scan your QR-Code for employee identification</span>
             </div>
@@ -136,8 +136,12 @@
                     </div>
                     <div class="row">
                         <div class="display-user-name editable">
-                            <img class="user-avatar" src="./images/sample/avatar.jpg" alt="john.smith"></img>
+                            <img class="user-avatar" id="update_display_avatar_image" src="./images/sample/avatar.jpg" alt="john.smith"></img>
                         </div>
+                    </div>
+                    <div class="row">
+                        <label class="input-label" for="update_employee_id">Employee ID</label>
+                        <input class="form-input full-width" id="update_employee_id" name="employee_id" type="text" placeholder="Name" autocomplete="off" value="John Smith"/>
                     </div>
                     <div class="row">
                         <label class="input-label" for="update_display_name">Name</label>
@@ -146,6 +150,10 @@
                     <div class="row">
                         <label class="input-label" for="update_department">Department</label>
                         <input class="form-input full-width" id="update_department" name="department" type="text" placeholder="Department" autocomplete="off" value="Information Technology"/>
+                    </div>
+                    <div class="row">
+                        <label class="input-label" for="update_job_role">Job Role</label>
+                        <input class="form-input full-width" id="update_job_role" name="job_role" type="text" placeholder="Name" autocomplete="off" value="John Smith"/>
                     </div>
                     <div class="row">
                         <label class="input-label" for="update_point_of_origin">Point of Origin</label>
@@ -163,7 +171,7 @@
                     </div>
                     <div class="row">
                         <label class="input-label" for="update_specific_onsite_days">Onsite Days</label>
-                        <select class="form-input-select full-width" id="update_specific_onsite_days" name="specific_onsite_days[]" multiple>
+                        <select class="form-input-select full-width" id="update_specific_onsite_days" name="specific_onsite_days" multiple>
                             <option value="mon">Monday</option>
                             <option value="tues">Tuesday</option>
                             <option value="wed">Wednesday</option>

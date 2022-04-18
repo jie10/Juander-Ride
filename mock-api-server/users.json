@@ -5,6 +5,7 @@
         "name": "John Smith",
         "department": "Information Technology",
         "job_role": "Software Engineer",
+        "avatar_image": "avatar.jpg",
         "profile": {
             "point_of_origin": "Makati City",
             "onsite_schedule": "a",
@@ -22,6 +23,7 @@
         "name": "Rachel Reyes",
         "department": "HR Department",
         "job_role": "HR Specialist",
+        "avatar_image": "avatar_2.jpg",
         "profile": {
             "point_of_origin": "Bacoor, Cavite",
             "onsite_schedule": "c",
@@ -39,6 +41,7 @@
         "name": "Bob Santos",
         "department": "Admin",
         "job_role": "Shuttle Service Rider",
+        "avatar_image": "avatar_3.jpg",
         "profile": {
             "point_of_origin": "Pasay City",
             "onsite_schedule": "d",

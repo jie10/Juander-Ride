@@ -7,8 +7,21 @@ var userProfileContainer = document.querySelector('.user-profile-container');
 var userQRCodeContainer = document.querySelector('.user-qr-code-container');
 var rideQRCodeContainer = document.querySelector('.ride-qr-code-container');
 var loaderPage = document.getElementById('page_loader');
+var displayUserName = document.getElementById('display_user_name');
+var userQRCode = document.getElementById('user_qr_code');
+var userDisplayName = document.getElementById('user_display_name');
+var updateDisplayAvatarImage = document.getElementById('update_display_avatar_image');
 var inputLoginEmail = document.getElementById('login_email');
 var inputLoginPassword = document.getElementById('login_password');
+var inputUpdateEmployeeID = document.getElementById('update_employee_id');
+var inputUpdateDisplayName = document.getElementById('update_display_name');
+var inputUpdateDepartment = document.getElementById('update_department');
+var inputUpdateJobRole = document.getElementById('update_job_role');
+var inputUpdatePointOfOrigin = document.getElementById('update_point_of_origin');
+var inputUpdateEmail = document.getElementById('update_email');
+var inputUpdatePassword = document.getElementById('update_password');
+var selectorUpdateOnsiteSchedule = document.getElementById('update_onsite_schedule');
+var selectorUpdateSpecificOnsiteDays = document.getElementById('update_specific_onsite_days');
 var buttonGoToLoginForm = document.getElementById('go_to_login_form');
 var buttonGoToRegiterForm = document.getElementById('go_to_register_form');
 var buttonUserLogin = document.getElementById('login_button');
@@ -154,11 +167,82 @@ var stopUserQRCodeScan = function () {
 var goToLoginPage = function () {
     showLoginPage();
     hideHomepage();
+    userQRCode.innerHTML = "";
 };
 var goToHomePage = function () {
     hideLoginPage();
     showHomepage();
     displayMapNavigation();
+    fetch(BASE_LOCAL_URL + "/user/view", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON({ "email": retrieveCurrentSession() })
+    })
+        .then(function (result) {
+        return result.json();
+    })
+        .then(function (res) {
+        if (res.status === 200) {
+            var data = res.data;
+            displayUserName.innerHTML = '<img class=\"user-avatar\" src=\"./images/sample/' + data.avatar_image + '\" alt=\"' + data.name + '\"></img>' +
+                '<span class=\"user-name\" title=\"' + data.email + '\">' + data.email + '</span>';
+            userDisplayName.innerHTML = data.name;
+            generateUserQRCode(data);
+        }
+        else {
+            destroyCurrentSession();
+            goToLoginPage();
+        }
+    })
+        .catch(function (error) {
+        showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+        console.error(error);
+    });
+};
+var goToUserProfile = function () {
+    displayUserProfile();
+    fetch(BASE_LOCAL_URL + "/user/view?edit=true", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON({ "email": retrieveCurrentSession() })
+    })
+        .then(function (result) {
+        return result.json();
+    })
+        .then(function (res) {
+        if (res.status === 200) {
+            var data = res.data;
+            var onsite_days_1 = data.profile.onsite_days.split(',');
+            updateDisplayAvatarImage.src = "./images/sample/" + data.avatar_image;
+            inputUpdateEmployeeID.value = data.employee_id;
+            inputUpdateDisplayName.value = data.name;
+            inputUpdateDepartment.value = data.department;
+            inputUpdateJobRole.value = data.job_role;
+            inputUpdatePointOfOrigin.value = data.profile.point_of_origin;
+            inputUpdateEmail.value = data.email;
+            inputUpdatePassword.value = data.password;
+            selectorUpdateOnsiteSchedule.value = data.profile.onsite_schedule;
+            selectorUpdateSpecificOnsiteDays.innerHTML = [{ short: 'mon', long: 'Monday' }, { short: 'tues', long: 'Tuesday' }, { short: 'wed', long: 'Wednesday' }, { short: 'thurs', long: 'Thursday' }, { short: 'fri', long: 'Friday' }].map(function (day) {
+                var isSelected = onsite_days_1 && onsite_days_1.some(function (d) { return d === day.short; });
+                return '<option value=\"' + day.short + '\" ' + (isSelected ? 'selected' : '') + '>' + day.long + '</option>';
+            }).join('\n');
+            generateUserQRCode(data);
+        }
+        else {
+            destroyCurrentSession();
+            goToLoginPage();
+        }
+    })
+        .catch(function (error) {
+        showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+        console.error(error);
+    });
 };
 var loginUser = function () {
     var input = {
@@ -233,7 +317,7 @@ buttonUserHome.addEventListener('click', function (e) {
 });
 buttonUserProfile.addEventListener('click', function (e) {
     e.preventDefault();
-    displayUserProfile();
+    goToUserProfile();
 });
 buttonUserLogout.addEventListener('click', function (e) {
     e.preventDefault();

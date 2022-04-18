@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const fs = require('fs');
 const methodOverride = require('method-override');
 const session = require('express-session');
@@ -139,7 +138,7 @@ const logout = (req) => {
     });
 }
 
-const viewUser = (email) => {
+const viewUser = (email, toEdit) => {
     return new Promise((resolve, reject) => {
         try {
             if (email) {
@@ -147,7 +146,34 @@ const viewUser = (email) => {
                     return user.account.email === email;
                 }) : null;
         
-                const result = user && user.length > 0 ? { "status": 200, "title": "User found", "message": "User exists from our database", "data": user[0] } : {
+                const result = user && user.length > 0 ? { "status": 200, "title": "User found", "message": "User exists from our database", "data": user.map(user => {
+                    let { account, name, department, job_role, employee_id, profile, avatar_image } = user;
+
+                    if (toEdit && toEdit === "true") {
+                        return {
+                            email: account.email,
+                            password: account.password,
+                            access_role: account.access_role,
+                            name,
+                            avatar_image,
+                            department,
+                            job_role,
+                            employee_id,
+                            profile
+                        };
+                    } else {
+                        return {
+                            email: account.email,
+                            access_role: account.access_role,
+                            name,
+                            avatar_image,
+                            department,
+                            job_role,
+                            employee_id,
+                            profile
+                        };
+                    }
+                })[0] } : {
                     "status": 404,
                     "title": "User not found",
                     "message": "Please login and try again."
@@ -421,10 +447,9 @@ const viewRideLogs = (email) => {
     });
 }
 
-app.post('/login', checkLoginSession, (req, res) => {
+app.post('/login', (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
-    console.log(req.body)
 
     login(req, email, password)
         .then(result => res.status(result.status).json(result))
@@ -434,7 +459,7 @@ app.post('/login', checkLoginSession, (req, res) => {
         });
 });
 
-app.post('/register', checkLoginSession, (req, res) => {
+app.post('/register', (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
 
@@ -446,7 +471,7 @@ app.post('/register', checkLoginSession, (req, res) => {
         });
 });
 
-app.delete('/logout', checkCurrentSession, (req, res) => {
+app.delete('/logout', (req, res) => {
     logout(req)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
@@ -455,7 +480,7 @@ app.delete('/logout', checkCurrentSession, (req, res) => {
         });
 });
 
-app.post('/user/scan', checkCurrentSession, (req, res) => {
+app.post('/user/scan', (req, res) => {
     scanUserQRCode(req.body.email)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
@@ -464,7 +489,7 @@ app.post('/user/scan', checkCurrentSession, (req, res) => {
         });
 });
 
-app.get('/user/rides', checkCurrentSession, (req, res) => {
+app.get('/user/rides', (req, res) => {
     viewRideLogs(req.body.email)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
@@ -495,8 +520,8 @@ app.route('/user/ride')
             });
     });
 
-app.get('/user/view', checkCurrentSession, (req, res) => {
-    viewUser(req.body.email)
+app.post('/user/view', (req, res) => {
+    viewUser(req.body.email, req.query.edit)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
             res.status(500).json(err);
@@ -504,7 +529,7 @@ app.get('/user/view', checkCurrentSession, (req, res) => {
         });
 });
 
-app.patch('/user/update', checkCurrentSession, (req, res) => {
+app.patch('/user/update', (req, res) => {
     updateUser(req.body)
         .then(result => res.status(result.status).json(result))
         .catch(err => {

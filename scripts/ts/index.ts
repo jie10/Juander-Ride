@@ -7,9 +7,25 @@ const userProfileContainer = document.querySelector('.user-profile-container') a
 const userQRCodeContainer = document.querySelector('.user-qr-code-container') as HTMLDivElement;
 const rideQRCodeContainer = document.querySelector('.ride-qr-code-container') as HTMLDivElement;
 const loaderPage = document.getElementById('page_loader') as HTMLDivElement;
+const displayUserName = document.getElementById('display_user_name') as HTMLDivElement;
+const userQRCode = document.getElementById('user_qr_code') as HTMLDivElement;
+
+const userDisplayName = document.getElementById('user_display_name') as HTMLHeadingElement;
+
+const updateDisplayAvatarImage = document.getElementById('update_display_avatar_image') as HTMLImageElement;
 
 const inputLoginEmail = document.getElementById('login_email') as HTMLInputElement;
 const inputLoginPassword = document.getElementById('login_password') as HTMLInputElement;
+const inputUpdateEmployeeID = document.getElementById('update_employee_id') as HTMLInputElement;
+const inputUpdateDisplayName = document.getElementById('update_display_name') as HTMLInputElement;
+const inputUpdateDepartment = document.getElementById('update_department') as HTMLInputElement;
+const inputUpdateJobRole = document.getElementById('update_job_role') as HTMLInputElement;
+const inputUpdatePointOfOrigin = document.getElementById('update_point_of_origin') as HTMLInputElement;
+const inputUpdateEmail = document.getElementById('update_email') as HTMLInputElement;
+const inputUpdatePassword = document.getElementById('update_password') as HTMLInputElement;
+
+const selectorUpdateOnsiteSchedule = document.getElementById('update_onsite_schedule') as HTMLSelectElement;
+const selectorUpdateSpecificOnsiteDays = document.getElementById('update_specific_onsite_days') as HTMLSelectElement;
 
 const buttonGoToLoginForm = document.getElementById('go_to_login_form') as HTMLButtonElement;
 const buttonGoToRegiterForm = document.getElementById('go_to_register_form') as HTMLButtonElement;
@@ -203,12 +219,87 @@ const stopUserQRCodeScan = () => {
 const goToLoginPage = () => {
     showLoginPage();
     hideHomepage();
+    userQRCode.innerHTML = "";
 }
 
 const goToHomePage = () => {
     hideLoginPage();
     showHomepage();
     displayMapNavigation();
+
+    fetch(BASE_LOCAL_URL + "/user/view", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON({"email": retrieveCurrentSession() })
+    })
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (res) {
+            if (res.status === 200) {
+                let data = res.data;
+                displayUserName.innerHTML = '<img class=\"user-avatar\" src=\"./images/sample/' + data.avatar_image + '\" alt=\"' + data.name + '\"></img>' +
+                                            '<span class=\"user-name\" title=\"' + data.email + '\">' + data.email + '</span>';
+                userDisplayName.innerHTML = data.name;
+                generateUserQRCode(data);
+            } else {
+                destroyCurrentSession();
+                goToLoginPage();
+            }
+        })
+        .catch(function (error) {
+            showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+            console.error(error);
+        });
+}
+
+const goToUserProfile = () => {
+    displayUserProfile();
+
+    fetch(BASE_LOCAL_URL + "/user/view?edit=true", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON({"email": retrieveCurrentSession() })
+    })
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (res) {
+            if (res.status === 200) {
+                let data = res.data;
+                let onsite_days = data.profile.onsite_days.split(',');
+
+                updateDisplayAvatarImage.src = "./images/sample/" + data.avatar_image;
+                inputUpdateEmployeeID.value = data.employee_id;
+                inputUpdateDisplayName.value = data.name;
+                inputUpdateDepartment.value = data.department;
+                inputUpdateJobRole.value = data.job_role;
+                inputUpdatePointOfOrigin.value = data.profile.point_of_origin;
+                inputUpdateEmail.value = data.email;
+                inputUpdatePassword.value = data.password;
+                selectorUpdateOnsiteSchedule.value = data.profile.onsite_schedule;
+                selectorUpdateSpecificOnsiteDays.innerHTML = [{short: 'mon', long: 'Monday'}, {short: 'tues', long: 'Tuesday'}, {short: 'wed', long: 'Wednesday'}, {short: 'thurs', long: 'Thursday'}, {short: 'fri', long: 'Friday'}].map(day => {
+                    let isSelected = onsite_days && onsite_days.some((d: string) => d === day.short);
+                    return '<option value=\"' + day.short + '\" ' + (isSelected ? 'selected' : '') + '>' + day.long + '</option>';
+                }).join('\n');
+
+                generateUserQRCode(data);
+            } else {
+                destroyCurrentSession();
+                goToLoginPage();
+            }
+        })
+        .catch(function (error) {
+            showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+            console.error(error);
+        });
+
 }
 
 const loginUser = () => {
@@ -296,7 +387,7 @@ buttonUserHome.addEventListener('click', (e) => {
 
 buttonUserProfile.addEventListener('click', (e) => {
     e.preventDefault();
-    displayUserProfile();
+    goToUserProfile();
 });
 
 buttonUserLogout.addEventListener('click', (e) => {
