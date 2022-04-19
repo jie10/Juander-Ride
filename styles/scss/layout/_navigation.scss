@@ -21,7 +21,7 @@
     background-color: $background-color-blue-light;
 
     @include for-screen-size-extra-large {
-        width: 200px
+        width: 250px
     }
 
     @include for-screen-size-large {

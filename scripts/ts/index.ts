@@ -11,6 +11,9 @@ const displayUserName = document.getElementById('display_user_name') as HTMLDivE
 const userQRCode = document.getElementById('user_qr_code') as HTMLDivElement;
 
 const userDisplayName = document.getElementById('user_display_name') as HTMLHeadingElement;
+const userDisplayDepartment = document.getElementById('user_display_department') as HTMLHeadingElement;
+const userDisplayJobRole = document.getElementById('user_display_jobe_role') as HTMLHeadingElement;
+const userDisplayPlateNumber = document.getElementById('user_display_plate_number') as HTMLHeadingElement;
 
 const updateDisplayAvatarImage = document.getElementById('update_display_avatar_image') as HTMLImageElement;
 
@@ -38,6 +41,7 @@ const buttonUserHome = document.getElementById('home_button') as HTMLButtonEleme
 const buttonUserProfile = document.getElementById('profile_button') as HTMLButtonElement;
 const buttonScanQRCode = document.getElementById('scan_qr_code_button') as HTMLButtonElement;
 const buttonStopScanQRCode = document.getElementById('stop_scan_qr_code_button') as HTMLButtonElement;
+const buttonStartScanQRCode = document.getElementById('scan_qr_code_button') as HTMLButtonElement;
 
 const formLogin = document.querySelector('.login-form') as HTMLDivElement;
 const formRegister = document.querySelector('.register-form') as HTMLDivElement;
@@ -217,9 +221,9 @@ const stopUserQRCodeScan = () => {
 }
 
 const goToLoginPage = () => {
+    clearUserQRCode();
     showLoginPage();
     hideHomepage();
-    userQRCode.innerHTML = "";
 }
 
 const goToHomePage = () => {
@@ -244,7 +248,13 @@ const goToHomePage = () => {
                 displayUserName.innerHTML = '<img class=\"user-avatar\" src=\"./images/sample/' + data.avatar_image + '\" alt=\"' + data.name + '\"></img>' +
                                             '<span class=\"user-name\" title=\"' + data.email + '\">' + data.email + '</span>';
                 userDisplayName.innerHTML = data.name;
+                userDisplayDepartment.innerHTML = data.department;
+                userDisplayJobRole.innerHTML = data.job_role;
+                userDisplayPlateNumber.innerHTML = data.vehicle_plate_number ? data.vehicle_plate_number  : '';
+
                 generateUserQRCode(data);
+
+                buttonScanQRCode.style.display = data.access_role === 'driver' ? 'none' : 'flex';
             } else {
                 destroyCurrentSession();
                 goToLoginPage();
@@ -257,6 +267,7 @@ const goToHomePage = () => {
 }
 
 const goToUserProfile = () => {
+    clearUserQRCode();
     displayUserProfile();
 
     fetch(BASE_LOCAL_URL + "/user/view?edit=true", {
@@ -393,6 +404,14 @@ buttonUserProfile.addEventListener('click', (e) => {
 buttonUserLogout.addEventListener('click', (e) => {
     e.preventDefault();
     logoutUser();
+});
+
+buttonStartScanQRCode.addEventListener('click', () => {
+    scanUserQRcode();
+});
+
+buttonStopScanQRCode.addEventListener('click', () => {
+    stopScanUserQRCodeScan();
 });
 
 /** PAGE LOAD INITIALIZATION */

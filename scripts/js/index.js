@@ -10,6 +10,9 @@ var loaderPage = document.getElementById('page_loader');
 var displayUserName = document.getElementById('display_user_name');
 var userQRCode = document.getElementById('user_qr_code');
 var userDisplayName = document.getElementById('user_display_name');
+var userDisplayDepartment = document.getElementById('user_display_department');
+var userDisplayJobRole = document.getElementById('user_display_jobe_role');
+var userDisplayPlateNumber = document.getElementById('user_display_plate_number');
 var updateDisplayAvatarImage = document.getElementById('update_display_avatar_image');
 var inputLoginEmail = document.getElementById('login_email');
 var inputLoginPassword = document.getElementById('login_password');
@@ -33,6 +36,7 @@ var buttonUserHome = document.getElementById('home_button');
 var buttonUserProfile = document.getElementById('profile_button');
 var buttonScanQRCode = document.getElementById('scan_qr_code_button');
 var buttonStopScanQRCode = document.getElementById('stop_scan_qr_code_button');
+var buttonStartScanQRCode = document.getElementById('scan_qr_code_button');
 var formLogin = document.querySelector('.login-form');
 var formRegister = document.querySelector('.register-form');
 var BASE_LOCAL_URL = 'http://localhost:8000';
@@ -165,9 +169,9 @@ var stopUserQRCodeScan = function () {
     }, 1500);
 };
 var goToLoginPage = function () {
+    clearUserQRCode();
     showLoginPage();
     hideHomepage();
-    userQRCode.innerHTML = "";
 };
 var goToHomePage = function () {
     hideLoginPage();
@@ -190,7 +194,11 @@ var goToHomePage = function () {
             displayUserName.innerHTML = '<img class=\"user-avatar\" src=\"./images/sample/' + data.avatar_image + '\" alt=\"' + data.name + '\"></img>' +
                 '<span class=\"user-name\" title=\"' + data.email + '\">' + data.email + '</span>';
             userDisplayName.innerHTML = data.name;
+            userDisplayDepartment.innerHTML = data.department;
+            userDisplayJobRole.innerHTML = data.job_role;
+            userDisplayPlateNumber.innerHTML = data.vehicle_plate_number ? data.vehicle_plate_number : '';
             generateUserQRCode(data);
+            buttonScanQRCode.style.display = data.access_role === 'driver' ? 'none' : 'flex';
         }
         else {
             destroyCurrentSession();
@@ -203,6 +211,7 @@ var goToHomePage = function () {
     });
 };
 var goToUserProfile = function () {
+    clearUserQRCode();
     displayUserProfile();
     fetch(BASE_LOCAL_URL + "/user/view?edit=true", {
         method: 'POST',
@@ -322,6 +331,12 @@ buttonUserProfile.addEventListener('click', function (e) {
 buttonUserLogout.addEventListener('click', function (e) {
     e.preventDefault();
     logoutUser();
+});
+buttonStartScanQRCode.addEventListener('click', function () {
+    scanUserQRcode();
+});
+buttonStopScanQRCode.addEventListener('click', function () {
+    stopScanUserQRCodeScan();
 });
 document.addEventListener('DOMContentLoaded', function () {
     var currentSession = retrieveCurrentSession();

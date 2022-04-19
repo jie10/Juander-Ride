@@ -148,31 +148,33 @@ const viewUser = (email, toEdit) => {
         
                 const result = user && user.length > 0 ? { "status": 200, "title": "User found", "message": "User exists from our database", "data": user.map(user => {
                     let { account, name, department, job_role, employee_id, profile, avatar_image } = user;
+                    let driverInfo = account.access_role === 'driver' ? rides.filter(ride => ride.driver_id === employee_id) : null;
+                    let newData = toEdit && toEdit === "true" ? {
+                        email: account.email,
+                        password: account.password,
+                        access_role: account.access_role,
+                        name,
+                        avatar_image,
+                        department,
+                        job_role,
+                        employee_id,
+                        profile
+                    } : {
+                        email: account.email,
+                        access_role: account.access_role,
+                        name,
+                        avatar_image,
+                        department,
+                        job_role,
+                        employee_id,
+                        profile
+                    };
 
-                    if (toEdit && toEdit === "true") {
-                        return {
-                            email: account.email,
-                            password: account.password,
-                            access_role: account.access_role,
-                            name,
-                            avatar_image,
-                            department,
-                            job_role,
-                            employee_id,
-                            profile
-                        };
-                    } else {
-                        return {
-                            email: account.email,
-                            access_role: account.access_role,
-                            name,
-                            avatar_image,
-                            department,
-                            job_role,
-                            employee_id,
-                            profile
-                        };
-                    }
+                    return driverInfo && driverInfo.length > 0 ? { ...newData, ...{
+                        vehicle_id: driverInfo[0].vehicle_id,
+                        vehicle_plate_number: driverInfo[0].vehicle_plate_number,
+                        isAvailable: driverInfo[0].isAvailable
+                    }} : newData;
                 })[0] } : {
                     "status": 404,
                     "title": "User not found",
@@ -275,8 +277,8 @@ const scanQRCodeToRide = (email, shuttleServiceId) => {
                 if (user && user.length > 0) {
                     rideLogs.push({
                         "_id": uuidv4(),
-                        "email": users[0].account.email,
-                        "employee_id": users[0].employee_id,
+                        "email": user[0].account.email,
+                        "employee_id": user[0].employee_id,
                         "shuttle_service_id": shuttleServiceId,
                         "log_datetime": moment.utc().format()
                     });
@@ -499,7 +501,7 @@ app.get('/user/rides', (req, res) => {
 });
 
 app.route('/user/ride')
-    .get(checkCurrentSession, (req, res) => {
+    .get((req, res) => {
         let query = req.query.q;
         let filterByDays = req.query.fdays;
         let filterByAvailability = req.query.favail;
@@ -511,7 +513,7 @@ app.route('/user/ride')
                 console.error(err);
             });
     })
-    .post(checkCurrentSession, (req, res) => {
+    .post((req, res) => {
         scanQRCodeToRide(req.body.email, req.body.shuttle_service_id)
             .then(result => res.status(result.status).json(result))
             .catch(err => {

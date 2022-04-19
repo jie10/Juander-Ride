@@ -17,6 +17,10 @@
 
     .user-name {
         color: $font-color-white;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        -ms-text-overflow: ellipsis;
         text-align: center;
         @include font-size(12);
     }

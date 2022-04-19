@@ -46,8 +46,21 @@
     padding: 16px;
     width: 300px;
 
-    .user-display-name {
+    .user-display-name, .user-display-plate-number, .user-display-department, .user-display-job-role {
         text-align: center;
+    }
+
+    .user-display-name {
+        margin-bottom: 14px;
+    }
+
+    .user-display-plate-number {
+        margin-bottom: 8px;
+    }
+
+    .user-display-department, .user-display-job-role {
+        margin-bottom: 4px;
+        font-weight: 300;
     }
 
     .user-qr-code {

@@ -347,7 +347,7 @@ button {
 }
 @media (min-width: 1201px) {
   .navigation-side-bar {
-    width: 200px;
+    width: 250px;
   }
 }
 @media (max-width: 1200px) {
@@ -443,8 +443,18 @@ button {
   padding: 16px;
   width: 300px;
 }
-.user-qr-code-container .user-display-name {
+.user-qr-code-container .user-display-name, .user-qr-code-container .user-display-plate-number, .user-qr-code-container .user-display-department, .user-qr-code-container .user-display-job-role {
   text-align: center;
+}
+.user-qr-code-container .user-display-name {
+  margin-bottom: 14px;
+}
+.user-qr-code-container .user-display-plate-number {
+  margin-bottom: 8px;
+}
+.user-qr-code-container .user-display-department, .user-qr-code-container .user-display-job-role {
+  margin-bottom: 4px;
+  font-weight: 300;
 }
 .user-qr-code-container .user-qr-code {
   margin: 16px auto;
@@ -765,6 +775,10 @@ button:disabled {
 }
 .display-user-name .user-name {
   color: #FFFFFF;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
   text-align: center;
   font-size: 12px;
   font-size: 0.75rem;
