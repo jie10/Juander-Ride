@@ -44,14 +44,22 @@
         height: calc(100% - 48px);
 
         .modal-body-header {
+            @include display-flex-row--with-aligned-centered-vertically;
             padding: 8px 12px 12px 12px;
+
+            @include for-screen-size-small {
+                @include display-flex-coluimn--with-aligned-centered-horizontally;
+            }
         }
 
         .modal-body-content {
-            height: calc(100% - 77px);
+            height: calc(100% - 150px);
             padding: 0 8px 12px 18px;
             overflow-y: scroll;
 
+            @include for-screen-size-small {
+                height: calc(100% - 230px);
+            }
             .content {
                 display: flex;
                 display: -webkit-flex;

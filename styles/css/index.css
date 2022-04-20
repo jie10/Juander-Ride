@@ -381,12 +381,33 @@ button {
   height: calc(100% - 48px);
 }
 .search-service-modal .modal-body .modal-body-header {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: row;
+  -ms-flex-direction: row;
+  align-items: center;
   padding: 8px 12px 12px 12px;
 }
+@media (max-width: 600px) {
+  .search-service-modal .modal-body .modal-body-header {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+    -ms-flex-direction: column;
+    justify-content: center;
+  }
+}
 .search-service-modal .modal-body .modal-body-content {
-  height: calc(100% - 77px);
+  height: calc(100% - 150px);
   padding: 0 8px 12px 18px;
   overflow-y: scroll;
+}
+@media (max-width: 600px) {
+  .search-service-modal .modal-body .modal-body-content {
+    height: calc(100% - 230px);
+  }
 }
 .search-service-modal .modal-body .modal-body-content .content {
   display: flex;
@@ -672,8 +693,18 @@ button {
 
 .search-ride-query-input-container {
   position: relative;
-  padding: 0 8px;
+  padding: 24px 16px;
   width: fit-content;
+}
+@media (max-width: 600px) {
+  .search-ride-query-input-container {
+    width: 60%;
+  }
+}
+@media (max-width: 480px) {
+  .search-ride-query-input-container {
+    width: 80%;
+  }
 }
 .search-ride-query-input-container input {
   height: 24px;
@@ -683,11 +714,60 @@ button {
   outline: none;
   border-bottom: 1px solid black;
 }
+@media (max-width: 600px) {
+  .search-ride-query-input-container input {
+    width: 90%;
+  }
+}
 .search-ride-query-input-container svg {
   position: absolute;
-  top: 9px;
-  right: 14px;
+  top: calc(50% - 8px);
+  right: 22px;
   height: 14px;
+}
+@media (max-width: 600px) {
+  .search-ride-query-input-container svg {
+    right: 20px;
+  }
+}
+
+.search-ride-filters-container {
+  width: fit-content;
+  padding: 0 8px;
+}
+
+.search-ride-filter-by-avail-container, .search-ride-filter-by-days-container {
+  padding: 0 0 16px 0;
+}
+.search-ride-filter-by-avail-container h4, .search-ride-filter-by-days-container h4 {
+  font-size: 13px;
+  font-size: 0.8125rem;
+  margin-bottom: 6px;
+}
+.search-ride-filter-by-avail-container .options, .search-ride-filter-by-days-container .options {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: row;
+  -ms-flex-direction: row;
+  align-items: center;
+}
+.search-ride-filter-by-avail-container .options .option, .search-ride-filter-by-days-container .options .option {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: row;
+  -ms-flex-direction: row;
+  align-items: center;
+  margin-right: 8px;
+}
+.search-ride-filter-by-avail-container .options .option label, .search-ride-filter-by-days-container .options .option label {
+  width: fit-content;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 /** Font */

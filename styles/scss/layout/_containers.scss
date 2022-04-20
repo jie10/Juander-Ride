@@ -84,9 +84,15 @@
 
 .search-ride-query-input-container {
     position: relative;
-    padding: 0 8px;
+    padding: 24px 16px;
     width: fit-content;
 
+    @include for-screen-size-small {
+        width: 60%;
+    }
+    @include for-screen-size-extra-small {
+        width: 80%;
+    }
     input {
         height: 24px;
         width: 150px;
@@ -94,11 +100,48 @@
         border: none;
         outline: none;
         border-bottom: 1px solid black;
+        @include for-screen-size-small {
+            width: 90%;
+        }
+
     }
     svg {
         position: absolute;
-        top: 9px;
-        right: 14px;
+        top: calc(50% - 8px);
+        right: 22px;
         height: 14px;
+
+        @include for-screen-size-small {
+            right: 20px;
+        }
+    }
+}
+.search-ride-filters-container {
+    width: fit-content;
+    padding: 0 8px;
+}
+
+.search-ride-filter-by-avail-container, .search-ride-filter-by-days-container {
+    padding: 0 0 16px 0;
+
+    h4 {
+        @include font-size(13);
+        margin-bottom: 6px;
+    }
+
+    .options {
+        @include display-flex-row--with-aligned-centered-vertically;
+
+        .option {
+            @include display-flex-row--with-aligned-centered-vertically;
+            margin-right: 8px;
+            label {
+                width: fit-content;
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                @include font-size(12);
+            }
+        }
     }
 }
