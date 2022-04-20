@@ -340,7 +340,7 @@ const searchRide = (query, filterByDays, filterByAvailability) => {
                                 "title": "Search succesful",
                                 "message": "Found " + matches.length + (matches.length > 0 ? " match" : " matches") + " for keyword: " + query,
                                 "result": matches.map(driver => {
-                                    driver.isAvailable = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
+                                    driver.availability = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
                                     return driver;
                                 })
                         });  
@@ -369,7 +369,7 @@ const searchRide = (query, filterByDays, filterByAvailability) => {
                             "title": "Search succesful",
                             "message": "Found " + matchWithFilter.length + (matchWithFilter.length > 1 ? " matches" : " match") + " for keyword: " + query,
                             "result": matchWithFilter.length > 0 ? matchWithFilter.map(driver => {
-                                driver.isAvailable = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
+                                driver.availability = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
                                 return driver;
                             }) : []
                     });  
@@ -386,7 +386,7 @@ const searchRide = (query, filterByDays, filterByAvailability) => {
                     "title": "Load Successful",
                     "message": rides.length + " rides found",
                     "data": rides.map(driver => {
-                        driver.isAvailable = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
+                        driver.availability = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
                         return driver;
                     })
                 } : {
