@@ -1,5 +1,4 @@
 "use strict";
-var _a;
 var pageLogin = document.querySelector('.login-page');
 var pageHome = document.querySelector('.home-page');
 var navigationSidebarContainer = document.querySelector('.navigation-side-bar-container');
@@ -47,6 +46,8 @@ var BASE_LOCAL_URL = 'http://localhost:8000';
 var delay = function (callback, DELAY_TIMEOUT_IN_MILLISECONDS) {
     setTimeout(callback, DELAY_TIMEOUT_IN_MILLISECONDS);
 };
+var capitalizeString = function (str) { return str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase(); };
+var capitalizeMultipleStrings = function (str, separator, joiner) { return str.split(separator).map(function (s) { return capitalizeString(s); }).join(joiner); };
 var stringifyJSON = function (obj) { return JSON.stringify(obj); };
 var parseJSON = function (str) { return JSON.parse(str); };
 var retrieveCurrentSession = function () { return localStorage.getItem('user'); };
@@ -208,6 +209,7 @@ var goToHomePage = function () {
             userDisplayJobRole.innerHTML = data.job_role;
             userDisplayPlateNumber.innerHTML = data.vehicle_plate_number ? data.vehicle_plate_number : '';
             generateUserQRCode(data);
+            buttonSearchService.style.display = data.access_role === 'driver' ? 'none' : 'flex';
             buttonScanQRCode.style.display = data.access_role === 'driver' ? 'none' : 'flex';
         }
         else {
@@ -308,6 +310,38 @@ var logoutUser = function () {
         console.error(error);
     });
 };
+var loadRideSchedules = function () {
+    fetch(BASE_LOCAL_URL + '/user/ride')
+        .then(function (result) { return result.json(); })
+        .then(function (result) {
+        var _a;
+        var data = result.data;
+        if (result.status === 200) {
+            console.log(data.length);
+            var searchContent = document.querySelector('.search-service-modal .modal-body-content');
+            searchContent.innerHTML = '';
+            searchContent.innerHTML = data.map(function (value) {
+                return "\n<div class=\"content\">\n                                                <div class=\"details\">\n                                                    <div class=\"col icon\">\n                                                        <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\">\n                                                            <path d=\"M224 0C348.8 0 448 35.2 448 80V416C448 433.7 433.7 448 416 448V480C416 497.7 401.7 512 384 512H352C334.3 512 320 497.7 320 480V448H128V480C128 497.7 113.7 512 96 512H64C46.33 512 32 497.7 32 480V448C14.33 448 0 433.7 0 416V80C0 35.2 99.19 0 224 0zM64 256C64 273.7 78.33 288 96 288H352C369.7 288 384 273.7 384 256V128C384 110.3 369.7 96 352 96H96C78.33 96 64 110.3 64 128V256zM80 400C97.67 400 112 385.7 112 368C112 350.3 97.67 336 80 336C62.33 336 48 350.3 48 368C48 385.7 62.33 400 80 400zM368 400C385.7 400 400 385.7 400 368C400 350.3 385.7 336 368 336C350.3 336 336 350.3 336 368C336 385.7 350.3 400 368 400z\"/>\n                                                        </svg>\n                                                        <span id=\"vehicle_availability\" class=\"".concat(value.isAvailable === "AVAILABLE" ? 'color-text-green' : 'color-text-red', "\">").concat(value.isAvailable, "</span>\n                                                    </div>\n                                                    <div class=\"col\">\n                                                        <div class=\"row\">\n                                                            <span class=\"label\">Plate No.</span>\n                                                            <span id=\"vehicle_plate_number\">").concat(value.vehicle_plate_number, "</span>\n                                                        </div>\n                                                        <div class=\"row\">\n                                                            <span class=\"label\">Vehicle ID</span>\n                                                            <span id=\"vehicle_id\">").concat(value.vehicle_id, "</span>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col\">\n                                                        <div class=\"row\">\n                                                            <span class=\"label\">Driver</span>\n                                                            <span id=\"vehicle_driver_name\">").concat(capitalizeMultipleStrings(value.driver_name, " ", " "), "</span>\n                                                        </div>\n                                                        <div class=\"row\">\n                                                            <span class=\"label\">Type</span>\n                                                            <span id=\"vehicle_type\">").concat(capitalizeString(value.vehicle_type), "</span>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col\">\n                                                        <div class=\"row\">\n                                                            <span class=\"label\">Color</span>\n                                                            <span id=\"vehicle_color\">").concat(capitalizeString(value.vehicle_color), "</span>\n                                                        </div>\n                                                        <div class=\"row\">\n                                                            <span class=\"label\">Schedule</span>\n                                                            <span class=\"vehicle-schedule-type\">\n                                                                ").concat(capitalizeString(value.schedule), " \n                                                                <span class=\"show-schedule\">\n                                                                    <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\">\n                                                                        <path d=\"M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 400c-18 0-32-14-32-32s13.1-32 32-32c17.1 0 32 14 32 32S273.1 400 256 400zM325.1 258L280 286V288c0 13-11 24-24 24S232 301 232 288V272c0-8 4-16 12-21l57-34C308 213 312 206 312 198C312 186 301.1 176 289.1 176h-51.1C225.1 176 216 186 216 198c0 13-11 24-24 24s-24-11-24-24C168 159 199 128 237.1 128h51.1C329 128 360 159 360 198C360 222 347 245 325.1 258z\"/>\n                                                                    </svg>\n                                                                    <span style=\"display: none;\">").concat(capitalizeMultipleStrings(value.schedule_days, ",", ","), "</span>\n                                                                </span>\n                                                            </span>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </div>");
+            }).join('\n');
+            (_a = document.querySelectorAll('.show-schedule')) === null || _a === void 0 ? void 0 : _a.forEach(function (element) {
+                element.addEventListener('click', function (e) {
+                    if (e.currentTarget instanceof Element) {
+                        var span = e.currentTarget.querySelector('span');
+                        span.style.display = span.style.display === "none" ? "block" : "none";
+                    }
+                });
+            });
+        }
+        else {
+            showAlertStatus(data.title, data.message, 'error');
+            goToLoginPage();
+        }
+    })
+        .catch(function (error) {
+        showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+        console.error(error);
+    });
+};
 buttonUserLogin.addEventListener('click', function () {
     loginUser();
 });
@@ -333,6 +367,7 @@ buttonCloseNavSidebar.addEventListener('click', function (e) {
 buttonSearchService.addEventListener('click', function (e) {
     e.preventDefault();
     showSearchServiceContainer();
+    loadRideSchedules();
 });
 buttonCloseSearchService.addEventListener('click', function (e) {
     e.preventDefault();
@@ -355,12 +390,6 @@ buttonStartScanQRCode.addEventListener('click', function () {
 });
 buttonStopScanQRCode.addEventListener('click', function () {
     stopScanUserQRCodeScan();
-});
-(_a = document.querySelector('.show-schedule')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function (e) {
-    if (e.currentTarget instanceof Element) {
-        var span = e.currentTarget.querySelector('span');
-        span.style.display = span.style.display === "none" ? "block" : "none";
-    }
 });
 document.addEventListener('DOMContentLoaded', function () {
     var currentSession = retrieveCurrentSession();

@@ -59,6 +59,10 @@ const delay = (callback: any, DELAY_TIMEOUT_IN_MILLISECONDS: number) => {
     setTimeout(callback, DELAY_TIMEOUT_IN_MILLISECONDS);
 }
 
+const capitalizeString = (str: string) => str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase();
+
+const capitalizeMultipleStrings = (str: string, separator: string, joiner: string) => str.split(separator).map(s => capitalizeString(s)).join(joiner);
+
 const stringifyJSON = (obj: Object) => JSON.stringify(obj);
 
 const parseJSON = (str: string) => JSON.parse(str);
@@ -265,6 +269,7 @@ const goToHomePage = () => {
 
                 generateUserQRCode(data);
 
+                buttonSearchService.style.display = data.access_role === 'driver' ? 'none' : 'flex';
                 buttonScanQRCode.style.display = data.access_role === 'driver' ? 'none' : 'flex';
             } else {
                 destroyCurrentSession();
@@ -372,6 +377,88 @@ const logoutUser = () => {
         });
 }
 
+const loadRideSchedules = () => {
+    fetch(BASE_LOCAL_URL + '/user/ride')
+        .then(result => result.json())
+        .then(result => {
+            let data = result.data;
+
+            if (result.status === 200) {
+                console.log(data.length)
+                let searchContent = document.querySelector('.search-service-modal .modal-body-content') as HTMLDivElement;
+                searchContent.innerHTML = '';
+
+                searchContent.innerHTML = data.map((value: { isAvailable: string, vehicle_id: string, vehicle_plate_number: string, driver_name: string, vehicle_type: string, vehicle_color: string, schedule: string, schedule_days: string }) => {
+                    
+                    return `\n<div class="content">
+                                                <div class="details">
+                                                    <div class="col icon">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                            <path d="M224 0C348.8 0 448 35.2 448 80V416C448 433.7 433.7 448 416 448V480C416 497.7 401.7 512 384 512H352C334.3 512 320 497.7 320 480V448H128V480C128 497.7 113.7 512 96 512H64C46.33 512 32 497.7 32 480V448C14.33 448 0 433.7 0 416V80C0 35.2 99.19 0 224 0zM64 256C64 273.7 78.33 288 96 288H352C369.7 288 384 273.7 384 256V128C384 110.3 369.7 96 352 96H96C78.33 96 64 110.3 64 128V256zM80 400C97.67 400 112 385.7 112 368C112 350.3 97.67 336 80 336C62.33 336 48 350.3 48 368C48 385.7 62.33 400 80 400zM368 400C385.7 400 400 385.7 400 368C400 350.3 385.7 336 368 336C350.3 336 336 350.3 336 368C336 385.7 350.3 400 368 400z"/>
+                                                        </svg>
+                                                        <span id="vehicle_availability" class="${value.isAvailable === "AVAILABLE" ? 'color-text-green' : 'color-text-red'}">${value.isAvailable}</span>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="row">
+                                                            <span class="label">Plate No.</span>
+                                                            <span id="vehicle_plate_number">${value.vehicle_plate_number}</span>
+                                                        </div>
+                                                        <div class="row">
+                                                            <span class="label">Vehicle ID</span>
+                                                            <span id="vehicle_id">${value.vehicle_id}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="row">
+                                                            <span class="label">Driver</span>
+                                                            <span id="vehicle_driver_name">${capitalizeMultipleStrings(value.driver_name, " ", " ")}</span>
+                                                        </div>
+                                                        <div class="row">
+                                                            <span class="label">Type</span>
+                                                            <span id="vehicle_type">${capitalizeString(value.vehicle_type)}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="row">
+                                                            <span class="label">Color</span>
+                                                            <span id="vehicle_color">${capitalizeString(value.vehicle_color)}</span>
+                                                        </div>
+                                                        <div class="row">
+                                                            <span class="label">Schedule</span>
+                                                            <span class="vehicle-schedule-type">
+                                                                ${capitalizeString(value.schedule)} 
+                                                                <span class="show-schedule">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                                        <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 400c-18 0-32-14-32-32s13.1-32 32-32c17.1 0 32 14 32 32S273.1 400 256 400zM325.1 258L280 286V288c0 13-11 24-24 24S232 301 232 288V272c0-8 4-16 12-21l57-34C308 213 312 206 312 198C312 186 301.1 176 289.1 176h-51.1C225.1 176 216 186 216 198c0 13-11 24-24 24s-24-11-24-24C168 159 199 128 237.1 128h51.1C329 128 360 159 360 198C360 222 347 245 325.1 258z"/>
+                                                                    </svg>
+                                                                    <span style="display: none;">${capitalizeMultipleStrings(value.schedule_days, ",", ",")}</span>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>`;
+                }).join('\n');
+
+                document.querySelectorAll('.show-schedule')?.forEach(element => {
+                    element.addEventListener('click', (e) => {
+                        if (e.currentTarget instanceof Element) {
+                            let span = e.currentTarget.querySelector('span') as HTMLSpanElement;
+                            span.style.display = span.style.display === "none" ? "block" : "none";
+                        }
+                    });
+                });
+            } else {
+                showAlertStatus(data.title, data.message, 'error');
+                goToLoginPage();
+            }
+        })
+        .catch(function (error) {
+            showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+            console.error(error);
+        });
+}
+
 
 /** DOM Events */
 buttonUserLogin.addEventListener('click', () => {
@@ -405,6 +492,7 @@ buttonCloseNavSidebar.addEventListener('click', (e) => {
 buttonSearchService.addEventListener('click', (e) => {
     e.preventDefault();
     showSearchServiceContainer();
+    loadRideSchedules();
 });
 
 buttonCloseSearchService.addEventListener('click', (e) => {
@@ -433,13 +521,6 @@ buttonStartScanQRCode.addEventListener('click', () => {
 
 buttonStopScanQRCode.addEventListener('click', () => {
     stopScanUserQRCodeScan();
-});
-
-document.querySelector('.show-schedule')?.addEventListener('click', (e) => {
-    if (e.currentTarget instanceof Element) {
-        let span = e.currentTarget.querySelector('span') as HTMLSpanElement;
-        span.style.display = span.style.display === "none" ? "block" : "none";
-    }
 });
 
 /** PAGE LOAD INITIALIZATION */

@@ -409,6 +409,16 @@ button {
   height: 48px;
   margin-bottom: 12px;
 }
+@media (max-width: 900px) {
+  .search-service-modal .modal-body .modal-body-content .content .icon svg {
+    height: 36px;
+  }
+}
+@media (max-width: 600px) {
+  .search-service-modal .modal-body .modal-body-content .content .icon svg {
+    height: 24px;
+  }
+}
 .search-service-modal .modal-body .modal-body-content .content .icon span {
   font-weight: 700;
   font-size: 14px;
@@ -430,11 +440,35 @@ button {
   font-size: 14px;
   font-size: 0.875rem;
 }
+@media (max-width: 600px) {
+  .search-service-modal .modal-body .modal-body-content .content .details .col span {
+    font-size: 13px;
+    font-size: 0.8125rem;
+  }
+}
+@media (max-width: 480px) {
+  .search-service-modal .modal-body .modal-body-content .content .details .col span {
+    font-size: 12px;
+    font-size: 0.75rem;
+  }
+}
 .search-service-modal .modal-body .modal-body-content .content .details .col span.label {
   margin-bottom: 4px;
   font-weight: 700;
   font-size: 12px;
   font-size: 0.75rem;
+}
+@media (max-width: 600px) {
+  .search-service-modal .modal-body .modal-body-content .content .details .col span.label {
+    font-size: 11px;
+    font-size: 0.6875rem;
+  }
+}
+@media (max-width: 480px) {
+  .search-service-modal .modal-body .modal-body-content .content .details .col span.label {
+    font-size: 10px;
+    font-size: 0.625rem;
+  }
 }
 .search-service-modal .modal-body .modal-body-content .content .details .col span.vehicle-schedule-type {
   display: flex;
