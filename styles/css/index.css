@@ -406,7 +406,7 @@ button {
 }
 @media (max-width: 600px) {
   .search-service-modal .modal-body .modal-body-content {
-    height: calc(100% - 230px);
+    height: calc(100% - 240px);
   }
 }
 .search-service-modal .modal-body .modal-body-content .content {

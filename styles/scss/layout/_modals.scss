@@ -58,7 +58,7 @@
             overflow-y: scroll;
 
             @include for-screen-size-small {
-                height: calc(100% - 230px);
+                height: calc(100% - 240px);
             }
             .content {
                 display: flex;
