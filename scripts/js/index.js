@@ -1,8 +1,10 @@
 "use strict";
+var _a;
 var pageLogin = document.querySelector('.login-page');
 var pageHome = document.querySelector('.home-page');
 var navigationSidebarContainer = document.querySelector('.navigation-side-bar-container');
 var mapNavigationContainer = document.querySelector('.map-navigation-container');
+var searchServiceContainer = document.querySelector('.search-service-container');
 var userProfileContainer = document.querySelector('.user-profile-container');
 var userQRCodeContainer = document.querySelector('.user-qr-code-container');
 var rideQRCodeContainer = document.querySelector('.ride-qr-code-container');
@@ -37,6 +39,8 @@ var buttonUserProfile = document.getElementById('profile_button');
 var buttonScanQRCode = document.getElementById('scan_qr_code_button');
 var buttonStopScanQRCode = document.getElementById('stop_scan_qr_code_button');
 var buttonStartScanQRCode = document.getElementById('scan_qr_code_button');
+var buttonSearchService = document.getElementById('search_service_button');
+var buttonCloseSearchService = document.getElementById('close_search_service_modal_button');
 var formLogin = document.querySelector('.login-form');
 var formRegister = document.querySelector('.register-form');
 var BASE_LOCAL_URL = 'http://localhost:8000';
@@ -83,6 +87,12 @@ var showMapNavigationContainer = function () {
 };
 var hideMapNavigationContainer = function () {
     mapNavigationContainer.style.display = "none";
+};
+var showSearchServiceContainer = function () {
+    searchServiceContainer.style.display = "block";
+};
+var hideSearchServiceContainer = function () {
+    searchServiceContainer.style.display = "none";
 };
 var showUserProfileContainer = function () {
     userProfileContainer.style.display = "block";
@@ -320,6 +330,14 @@ buttonCloseNavSidebar.addEventListener('click', function (e) {
     e.preventDefault();
     hideNavSidebar();
 });
+buttonSearchService.addEventListener('click', function (e) {
+    e.preventDefault();
+    showSearchServiceContainer();
+});
+buttonCloseSearchService.addEventListener('click', function (e) {
+    e.preventDefault();
+    hideSearchServiceContainer();
+});
 buttonUserHome.addEventListener('click', function (e) {
     e.preventDefault();
     displayMapNavigation();
@@ -337,6 +355,12 @@ buttonStartScanQRCode.addEventListener('click', function () {
 });
 buttonStopScanQRCode.addEventListener('click', function () {
     stopScanUserQRCodeScan();
+});
+(_a = document.querySelector('.show-schedule')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function (e) {
+    if (e.currentTarget instanceof Element) {
+        var span = e.currentTarget.querySelector('span');
+        span.style.display = span.style.display === "none" ? "block" : "none";
+    }
 });
 document.addEventListener('DOMContentLoaded', function () {
     var currentSession = retrieveCurrentSession();

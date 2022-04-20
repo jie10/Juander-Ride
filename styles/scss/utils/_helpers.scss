@@ -1,3 +1,5 @@
+@import '../abstracts/variables';
+
 .full-width {
     width: 100%;
 }
@@ -31,4 +33,12 @@
     bottom: 0;
     left: 0;
     right: 0;
+}
+
+.color-text-green {
+    color: $font-color-green;
+}
+
+.color-text-red {
+    color: $font-color-red;
 }

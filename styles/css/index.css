@@ -122,6 +122,9 @@ button {
   color: #000000;
 }
 
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
 .full-width {
   width: 100%;
 }
@@ -155,6 +158,14 @@ button {
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.color-text-green {
+  color: #80C051;
+}
+
+.color-text-red {
+  color: #ED6346;
 }
 
 /** Font */
@@ -321,6 +332,154 @@ button {
 /** FONT */
 /** FONT WEIGHT */
 /** COLORS */
+.search-service-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #FFFFFF;
+  overflow: hidden;
+}
+@media (min-width: 1201px) {
+  .search-service-modal {
+    width: 60%;
+    height: 60%;
+  }
+}
+@media (max-width: 1200px) {
+  .search-service-modal {
+    width: 60%;
+    height: 60%;
+  }
+}
+@media (max-width: 900px) {
+  .search-service-modal {
+    width: 80%;
+    height: 80%;
+  }
+}
+@media (max-width: 600px) {
+  .search-service-modal {
+    width: 90%;
+    height: 90%;
+  }
+}
+@media (max-width: 480px) {
+  .search-service-modal {
+    width: 95%;
+    height: 85%;
+  }
+}
+.search-service-modal .modal-header {
+  width: 100%;
+}
+.search-service-modal .modal-header h2 {
+  padding: 24px 12px 12px 16px;
+}
+.search-service-modal .modal-body {
+  width: 100%;
+  height: calc(100% - 48px);
+}
+.search-service-modal .modal-body .modal-body-header {
+  padding: 8px 12px 12px 12px;
+}
+.search-service-modal .modal-body .modal-body-content {
+  height: calc(100% - 77px);
+  padding: 0 8px 12px 18px;
+  overflow-y: scroll;
+}
+.search-service-modal .modal-body .modal-body-content .content {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  -ms-flex-direction: row;
+  padding: 8px 0 8px 8px;
+  border-bottom: solid 1px black;
+}
+.search-service-modal .modal-body .modal-body-content .content .icon {
+  width: fit-content;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -ms-flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.search-service-modal .modal-body .modal-body-content .content .icon svg {
+  height: 48px;
+  margin-bottom: 12px;
+}
+.search-service-modal .modal-body .modal-body-content .content .icon span {
+  font-weight: 700;
+  font-size: 14px;
+  font-size: 0.875rem;
+}
+.search-service-modal .modal-body .modal-body-content .content .details {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  -ms-flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+}
+.search-service-modal .modal-body .modal-body-content .content .details .col {
+  flex-basis: 33.33%;
+}
+.search-service-modal .modal-body .modal-body-content .content .details .col span {
+  text-align: center;
+  font-size: 14px;
+  font-size: 0.875rem;
+}
+.search-service-modal .modal-body .modal-body-content .content .details .col span.label {
+  margin-bottom: 4px;
+  font-weight: 700;
+  font-size: 12px;
+  font-size: 0.75rem;
+}
+.search-service-modal .modal-body .modal-body-content .content .details .col span.vehicle-schedule-type {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  -ms-flex-direction: row;
+  justify-content: center;
+}
+.search-service-modal .modal-body .modal-body-content .content .details .col span.vehicle-schedule-type .show-schedule {
+  position: relative;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+.search-service-modal .modal-body .modal-body-content .content .details .col span.vehicle-schedule-type .show-schedule span {
+  font-size: 12px;
+  font-size: 0.75rem;
+  position: absolute;
+  right: -18px;
+  top: 20px;
+  background-color: gray;
+  padding: 4px 8px;
+  color: white;
+  z-index: 1000;
+}
+.search-service-modal .modal-body .modal-body-content .content .details .col span.vehicle-schedule-type svg {
+  height: 16px;
+  padding: 0 0 0 4px;
+  fill: #C9C9CA;
+}
+.search-service-modal .modal-body .modal-body-content .content .details span {
+  display: block;
+}
+
+/** Font */
+/** Alignment */
+/** Element Position */
+/** String Manipulation */
+/** Display */
+/** Borders */
+/** Screen Size Resolution */
+/** FONT */
+/** FONT WEIGHT */
+/** COLORS */
 .navigation-bar {
   height: 48px;
   background-color: #FFFFFF;
@@ -394,6 +553,16 @@ button {
   padding: 48px 0 0 0;
 }
 
+.search-service-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 48px 0 0 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
 .user-profile-container {
   position: fixed;
   top: 0;
@@ -465,6 +634,26 @@ button {
   text-align: center;
   font-size: 14px;
   font-size: 0.875rem;
+}
+
+.search-ride-query-input-container {
+  position: relative;
+  padding: 0 8px;
+  width: fit-content;
+}
+.search-ride-query-input-container input {
+  height: 24px;
+  width: 150px;
+  padding: 4px 24px 4px 4px;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid black;
+}
+.search-ride-query-input-container svg {
+  position: absolute;
+  top: 9px;
+  right: 14px;
+  height: 14px;
 }
 
 /** Font */
@@ -544,6 +733,20 @@ button:disabled {
 .close-nav-side-bar-button .svg-icon {
   color: #FFFFFF;
   fill: #FFFFFF;
+}
+
+.close-search-service-modal-button {
+  border: none;
+  outline: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 12px;
+  background-color: transparent;
+}
+.close-search-service-modal-button .svg-icon {
+  color: #000000;
+  fill: #000000;
 }
 
 .nav-menu .nav-item .nav-side-button {

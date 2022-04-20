@@ -69,6 +69,20 @@ button:disabled {
     }
 }
 
+.close-search-service-modal-button {
+    @include borderless-element;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 12px;
+    background-color: $background-color-transparent;
+
+    .svg-icon {
+        color: $font-color-black;
+        fill: $font-color-black;
+    }
+}
+
 .nav-menu {
     .nav-item {
         .nav-side-button {

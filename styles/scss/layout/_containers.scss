@@ -6,6 +6,13 @@
     padding: 48px 0 0 0;
 }
 
+.search-service-container {
+    @include position-fixed-from-top;
+    padding: 48px 0 0 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
 .user-profile-container {
     @include position-fixed-from-top;
     padding: 48px 0 0 0;
@@ -72,5 +79,26 @@
         display: inherit;
         text-align: center;
         @include font-size(14);
+    }
+}
+
+.search-ride-query-input-container {
+    position: relative;
+    padding: 0 8px;
+    width: fit-content;
+
+    input {
+        height: 24px;
+        width: 150px;
+        padding: 4px 24px 4px 4px;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid black;
+    }
+    svg {
+        position: absolute;
+        top: 9px;
+        right: 14px;
+        height: 14px;
     }
 }

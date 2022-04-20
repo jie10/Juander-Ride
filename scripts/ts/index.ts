@@ -3,6 +3,7 @@ const pageLogin = document.querySelector('.login-page') as HTMLDivElement;
 const pageHome = document.querySelector('.home-page') as HTMLDivElement;
 const navigationSidebarContainer = document.querySelector('.navigation-side-bar-container') as HTMLDivElement;
 const mapNavigationContainer = document.querySelector('.map-navigation-container') as HTMLDivElement;
+const searchServiceContainer = document.querySelector('.search-service-container') as HTMLDivElement;
 const userProfileContainer = document.querySelector('.user-profile-container') as HTMLDivElement;
 const userQRCodeContainer = document.querySelector('.user-qr-code-container') as HTMLDivElement;
 const rideQRCodeContainer = document.querySelector('.ride-qr-code-container') as HTMLDivElement;
@@ -42,6 +43,8 @@ const buttonUserProfile = document.getElementById('profile_button') as HTMLButto
 const buttonScanQRCode = document.getElementById('scan_qr_code_button') as HTMLButtonElement;
 const buttonStopScanQRCode = document.getElementById('stop_scan_qr_code_button') as HTMLButtonElement;
 const buttonStartScanQRCode = document.getElementById('scan_qr_code_button') as HTMLButtonElement;
+const buttonSearchService = document.getElementById('search_service_button') as HTMLButtonElement;
+const buttonCloseSearchService = document.getElementById('close_search_service_modal_button') as HTMLButtonElement;
 
 const formLogin = document.querySelector('.login-form') as HTMLDivElement;
 const formRegister = document.querySelector('.register-form') as HTMLDivElement;
@@ -112,6 +115,14 @@ const showMapNavigationContainer = () => {
 
 const hideMapNavigationContainer = () => {
     mapNavigationContainer.style.display = "none";
+}
+
+const showSearchServiceContainer = () => {
+    searchServiceContainer.style.display = "block";
+}
+
+const hideSearchServiceContainer = () => {
+    searchServiceContainer.style.display = "none";
 }
 
 const showUserProfileContainer = () => {
@@ -391,6 +402,16 @@ buttonCloseNavSidebar.addEventListener('click', (e) => {
     hideNavSidebar();
 });
 
+buttonSearchService.addEventListener('click', (e) => {
+    e.preventDefault();
+    showSearchServiceContainer();
+});
+
+buttonCloseSearchService.addEventListener('click', (e) => {
+    e.preventDefault();
+    hideSearchServiceContainer();
+});
+
 buttonUserHome.addEventListener('click', (e) => {
     e.preventDefault();
     displayMapNavigation();
@@ -412,6 +433,13 @@ buttonStartScanQRCode.addEventListener('click', () => {
 
 buttonStopScanQRCode.addEventListener('click', () => {
     stopScanUserQRCodeScan();
+});
+
+document.querySelector('.show-schedule')?.addEventListener('click', (e) => {
+    if (e.currentTarget instanceof Element) {
+        let span = e.currentTarget.querySelector('span') as HTMLSpanElement;
+        span.style.display = span.style.display === "none" ? "block" : "none";
+    }
 });
 
 /** PAGE LOAD INITIALIZATION */
