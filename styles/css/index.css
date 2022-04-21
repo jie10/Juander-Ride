@@ -399,6 +399,11 @@ button {
     justify-content: center;
   }
 }
+@media (min-width: 1201px) {
+  .search-service-modal .modal-body .modal-body-header {
+    justify-content: space-between;
+  }
+}
 .search-service-modal .modal-body .modal-body-content {
   height: calc(100% - 150px);
   padding: 0 8px 12px 18px;
@@ -732,17 +737,47 @@ button {
 }
 
 .search-ride-filters-container {
-  width: fit-content;
   padding: 0 8px;
+}
+@media (max-width: 600px) {
+  .search-ride-filters-container {
+    width: fit-content;
+  }
+}
+@media (max-width: 480px) {
+  .search-ride-filters-container {
+    width: fit-content;
+  }
+}
+@media (min-width: 1201px) {
+  .search-ride-filters-container {
+    display: flex;
+    display: -webkit-flex;
+  }
 }
 
 .search-ride-filter-by-avail-container, .search-ride-filter-by-days-container {
   padding: 0 0 16px 0;
 }
+@media (min-width: 1201px) {
+  .search-ride-filter-by-avail-container, .search-ride-filter-by-days-container {
+    padding: 0;
+  }
+}
 .search-ride-filter-by-avail-container h4, .search-ride-filter-by-days-container h4 {
   font-size: 13px;
   font-size: 0.8125rem;
   margin-bottom: 6px;
+}
+@media (max-width: 600px) {
+  .search-ride-filter-by-avail-container h4, .search-ride-filter-by-days-container h4 {
+    text-align: center;
+  }
+}
+@media (max-width: 480px) {
+  .search-ride-filter-by-avail-container h4, .search-ride-filter-by-days-container h4 {
+    text-align: center;
+  }
 }
 .search-ride-filter-by-avail-container .options, .search-ride-filter-by-days-container .options {
   display: -webkit-flex;
@@ -751,6 +786,16 @@ button {
   flex-direction: row;
   -ms-flex-direction: row;
   align-items: center;
+}
+@media (max-width: 600px) {
+  .search-ride-filter-by-avail-container .options, .search-ride-filter-by-days-container .options {
+    justify-content: center;
+  }
+}
+@media (max-width: 480px) {
+  .search-ride-filter-by-avail-container .options, .search-ride-filter-by-days-container .options {
+    justify-content: center;
+  }
 }
 .search-ride-filter-by-avail-container .options .option, .search-ride-filter-by-days-container .options .option {
   display: -webkit-flex;

@@ -117,21 +117,51 @@
     }
 }
 .search-ride-filters-container {
-    width: fit-content;
     padding: 0 8px;
+
+    @include for-screen-size-small {
+        width: fit-content;
+    }
+
+    @include for-screen-size-extra-small {
+        width: fit-content;
+    }
+
+    @include for-screen-size-extra-large {
+        display: flex;
+        display: -webkit-flex;
+    }
 }
 
 .search-ride-filter-by-avail-container, .search-ride-filter-by-days-container {
     padding: 0 0 16px 0;
 
+    @include for-screen-size-extra-large {
+        padding: 0;
+    }
+
     h4 {
         @include font-size(13);
         margin-bottom: 6px;
+        @include for-screen-size-small {
+            text-align: center;
+        }
+    
+        @include for-screen-size-extra-small {
+            text-align: center;
+        }
     }
 
     .options {
         @include display-flex-row--with-aligned-centered-vertically;
 
+        @include for-screen-size-small {
+            justify-content: center;
+        }
+    
+        @include for-screen-size-extra-small {
+            justify-content: center;
+        }
         .option {
             @include display-flex-row--with-aligned-centered-vertically;
             margin-right: 8px;

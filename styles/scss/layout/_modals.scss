@@ -50,6 +50,10 @@
             @include for-screen-size-small {
                 @include display-flex-coluimn--with-aligned-centered-horizontally;
             }
+
+            @include for-screen-size-extra-large {
+                justify-content: space-between;
+            }
         }
 
         .modal-body-content {
