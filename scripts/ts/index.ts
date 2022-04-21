@@ -177,6 +177,18 @@ const hidePageLoader = () => {
     loaderPage.style.display = "none";
 }
 
+const showModalLoader = () => {
+    let searchContent = document.querySelector('.search-service-modal .modal-body-content') as HTMLDivElement;
+
+    searchContent.innerHTML = '<div class="modal-loader" id="modal_first_loader">Loading...</div>';
+}
+
+const hideModalLoader = () => {
+    let searchContent = document.querySelector('.search-service-modal .modal-body-content') as HTMLDivElement;
+
+    searchContent.innerHTML = '';
+}
+
 const displayMapNavigation = () => {
     showMapNavigationContainer();
     hideUserProfileContainer();
@@ -384,12 +396,11 @@ const loadRideSchedules = () => {
             let data = result.data;
 
             if (result.status === 200) {
-                console.log(data.length)
                 let searchContent = document.querySelector('.search-service-modal .modal-body-content') as HTMLDivElement;
-                searchContent.innerHTML = '';
+
+                hideModalLoader();
 
                 searchContent.innerHTML = data.map((value: { availability: string, vehicle_id: string, vehicle_plate_number: string, driver_name: string, vehicle_type: string, vehicle_color: string, schedule: string, schedule_days: string }) => {
-                    console.log(value.availability)
                     return `\n<div class="content">
                                                 <div class="details">
                                                     <div class="col icon">
@@ -492,7 +503,11 @@ buttonCloseNavSidebar.addEventListener('click', (e) => {
 buttonSearchService.addEventListener('click', (e) => {
     e.preventDefault();
     showSearchServiceContainer();
-    loadRideSchedules();
+    showModalLoader();
+
+    delay(() => {
+        loadRideSchedules();
+    }, 1500);
 });
 
 buttonCloseSearchService.addEventListener('click', (e) => {
