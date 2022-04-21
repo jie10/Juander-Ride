@@ -5,6 +5,7 @@ const session = require('express-session');
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
 const moment = require('moment');
+const { Console } = require('console');
 
 const PORT = process.env.PORT || 8000;
 const users = JSON.parse(fs.readFileSync(__dirname + '/users.json'));
@@ -309,41 +310,55 @@ const searchRide = (query, filterByDays, filterByAvailability) => {
     return new Promise((resolve, reject) => {
         try {
             if (query) {
+                console.log('pasok!')
                 const matches = rides && rides.length > 0 ? rides.filter(ride => {
                     return ride.vehicle_id === query || ride.vehicle_plate_number === query;
                 }) : null;
 
                 if (matches && matches.length > 0) {
-                    let matchWithFilter = filterByDays ? matches.filter(match => {
-                        return match.schedule_days.split(',').filter(d => {
-                            return filterByDays.split(',').some(day => {
-                                return new RegExp(day, 'gi').test(d)
-                            })
-                        }).length > 0
-                    }) : null;
-
-                    matchWithFilter = filterByAvailability ? matchWithFilter.filter(match => String(match.isAvailable) === filterByAvailability) : matchWithFilter;
-
-                    if (matchWithFilter) {
-                        resolve({
-                                "status": 200,
-                                "title": "Search succesful",
-                                "message": "Found " + matchWithFilter.length + (matchWithFilter.length > 1 ? " matches" : " match") + " for keyword: " + query,
-                                "result": matchWithFilter.length > 0 ? matchWithFilter.map(driver => {
-                                    driver.isAvailable = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
-                                    return driver;
-                                }) : []
-                        });  
-                    } else {
-                        resolve({
-                                "status": 200,
-                                "title": "Search succesful",
-                                "message": "Found " + matches.length + (matches.length > 0 ? " match" : " matches") + " for keyword: " + query,
-                                "result": matches.map(driver => {
-                                    driver.availability = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
-                                    return driver;
+                    if (filterByDays || filterByAvailability) {
+                        let matchWithFilter = filterByDays ? matches.filter(match => {
+                            return match.schedule_days.split(',').filter(d => {
+                                return filterByDays.split(',').some(day => {
+                                    return new RegExp(day, 'gi').test(d)
                                 })
-                        });  
+                            }).length > 0
+                        }) : matches;
+        
+                        matchWithFilter = filterByAvailability ? matchWithFilter.filter(match => String(match.isAvailable) === filterByAvailability) : matchWithFilter;
+        
+                        if (matchWithFilter) {
+                            resolve({
+                                    "status": 200,
+                                    "title": "Search succesful",
+                                    "message": "Found " + matchWithFilter.length + (matchWithFilter.length > 1 ? " matches" : " match") + (query ? " found for keyword: " + query : " found."),
+                                    "data": matchWithFilter.length > 0 ? matchWithFilter.map(driver => {
+                                        driver.availability = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
+                                        return driver;
+                                    }) : []
+                            });  
+                        } else {
+                            resolve({
+                                "status": 404,
+                                "title": "Search failed",
+                                "message": "No match found with keyword " + query
+                            });
+                        }
+                    } else {
+                        resolve(matches && matches.length > 0 ? {
+                            "status": 200,
+                            "title": "Load Successful",
+                            "message": matches.length + " rides found",
+                            "data": matches.map(driver => {
+                                driver.availability = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
+                                return driver;
+                            })
+                        } : {
+                            "status": 200,
+                            "title": "Load Successful",
+                            "message": "No rides found",
+                            "data": []
+                        }); 
                     }
                 } else {
                     resolve({
@@ -367,8 +382,8 @@ const searchRide = (query, filterByDays, filterByAvailability) => {
                     resolve({
                             "status": 200,
                             "title": "Search succesful",
-                            "message": "Found " + matchWithFilter.length + (matchWithFilter.length > 1 ? " matches" : " match") + " for keyword: " + query,
-                            "result": matchWithFilter.length > 0 ? matchWithFilter.map(driver => {
+                            "message": "Found " + matchWithFilter.length + (matchWithFilter.length > 1 ? " matches" : " match") + (query ? " found for keyword: " + query : " found."),
+                            "data": matchWithFilter.length > 0 ? matchWithFilter.map(driver => {
                                 driver.availability = driver.isAvailable ? "AVAILABLE" : "NOT AVAILABLE";
                                 return driver;
                             }) : []
@@ -392,7 +407,8 @@ const searchRide = (query, filterByDays, filterByAvailability) => {
                 } : {
                     "status": 200,
                     "title": "Load Successful",
-                    "message": "No rides found"
+                    "message": "No rides found",
+                    "data": []
                 });  
             }
 

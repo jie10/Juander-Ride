@@ -815,6 +815,17 @@ button {
   font-size: 0.75rem;
 }
 
+.modal-no-results-found-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
 /** Font */
 /** Alignment */
 /** Element Position */

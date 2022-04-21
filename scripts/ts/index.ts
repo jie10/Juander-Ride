@@ -27,6 +27,14 @@ const inputUpdateJobRole = document.getElementById('update_job_role') as HTMLInp
 const inputUpdatePointOfOrigin = document.getElementById('update_point_of_origin') as HTMLInputElement;
 const inputUpdateEmail = document.getElementById('update_email') as HTMLInputElement;
 const inputUpdatePassword = document.getElementById('update_password') as HTMLInputElement;
+const inputSearchRideQuery = document.getElementById('search_ride_query') as HTMLInputElement;
+const checkboxFavailYes = document.getElementById('favail_yes_checkbox') as HTMLInputElement;
+const checkboxFavailNo = document.getElementById('favail_no_checkbox') as HTMLInputElement;
+const checkboxFdaysMon = document.getElementById('fdays_mon_checkbox') as HTMLInputElement;
+const checkboxFdaysTues = document.getElementById('fdays_tues_checkbox') as HTMLInputElement;
+const checkboxFdaysWed = document.getElementById('fdays_wed_checkbox') as HTMLInputElement;
+const checkboxFdaysThurs = document.getElementById('fdays_thurs_checkbox') as HTMLInputElement;
+const checkboxFdaysFri = document.getElementById('fdays_fri_checkbox') as HTMLInputElement;
 
 const selectorUpdateOnsiteSchedule = document.getElementById('update_onsite_schedule') as HTMLSelectElement;
 const selectorUpdateSpecificOnsiteDays = document.getElementById('update_specific_onsite_days') as HTMLSelectElement;
@@ -52,6 +60,9 @@ const formRegister = document.querySelector('.register-form') as HTMLDivElement;
 
 /** Variables */
 const BASE_LOCAL_URL = 'http://localhost:8000';
+let q: string = '';
+let favail: string = '';
+let fdays: string[] = [];
 
 
 /** Functions */
@@ -181,12 +192,30 @@ const showModalLoader = () => {
     let searchContent = document.querySelector('.search-service-modal .modal-body-content') as HTMLDivElement;
 
     searchContent.innerHTML = '<div class="modal-loader" id="modal_first_loader">Loading...</div>';
+    buttonCloseSearchService.disabled = true;
+    checkboxFavailNo.disabled = true;
+    checkboxFavailYes.disabled = true;
+    checkboxFdaysMon.disabled = true;
+    checkboxFdaysTues.disabled = true;
+    checkboxFdaysWed.disabled = true;
+    checkboxFdaysThurs.disabled = true;
+    checkboxFdaysFri.disabled = true;
+    inputSearchRideQuery.disabled = true;
 }
 
 const hideModalLoader = () => {
     let searchContent = document.querySelector('.search-service-modal .modal-body-content') as HTMLDivElement;
 
     searchContent.innerHTML = '';
+    buttonCloseSearchService.disabled = false;
+    checkboxFavailNo.disabled = false;
+    checkboxFavailYes.disabled = false;
+    checkboxFdaysMon.disabled = false;
+    checkboxFdaysTues.disabled = false;
+    checkboxFdaysWed.disabled = false;
+    checkboxFdaysThurs.disabled = false;
+    checkboxFdaysFri.disabled = false;
+    inputSearchRideQuery.disabled = false;
 }
 
 const displayMapNavigation = () => {
@@ -390,84 +419,108 @@ const logoutUser = () => {
 }
 
 const loadRideSchedules = () => {
-    fetch(BASE_LOCAL_URL + '/user/ride')
+    let endpointURL = new URL(BASE_LOCAL_URL + '/user/ride');
+
+    if (q) {
+        endpointURL.searchParams.set('q', q);
+    }
+
+    if (favail) {
+        endpointURL.searchParams.set('favail', favail);
+    }
+
+    if (fdays && fdays.length > 0) {
+        endpointURL.searchParams.set('fdays', fdays.join(','));
+    }
+
+    fetch(endpointURL.toString())
         .then(result => result.json())
         .then(result => {
             let data = result.data;
+            let searchContent = document.querySelector('.search-service-modal .modal-body-content') as HTMLDivElement;
+
+            hideModalLoader();
 
             if (result.status === 200) {
-                let searchContent = document.querySelector('.search-service-modal .modal-body-content') as HTMLDivElement;
-
-                hideModalLoader();
-
-                searchContent.innerHTML = data.map((value: { availability: string, vehicle_id: string, vehicle_plate_number: string, driver_name: string, vehicle_type: string, vehicle_color: string, schedule: string, schedule_days: string }) => {
-                    return `\n<div class="content">
-                                                <div class="details">
-                                                    <div class="col icon">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                                            <path d="M224 0C348.8 0 448 35.2 448 80V416C448 433.7 433.7 448 416 448V480C416 497.7 401.7 512 384 512H352C334.3 512 320 497.7 320 480V448H128V480C128 497.7 113.7 512 96 512H64C46.33 512 32 497.7 32 480V448C14.33 448 0 433.7 0 416V80C0 35.2 99.19 0 224 0zM64 256C64 273.7 78.33 288 96 288H352C369.7 288 384 273.7 384 256V128C384 110.3 369.7 96 352 96H96C78.33 96 64 110.3 64 128V256zM80 400C97.67 400 112 385.7 112 368C112 350.3 97.67 336 80 336C62.33 336 48 350.3 48 368C48 385.7 62.33 400 80 400zM368 400C385.7 400 400 385.7 400 368C400 350.3 385.7 336 368 336C350.3 336 336 350.3 336 368C336 385.7 350.3 400 368 400z"/>
-                                                        </svg>
-                                                        <span id="vehicle_availability" class="${value.availability === "AVAILABLE" ? 'color-text-green' : 'color-text-red'}">${value.availability}</span>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="row">
-                                                            <span class="label">Plate No.</span>
-                                                            <span id="vehicle_plate_number">${value.vehicle_plate_number}</span>
+                if (data && data.length > 0) {
+                    searchContent.innerHTML = data.map((value: { availability: string, vehicle_id: string, vehicle_plate_number: string, driver_name: string, vehicle_type: string, vehicle_color: string, schedule: string, schedule_days: string }) => {
+                        return `\n<div class="content">
+                                                    <div class="details">
+                                                        <div class="col icon">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                                <path d="M224 0C348.8 0 448 35.2 448 80V416C448 433.7 433.7 448 416 448V480C416 497.7 401.7 512 384 512H352C334.3 512 320 497.7 320 480V448H128V480C128 497.7 113.7 512 96 512H64C46.33 512 32 497.7 32 480V448C14.33 448 0 433.7 0 416V80C0 35.2 99.19 0 224 0zM64 256C64 273.7 78.33 288 96 288H352C369.7 288 384 273.7 384 256V128C384 110.3 369.7 96 352 96H96C78.33 96 64 110.3 64 128V256zM80 400C97.67 400 112 385.7 112 368C112 350.3 97.67 336 80 336C62.33 336 48 350.3 48 368C48 385.7 62.33 400 80 400zM368 400C385.7 400 400 385.7 400 368C400 350.3 385.7 336 368 336C350.3 336 336 350.3 336 368C336 385.7 350.3 400 368 400z"/>
+                                                            </svg>
+                                                            <span id="vehicle_availability" class="${value.availability === "AVAILABLE" ? 'color-text-green' : 'color-text-red'}">${value.availability}</span>
                                                         </div>
-                                                        <div class="row">
-                                                            <span class="label">Vehicle ID</span>
-                                                            <span id="vehicle_id">${value.vehicle_id}</span>
+                                                        <div class="col">
+                                                            <div class="row">
+                                                                <span class="label">Plate No.</span>
+                                                                <span id="vehicle_plate_number">${value.vehicle_plate_number}</span>
+                                                            </div>
+                                                            <div class="row">
+                                                                <span class="label">Vehicle ID</span>
+                                                                <span id="vehicle_id">${value.vehicle_id}</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="row">
-                                                            <span class="label">Driver</span>
-                                                            <span id="vehicle_driver_name">${capitalizeMultipleStrings(value.driver_name, " ", " ")}</span>
+                                                        <div class="col">
+                                                            <div class="row">
+                                                                <span class="label">Driver</span>
+                                                                <span id="vehicle_driver_name">${capitalizeMultipleStrings(value.driver_name, " ", " ")}</span>
+                                                            </div>
+                                                            <div class="row">
+                                                                <span class="label">Type</span>
+                                                                <span id="vehicle_type">${capitalizeString(value.vehicle_type)}</span>
+                                                            </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <span class="label">Type</span>
-                                                            <span id="vehicle_type">${capitalizeString(value.vehicle_type)}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="row">
-                                                            <span class="label">Color</span>
-                                                            <span id="vehicle_color">${capitalizeString(value.vehicle_color)}</span>
-                                                        </div>
-                                                        <div class="row">
-                                                            <span class="label">Schedule</span>
-                                                            <span class="vehicle-schedule-type">
-                                                                ${capitalizeString(value.schedule)} 
-                                                                <span class="show-schedule">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                                                        <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 400c-18 0-32-14-32-32s13.1-32 32-32c17.1 0 32 14 32 32S273.1 400 256 400zM325.1 258L280 286V288c0 13-11 24-24 24S232 301 232 288V272c0-8 4-16 12-21l57-34C308 213 312 206 312 198C312 186 301.1 176 289.1 176h-51.1C225.1 176 216 186 216 198c0 13-11 24-24 24s-24-11-24-24C168 159 199 128 237.1 128h51.1C329 128 360 159 360 198C360 222 347 245 325.1 258z"/>
-                                                                    </svg>
-                                                                    <span style="display: none;">${capitalizeMultipleStrings(value.schedule_days, ",", ",")}</span>
+                                                        <div class="col">
+                                                            <div class="row">
+                                                                <span class="label">Color</span>
+                                                                <span id="vehicle_color">${capitalizeString(value.vehicle_color)}</span>
+                                                            </div>
+                                                            <div class="row">
+                                                                <span class="label">Schedule</span>
+                                                                <span class="vehicle-schedule-type">
+                                                                    ${capitalizeString(value.schedule)} 
+                                                                    <span class="show-schedule">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                                            <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 400c-18 0-32-14-32-32s13.1-32 32-32c17.1 0 32 14 32 32S273.1 400 256 400zM325.1 258L280 286V288c0 13-11 24-24 24S232 301 232 288V272c0-8 4-16 12-21l57-34C308 213 312 206 312 198C312 186 301.1 176 289.1 176h-51.1C225.1 176 216 186 216 198c0 13-11 24-24 24s-24-11-24-24C168 159 199 128 237.1 128h51.1C329 128 360 159 360 198C360 222 347 245 325.1 258z"/>
+                                                                        </svg>
+                                                                        <span style="display: none;">${capitalizeMultipleStrings(value.schedule_days, ",", ",")}</span>
+                                                                    </span>
                                                                 </span>
-                                                            </span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>`;
-                }).join('\n');
-
-                document.querySelectorAll('.show-schedule')?.forEach(element => {
-                    element.addEventListener('click', (e) => {
-                        if (e.currentTarget instanceof Element) {
-                            let span = e.currentTarget.querySelector('span') as HTMLSpanElement;
-                            span.style.display = span.style.display === "none" ? "block" : "none";
-                        }
+                                                </div>`;
+                    }).join('\n');
+    
+                    document.querySelectorAll('.show-schedule')?.forEach(element => {
+                        element.addEventListener('click', (e) => {
+                            if (e.currentTarget instanceof Element) {
+                                let span = e.currentTarget.querySelector('span') as HTMLSpanElement;
+                                span.style.display = span.style.display === "none" ? "block" : "none";
+                            }
+                        });
                     });
-                });
+                } else {
+                    searchContent.innerHTML = '<div class="modal-no-results-found-container" id="modal_no_results_found">No results found.</div>';
+                }
             } else {
-                showAlertStatus(data.title, data.message, 'error');
-                goToLoginPage();
+                searchContent.innerHTML = '<div class="modal-no-results-found-container" id="modal_no_results_found">No results found.</div>';
             }
         })
         .catch(function (error) {
             showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
             console.error(error);
         });
+}
+
+const displayRideSchedules = () => {
+    showModalLoader();
+
+    delay(() => {
+        loadRideSchedules();
+    }, 1500);
 }
 
 
@@ -503,16 +556,23 @@ buttonCloseNavSidebar.addEventListener('click', (e) => {
 buttonSearchService.addEventListener('click', (e) => {
     e.preventDefault();
     showSearchServiceContainer();
-    showModalLoader();
-
-    delay(() => {
-        loadRideSchedules();
-    }, 1500);
+    displayRideSchedules();
 });
 
 buttonCloseSearchService.addEventListener('click', (e) => {
     e.preventDefault();
     hideSearchServiceContainer();
+    favail = '';
+    fdays = [];
+    q = '';
+    checkboxFavailNo.checked = false;
+    checkboxFavailYes.checked = false;
+    checkboxFdaysMon.checked = false;
+    checkboxFdaysTues.checked = false;
+    checkboxFdaysWed.checked = false;
+    checkboxFdaysThurs.checked = false;
+    checkboxFdaysFri.checked = false;
+    inputSearchRideQuery.value = '';
 });
 
 buttonUserHome.addEventListener('click', (e) => {
@@ -536,6 +596,85 @@ buttonStartScanQRCode.addEventListener('click', () => {
 
 buttonStopScanQRCode.addEventListener('click', () => {
     stopScanUserQRCodeScan();
+});
+
+inputSearchRideQuery.addEventListener('keyup', (e) => {
+    q = (<HTMLInputElement> e.currentTarget).value;
+    loadRideSchedules();
+});
+
+checkboxFavailYes.addEventListener('click', () => {
+    if ((checkboxFavailYes.checked === true && checkboxFavailNo.checked === true) || (checkboxFavailYes.checked === false && checkboxFavailNo.checked === false)) {
+        favail = '';
+    } else if (checkboxFavailYes.checked === false) {
+        favail = "false";
+    } else {
+        favail = "true";
+    }
+
+    loadRideSchedules();
+});
+
+checkboxFavailNo.addEventListener('click', () => {
+    if ((checkboxFavailYes.checked === true && checkboxFavailNo.checked === true) || (checkboxFavailYes.checked === false && checkboxFavailNo.checked === false)) {
+        favail = '';
+    } else if (checkboxFavailNo.checked === false) {
+        favail = "true";
+    } else {
+        favail = "false";
+    }
+
+    loadRideSchedules();
+});
+
+checkboxFdaysMon.addEventListener('click', () => {
+    if (checkboxFdaysMon.checked === true) {
+        fdays.push(checkboxFdaysMon.value);
+    } else {
+        fdays = fdays.filter((day: string) => day !== checkboxFdaysMon.value);
+    }
+
+    loadRideSchedules();
+});
+
+checkboxFdaysTues.addEventListener('click', () => {
+    if (checkboxFdaysTues.checked === true) {
+        fdays.push(checkboxFdaysTues.value);
+    } else {
+        fdays = fdays.filter((day: string) => day !== checkboxFdaysTues.value);
+    }
+
+    loadRideSchedules();
+});
+
+checkboxFdaysWed.addEventListener('click', () => {
+    if (checkboxFdaysWed.checked === true) {
+        fdays.push(checkboxFdaysWed.value);
+    } else {
+        fdays = fdays.filter((day: string) => day !== checkboxFdaysWed.value);
+    }
+
+    loadRideSchedules();
+});
+
+checkboxFdaysThurs.addEventListener('click', () => {
+    if (checkboxFdaysThurs.checked === true) {
+        fdays.push(checkboxFdaysThurs.value);
+    } else {
+        fdays = fdays.filter((day: string) => day !== checkboxFdaysThurs.value);
+    }
+
+    loadRideSchedules();
+});
+
+checkboxFdaysFri.addEventListener('click', () => {
+    if (checkboxFdaysFri.checked === true) {
+        fdays.push(checkboxFdaysFri.value);
+    } else {
+        fdays = fdays.filter((day: string) => day !== checkboxFdaysFri.value);
+    }
+
+    loadRideSchedules();
 });
 
 /** PAGE LOAD INITIALIZATION */
