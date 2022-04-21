@@ -826,6 +826,11 @@ button {
   letter-spacing: 1.5px;
 }
 
+.navigation-buttons-container {
+  display: flex;
+  display: -webkit-flex;
+}
+
 /** Font */
 /** Alignment */
 /** Element Position */
@@ -863,6 +868,19 @@ button:disabled {
   cursor: pointer;
 }
 .search-service-button .svg-icon {
+  color: #000000;
+  fill: #000000;
+}
+
+.view-ride-logs-button {
+  border: none;
+  outline: none;
+  width: 48px;
+  padding: 12px;
+  background-color: transparent;
+  cursor: pointer;
+}
+.view-ride-logs-button .svg-icon {
   color: #000000;
   fill: #000000;
 }

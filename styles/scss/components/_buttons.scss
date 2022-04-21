@@ -32,6 +32,19 @@ button:disabled {
     }
 }
 
+.view-ride-logs-button {
+    @include borderless-element;
+    width: 48px;
+    padding: 12px;
+    background-color: $background-color-transparent;
+    cursor: pointer;
+
+    .svg-icon {
+        color: $font-color-black;
+        fill: $font-color-black;
+    }
+}
+
 .form-button {
     @include borderless-element;
     padding: 12px;

@@ -52,6 +52,7 @@ const buttonScanQRCode = document.getElementById('scan_qr_code_button') as HTMLB
 const buttonStopScanQRCode = document.getElementById('stop_scan_qr_code_button') as HTMLButtonElement;
 const buttonStartScanQRCode = document.getElementById('scan_qr_code_button') as HTMLButtonElement;
 const buttonSearchService = document.getElementById('search_service_button') as HTMLButtonElement;
+const buttonViewRideLogs = document.getElementById('view_ride_logs_button') as HTMLButtonElement;
 const buttonCloseSearchService = document.getElementById('close_search_service_modal_button') as HTMLButtonElement;
 
 const formLogin = document.querySelector('.login-form') as HTMLDivElement;
@@ -311,6 +312,7 @@ const goToHomePage = () => {
                 generateUserQRCode(data);
 
                 buttonSearchService.style.display = data.access_role === 'driver' ? 'none' : 'flex';
+                buttonViewRideLogs.style.display = data.access_role === 'driver' ? 'none' : 'flex';
                 buttonScanQRCode.style.display = data.access_role === 'driver' ? 'none' : 'flex';
             } else {
                 destroyCurrentSession();

@@ -47,6 +47,7 @@ var buttonScanQRCode = document.getElementById('scan_qr_code_button');
 var buttonStopScanQRCode = document.getElementById('stop_scan_qr_code_button');
 var buttonStartScanQRCode = document.getElementById('scan_qr_code_button');
 var buttonSearchService = document.getElementById('search_service_button');
+var buttonViewRideLogs = document.getElementById('view_ride_logs_button');
 var buttonCloseSearchService = document.getElementById('close_search_service_modal_button');
 var formLogin = document.querySelector('.login-form');
 var formRegister = document.querySelector('.register-form');
@@ -247,6 +248,7 @@ var goToHomePage = function () {
             userDisplayPlateNumber.innerHTML = data.vehicle_plate_number ? data.vehicle_plate_number : '';
             generateUserQRCode(data);
             buttonSearchService.style.display = data.access_role === 'driver' ? 'none' : 'flex';
+            buttonViewRideLogs.style.display = data.access_role === 'driver' ? 'none' : 'flex';
             buttonScanQRCode.style.display = data.access_role === 'driver' ? 'none' : 'flex';
         }
         else {
