@@ -4,6 +4,7 @@ var pageHome = document.querySelector('.home-page');
 var navigationSidebarContainer = document.querySelector('.navigation-side-bar-container');
 var mapNavigationContainer = document.querySelector('.map-navigation-container');
 var searchServiceContainer = document.querySelector('.search-service-container');
+var viewRideLogsContainer = document.querySelector('.view-ride-logs-container');
 var userProfileContainer = document.querySelector('.user-profile-container');
 var userQRCodeContainer = document.querySelector('.user-qr-code-container');
 var rideQRCodeContainer = document.querySelector('.ride-qr-code-container');
@@ -124,6 +125,12 @@ var showUserQRCodeContainer = function () {
 };
 var hideUserQRCodeContainer = function () {
     userQRCodeContainer.style.display = "none";
+};
+var showViewRideLogsContainer = function () {
+    viewRideLogsContainer.style.display = "block";
+};
+var hideViewRideLogsContainer = function () {
+    viewRideLogsContainer.style.display = "none";
 };
 var showUserScanQRCodeButton = function () {
     buttonScanQRCode.style.display = "flex";
@@ -459,6 +466,9 @@ buttonStartScanQRCode.addEventListener('click', function () {
 });
 buttonStopScanQRCode.addEventListener('click', function () {
     stopScanUserQRCodeScan();
+});
+buttonViewRideLogs.addEventListener('click', function () {
+    showViewRideLogsContainer();
 });
 inputSearchRideQuery.addEventListener('keyup', function (e) {
     q = e.currentTarget.value;

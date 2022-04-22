@@ -4,6 +4,7 @@ const pageHome = document.querySelector('.home-page') as HTMLDivElement;
 const navigationSidebarContainer = document.querySelector('.navigation-side-bar-container') as HTMLDivElement;
 const mapNavigationContainer = document.querySelector('.map-navigation-container') as HTMLDivElement;
 const searchServiceContainer = document.querySelector('.search-service-container') as HTMLDivElement;
+const viewRideLogsContainer = document.querySelector('.view-ride-logs-container') as HTMLDivElement;
 const userProfileContainer = document.querySelector('.user-profile-container') as HTMLDivElement;
 const userQRCodeContainer = document.querySelector('.user-qr-code-container') as HTMLDivElement;
 const rideQRCodeContainer = document.querySelector('.ride-qr-code-container') as HTMLDivElement;
@@ -163,6 +164,14 @@ const showUserQRCodeContainer = () => {
 
 const hideUserQRCodeContainer = () => {
     userQRCodeContainer.style.display = "none";
+}
+
+const showViewRideLogsContainer = () => {
+    viewRideLogsContainer.style.display = "block";
+}
+
+const hideViewRideLogsContainer = () => {
+    viewRideLogsContainer.style.display = "none";
 }
 
 const showUserScanQRCodeButton = () => {
@@ -598,6 +607,10 @@ buttonStartScanQRCode.addEventListener('click', () => {
 
 buttonStopScanQRCode.addEventListener('click', () => {
     stopScanUserQRCodeScan();
+});
+
+buttonViewRideLogs.addEventListener('click', () => {
+    showViewRideLogsContainer();
 });
 
 inputSearchRideQuery.addEventListener('keyup', (e) => {

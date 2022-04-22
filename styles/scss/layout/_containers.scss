@@ -13,6 +13,13 @@
     z-index: 1000;
 }
 
+.view-ride-logs-container {
+    @include position-fixed-from-top;
+    padding: 48px 0 0 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
 .user-profile-container {
     @include position-fixed-from-top;
     padding: 48px 0 0 0;
