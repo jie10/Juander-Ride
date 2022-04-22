@@ -259,65 +259,16 @@
                     </svg>
                 </button>
                 <div class="modal-header">
-                    <h2>Search Ride</h2>
+                    <h2>Ride Logs</h2>
                 </div>
                 <div class="modal-body">
-                    <div class="modal-body-header">
-                        <div class="search-ride-query-input-container">
-                            <input type="text" class="search-ride-query" id="search_ride_query" placeholder="Vehicle ID or Plate No."/>
-                            <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                <path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path>
-                            </svg>
-                        </div>
-                        <div class="search-ride-filters-container">
-                            <div class="search-ride-filter-by-avail-container">
-                                <h4>Availability</h4>
-                                <div class="options">
-                                    <div class="option">
-                                        <input type="checkbox" id="favail_yes_checkbox" name="favail" value="available" />
-                                        <label for="favail_yes_checkbox">Available</label>
-                                    </div>
-                                    <div class="option">
-                                        <input type="checkbox" id="favail_no_checkbox" name="favail" value="not available" />
-                                        <label for="favail_no_checkbox">Not Available</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="search-ride-filter-by-days-container">
-                                <h4>Schedule Days</h4>
-                                <div class="options">
-                                    <div class="option">
-                                        <input type="checkbox" id="fdays_mon_checkbox" name="fdays" value="mon" />
-                                        <label for="fdays_mon_checkbox">Mon</label>
-                                    </div>
-                                    <div class="option">
-                                        <input type="checkbox" id="fdays_tues_checkbox" name="fdays" value="tues" />
-                                        <label for="fdays_tues_checkbox">Tues</label>
-                                    </div>
-                                    <div class="option">
-                                        <input type="checkbox" id="fdays_wed_checkbox" name="fdays" value="wed" />
-                                        <label for="fdays_wed_checkbox">Wed</label>
-                                    </div>
-                                    <div class="option">
-                                        <input type="checkbox" id="fdays_thurs_checkbox" name="fdays" value="thurs" />
-                                        <label for="fdays_thurs_checkbox">Thurs</label>
-                                    </div>
-                                    <div class="option">
-                                        <input type="checkbox" id="fdays_fri_checkbox" name="fdays" value="fri" />
-                                        <label for="fdays_fri_checkbox">Fri</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="modal-body-content">
                         <div class="content">
                             <div class="details">
                                 <div class="col icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                        <path d="M224 0C348.8 0 448 35.2 448 80V416C448 433.7 433.7 448 416 448V480C416 497.7 401.7 512 384 512H352C334.3 512 320 497.7 320 480V448H128V480C128 497.7 113.7 512 96 512H64C46.33 512 32 497.7 32 480V448C14.33 448 0 433.7 0 416V80C0 35.2 99.19 0 224 0zM64 256C64 273.7 78.33 288 96 288H352C369.7 288 384 273.7 384 256V128C384 110.3 369.7 96 352 96H96C78.33 96 64 110.3 64 128V256zM80 400C97.67 400 112 385.7 112 368C112 350.3 97.67 336 80 336C62.33 336 48 350.3 48 368C48 385.7 62.33 400 80 400zM368 400C385.7 400 400 385.7 400 368C400 350.3 385.7 336 368 336C350.3 336 336 350.3 336 368C336 385.7 350.3 400 368 400z"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                        <path d="M256 96C256 113.7 270.3 128 288 128C305.7 128 320 113.7 320 96V32H394.8C421.9 32 446 49.08 455.1 74.63L572.9 407.2C574.9 413 576 419.2 576 425.4C576 455.5 551.5 480 521.4 480H320V416C320 398.3 305.7 384 288 384C270.3 384 256 398.3 256 416V480H54.61C24.45 480 0 455.5 0 425.4C0 419.2 1.06 413 3.133 407.2L120.9 74.63C129.1 49.08 154.1 32 181.2 32H255.1L256 96zM320 224C320 206.3 305.7 192 288 192C270.3 192 256 206.3 256 224V288C256 305.7 270.3 320 288 320C305.7 320 320 305.7 320 288V224z" />
                                     </svg>
-                                    <span id="vehicle_availability" class="color-text-green">AVAILABLE</span>
                                 </div>
                                 <div class="col">
                                     <div class="row">
@@ -335,26 +286,18 @@
                                         <span id="vehicle_driver_name">Bob Santos</span>
                                     </div>
                                     <div class="row">
-                                        <span class="label">Type</span>
-                                        <span id="vehicle_type">Bus</span>
+                                        <span class="label">Color</span>
+                                        <span id="vehicle_color">Yellow</span>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="row">
-                                        <span class="label">Color</span>
-                                        <span id="vehicle_color">Yellow</span>
+                                        <span class="label">Type</span>
+                                        <span id="vehicle_type">Bus</span>
                                     </div>
                                     <div class="row">
-                                        <span class="label">Schedule</span>
-                                        <span class="vehicle-schedule-type">
-                                            Daily 
-                                            <span class="show-schedule">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                                    <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 400c-18 0-32-14-32-32s13.1-32 32-32c17.1 0 32 14 32 32S273.1 400 256 400zM325.1 258L280 286V288c0 13-11 24-24 24S232 301 232 288V272c0-8 4-16 12-21l57-34C308 213 312 206 312 198C312 186 301.1 176 289.1 176h-51.1C225.1 176 216 186 216 198c0 13-11 24-24 24s-24-11-24-24C168 159 199 128 237.1 128h51.1C329 128 360 159 360 198C360 222 347 245 325.1 258z"/>
-                                                </svg>
-                                                <span style="display: none;">Mon,Tues,Wed,Thurs,Fri</span>
-                                            </span>
-                                        </span>
+                                        <span class="label">Date & Time</span>
+                                        <span id="log-datetime">04-06-2022 4:54 PM</span>
                                     </div>
                                 </div>
                             </div>

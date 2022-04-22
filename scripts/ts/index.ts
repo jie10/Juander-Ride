@@ -55,6 +55,7 @@ const buttonStartScanQRCode = document.getElementById('scan_qr_code_button') as 
 const buttonSearchService = document.getElementById('search_service_button') as HTMLButtonElement;
 const buttonViewRideLogs = document.getElementById('view_ride_logs_button') as HTMLButtonElement;
 const buttonCloseSearchService = document.getElementById('close_search_service_modal_button') as HTMLButtonElement;
+const buttonCloseViewRideLogs = document.getElementById('close_view_ride_logs_modal_button') as HTMLButtonElement;
 
 const formLogin = document.querySelector('.login-form') as HTMLDivElement;
 const formRegister = document.querySelector('.register-form') as HTMLDivElement;
@@ -213,6 +214,13 @@ const showModalLoader = () => {
     inputSearchRideQuery.disabled = true;
 }
 
+const showViewModalLoader = () => {
+    let viewContent = document.querySelector('.view-ride-logs-modal .modal-body-content') as HTMLDivElement;
+
+    viewContent.innerHTML = '<div class="modal-loader" id="modal_first_loader">Loading...</div>';
+    buttonCloseViewRideLogs.disabled = true;
+}
+
 const hideModalLoader = () => {
     let searchContent = document.querySelector('.search-service-modal .modal-body-content') as HTMLDivElement;
 
@@ -226,6 +234,13 @@ const hideModalLoader = () => {
     checkboxFdaysThurs.disabled = false;
     checkboxFdaysFri.disabled = false;
     inputSearchRideQuery.disabled = false;
+}
+
+const hideViewModalLoader = () => {
+    let viewContent = document.querySelector('.view-ride-logs-modal .modal-body-content') as HTMLDivElement;
+
+    viewContent.innerHTML = '';
+    buttonCloseViewRideLogs.disabled = false;
 }
 
 const displayMapNavigation = () => {
@@ -526,11 +541,103 @@ const loadRideSchedules = () => {
         });
 }
 
+const loadRideLogs = () => {
+    let endpointURL = new URL(BASE_LOCAL_URL + '/user/rides');
+
+    fetch(endpointURL.toString(), {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON({"email": retrieveCurrentSession() })
+    })
+        .then(result => result.json())
+        .then(result => {
+            let data = result.data;
+            let viewContent = document.querySelector('.view-ride-logs-modal .modal-body-content') as HTMLDivElement;
+
+            hideViewModalLoader();
+
+            if (result.status === 200) {
+                console.log(data)
+                if (data && data.length > 0) {
+                    viewContent.innerHTML = data.map((value: { vehicle_id: string, vehicle_plate_number: string, driver_name: string, vehicle_type: string, vehicle_color: string, log_datetime: string }) => {
+                        return `\n<div class="content">
+                            <div class="details">
+                                <div class="col icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                        <path d="M256 96C256 113.7 270.3 128 288 128C305.7 128 320 113.7 320 96V32H394.8C421.9 32 446 49.08 455.1 74.63L572.9 407.2C574.9 413 576 419.2 576 425.4C576 455.5 551.5 480 521.4 480H320V416C320 398.3 305.7 384 288 384C270.3 384 256 398.3 256 416V480H54.61C24.45 480 0 455.5 0 425.4C0 419.2 1.06 413 3.133 407.2L120.9 74.63C129.1 49.08 154.1 32 181.2 32H255.1L256 96zM320 224C320 206.3 305.7 192 288 192C270.3 192 256 206.3 256 224V288C256 305.7 270.3 320 288 320C305.7 320 320 305.7 320 288V224z" />
+                                    </svg>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <span class="label">Plate No.</span>
+                                        <span id="vehicle_plate_number">${value.vehicle_plate_number}</span>
+                                    </div>
+                                    <div class="row">
+                                        <span class="label">Vehicle ID</span>
+                                        <span id="vehicle_id">${value.vehicle_id}</span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <span class="label">Driver</span>
+                                        <span id="vehicle_driver_name">${value.driver_name}</span>
+                                    </div>
+                                    <div class="row">
+                                        <span class="label">Color</span>
+                                        <span id="vehicle_color">${value.vehicle_color}</span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <span class="label">Type</span>
+                                        <span id="vehicle_type">${value.vehicle_type}</span>
+                                    </div>
+                                    <div class="row">
+                                        <span class="label">Date & Time</span>
+                                        <span id="log-datetime">${value.log_datetime}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                    }).join('\n');
+    
+                    document.querySelectorAll('.show-schedule')?.forEach(element => {
+                        element.addEventListener('click', (e) => {
+                            if (e.currentTarget instanceof Element) {
+                                let span = e.currentTarget.querySelector('span') as HTMLSpanElement;
+                                span.style.display = span.style.display === "none" ? "block" : "none";
+                            }
+                        });
+                    });
+                } else {
+                    viewContent.innerHTML = '<div class="modal-no-results-found-container" id="modal_no_results_found">No results found.</div>';
+                }
+            } else {
+                viewContent.innerHTML = '<div class="modal-no-results-found-container" id="modal_no_results_found">No results found.</div>';
+            }
+        })
+        .catch(function (error) {
+            showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+            console.error(error);
+        });
+}
+
 const displayRideSchedules = () => {
     showModalLoader();
 
     delay(() => {
         loadRideSchedules();
+    }, 1500);
+}
+
+const displayRideLogs = () => {
+    showViewModalLoader();
+
+    delay(() => {
+        loadRideLogs();
     }, 1500);
 }
 
@@ -586,6 +693,11 @@ buttonCloseSearchService.addEventListener('click', (e) => {
     inputSearchRideQuery.value = '';
 });
 
+buttonCloseViewRideLogs.addEventListener('click', (e) => {
+    e.preventDefault();
+    hideViewRideLogsContainer();
+});
+
 buttonUserHome.addEventListener('click', (e) => {
     e.preventDefault();
     displayMapNavigation();
@@ -611,6 +723,7 @@ buttonStopScanQRCode.addEventListener('click', () => {
 
 buttonViewRideLogs.addEventListener('click', () => {
     showViewRideLogsContainer();
+    displayRideLogs();
 });
 
 inputSearchRideQuery.addEventListener('keyup', (e) => {

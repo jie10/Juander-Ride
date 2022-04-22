@@ -438,16 +438,17 @@ const viewRideLogs = (email) => {
                         "data": logs.map(log => {
                                 let { log_datetime } = log;
                                 let driver = driverInfo[0];
+
                                 return {
                                     "vehicle_id": driver.vehicle_id,
                                     "vehicle_plate_number": driver.vehicle_plate_number,
                                     "vehicle_type": driver.vehicle_type,
                                     "vehicle_color": driver.vehicle_color,
-                                    "driver_id": driver.driver_id,
+                                    "driver_name": driver.driver_name,
                                     "log_datetime": moment(log_datetime).format('MM-DD-YYYY h:mm A'),
                                     "log_timestamp": log_datetime
                                 }
-                            })
+                            }).sort((a, b) => (a.log_timestamp > b.log_timestamp) ? 1 : -1)
                     });
                 } else {
                     resolve({
@@ -507,7 +508,7 @@ app.post('/user/scan', (req, res) => {
         });
 });
 
-app.get('/user/rides', (req, res) => {
+app.post('/user/rides', (req, res) => {
     viewRideLogs(req.body.email)
         .then(result => res.status(result.status).json(result))
         .catch(err => {
