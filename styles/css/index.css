@@ -291,22 +291,22 @@ button {
 }
 @media (min-width: 1201px) {
   .update-profile-form-container {
-    width: 400px;
+    width: 60%;
   }
 }
 @media (max-width: 1200px) {
   .update-profile-form-container {
-    width: 450px;
+    width: 70%;
   }
 }
 @media (max-width: 900px) {
   .update-profile-form-container {
-    width: 500px;
+    width: 80%;
   }
 }
 @media (max-width: 600px) {
   .update-profile-form-container {
-    width: 80%;
+    width: 90%;
   }
 }
 @media (max-width: 480px) {
@@ -320,6 +320,31 @@ button {
   border: 1px solid #C9C9CA;
   padding: 36px 24px;
   overflow: hidden;
+}
+@media (min-width: 1201px) {
+  .update-profile-form .row {
+    width: 35%;
+  }
+}
+@media (max-width: 1200px) {
+  .update-profile-form .row {
+    width: 50%;
+  }
+}
+@media (max-width: 900px) {
+  .update-profile-form .row {
+    width: 60%;
+  }
+}
+@media (max-width: 600px) {
+  .update-profile-form .row {
+    width: 80%;
+  }
+}
+@media (max-width: 480px) {
+  .update-profile-form .row {
+    width: 80%;
+  }
 }
 
 /** Font */

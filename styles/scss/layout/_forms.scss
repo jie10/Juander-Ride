@@ -69,19 +69,19 @@
     height: 100%;
 
     @include for-screen-size-extra-large {
-        width: 400px;
+        width: 60%;
     }
 
     @include for-screen-size-large {
-        width: 450px;
+        width: 70%;
     }
 
     @include for-screen-size-medium {
-        width: 500px;
+        width: 80%;
     }
 
     @include for-screen-size-small {
-        width: 80%;
+        width: 90%;
     }
 
     @include for-screen-size-extra-small {
@@ -94,4 +94,26 @@
     border: 1px solid $border-color-gray;
     padding: 36px 24px;
     overflow: hidden;
+
+    .row {
+        @include for-screen-size-extra-large {
+            width: 35%;
+        }
+    
+        @include for-screen-size-large {
+            width: 50%;
+        }
+
+        @include for-screen-size-medium {
+            width: 60%;
+        }
+
+        @include for-screen-size-small {
+            width: 80%;
+        }
+    
+        @include for-screen-size-extra-small {
+            width: 80%;
+        }
+    }
 }

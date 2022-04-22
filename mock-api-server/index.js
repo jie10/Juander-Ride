@@ -126,13 +126,13 @@ const register = (req, email, password) => {
 const logout = (req) => {
     return new Promise((resolve, reject) => {
         try {
-            if (req.session.user) {
-                req.session.destroy();
-                resolve({ "status": 200, "title": "Logout Successful", "message": "Session has ended for current user" });
-            } else {
-                resolve({ "status": 400, "title": "User has no session yet", "message": "Please login first and try again" })
-            }
-
+            resolve({ "status": 200, "title": "Logout Successful", "message": "Session has ended for current user" });
+            // if (req.session.user) {
+            //     req.session.destroy();
+            //     resolve({ "status": 200, "title": "Logout Successful", "message": "Session has ended for current user" });
+            // } else {
+            //     resolve({ "status": 400, "title": "User has no session yet", "message": "Please login first and try again" })
+            // }
         } catch(err) {
             reject(err);
         }
@@ -310,7 +310,6 @@ const searchRide = (query, filterByDays, filterByAvailability) => {
     return new Promise((resolve, reject) => {
         try {
             if (query) {
-                console.log('pasok!')
                 const matches = rides && rides.length > 0 ? rides.filter(ride => {
                     return ride.vehicle_id === query || ride.vehicle_plate_number === query;
                 }) : null;

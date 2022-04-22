@@ -56,6 +56,7 @@ const buttonSearchService = document.getElementById('search_service_button') as 
 const buttonViewRideLogs = document.getElementById('view_ride_logs_button') as HTMLButtonElement;
 const buttonCloseSearchService = document.getElementById('close_search_service_modal_button') as HTMLButtonElement;
 const buttonCloseViewRideLogs = document.getElementById('close_view_ride_logs_modal_button') as HTMLButtonElement;
+const buttonUpdateProfile = document.getElementById('update_profile_button') as HTMLButtonElement;
 
 const formLogin = document.querySelector('.login-form') as HTMLDivElement;
 const formRegister = document.querySelector('.register-form') as HTMLDivElement;
@@ -431,7 +432,9 @@ const loginUser = () => {
 }
 
 const logoutUser = () => {
-    fetch(BASE_LOCAL_URL + '/logout?_method=DELETE')
+    fetch(BASE_LOCAL_URL + '/logout', {
+        method: "DELETE"    
+    })
         .then(() => {
             destroyCurrentSession();
             hideNavSidebar();
@@ -560,7 +563,6 @@ const loadRideLogs = () => {
             hideViewModalLoader();
 
             if (result.status === 200) {
-                console.log(data)
                 if (data && data.length > 0) {
                     viewContent.innerHTML = data.map((value: { vehicle_id: string, vehicle_plate_number: string, driver_name: string, vehicle_type: string, vehicle_color: string, log_datetime: string }) => {
                         return `\n<div class="content">
@@ -724,6 +726,52 @@ buttonStopScanQRCode.addEventListener('click', () => {
 buttonViewRideLogs.addEventListener('click', () => {
     showViewRideLogsContainer();
     displayRideLogs();
+});
+
+buttonUpdateProfile.addEventListener('click', () => {
+    let employee_id = (<HTMLInputElement> document.getElementsByName('employee_id')[0]).value;
+    let display_name = (<HTMLInputElement> document.getElementsByName('display_name')[0]).value;
+    let department = (<HTMLInputElement> document.getElementsByName('department')[0]).value;
+    let job_role = (<HTMLInputElement> document.getElementsByName('job_role')[0]).value;
+    let point_of_origin = (<HTMLInputElement> document.getElementsByName('point_of_origin')[0]).value;
+    let onsite_schedule = (<HTMLInputElement> document.getElementsByName('onsite_schedule')[0]).value;
+    let specific_onsite_days = Array.from(document.querySelectorAll('#update_specific_onsite_days option:checked')).map(el => (<HTMLInputElement>el).value).join(',');
+    let email = (<HTMLInputElement> document.getElementsByName('user_email')[0]).value;
+    let password = (<HTMLInputElement> document.getElementsByName('user_password')[0]).value;
+    let payload = {
+        "employee_id": employee_id,
+        "name": display_name,
+        "department": department,
+        "job_role": job_role,
+        "point_of_origin": point_of_origin,
+        "onsite_schedule": onsite_schedule,
+        "onsite_days": specific_onsite_days,
+        "email": email,
+        "password": password
+    }
+
+    fetch(BASE_LOCAL_URL + "/user/update?_method=PATCH", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON(payload)
+    })
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (res) {
+            if (res.status === 200) {
+                showAlertStatus(res.title, res.message, 'success');
+            } else {
+                showAlertStatus(res.title, res.message, 'error');
+            }
+        })
+        .catch(function (error) {
+            showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+            console.error(error);
+        });
 });
 
 inputSearchRideQuery.addEventListener('keyup', (e) => {

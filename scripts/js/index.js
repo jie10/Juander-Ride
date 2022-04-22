@@ -51,6 +51,7 @@ var buttonSearchService = document.getElementById('search_service_button');
 var buttonViewRideLogs = document.getElementById('view_ride_logs_button');
 var buttonCloseSearchService = document.getElementById('close_search_service_modal_button');
 var buttonCloseViewRideLogs = document.getElementById('close_view_ride_logs_modal_button');
+var buttonUpdateProfile = document.getElementById('update_profile_button');
 var formLogin = document.querySelector('.login-form');
 var formRegister = document.querySelector('.register-form');
 var BASE_LOCAL_URL = 'http://localhost:8000';
@@ -355,7 +356,9 @@ var loginUser = function () {
     });
 };
 var logoutUser = function () {
-    fetch(BASE_LOCAL_URL + '/logout?_method=DELETE')
+    fetch(BASE_LOCAL_URL + '/logout', {
+        method: "DELETE"
+    })
         .then(function () {
         destroyCurrentSession();
         hideNavSidebar();
@@ -429,7 +432,6 @@ var loadRideLogs = function () {
         var viewContent = document.querySelector('.view-ride-logs-modal .modal-body-content');
         hideViewModalLoader();
         if (result.status === 200) {
-            console.log(data);
             if (data && data.length > 0) {
                 viewContent.innerHTML = data.map(function (value) {
                     return "\n<div class=\"content\">\n                            <div class=\"details\">\n                                <div class=\"col icon\">\n                                    <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 576 512\">\n                                        <path d=\"M256 96C256 113.7 270.3 128 288 128C305.7 128 320 113.7 320 96V32H394.8C421.9 32 446 49.08 455.1 74.63L572.9 407.2C574.9 413 576 419.2 576 425.4C576 455.5 551.5 480 521.4 480H320V416C320 398.3 305.7 384 288 384C270.3 384 256 398.3 256 416V480H54.61C24.45 480 0 455.5 0 425.4C0 419.2 1.06 413 3.133 407.2L120.9 74.63C129.1 49.08 154.1 32 181.2 32H255.1L256 96zM320 224C320 206.3 305.7 192 288 192C270.3 192 256 206.3 256 224V288C256 305.7 270.3 320 288 320C305.7 320 320 305.7 320 288V224z\" />\n                                    </svg>\n                                </div>\n                                <div class=\"col\">\n                                    <div class=\"row\">\n                                        <span class=\"label\">Plate No.</span>\n                                        <span id=\"vehicle_plate_number\">".concat(value.vehicle_plate_number, "</span>\n                                    </div>\n                                    <div class=\"row\">\n                                        <span class=\"label\">Vehicle ID</span>\n                                        <span id=\"vehicle_id\">").concat(value.vehicle_id, "</span>\n                                    </div>\n                                </div>\n                                <div class=\"col\">\n                                    <div class=\"row\">\n                                        <span class=\"label\">Driver</span>\n                                        <span id=\"vehicle_driver_name\">").concat(value.driver_name, "</span>\n                                    </div>\n                                    <div class=\"row\">\n                                        <span class=\"label\">Color</span>\n                                        <span id=\"vehicle_color\">").concat(value.vehicle_color, "</span>\n                                    </div>\n                                </div>\n                                <div class=\"col\">\n                                    <div class=\"row\">\n                                        <span class=\"label\">Type</span>\n                                        <span id=\"vehicle_type\">").concat(value.vehicle_type, "</span>\n                                    </div>\n                                    <div class=\"row\">\n                                        <span class=\"label\">Date & Time</span>\n                                        <span id=\"log-datetime\">").concat(value.log_datetime, "</span>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>");
@@ -535,6 +537,51 @@ buttonStopScanQRCode.addEventListener('click', function () {
 buttonViewRideLogs.addEventListener('click', function () {
     showViewRideLogsContainer();
     displayRideLogs();
+});
+buttonUpdateProfile.addEventListener('click', function () {
+    var employee_id = document.getElementsByName('employee_id')[0].value;
+    var display_name = document.getElementsByName('display_name')[0].value;
+    var department = document.getElementsByName('department')[0].value;
+    var job_role = document.getElementsByName('job_role')[0].value;
+    var point_of_origin = document.getElementsByName('point_of_origin')[0].value;
+    var onsite_schedule = document.getElementsByName('onsite_schedule')[0].value;
+    var specific_onsite_days = Array.from(document.querySelectorAll('#update_specific_onsite_days option:checked')).map(function (el) { return el.value; }).join(',');
+    var email = document.getElementsByName('user_email')[0].value;
+    var password = document.getElementsByName('user_password')[0].value;
+    var payload = {
+        "employee_id": employee_id,
+        "name": display_name,
+        "department": department,
+        "job_role": job_role,
+        "point_of_origin": point_of_origin,
+        "onsite_schedule": onsite_schedule,
+        "onsite_days": specific_onsite_days,
+        "email": email,
+        "password": password
+    };
+    fetch(BASE_LOCAL_URL + "/user/update?_method=PATCH", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON(payload)
+    })
+        .then(function (result) {
+        return result.json();
+    })
+        .then(function (res) {
+        if (res.status === 200) {
+            showAlertStatus(res.title, res.message, 'success');
+        }
+        else {
+            showAlertStatus(res.title, res.message, 'error');
+        }
+    })
+        .catch(function (error) {
+        showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+        console.error(error);
+    });
 });
 inputSearchRideQuery.addEventListener('keyup', function (e) {
     q = e.currentTarget.value;
