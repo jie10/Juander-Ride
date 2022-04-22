@@ -703,11 +703,13 @@ buttonCloseViewRideLogs.addEventListener('click', (e) => {
 buttonUserHome.addEventListener('click', (e) => {
     e.preventDefault();
     displayMapNavigation();
+    hideNavSidebar();
 });
 
 buttonUserProfile.addEventListener('click', (e) => {
     e.preventDefault();
     goToUserProfile();
+    hideNavSidebar();
 });
 
 buttonUserLogout.addEventListener('click', (e) => {

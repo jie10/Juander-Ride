@@ -519,10 +519,12 @@ buttonCloseViewRideLogs.addEventListener('click', function (e) {
 buttonUserHome.addEventListener('click', function (e) {
     e.preventDefault();
     displayMapNavigation();
+    hideNavSidebar();
 });
 buttonUserProfile.addEventListener('click', function (e) {
     e.preventDefault();
     goToUserProfile();
+    hideNavSidebar();
 });
 buttonUserLogout.addEventListener('click', function (e) {
     e.preventDefault();
