@@ -293,7 +293,6 @@ const startUserQRCodeScan = () => {
         })
         .then(function (res) {
             if (res.status === 200) {
-                console.log(res.data);
                 delay(() => {
                     hidePageLoader();
                     buttonStopScanQRCode.disabled = false;

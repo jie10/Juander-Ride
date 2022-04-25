@@ -241,26 +241,49 @@ const scanUserQRCode = (email) => {
                 const user = users && users.length > 0 ? users.filter(user => {
                     return user.account.email === email;
                 }) : null;
-                console.log(user)
-                const result = user && user.length > 0 ? { "status": 200, "title": "Scan succesful", "message": "User foundU from our database", "data": user.map(user => ({
-                    "employee_id": user.employee_id,
-                    "name": user.name,
-                    "department": user.department,
-                    "job_role": user.job_role,
-                    "point_of_origin": user.profile.point_of_origin,
-                    "onsite_schedule": user.profile.onsite_schedule,
-                    "onsite_days": user.profile.onsite_days
-                }))[0] } : {
-                    "status": 404,
-                    "title": "Scan failed",
-                    "message": "User not found. Please login and try again."
-                };
-        
-                resolve(result);
+
+                if (user && user.length > 0) {
+                    if (user.account.access_role === 'driver') {
+                        resolve({
+                            "status": 200,
+                            "title": "Scan successful",
+                            "message": "You can now use the shuttle service",
+                            "data": user.map(user => ({
+                                "employee_id": user.employee_id,
+                                "name": user.name,
+                                "department": user.department,
+                                "job_role": user.job_role,
+                                "point_of_origin": user.profile.point_of_origin,
+                                "onsite_schedule": user.profile.onsite_schedule,
+                                "onsite_days": user.profile.onsite_days
+                            }))[0]
+                        });
+                    } else {
+                        rideLogs.push({
+                            "_id": uuidv4(),
+                            "email": user[0].account.email,
+                            "employee_id": user[0].employee_id,
+                            "shuttle_service_id": shuttleServiceId,
+                            "log_datetime": moment.utc().format()
+                        });
+    
+                        resolve({
+                                    "status": 200,
+                                    "title": "Scan successful",
+                                    "message": "You can now use the shuttle service",
+                                    "data": rideLogs
+                                });
+                    }
+                } else {
+                    resolve({
+                        "status": 404,
+                        "title": "Scan failed",
+                        "message": "User not found. Please login and try again."
+                    });
+                }
             } else {
                 resolve({ "status": 400, "title": "Incomplete request", "message": "Please make sure you indicate user email to retrieve their data" })
             }
-
         } catch(err) {
             reject(err);
         }
