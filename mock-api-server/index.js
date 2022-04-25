@@ -243,7 +243,7 @@ const scanUserQRCode = (email) => {
                 }) : null;
 
                 if (user && user.length > 0) {
-                    if (user.account.access_role === 'driver') {
+                    if (user[0].account.access_role === 'driver') {
                         resolve({
                             "status": 200,
                             "title": "Scan successful",
