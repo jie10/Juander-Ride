@@ -275,7 +275,8 @@ const displayUserQRCodeContainer = () => {
     hideRideQRCodeContainer();
 }
 
-const startUserQRCodeScan = () => {
+const startUserQRCodeScan = (shuttleServiceId: string) => {
+    let data = shuttleServiceId ? { "email": retrieveCurrentSession(), "shuttle_service_id": shuttleServiceId } : {"email": retrieveCurrentSession() };
     buttonScanQRCode.disabled = true;
     hideUserQRCodeContainer();
     showPageLoader();
@@ -286,7 +287,7 @@ const startUserQRCodeScan = () => {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: stringifyJSON({"email": retrieveCurrentSession() })
+        body: stringifyJSON(data)
     })
         .then(function (result) {
             return result.json();

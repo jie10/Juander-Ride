@@ -70,7 +70,7 @@ function scanUserQRCode(cameraId) {
             lastResult = decodedText;
             var result = JSON.parse(decodedText);
             if (result && result.access_role === 'driver') {
-                saveAsRideLog(result.vehicle_id);
+                startUserQRCodeScan(result.vehicle_id);
             }
         }
     })
@@ -93,7 +93,6 @@ function scanUserQRcode() {
     Html5Qrcode.getCameras().then(function (devices) {
         if (devices && devices.length) {
             var cameraId = devices[0].id;
-            startUserQRCodeScan();
             scanUserQRCode(cameraId);
         }
         else {
