@@ -10,7 +10,11 @@ const userQRCodeContainer = document.querySelector('.user-qr-code-container') as
 const rideQRCodeContainer = document.querySelector('.ride-qr-code-container') as HTMLDivElement;
 const loaderPage = document.getElementById('page_loader') as HTMLDivElement;
 const displayUserName = document.getElementById('display_user_name') as HTMLDivElement;
+const formLogin = document.querySelector('.login-form') as HTMLDivElement;
+const formRegister = document.querySelector('.register-form') as HTMLDivElement;
 const userQRCode = document.getElementById('user_qr_code') as HTMLDivElement;
+
+const userDetails = document.querySelector('.qr-details') as HTMLSpanElement;
 
 const userDisplayName = document.getElementById('user_display_name') as HTMLHeadingElement;
 const userDisplayDepartment = document.getElementById('user_display_department') as HTMLHeadingElement;
@@ -57,9 +61,6 @@ const buttonViewRideLogs = document.getElementById('view_ride_logs_button') as H
 const buttonCloseSearchService = document.getElementById('close_search_service_modal_button') as HTMLButtonElement;
 const buttonCloseViewRideLogs = document.getElementById('close_view_ride_logs_modal_button') as HTMLButtonElement;
 const buttonUpdateProfile = document.getElementById('update_profile_button') as HTMLButtonElement;
-
-const formLogin = document.querySelector('.login-form') as HTMLDivElement;
-const formRegister = document.querySelector('.register-form') as HTMLDivElement;
 
 
 /** Variables */
@@ -279,13 +280,38 @@ const startUserQRCodeScan = () => {
     hideUserQRCodeContainer();
     showPageLoader();
 
-    delay(() => {
-        hidePageLoader();
-        buttonStopScanQRCode.disabled = false;
-        hideUserScanQRCodeButton();
-        showStopUserScanQRCodeButton();
-        displayRideQRCodeContainer();
-    }, 1500);
+    fetch(BASE_LOCAL_URL + "/user/scan", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON({"email": retrieveCurrentSession() })
+    })
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (res) {
+            if (res.status === 200) {
+                console.log(res.data);
+                delay(() => {
+                    hidePageLoader();
+                    buttonStopScanQRCode.disabled = false;
+                    hideUserScanQRCodeButton();
+                    showStopUserScanQRCodeButton();
+                    displayRideQRCodeContainer();
+                }, 1500);
+            } else {
+                destroyCurrentSession();
+                goToLoginPage();
+            }
+        })
+        .catch(function (error) {
+            showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+            console.error(error);
+        });
+
+
 }
 
 const stopUserQRCodeScan = () => {
@@ -310,6 +336,7 @@ const goToLoginPage = () => {
 
 const goToHomePage = () => {
     hideLoginPage();
+    clearUserQRCode();
     showHomepage();
     displayMapNavigation();
 
@@ -338,7 +365,6 @@ const goToHomePage = () => {
 
                 buttonSearchService.style.display = data.access_role === 'driver' ? 'none' : 'flex';
                 buttonViewRideLogs.style.display = data.access_role === 'driver' ? 'none' : 'flex';
-                buttonScanQRCode.style.display = data.access_role === 'driver' ? 'none' : 'flex';
             } else {
                 destroyCurrentSession();
                 goToLoginPage();

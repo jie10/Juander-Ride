@@ -241,7 +241,7 @@ const scanUserQRCode = (email) => {
                 const user = users && users.length > 0 ? users.filter(user => {
                     return user.account.email === email;
                 }) : null;
-
+                console.log(user)
                 const result = user && user.length > 0 ? { "status": 200, "title": "Scan succesful", "message": "User foundU from our database", "data": user.map(user => ({
                     "employee_id": user.employee_id,
                     "name": user.name,

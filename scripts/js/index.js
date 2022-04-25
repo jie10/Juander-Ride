@@ -10,7 +10,10 @@ var userQRCodeContainer = document.querySelector('.user-qr-code-container');
 var rideQRCodeContainer = document.querySelector('.ride-qr-code-container');
 var loaderPage = document.getElementById('page_loader');
 var displayUserName = document.getElementById('display_user_name');
+var formLogin = document.querySelector('.login-form');
+var formRegister = document.querySelector('.register-form');
 var userQRCode = document.getElementById('user_qr_code');
+var userDetails = document.querySelector('.qr-details');
 var userDisplayName = document.getElementById('user_display_name');
 var userDisplayDepartment = document.getElementById('user_display_department');
 var userDisplayJobRole = document.getElementById('user_display_jobe_role');
@@ -52,8 +55,6 @@ var buttonViewRideLogs = document.getElementById('view_ride_logs_button');
 var buttonCloseSearchService = document.getElementById('close_search_service_modal_button');
 var buttonCloseViewRideLogs = document.getElementById('close_view_ride_logs_modal_button');
 var buttonUpdateProfile = document.getElementById('update_profile_button');
-var formLogin = document.querySelector('.login-form');
-var formRegister = document.querySelector('.register-form');
 var BASE_LOCAL_URL = 'http://localhost:8000';
 var q = '';
 var favail = '';
@@ -216,13 +217,37 @@ var startUserQRCodeScan = function () {
     buttonScanQRCode.disabled = true;
     hideUserQRCodeContainer();
     showPageLoader();
-    delay(function () {
-        hidePageLoader();
-        buttonStopScanQRCode.disabled = false;
-        hideUserScanQRCodeButton();
-        showStopUserScanQRCodeButton();
-        displayRideQRCodeContainer();
-    }, 1500);
+    fetch(BASE_LOCAL_URL + "/user/scan", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: stringifyJSON({ "email": retrieveCurrentSession() })
+    })
+        .then(function (result) {
+        return result.json();
+    })
+        .then(function (res) {
+        if (res.status === 200) {
+            console.log(res.data);
+            delay(function () {
+                hidePageLoader();
+                buttonStopScanQRCode.disabled = false;
+                hideUserScanQRCodeButton();
+                showStopUserScanQRCodeButton();
+                displayRideQRCodeContainer();
+            }, 1500);
+        }
+        else {
+            destroyCurrentSession();
+            goToLoginPage();
+        }
+    })
+        .catch(function (error) {
+        showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
+        console.error(error);
+    });
 };
 var stopUserQRCodeScan = function () {
     buttonStopScanQRCode.disabled = true;
@@ -243,6 +268,7 @@ var goToLoginPage = function () {
 };
 var goToHomePage = function () {
     hideLoginPage();
+    clearUserQRCode();
     showHomepage();
     displayMapNavigation();
     fetch(BASE_LOCAL_URL + "/user/view", {
@@ -268,7 +294,6 @@ var goToHomePage = function () {
             generateUserQRCode(data);
             buttonSearchService.style.display = data.access_role === 'driver' ? 'none' : 'flex';
             buttonViewRideLogs.style.display = data.access_role === 'driver' ? 'none' : 'flex';
-            buttonScanQRCode.style.display = data.access_role === 'driver' ? 'none' : 'flex';
         }
         else {
             destroyCurrentSession();
