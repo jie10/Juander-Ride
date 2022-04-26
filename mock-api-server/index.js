@@ -107,7 +107,7 @@ const register = (req, email, password) => {
                         "account": {
                             "email": email,
                             "password": password,
-                            "access_role": "rider"
+                            "access_role": "passenger"
                         }
                     });
                     req.session.user = email;
@@ -234,7 +234,7 @@ const updateUser = (body) => {
     });
 }
 
-const scanUserQRCode = (email) => {
+const scanUserQRCode = (passenger_email, email, shuttleServiceId) => {
     return new Promise((resolve, reject) => {
         try {
             if (email) {
@@ -243,12 +243,16 @@ const scanUserQRCode = (email) => {
                 }) : null;
 
                 if (user && user.length > 0) {
-                    if (user[0].account.access_role === 'driver') {
+                    if (user[0].account.access_role === 'driver' && !shuttleServiceId) {
+                        const passenger = users && users.length > 0 ? users.filter(user => {
+                            return user.account.email === passenger_email;
+                        }) : null;
+    
                         resolve({
                             "status": 200,
                             "title": "Scan successful",
-                            "message": "You can now use the shuttle service",
-                            "data": user.map(user => ({
+                            "message": "You can now view your passenger's info",
+                            "data": passenger.map(user => ({
                                 "employee_id": user.employee_id,
                                 "name": user.name,
                                 "department": user.department,
@@ -270,8 +274,7 @@ const scanUserQRCode = (email) => {
                         resolve({
                                     "status": 200,
                                     "title": "Scan successful",
-                                    "message": "You can now use the shuttle service",
-                                    "data": rideLogs
+                                    "message": "You can now use the shuttle service"
                                 });
                     }
                 } else {
@@ -522,7 +525,7 @@ app.delete('/logout', (req, res) => {
 });
 
 app.post('/user/scan', (req, res) => {
-    scanUserQRCode(req.body.email)
+    scanUserQRCode(req.body.passenger_email, req.body.email, req.body.shuttle_service_id )
         .then(result => res.status(result.status).json(result))
         .catch(err => {
             res.status(500).json(err);

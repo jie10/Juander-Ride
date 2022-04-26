@@ -17,7 +17,7 @@ function generateUserQRCode(data) {
     qrcode.makeCode(JSON.stringify(output, null, 2));
     var vehicleDetails = data.access_role === 'driver' ? '\nVehicle ID: ' + data.vehicle_id + '\nPlateNumber: ' + data.vehicle_plate_number : '';
     userQRCode.title = 'Employee ID: ' + data.employee_id + vehicleDetails + '\nName: ' + data.name + '\nEmail: ' + data.email + '\nDepartment: ' + data.department + '\nPosition: ' + data.job_role;
-    userDetails.innerHTML = data.access_role === 'driver' ? 'Ask rider to scan QR code to use shuttle service' : 'Ask driver to scan your QR-Code for employee information';
+    userDetails.innerHTML = data.access_role === 'driver' ? 'Ask passenger to scan QR code to use shuttle service' : 'Ask driver to scan your QR-Code for employee information';
     userQRCodeContainer.style.display = "block";
 }
 function clearUserQRCode() {

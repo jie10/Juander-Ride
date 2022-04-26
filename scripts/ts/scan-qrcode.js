@@ -82,8 +82,8 @@ function scanUserQRCode (cameraId) {
                 // Handle on success condition with the decoded message.
                 var result = JSON.parse(decodedText);
 
-                if (result && result.access_role === 'driver') {
-                    startUserQRCodeScan(result.vehicle_id);
+                if (result) {
+                    startUserQRCodeScan(result.email, result.vehicle_id, result.access_role);
                 }   
             }
         }
@@ -109,7 +109,17 @@ function scanUserQRcode () {
     Html5Qrcode.getCameras().then(devices => {
         if (devices && devices.length) {
             var cameraId = devices[0].id;
+            hideUserQRCodeContainer();
+            showPageLoader();
+            buttonScanQRCode.disabled = true;
             scanUserQRCode(cameraId);
+            delay(() => {
+                hidePageLoader();
+                buttonStopScanQRCode.disabled = false;
+                hideUserScanQRCodeButton();
+                showStopUserScanQRCodeButton();
+                displayRideQRCodeContainer();
+            }, 1500);
         } else {
             stopUserQRCodeScan();
             displayCamUndetectedError();

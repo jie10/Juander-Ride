@@ -275,11 +275,8 @@ const displayUserQRCodeContainer = () => {
     hideRideQRCodeContainer();
 }
 
-const startUserQRCodeScan = (shuttleServiceId: string) => {
-    let data = shuttleServiceId ? { "email": retrieveCurrentSession(), "shuttle_service_id": shuttleServiceId } : {"email": retrieveCurrentSession() };
-    buttonScanQRCode.disabled = true;
-    hideUserQRCodeContainer();
-    showPageLoader();
+const startUserQRCodeScan = (email: string, shuttleServiceId: string, access_role: string) => {
+    let bodyData = shuttleServiceId && access_role === "driver" ? { "email": retrieveCurrentSession(), "shuttle_service_id": shuttleServiceId } : {"email": retrieveCurrentSession(), "passenger_email": email };
 
     fetch(BASE_LOCAL_URL + "/user/scan", {
         method: 'POST',
@@ -287,23 +284,23 @@ const startUserQRCodeScan = (shuttleServiceId: string) => {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: stringifyJSON(data)
+        body: stringifyJSON(bodyData)
     })
         .then(function (result) {
             return result.json();
         })
         .then(function (res) {
             if (res.status === 200) {
-                delay(() => {
-                    hidePageLoader();
-                    buttonStopScanQRCode.disabled = false;
-                    hideUserScanQRCodeButton();
-                    showStopUserScanQRCodeButton();
-                    displayRideQRCodeContainer();
-                }, 1500);
+
+                if (access_role === "driver" ) {
+                    showAlertStatus(res.title, res.text, 'success');
+                } else {
+                    showUserInfo(res.data);
+                }
+
+                stopScanUserQRCodeScan();
             } else {
-                destroyCurrentSession();
-                goToLoginPage();
+                showAlertStatus(res.title, res.text, 'error');
             }
         })
         .catch(function (error) {
@@ -363,6 +360,7 @@ const goToHomePage = () => {
 
                 generateUserQRCode(data);
 
+                (<HTMLSpanElement> document.querySelector('.scan-qr-code-button .label')).innerHTML = data.access_role === 'driver' ? 'Scan QR-Code for ID' : 'Scan QR-Code to Ride';
                 buttonSearchService.style.display = data.access_role === 'driver' ? 'none' : 'flex';
                 buttonViewRideLogs.style.display = data.access_role === 'driver' ? 'none' : 'flex';
             } else {

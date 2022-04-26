@@ -14,7 +14,7 @@
         "account": {
             "email": "john.smith@cebupacificair.com",
             "password": "p@ssword12345",
-            "access_role": "rider"
+            "access_role": "passenger"
         }
     },
     {
@@ -32,7 +32,7 @@
         "account": {
             "email": "rachel.reyes@cebupacificair.com",
             "password": "p@ssword12345",
-            "access_role": "rider"
+            "access_role": "passenger"
         }
     },
     {
