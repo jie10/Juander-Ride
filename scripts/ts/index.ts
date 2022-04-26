@@ -291,24 +291,22 @@ const startUserQRCodeScan = (email: string, shuttleServiceId: string, access_rol
         })
         .then(function (res) {
             if (res.status === 200) {
-
                 if (access_role === "driver" ) {
-                    showAlertStatus(res.title, res.text, 'success');
+                    showScanAlertStatus(res.title, res.message, 'success');
+                    stopScanUserQRCodeScan();
                 } else {
                     showUserInfo(res.data);
+                    stopScanUserQRCodeScan();
                 }
-
-                stopScanUserQRCodeScan();
             } else {
-                showAlertStatus(res.title, res.text, 'error');
+                showAlertStatus(res.title, res.message, 'error');
+                stopScanUserQRCodeScan();
             }
         })
         .catch(function (error) {
             showAlertStatus('Internal Server Error', 'Something went wrong with connection', 'error');
             console.error(error);
         });
-
-
 }
 
 const stopUserQRCodeScan = () => {

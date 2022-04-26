@@ -63,7 +63,8 @@ function saveAsRideLog(shuttleServiceId) {
         console.error(error);
     });
 }
-function scanUserQRCode(cameraId) {
+function scanQRCode(cameraId) {
+    console.log('start');
     html5QrCode.start(cameraId, { fps: 10 }, function (decodedText, decodedResult) {
         if (decodedText !== lastResult) {
             ++countResults;
@@ -93,16 +94,16 @@ function scanUserQRcode() {
     Html5Qrcode.getCameras().then(function (devices) {
         if (devices && devices.length) {
             var cameraId = devices[0].id;
+            buttonScanQRCode.disabled = true;
             hideUserQRCodeContainer();
             showPageLoader();
-            buttonScanQRCode.disabled = true;
-            scanUserQRCode(cameraId);
             delay(function () {
-                hidePageLoader();
                 buttonStopScanQRCode.disabled = false;
+                hidePageLoader();
                 hideUserScanQRCodeButton();
                 showStopUserScanQRCodeButton();
                 displayRideQRCodeContainer();
+                scanQRCode(cameraId);
             }, 1500);
         }
         else {

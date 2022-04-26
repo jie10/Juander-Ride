@@ -71,15 +71,17 @@ function saveAsRideLog (shuttleServiceId) {
         });
 }
 
-function scanUserQRCode (cameraId) {
+function scanQRCode (cameraId) {
+    console.log('start')
     html5QrCode.start(
         cameraId, 
         { fps: 10 },
         (decodedText, decodedResult) => {
             if (decodedText !== lastResult) {
                 ++countResults;
+
                 lastResult = decodedText;
-                // Handle on success condition with the decoded message.
+
                 var result = JSON.parse(decodedText);
 
                 if (result) {
@@ -109,16 +111,21 @@ function scanUserQRcode () {
     Html5Qrcode.getCameras().then(devices => {
         if (devices && devices.length) {
             var cameraId = devices[0].id;
+
+            buttonScanQRCode.disabled = true;
+
             hideUserQRCodeContainer();
             showPageLoader();
-            buttonScanQRCode.disabled = true;
-            scanUserQRCode(cameraId);
+
             delay(() => {
-                hidePageLoader();
                 buttonStopScanQRCode.disabled = false;
+
+                hidePageLoader();
                 hideUserScanQRCodeButton();
                 showStopUserScanQRCodeButton();
                 displayRideQRCodeContainer();
+
+                scanQRCode(cameraId);
             }, 1500);
         } else {
             stopUserQRCodeScan();

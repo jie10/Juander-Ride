@@ -9,10 +9,25 @@ function showAlertStatus (title, text, status) {
     });
 }
 
+function showScanAlertStatus (title, text, status) {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: status,
+        showConfirmButton: true
+    })
+    .then(function (result) {
+        if (result.isConfirmed) {
+            location.reload();
+        }
+    });
+}
+
 function showUserInfo (data) {
     Swal.fire({
         title: 'Passenger\'s Info',
         icon: 'info',
+        showConfirmButton: true,
         html:
         '<b>Emnployee ID: </b>' + data.employee_id + '<br/>' +
         '<b>Name: </b>' + data.name + '<br/>' +
@@ -24,5 +39,9 @@ function showUserInfo (data) {
         focusConfirm: false,
         confirmButtonText:
         'Okay',
+    }).then(function (result) {
+        if (result.isConfirmed) {
+            location.reload();
+        }
     });
 }
