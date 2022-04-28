@@ -467,8 +467,8 @@ const viewRideLogs = (email) => {
                                 return {
                                     "vehicle_id": driver.vehicle_id,
                                     "vehicle_plate_number": driver.vehicle_plate_number,
-                                    "vehicle_type": driver.vehicle_type,
-                                    "vehicle_color": driver.vehicle_color,
+                                    "vehicle_model": driver.vehicle_model,
+                                    "destination": driver.destination,
                                     "driver_name": driver.driver_name,
                                     "log_datetime": moment(log_datetime).format('MM-DD-YYYY h:mm A'),
                                     "log_timestamp": log_datetime

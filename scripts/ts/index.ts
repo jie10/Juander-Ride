@@ -494,7 +494,7 @@ const loadRideSchedules = () => {
 
             if (result.status === 200) {
                 if (data && data.length > 0) {
-                    searchContent.innerHTML = data.map((value: { availability: string, vehicle_id: string, vehicle_plate_number: string, driver_name: string, vehicle_type: string, vehicle_color: string, schedule: string, schedule_days: string }) => {
+                    searchContent.innerHTML = data.map((value: { availability: string, vehicle_id: string, vehicle_plate_number: string, driver_name: string, vehicle_model: string, destination: string, schedule: string, schedule_days: string }) => {
                         return `\n<div class="content">
                                                     <div class="details">
                                                         <div class="col icon">
@@ -519,14 +519,14 @@ const loadRideSchedules = () => {
                                                                 <span id="vehicle_driver_name">${capitalizeMultipleStrings(value.driver_name, " ", " ")}</span>
                                                             </div>
                                                             <div class="row">
-                                                                <span class="label">Type</span>
-                                                                <span id="vehicle_type">${capitalizeString(value.vehicle_type)}</span>
+                                                                <span class="label">Model</span>
+                                                                <span id="vehicle_type">${value.vehicle_model}</span>
                                                             </div>
                                                         </div>
                                                         <div class="col">
                                                             <div class="row">
-                                                                <span class="label">Color</span>
-                                                                <span id="vehicle_color">${capitalizeString(value.vehicle_color)}</span>
+                                                                <span class="label">Destination</span>
+                                                                <span id="vehicle_color">${value.destination}</span>
                                                             </div>
                                                             <div class="row">
                                                                 <span class="label">Schedule</span>
@@ -586,7 +586,7 @@ const loadRideLogs = () => {
 
             if (result.status === 200) {
                 if (data && data.length > 0) {
-                    viewContent.innerHTML = data.map((value: { vehicle_id: string, vehicle_plate_number: string, driver_name: string, vehicle_type: string, vehicle_color: string, log_datetime: string }) => {
+                    viewContent.innerHTML = data.map((value: { vehicle_id: string, vehicle_plate_number: string, driver_name: string, vehicle_model: string, destination: string, log_datetime: string }) => {
                         return `\n<div class="content">
                             <div class="details">
                                 <div class="col icon">
@@ -610,14 +610,14 @@ const loadRideLogs = () => {
                                         <span id="vehicle_driver_name">${value.driver_name}</span>
                                     </div>
                                     <div class="row">
-                                        <span class="label">Color</span>
-                                        <span id="vehicle_color">${value.vehicle_color}</span>
+                                        <span class="label">Model</span>
+                                        <span id="vehicle_color">${value.vehicle_model}</span>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="row">
-                                        <span class="label">Type</span>
-                                        <span id="vehicle_type">${value.vehicle_type}</span>
+                                        <span class="label">Destination</span>
+                                        <span id="vehicle_type">${value.destination}</span>
                                     </div>
                                     <div class="row">
                                         <span class="label">Date & Time</span>
