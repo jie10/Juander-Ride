@@ -28,6 +28,28 @@
         .shuttle-container {
             display: none;
         }
+        .carpool-container {
+            position: relative;
+            background-image: url('./images/sample/google_map.png');
+            background-position: center;
+            background-size: cover;
+        }
+        .more-carpool-buttons {
+            position: fixed;
+            width: fit-content;
+            background-color: #FFFFFF;
+            margin-right: 16px;
+            top: 80px;
+            right: 0;
+            border-radius: 16px;
+        }
+        .scan-qr-carpool-button {
+            position: fixed;
+            width: 250px;
+            bottom: 50px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
         .tab-page-active {
             display: block;
         }
@@ -39,6 +61,11 @@
         }
         .tab-active {
             color: #0066A3;
+        }
+        @media only screen and (max-width: 480px) { 
+            .scan-qr-carpool-button {
+                width: 80%;
+            }
         }
     </style>
 </head>
@@ -53,10 +80,17 @@
             </div>
         </div>
         <div class="row" style="flex-grow: 1;">
-            <div class="container carpool-container tab-page-active" id="carpool_container">
-                <p>This is a carpool container!</p>
+            <div class="container p-3 carpool-container tab-page-active" id="carpool_container">
+                <div class="more-carpool-buttons d-flex flex-column">
+                    <button type="button" class="btn btn-light"><i class="fa-solid fa-location-arrow"></i></button>
+                    <button type="button" class="btn btn-light"><i class="fa-solid fa-bars-staggered"></i></button>
+                </div>
+                <button class="btn btn-primary scan-qr-carpool-button" type="button" id="scan_qr_carpool_button">
+                    <i class="fa-solid fa-qrcode me-2"></i>
+                    Scan QR Code to Ride
+                </button>
             </div>
-            <div class="container shuttle-container" id="shuttle_container">
+            <div class="container p-3 shuttle-container" id="shuttle_container">
                 <p>This is a shuttle container!</p>
             </div>
         </div>
