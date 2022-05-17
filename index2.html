@@ -25,8 +25,10 @@
     <script src="./scripts/lib/html5-qrcode.min.js" defer></script>
     <style>
         .carpool-container,
-        .shuttle-container {
+        .shuttle-container,
+        .share-ride-container {
             display: none;
+            padding: 0 !important;
         }
         .carpool-container {
             position: relative;
@@ -46,7 +48,7 @@
         .scan-qr-carpool-button {
             position: fixed;
             width: 250px;
-            bottom: 50px;
+            bottom: 75px;
             left: 50%;
             transform: translate(-50%, -50%);
         }
@@ -62,7 +64,8 @@
             display: block;
         }
         .carpool-tab-button,
-        .shuttle-tab-button {
+        .shuttle-tab-button,
+        .share-ride-tab-button {
             color: #373737;
             font-size: 14px;
             cursor: pointer;
@@ -78,12 +81,24 @@
             display: block;
         }
         .carpool-main-page,
-        .carpool-scan-to-ride-page {
+        .carpool-scan-to-ride-page,
+        .carpool-ride-list-container {
+            padding: 20px;
             height: 100%;
+        }
+        .carpool-scan-to-ride-page,
+        .carpool-ride-list-container {
+            background-color: #FFFFFF;
         }
         .scan-qr-to-ride-reader {
             width: 450px;
             margin: 0 auto;
+        }
+        .absolute-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         @media only screen and (max-width: 480px) { 
             .scan-qr-carpool-button,
@@ -128,7 +143,7 @@
                 <div class="carpool-main-page" id="carpool_main_page">
                     <div class="more-carpool-buttons d-flex flex-column">
                         <button type="button" class="btn btn-light"><i class="fa-solid fa-location-arrow"></i></button>
-                        <button type="button" class="btn btn-light"><i class="fa-solid fa-bars-staggered"></i></button>
+                        <button type="button" class="btn btn-light carpool-ride-list-button" id="carpool_ride_list_button"><i class="fa-solid fa-bars-staggered"></i></button>
                     </div>
                     <button class="btn btn-primary scan-qr-carpool-button" type="button" id="scan_qr_carpool_button">
                         <i class="fa-solid fa-qrcode me-2"></i>
@@ -147,20 +162,29 @@
                     </div>
                     <button type="submit" class="btn btn-primary submit-vehicle-id-button mt-3 mb-3 d-flex justify-content-center" id="submit_vehicle_id_button">Submit</button>
                 </div>
+                <div class="carpool-ride-list-container" id="carpool_ride_list_container" style="display: none;">
+                    <p class="text-muted no-carpool-rides-found absolute-center text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">There are currently no vehicles nearby</p>
+                </div>
             </div>
             <div class="container p-3 shuttle-container" id="shuttle_container">
-                <p>This is a shuttle container!</p>
+                <p class="text-muted absolute-center text-center">Feature coming soon</p>
+            </div>
+            <div class="container p-3 share-ride-container" id="share_ride_container">
+                <p class="text-muted absolute-center text-center">Feature coming soon</p>
             </div>
         </div>
         <div class="row">
             <div class="col" style="background-color: #FFFFFF; border-top: 1px solid #C0CED8;">
                 <div class="container">
                     <div class="row">
-                        <div class="col text-center p-2 d-flex flex-column tab-active carpool-tab-button" id="carpool_tab_button">
+                        <div class="col text-center p-3 d-flex flex-column tab-active carpool-tab-button" id="carpool_tab_button">
                             <i class="fa-solid fa-car-side"></i>Carpool
                         </div>
-                        <div class="col text-center p-2 d-flex flex-column shuttle-tab-button" id="shuttle_tab_button">
+                        <div class="col text-center p-3 d-flex flex-column shuttle-tab-button" id="shuttle_tab_button">
                             <i class="fa-solid fa-van-shuttle"></i>Shuttle
+                        </div>
+                        <div class="col text-center p-3 d-flex flex-column share-ride-tab-button" id="share_ride_tab_button">
+                            <i class="fa-solid fa-car"></i>Share Ride
                         </div>
                     </div>
                 </div>
@@ -173,14 +197,18 @@
         var carpool_page_loader = document.getElementById('carpool_page_loader');
         var carpool_container = document.getElementById('carpool_container');
         var shuttle_container = document.getElementById('shuttle_container');
+        var share_ride_container = document.getElementById('share_ride_container');
+        var carpool_ride_list_container = document.getElementById('carpool_ride_list_container');
         var carpool_main_page = document.getElementById('carpool_main_page');
         var carpool_scan_to_ride_page = document.getElementById('carpool_scan_to_ride_page');
         var carpool_tab_button = document.getElementById('carpool_tab_button');
         var shuttle_tab_button = document.getElementById('shuttle_tab_button');
+        var share_ride_tab_button = document.getElementById('share_ride_tab_button');
         var scan_qr_carpool_button = document.getElementById('scan_qr_carpool_button');
         var submit_vehicle_id_button = document.getElementById('submit_vehicle_id_button');
         var back_to_previous_carpool_button = document.getElementById('back_to_previous_carpool_button');
         var carpool_vehicle_id_input = document.getElementById('carpool_vehicle_id_input');
+        var carpool_ride_list_button = document.getElementById('carpool_ride_list_button');
 
         function delay(callback, TIMEOUT_IN_SECONDS) {
             setTimeout(callback, TIMEOUT_IN_SECONDS);
@@ -193,15 +221,29 @@
         }
         function onCarpoolTab () {
             shuttle_tab_button.classList.remove('tab-active');
+            share_ride_tab_button.classList.remove('tab-active');
             carpool_tab_button.classList.add('tab-active');
             shuttle_container.classList.remove('tab-page-active');
+            share_ride_container.classList.remove('tab-page-active');
             carpool_container.classList.add('tab-page-active');
             backToCarpoolPage();
         }
         function onShuttleTab () {
             shuttle_tab_button.classList.add('tab-active');
+            share_ride_tab_button.classList.remove('tab-active');
             carpool_tab_button.classList.remove('tab-active');
+            share_ride_container.classList.remove('tab-page-active');
             shuttle_container.classList.add('tab-page-active');
+            carpool_container.classList.remove('tab-page-active');
+            main_top_navbar.style.display = 'flex';
+            secondary_top_navbar.style.display = 'none';
+        }
+        function onShareRideTab () {
+            share_ride_tab_button.classList.add('tab-active');
+            shuttle_tab_button.classList.remove('tab-active');
+            carpool_tab_button.classList.remove('tab-active');
+            share_ride_container.classList.add('tab-page-active');
+            shuttle_container.classList.remove('tab-page-active');
             carpool_container.classList.remove('tab-page-active');
             main_top_navbar.style.display = 'flex';
             secondary_top_navbar.style.display = 'none';
@@ -210,6 +252,7 @@
             main_top_navbar.style.display = 'flex';
             secondary_top_navbar.style.display = 'none';
             carpool_scan_to_ride_page.style.display = 'none';
+            carpool_ride_list_container.style.display = 'none';
             carpool_main_page.style.display = 'block';
         }
         function showToastMessage (title, status, TIMEOUT_IN_SECONDS) {
@@ -297,11 +340,19 @@
         function closeQRScanToRide () {
             backToCarpoolPage();
         }
+        function openRideList () {
+            carpool_ride_list_container.style.display = 'block';
+            secondary_top_navbar.style.display = 'flex';
+            main_top_navbar.style.display = 'none';
+            carpool_main_page.style.display = 'none';
+        }
         carpool_tab_button.addEventListener('click', onCarpoolTab);
         shuttle_tab_button.addEventListener('click', onShuttleTab);
+        share_ride_tab_button.addEventListener('click', onShareRideTab);
         scan_qr_carpool_button.addEventListener('click', openQRScanToRide);
         submit_vehicle_id_button.addEventListener('click', submitVehicleIDToRide)
         back_to_previous_carpool_button.addEventListener('click', closeQRScanToRide);
+        carpool_ride_list_button.addEventListener('click', openRideList);
     </script>
 </body>
 </html>
