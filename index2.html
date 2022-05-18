@@ -26,7 +26,7 @@
     <style>
         .carpool-container,
         .shuttle-container,
-        .share-ride-container {
+        .user-account-container {
             display: none;
             padding: 0 !important;
         }
@@ -70,7 +70,7 @@
         }
         .carpool-tab-button,
         .shuttle-tab-button,
-        .share-ride-tab-button {
+        .user-account-tab-button {
             color: #373737;
             font-size: 14px;
             cursor: pointer;
@@ -158,6 +158,11 @@
             .scan-qr-to-ride-reader  {
                 width: 350px;
             }
+            .carpool-tab-button,
+            .shuttle-tab-button,
+            .user-account-tab-button {
+                font-size: 12px;
+            }
         }
         @media only screen and (max-width: 320px) { 
             .scan-qr-to-ride-reader  {
@@ -169,12 +174,11 @@
 <body>
     <div class="container-fluid d-flex flex-column" style="min-height: 100vh;">
         <div class="row p-2 main-top-navbar" id="main_top_navbar">
-            <div class="col-6 d-flex my-auto">
+            <div class="col"></div>
+            <div class="col-6 d-flex my-auto justify-content-center">
                 <span class="h3" style="color: #0066A3; margin-bottom: 0;">Juander</span>
             </div>
-            <div class="col d-flex justify-content-end">
-                <button type="button" class="btn btn-primary-outline" style="color: #373737;"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-            </div>
+            <div class="col"></div>
         </div>
         <div class="row p-2 secondary-top-navbar" id="secondary_top_navbar" style="display: none;">
             <div class="col d-flex justify-content-start">
@@ -218,11 +222,11 @@
             <div class="container p-3 shuttle-container" id="shuttle_container">
                 <p class="text-muted absolute-center text-center">Feature coming soon</p>
             </div>
-            <div class="container p-3 share-ride-container" id="share_ride_container">
+            <div class="container p-3 user-account-container" id="share_ride_container">
                 <p class="text-muted absolute-center text-center">Feature coming soon</p>
             </div>
         </div>
-        <div class="row">
+        <div class="row main-bottom-navbar" id="main_bottom_navbar">
             <div class="col" style="background-color: #FFFFFF; border-top: 1px solid #C0CED8;">
                 <div class="container">
                     <div class="row">
@@ -232,8 +236,8 @@
                         <div class="col text-center p-3 d-flex flex-column shuttle-tab-button" id="shuttle_tab_button">
                             <i class="fa-solid fa-van-shuttle"></i>Shuttle
                         </div>
-                        <div class="col text-center p-3 d-flex flex-column share-ride-tab-button" id="share_ride_tab_button">
-                            <i class="fa-solid fa-car"></i>Share Ride
+                        <div class="col text-center p-3 d-flex flex-column user-account-tab-button" id="share_ride_tab_button">
+                            <i class="fa-solid fa-user"></i>Account
                         </div>
                     </div>
                 </div>
@@ -274,6 +278,7 @@
                             }
                         ];
         var main_top_navbar = document.getElementById('main_top_navbar');
+        var main_bottom_navbar = document.getElementById('main_bottom_navbar');
         var secondary_top_navbar = document.getElementById('secondary_top_navbar');
         var carpool_page_loader = document.getElementById('carpool_page_loader');
         var carpool_container = document.getElementById('carpool_container');
@@ -354,6 +359,12 @@
         function hideCarpoolPageLoader () {
             carpool_page_loader.style.display = 'none';
         }
+        function showMainBottomNavbar () {
+            main_bottom_navbar.style.display = 'block';
+        }
+        function hideMainBottomNavbar () {
+            main_bottom_navbar.style.display = 'none';
+        }
         function onCarpoolTab () {
             shuttle_tab_button.classList.remove('tab-active');
             share_ride_tab_button.classList.remove('tab-active');
@@ -373,7 +384,7 @@
             main_top_navbar.style.display = 'flex';
             secondary_top_navbar.style.display = 'none';
         }
-        function onShareRideTab () {
+        function onAccountTab () {
             share_ride_tab_button.classList.add('tab-active');
             shuttle_tab_button.classList.remove('tab-active');
             carpool_tab_button.classList.remove('tab-active');
@@ -384,6 +395,7 @@
             secondary_top_navbar.style.display = 'none';
         }
         function backToCarpoolPage () {
+            showMainBottomNavbar();
             main_top_navbar.style.display = 'flex';
             secondary_top_navbar.style.display = 'none';
             carpool_scan_to_ride_page.style.display = 'none';
@@ -459,6 +471,7 @@
             backToCarpoolPage();
         }
         function openQRScanToRide () {
+            hideMainBottomNavbar();
             secondary_top_navbar.style.display = 'flex';
             main_top_navbar.style.display = 'none';
             scanQRCodeToRide();
@@ -476,6 +489,7 @@
             backToCarpoolPage();
         }
         function openRideList () {
+            hideMainBottomNavbar();
             carpool_ride_list_container.style.display = 'block';
             secondary_top_navbar.style.display = 'flex';
             main_top_navbar.style.display = 'none';
@@ -490,7 +504,7 @@
         }
         carpool_tab_button.addEventListener('click', onCarpoolTab);
         shuttle_tab_button.addEventListener('click', onShuttleTab);
-        share_ride_tab_button.addEventListener('click', onShareRideTab);
+        share_ride_tab_button.addEventListener('click', onAccountTab);
         scan_qr_carpool_button.addEventListener('click', openQRScanToRide);
         submit_vehicle_id_button.addEventListener('click', submitVehicleIDToRide)
         back_to_previous_carpool_button.addEventListener('click', closeQRScanToRide);
