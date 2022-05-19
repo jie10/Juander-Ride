@@ -64,8 +64,11 @@ function saveAsRideLog(shuttleServiceId) {
     });
 }
 function scanQRCode(cameraId) {
-    console.log('start');
-    html5QrCode.start(cameraId, { fps: 10 }, function (decodedText, decodedResult) {
+    var config = {
+        fps: 10,
+        qrbox: { width: 180, height: 180 }
+    };
+    html5QrCode.start(cameraId, config, function (decodedText, decodedResult) {
         if (decodedText !== lastResult) {
             ++countResults;
             lastResult = decodedText;

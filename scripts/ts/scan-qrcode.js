@@ -72,10 +72,14 @@ function saveAsRideLog (shuttleServiceId) {
 }
 
 function scanQRCode (cameraId) {
-    console.log('start')
+    var config = {
+        fps: 10,
+        qrbox: { width: 180, height: 180 }
+    };
+
     html5QrCode.start(
         cameraId, 
-        { fps: 10 },
+        config,
         (decodedText, decodedResult) => {
             if (decodedText !== lastResult) {
                 ++countResults;
