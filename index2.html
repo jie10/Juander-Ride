@@ -9,21 +9,23 @@
     <!-- <link href="./styles/css/index.css" rel="stylesheet" type="text/css" /> -->
     <!-- FONTAWESOME-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./styles/lib/all.min.css" />
     <!-- BOOTSTRAP-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./styles/lib/bootstrap.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
-    <script src="./scripts/lib/bootstrap.min.js" defer></script>
     <!-- SWAL 2-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.css" integrity="sha512-y4S4cBeErz9ykN3iwUC4kmP/Ca+zd8n8FDzlVbq5Nr73gn1VBXZhpriQ7avR+8fQLpyq4izWm0b8s6q4Vedb9w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./styles/lib/sweetalert2.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js" integrity="sha512-7x7HoEikRZhV0FAORWP+hrUzl75JW/uLHBbg2kHnPdFmScpIeHY0ieUVSacjusrKrlA/RsA2tDOBvisFmKc3xw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
-    <script src="./scripts/lib/sweetalert2.min.js" defer></script>
     <!-- HTML5 QR code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.2.0/html5-qrcode.min.js" defer></script>
-    <script src="./scripts/lib/html5-qrcode.min.js" defer></script>
+    <script type='text/javascript'
+            src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' 
+            async defer></script>
     <style>
+        #carpool-bing-map {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
         .carpool-container,
         .shuttle-container,
         .user-account-container {
@@ -32,7 +34,7 @@
         }
         .carpool-container {
             position: relative;
-            background-image: url('./images/sample/google_map.png');
+            /* background-image: url('./images/sample/google_map.png'); */
             background-position: center;
             background-size: cover;
         }
@@ -88,8 +90,11 @@
         .carpool-main-page,
         .carpool-scan-to-ride-page,
         .carpool-ride-list-container {
-            padding: 20px;
             height: 100%;
+        }
+        .carpool-scan-to-ride-page,
+        .carpool-ride-list-container {
+            padding: 20px;
         }
         .carpool-scan-to-ride-page,
         .carpool-ride-list-container {
@@ -194,8 +199,9 @@
         <div class="row" style="flex-grow: 1;">
             <div class="container p-3 carpool-container tab-page-active" id="carpool_container">
                 <div class="carpool-main-page" id="carpool_main_page">
+                    <div id="carpool-bing-map"></div>
                     <div class="more-carpool-buttons d-flex flex-column">
-                        <button type="button" class="btn btn-light" style="background-color: transparent;"><i class="fa-solid fa-location-arrow"></i></button>
+                        <button type="button" class="btn btn-light" style="background-color: transparent;" id="carpool_locate_me_button"><i class="fa-solid fa-location-arrow"></i></button>
                         <button type="button" class="btn btn-light carpool-ride-list-button" style="background-color: transparent;" id="carpool_ride_list_button"><i class="fa-solid fa-bars-staggered"></i></button>
                     </div>
                     <button class="btn btn-primary scan-qr-carpool-button" type="button" id="scan_qr_carpool_button">
@@ -219,6 +225,7 @@
                     <p class="text-muted no-carpool-rides-found absolute-center text-center">There are currently no vehicles nearby</p>
                 </div>
             </div>
+            <div class="container p-3 error-container" id="error_page"></div>
             <div class="container p-3 shuttle-container" id="shuttle_container">
                 <p class="text-muted absolute-center text-center">Feature coming soon</p>
             </div>
@@ -258,7 +265,7 @@
                                 "plate_number": "LTO 1234",
                                 "pick_up_point": "SM Bacoor Parking Area",
                                 "location": "Cavite",
-                                "pick_up_location": "14.444506521713812, 120.94977917866827",
+                                "pick_up_location": "14.444506521713812,120.94977917866827",
                                 "employee_id": "098912"
                             },
                             {
@@ -273,7 +280,7 @@
                                 "plate_number": "RGB 1234",
                                 "pick_up_point": "SM Mall of Asia North Parking Entrance",
                                 "location": "Pasay",
-                                "pick_up_location": "14.537223302783715, 120.98259705364497",
+                                "pick_up_location": "14.537223302783715,120.98259705364497",
                                 "employee_id": "067834"
                             }
                         ];
@@ -286,16 +293,109 @@
         var share_ride_container = document.getElementById('share_ride_container');
         var carpool_ride_list_container = document.getElementById('carpool_ride_list_container');
         var carpool_main_page = document.getElementById('carpool_main_page');
+        var error_page = document.getElementById('error_page');
         var carpool_scan_to_ride_page = document.getElementById('carpool_scan_to_ride_page');
         var carpool_tab_button = document.getElementById('carpool_tab_button');
         var shuttle_tab_button = document.getElementById('shuttle_tab_button');
         var share_ride_tab_button = document.getElementById('share_ride_tab_button');
+        var carpool_locate_me_button = document.getElementById('carpool_locate_me_button');
         var scan_qr_carpool_button = document.getElementById('scan_qr_carpool_button');
         var submit_vehicle_id_button = document.getElementById('submit_vehicle_id_button');
         var back_to_previous_carpool_button = document.getElementById('back_to_previous_carpool_button');
         var carpool_vehicle_id_input = document.getElementById('carpool_vehicle_id_input');
         var carpool_ride_list_button = document.getElementById('carpool_ride_list_button');
 
+        function createLocationPins (map, latitude, longitude, data) {
+            var infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
+                            visible: false
+                        });
+
+            var location = new Microsoft.Maps.Location(latitude, longitude);
+
+            var pin = new Microsoft.Maps.Pushpin(location, {
+                color: 'blue'
+            });
+            pin.data = data;
+
+            map.entities.push(pin);
+            infobox.setMap(map);
+            Microsoft.Maps.Events.addHandler(pin, 'click', function (e) {
+                                                                            var data = e.target.data;
+
+                                                                            if (data) {
+                                                                                infobox.setOptions({
+                                                                                    location: e.target.getLocation(),
+                                                                                    title: 'Plate No. ' + data.plate_number,
+                                                                                    description: data.pick_up_point + '\n' + data.location,
+                                                                                    visible: true
+                                                                                });
+                                                                            }
+                                                                        });
+        }
+        function GetMap() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position, error) {
+                    if (error) {
+                        console.error(error);
+                        showErrorPage(error);
+                        carpool_main_page.style.display = 'none';
+                        document.getElementById('carpool-bing-map').style.display = 'none';
+                    } else {
+                        var currentCoordinates = position.coords;
+                        var map = new Microsoft.Maps.Map('#carpool-bing-map', {
+                            credentials: 'AgZPnTFYL83kjBDMf_zCSEyLTHbPDKzI_I57ZIUGgwjiQMK1mzFPofci_Iri677M',
+                            enableCORS: true,
+                            showDashboard: false,
+                            zoom: 18
+                        });
+
+                        var userLocation = new Microsoft.Maps.Location(position.coords.latitude, position.coords.longitude);
+
+                        var userPin = new Microsoft.Maps.Pushpin(userLocation, {
+                            title: 'You are Here',
+                            color: 'red'
+                        });
+
+                        map.entities.push(userPin);
+
+                        map.setView({ center: userLocation, zoom: 18 });
+
+                        hideErrorPage();
+
+                        document.getElementById('carpool-bing-map').style.display = 'block';
+
+                        carpool_locate_me_button.addEventListener('click', function () {
+                            map.setView({ center: userLocation, zoom: 18 });
+                        });
+
+                        carpools.forEach(vehicle => {
+                            var locs = vehicle.pick_up_location.split(',');
+                            var latitude = parseFloat(locs[0]);
+                            var longitude = parseFloat(locs[1]);
+                            var data = {
+                                pick_up_point: vehicle.pick_up_point,
+                                location: vehicle.location,
+                                plate_number: vehicle.plate_number
+                            };
+                            createLocationPins(map, latitude, longitude, data);
+                        })
+                    }
+                }, function(error) {
+                    showErrorPage(error);
+                    console.error(error);
+                    carpool_main_page.style.display = 'none';
+                    document.getElementById('carpool-bing-map').style.display = 'none';
+                }, {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                });
+            } else { 
+                error_page.innerHTML = "Geolocation is not supported by this browser.";
+                carpool_main_page.style.display = 'none';
+                document.getElementById('carpool-bing-map').style.display = 'none';
+            }
+    }
         function delay(callback, TIMEOUT_IN_SECONDS) {
             setTimeout(callback, TIMEOUT_IN_SECONDS);
         }
@@ -310,6 +410,14 @@
                 }
             });
             Alert.fire(title, message, status);
+        }
+        function showErrorPage (error) {
+            console.error(error.message);
+            error_page.style.display = 'block';
+            error_page.innerHTML = '<p class="text-muted absolute-center text-center">' + error.message + '</p>';
+        }
+        function hideErrorPage () {
+            error_page.style.display = 'none';
         }
         function loadCarpoolRidesList () {
             var withResults = '<div class=\"container carpool-rides-list\">' +
@@ -372,7 +480,7 @@
             shuttle_container.classList.remove('tab-page-active');
             share_ride_container.classList.remove('tab-page-active');
             carpool_container.classList.add('tab-page-active');
-            backToCarpoolPage();
+            reloadCarpoolPage();
         }
         function onShuttleTab () {
             shuttle_tab_button.classList.add('tab-active');
@@ -394,13 +502,14 @@
             main_top_navbar.style.display = 'flex';
             secondary_top_navbar.style.display = 'none';
         }
-        function backToCarpoolPage () {
+        function reloadCarpoolPage () {
             showMainBottomNavbar();
             main_top_navbar.style.display = 'flex';
             secondary_top_navbar.style.display = 'none';
             carpool_scan_to_ride_page.style.display = 'none';
             carpool_ride_list_container.style.display = 'none';
             carpool_main_page.style.display = 'block';
+            error_page.style.display = 'none';
         }
         function showToastMessage (title, status, TIMEOUT_IN_SECONDS) {
             var Toast = Swal.mixin({
@@ -445,7 +554,7 @@
                             }
 
                             html5QrCode.clear();
-                            backToCarpoolPage();
+                            reloadCarpoolPage();
                             showToastMessage('Scan successful', 'success', 2500);
                         },
                         function (err) {
@@ -453,22 +562,22 @@
                     .catch((err) => {
                         console.error(err);
                         showToastMessage('Scan failed', 'error', 2500);
-                        backToCarpoolPage();
+                        reloadCarpoolPage();
                     });
                 } else {
-                    backToCarpoolPage();
+                    reloadCarpoolPage();
                     showToastMessage('No cameras found', 'error', 2500);
                 }
             })
             .catch(err => {
                 console.error(err);
-                backToCarpoolPage();
+                reloadCarpoolPage();
                 showToastMessage('Camera permission blocked', 'error', 2500);
             });
         }
         function submitVehicleIDToRide () {
             showToastMessage('Submit successful', 'success', 2500);
-            backToCarpoolPage();
+            reloadCarpoolPage();
         }
         function openQRScanToRide () {
             hideMainBottomNavbar();
@@ -486,7 +595,7 @@
             }, 1500);
         }
         function closeQRScanToRide () {
-            backToCarpoolPage();
+            reloadCarpoolPage();
         }
         function openRideList () {
             hideMainBottomNavbar();
@@ -498,10 +607,11 @@
             document.querySelectorAll('.request-a-ride-button').forEach(function (btn) {
                 btn.addEventListener('click', function (e) {
                     showTimedAlertMessage('Request Successful', 'Estimated waiting time is 25 minutes!', 'success', 2000);
-                    backToCarpoolPage();
+                    reloadCarpoolPage();
                 });
             });
         }
+
         carpool_tab_button.addEventListener('click', onCarpoolTab);
         shuttle_tab_button.addEventListener('click', onShuttleTab);
         share_ride_tab_button.addEventListener('click', onAccountTab);
@@ -509,6 +619,10 @@
         submit_vehicle_id_button.addEventListener('click', submitVehicleIDToRide)
         back_to_previous_carpool_button.addEventListener('click', closeQRScanToRide);
         carpool_ride_list_button.addEventListener('click', openRideList);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            reloadCarpoolPage();
+        });
     </script>
 </body>
 </html>
