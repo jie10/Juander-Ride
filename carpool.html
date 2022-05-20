@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juander | Shuttle Service Ride Application </title>
     <link rel="icon" type="image/x-icon" href="./images/icons/juander-icon.ico">
-    <!-- <link href="./styles/css/index.css" rel="stylesheet" type="text/css" /> -->
+    <link href="index.css" rel="stylesheet" type="text/css" />
+    <link href="index.mobile.css" rel="stylesheet" type="text/css" />
     <!-- FONTAWESOME-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- BOOTSTRAP-->
@@ -17,164 +18,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js" integrity="sha512-7x7HoEikRZhV0FAORWP+hrUzl75JW/uLHBbg2kHnPdFmScpIeHY0ieUVSacjusrKrlA/RsA2tDOBvisFmKc3xw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
     <!-- HTML5 QR code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.2.0/html5-qrcode.min.js" defer></script>
-    <script type='text/javascript'
-            src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' 
-            async defer></script>
-    <style>
-        #carpool-bing-map {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-        .carpool-container,
-        .shuttle-container,
-        .user-account-container {
-            display: none;
-            padding: 0 !important;
-        }
-        .carpool-container {
-            position: relative;
-            /* background-image: url('./images/sample/google_map.png'); */
-            background-position: center;
-            background-size: cover;
-        }
-        .more-carpool-buttons {
-            position: fixed;
-            width: fit-content;
-            background-color: #FFCD00;
-            margin-right: 16px;
-            top: 80px;
-            right: 0;
-            border: 1px solid transparent;
-            border-radius: 18px;
-
-        }
-        .more-carpool-buttons button {
-            border: 1px solid transparent;
-        }
-        .scan-qr-carpool-button {
-            position: fixed;
-            width: 250px;
-            bottom: 75px;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .carpool-vehicle-id-input {
-            width: 250px !important;
-            margin: auto;
-        }
-        .submit-vehicle-id-button {
-            width: 250px !important;
-            margin: auto;
-        }
-        .tab-page-active {
-            display: block;
-        }
-        .carpool-tab-button,
-        .shuttle-tab-button,
-        .user-account-tab-button {
-            color: #373737;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .tab-active {
-            color: #0066A3;
-        }
-        .main-top-navbar,
-        .secondary-top-navbar {
-            background-color: #FFCD00;
-        }
-        .active-navbar {
-            display: block;
-        }
-        .carpool-main-page,
-        .carpool-scan-to-ride-page,
-        .carpool-ride-list-container {
-            height: 100%;
-        }
-        .carpool-scan-to-ride-page,
-        .carpool-ride-list-container {
-            padding: 20px;
-        }
-        .carpool-scan-to-ride-page,
-        .carpool-ride-list-container {
-            background-color: #FFFFFF;
-        }
-        .scan-qr-to-ride-reader {
-            width: 450px;
-            margin: 0 auto;
-        }
-        .absolute-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .carpool-rides-list .item {
-            background-color: #f7f7f7;
-            margin: 16px 0;
-            padding: 16px 8px;
-            border-radius: 16px;
-        }
-        .carpool-rides-list .item .details span {
-            display: block;
-        }
-        .carpool-rides-list .item .details {
-            margin: 8px 0;
-        }
-        .carpool-rides-list .item .details .label {
-            padding: 0;
-            margin: 0;
-            font-weight: 700;
-        }
-        .carpool-rides-list .item .main-details .icon {
-            font-size: 4rem;
-        }
-        .carpool-rides-list .item .pick-up-location-link {
-            text-decoration: none;
-            margin-left: 8px;
-        }
-        .carpool-rides-list .item .pick-up-location-link:hover {
-            text-decoration: underline;
-        }
-        @media only screen and (max-width: 991px) { 
-            .carpool-rides-list .item .details {
-                text-align: center;
-            }
-        }
-        @media only screen and (max-width: 1080px) { 
-            .carpool-rides-list .item .main-details .icon {
-                font-size: 3rem;
-            }
-        }
-        @media only screen and (max-width: 480px) { 
-            .carpool-rides-list .item .main-details .icon {
-                font-size: 2rem;
-            }
-            .carpool-rides-list {
-                padding: 0;
-                margin: 0;
-            }
-            .scan-qr-carpool-button,
-            .submit-vehicle-id-button,
-            .carpool-vehicle-id-input  {
-                width: 80% !important;
-            }
-            .scan-qr-to-ride-reader  {
-                width: 350px;
-            }
-            .carpool-tab-button,
-            .shuttle-tab-button,
-            .user-account-tab-button {
-                font-size: 12px;
-            }
-        }
-        @media only screen and (max-width: 320px) { 
-            .scan-qr-to-ride-reader  {
-                width: 280px;
-            }
-        }
-    </style>
+    <!-- BING MAPS -->
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
 </head>
 <body>
     <div class="container-fluid d-flex flex-column" style="min-height: 100vh;">
@@ -226,26 +71,20 @@
                 </div>
             </div>
             <div class="container p-3 error-container" id="error_page"></div>
-            <div class="container p-3 shuttle-container" id="shuttle_container">
-                <p class="text-muted absolute-center text-center">Feature coming soon</p>
-            </div>
-            <div class="container p-3 user-account-container" id="share_ride_container">
-                <p class="text-muted absolute-center text-center">Feature coming soon</p>
-            </div>
         </div>
         <div class="row main-bottom-navbar" id="main_bottom_navbar">
             <div class="col" style="background-color: #FFFFFF; border-top: 1px solid #C0CED8;">
                 <div class="container">
                     <div class="row">
-                        <div class="col text-center p-3 d-flex flex-column tab-active carpool-tab-button" id="carpool_tab_button">
+                        <a class="col text-center p-3 d-flex flex-column carpool-tab-button tab-active" id="carpool_tab_button" href="./carpool.html">
                             <i class="fa-solid fa-car-side"></i>Carpool
-                        </div>
-                        <div class="col text-center p-3 d-flex flex-column shuttle-tab-button" id="shuttle_tab_button">
+                        </a>
+                        <a class="col text-center p-3 d-flex flex-column shuttle-tab-button" id="shuttle_tab_button">
                             <i class="fa-solid fa-van-shuttle"></i>Shuttle
-                        </div>
-                        <div class="col text-center p-3 d-flex flex-column user-account-tab-button" id="share_ride_tab_button">
+                        </a>
+                        <a class="col text-center p-3 d-flex flex-column user-account-tab-button" id="user_account_tab_button" href="./account.html">
                             <i class="fa-solid fa-user"></i>Account
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -290,14 +129,14 @@
         var carpool_page_loader = document.getElementById('carpool_page_loader');
         var carpool_container = document.getElementById('carpool_container');
         var shuttle_container = document.getElementById('shuttle_container');
-        var share_ride_container = document.getElementById('share_ride_container');
+        var user_account_container = document.getElementById('user_account_container');
         var carpool_ride_list_container = document.getElementById('carpool_ride_list_container');
         var carpool_main_page = document.getElementById('carpool_main_page');
         var error_page = document.getElementById('error_page');
         var carpool_scan_to_ride_page = document.getElementById('carpool_scan_to_ride_page');
         var carpool_tab_button = document.getElementById('carpool_tab_button');
         var shuttle_tab_button = document.getElementById('shuttle_tab_button');
-        var share_ride_tab_button = document.getElementById('share_ride_tab_button');
+        var user_account_tab_button = document.getElementById('user_account_tab_button');
         var carpool_locate_me_button = document.getElementById('carpool_locate_me_button');
         var scan_qr_carpool_button = document.getElementById('scan_qr_carpool_button');
         var submit_vehicle_id_button = document.getElementById('submit_vehicle_id_button');
@@ -473,35 +312,6 @@
         function hideMainBottomNavbar () {
             main_bottom_navbar.style.display = 'none';
         }
-        function onCarpoolTab () {
-            shuttle_tab_button.classList.remove('tab-active');
-            share_ride_tab_button.classList.remove('tab-active');
-            carpool_tab_button.classList.add('tab-active');
-            shuttle_container.classList.remove('tab-page-active');
-            share_ride_container.classList.remove('tab-page-active');
-            carpool_container.classList.add('tab-page-active');
-            reloadCarpoolPage();
-        }
-        function onShuttleTab () {
-            shuttle_tab_button.classList.add('tab-active');
-            share_ride_tab_button.classList.remove('tab-active');
-            carpool_tab_button.classList.remove('tab-active');
-            share_ride_container.classList.remove('tab-page-active');
-            shuttle_container.classList.add('tab-page-active');
-            carpool_container.classList.remove('tab-page-active');
-            main_top_navbar.style.display = 'flex';
-            secondary_top_navbar.style.display = 'none';
-        }
-        function onAccountTab () {
-            share_ride_tab_button.classList.add('tab-active');
-            shuttle_tab_button.classList.remove('tab-active');
-            carpool_tab_button.classList.remove('tab-active');
-            share_ride_container.classList.add('tab-page-active');
-            shuttle_container.classList.remove('tab-page-active');
-            carpool_container.classList.remove('tab-page-active');
-            main_top_navbar.style.display = 'flex';
-            secondary_top_navbar.style.display = 'none';
-        }
         function reloadCarpoolPage () {
             showMainBottomNavbar();
             main_top_navbar.style.display = 'flex';
@@ -612,9 +422,6 @@
             });
         }
 
-        carpool_tab_button.addEventListener('click', onCarpoolTab);
-        shuttle_tab_button.addEventListener('click', onShuttleTab);
-        share_ride_tab_button.addEventListener('click', onAccountTab);
         scan_qr_carpool_button.addEventListener('click', openQRScanToRide);
         submit_vehicle_id_button.addEventListener('click', submitVehicleIDToRide)
         back_to_previous_carpool_button.addEventListener('click', closeQRScanToRide);

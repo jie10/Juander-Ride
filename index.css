@@ -1,0 +1,132 @@
+/** TOP NAVBAR */
+.main-top-navbar,
+.secondary-top-navbar {
+    background-color: #FFCD00;
+}
+.active-navbar {
+    display: block;
+}
+
+
+/** BOTTOM NAVBAR */
+.carpool-tab-button,
+.shuttle-tab-button,
+.user-account-tab-button {
+    color: #373737;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.carpool-tab-button:hover,
+.shuttle-tab-button:hover,
+.user-account-tab-button:hover {
+    color: #373737;
+}
+.tab-active,
+.tab-active:hover {
+    color: #0066A3 !important;
+}
+
+
+/** PAGES CONTAINER */
+.carpool-container,
+.shuttle-container,
+.user-account-container {
+    display: none;
+    padding: 0 !important;
+}
+.tab-page-active {
+    display: block;
+}
+
+
+/** CARPOOL */
+.carpool-container {
+    position: relative;
+    background-position: center;
+    background-size: cover;
+}
+.more-carpool-buttons {
+    position: fixed;
+    width: fit-content;
+    background-color: #FFCD00;
+    margin-right: 16px;
+    top: 80px;
+    right: 0;
+    border: 1px solid transparent;
+    border-radius: 18px;
+
+}
+.more-carpool-buttons button {
+    border: 1px solid transparent;
+}
+#carpool-bing-map {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.scan-qr-carpool-button {
+    position: fixed;
+    width: 250px;
+    bottom: 75px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.carpool-vehicle-id-input {
+    width: 250px !important;
+    margin: auto;
+}
+.submit-vehicle-id-button {
+    width: 250px !important;
+    margin: auto;
+}
+.carpool-main-page,
+.carpool-scan-to-ride-page,
+.carpool-ride-list-container {
+    height: 100%;
+}
+.carpool-scan-to-ride-page,
+.carpool-ride-list-container {
+    padding: 20px;
+}
+.carpool-scan-to-ride-page,
+.carpool-ride-list-container {
+    background-color: #FFFFFF;
+}
+.scan-qr-to-ride-reader {
+    width: 450px;
+    margin: 0 auto;
+}
+.absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.carpool-rides-list .item {
+    background-color: #f7f7f7;
+    margin: 16px 0;
+    padding: 16px 8px;
+    border-radius: 16px;
+}
+.carpool-rides-list .item .details span {
+    display: block;
+}
+.carpool-rides-list .item .details {
+    margin: 8px 0;
+}
+.carpool-rides-list .item .details .label {
+    padding: 0;
+    margin: 0;
+    font-weight: 700;
+}
+.carpool-rides-list .item .main-details .icon {
+    font-size: 4rem;
+}
+.carpool-rides-list .item .pick-up-location-link {
+    text-decoration: none;
+    margin-left: 8px;
+}
+.carpool-rides-list .item .pick-up-location-link:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,42 @@
+@media only screen and (max-width: 991px) {
+    /** CARPOOL */
+    .carpool-rides-list .item .details {
+        text-align: center;
+    }
+}
+@media only screen and (max-width: 1080px) {
+    /** CARPOOL */
+    .carpool-rides-list .item .main-details .icon {
+        font-size: 3rem;
+    }
+}
+@media only screen and (max-width: 480px) {
+    /** BOTTOM NAVBAR */
+    .carpool-tab-button,
+    .shuttle-tab-button,
+    .user-account-tab-button {
+        font-size: 12px;
+    }
+    /** CARPOOL */
+    .carpool-rides-list .item .main-details .icon {
+        font-size: 2rem;
+    }
+    .carpool-rides-list {
+        padding: 0;
+        margin: 0;
+    }
+    .scan-qr-carpool-button,
+    .submit-vehicle-id-button,
+    .carpool-vehicle-id-input  {
+        width: 80% !important;
+    }
+    .scan-qr-to-ride-reader  {
+        width: 350px;
+    }
+}
+@media only screen and (max-width: 320px) {
+    /** CARPOOL */
+    .scan-qr-to-ride-reader  {
+        width: 280px;
+    }
+}
