@@ -32,7 +32,7 @@
         </div>
         <div class="row p-2 secondary-top-navbar" id="secondary_top_navbar" style="display: none;">
             <div class="col d-flex justify-content-start">
-                <button type="button" class="btn btn-primary-outline" id="back_to_previous_carpool_button" style="color: #373737;">
+                <button type="button" class="btn btn-primary-outline" id="back_to_previous_page_button" style="color: #373737;">
                     <i class="fa-solid fa-arrow-left-long"></i>
                 </button>
             </div>
@@ -42,17 +42,12 @@
             <div class="col"></div>
         </div>
         <div class="row" style="flex-grow: 1;">
-            <div class="container p-3 carpool-container tab-page-active" id="carpool_container">
+            <div class="container carpool-container tab-page-active" id="carpool_container">
                 <div class="carpool-main-page" id="carpool_main_page">
-                    <div id="carpool-bing-map"></div>
-                    <div class="more-carpool-buttons d-flex flex-column">
-                        <button type="button" class="btn btn-light" style="background-color: transparent;" id="carpool_locate_me_button"><i class="fa-solid fa-location-arrow"></i></button>
-                        <button type="button" class="btn btn-light carpool-ride-list-button" style="background-color: transparent;" id="carpool_ride_list_button"><i class="fa-solid fa-bars-staggered"></i></button>
+                    <div class="more-carpool-buttons d-flex">
+                        <button type="button" class="btn btn-light carpool-ride-list-button" style="border-right: 1px solid #C0CED8;" id="carpool_ride_list_button">Find Carpool</button>
+                        <button type="button" class="btn btn-light" id="carpool_locate_me_button">Share a Ride</button>
                     </div>
-                    <button class="btn btn-primary scan-qr-carpool-button" type="button" id="scan_qr_carpool_button">
-                        <i class="fa-solid fa-qrcode me-2"></i>
-                        Scan QR Code to Ride
-                    </button>
                 </div>
                 <div class="carpool-page-loader d-flex justify-content-center m-5" id="carpool_page_loader" style="display: none !important;">
                     <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
@@ -138,103 +133,11 @@
         var shuttle_tab_button = document.getElementById('shuttle_tab_button');
         var user_account_tab_button = document.getElementById('user_account_tab_button');
         var carpool_locate_me_button = document.getElementById('carpool_locate_me_button');
-        var scan_qr_carpool_button = document.getElementById('scan_qr_carpool_button');
         var submit_vehicle_id_button = document.getElementById('submit_vehicle_id_button');
-        var back_to_previous_carpool_button = document.getElementById('back_to_previous_carpool_button');
+        var back_to_previous_page_button = document.getElementById('back_to_previous_page_button');
         var carpool_vehicle_id_input = document.getElementById('carpool_vehicle_id_input');
         var carpool_ride_list_button = document.getElementById('carpool_ride_list_button');
 
-        function createLocationPins (map, latitude, longitude, data) {
-            var infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
-                            visible: false
-                        });
-
-            var location = new Microsoft.Maps.Location(latitude, longitude);
-
-            var pin = new Microsoft.Maps.Pushpin(location, {
-                color: 'blue'
-            });
-            pin.data = data;
-
-            map.entities.push(pin);
-            infobox.setMap(map);
-            Microsoft.Maps.Events.addHandler(pin, 'click', function (e) {
-                                                                            var data = e.target.data;
-
-                                                                            if (data) {
-                                                                                infobox.setOptions({
-                                                                                    location: e.target.getLocation(),
-                                                                                    title: 'Plate No. ' + data.plate_number,
-                                                                                    description: data.pick_up_point + '\n' + data.location,
-                                                                                    visible: true
-                                                                                });
-                                                                            }
-                                                                        });
-        }
-        function GetMap() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position, error) {
-                    if (error) {
-                        console.error(error);
-                        showErrorPage(error);
-                        carpool_main_page.style.display = 'none';
-                        document.getElementById('carpool-bing-map').style.display = 'none';
-                    } else {
-                        var currentCoordinates = position.coords;
-                        var map = new Microsoft.Maps.Map('#carpool-bing-map', {
-                            credentials: 'AgZPnTFYL83kjBDMf_zCSEyLTHbPDKzI_I57ZIUGgwjiQMK1mzFPofci_Iri677M',
-                            enableCORS: true,
-                            showDashboard: false,
-                            zoom: 18
-                        });
-
-                        var userLocation = new Microsoft.Maps.Location(position.coords.latitude, position.coords.longitude);
-
-                        var userPin = new Microsoft.Maps.Pushpin(userLocation, {
-                            title: 'You are Here',
-                            color: 'red'
-                        });
-
-                        map.entities.push(userPin);
-
-                        map.setView({ center: userLocation, zoom: 18 });
-
-                        hideErrorPage();
-
-                        document.getElementById('carpool-bing-map').style.display = 'block';
-
-                        carpool_locate_me_button.addEventListener('click', function () {
-                            map.setView({ center: userLocation, zoom: 18 });
-                        });
-
-                        carpools.forEach(vehicle => {
-                            var locs = vehicle.pick_up_location.split(',');
-                            var latitude = parseFloat(locs[0]);
-                            var longitude = parseFloat(locs[1]);
-                            var data = {
-                                pick_up_point: vehicle.pick_up_point,
-                                location: vehicle.location,
-                                plate_number: vehicle.plate_number
-                            };
-                            createLocationPins(map, latitude, longitude, data);
-                        })
-                    }
-                }, function(error) {
-                    showErrorPage(error);
-                    console.error(error);
-                    carpool_main_page.style.display = 'none';
-                    document.getElementById('carpool-bing-map').style.display = 'none';
-                }, {
-                        enableHighAccuracy: true,
-                        timeout: 5000,
-                        maximumAge: 0
-                });
-            } else { 
-                error_page.innerHTML = "Geolocation is not supported by this browser.";
-                carpool_main_page.style.display = 'none';
-                document.getElementById('carpool-bing-map').style.display = 'none';
-            }
-    }
         function delay(callback, TIMEOUT_IN_SECONDS) {
             setTimeout(callback, TIMEOUT_IN_SECONDS);
         }
@@ -284,7 +187,7 @@
                                                     + '</div>'
                                                     + '<div class=\"col-12 col-lg\">'
                                                         + '<div class=\"d-flex justify-content-center justify-content-lg-start\">'
-                                                            + '<button type=\"button\" id=\"' + ride._id + '\" class=\"btn btn-primary mt-3 mb-3 request-a-ride-button\">Request for a ride</button>' 
+                                                            + '<button type=\"button\" id=\"' + ride._id + '\" class=\"btn btn-primary mt-3 mb-3 request-a-ride-button\">Request</button>' 
                                                         + '</div>'
                                                         + '<div class=\"details\">' 
                                                             + '<span class=\"label\">Pick-up Point / Location</span>' 
@@ -339,72 +242,8 @@
                 title: title
             });
         }
-        function scanQRCodeToRide () {
-            var lastResult, countResults = 0;
-
-            Html5Qrcode.getCameras().then(devices => {
-                if (devices && devices.length) {
-                    var html5QrCode = new Html5Qrcode('scan_qr_to_ride_reader');
-                    var cameraId = devices[0].id;
-                    var config = {
-                        fps: 10,
-                        qrbox: { width: 180, height: 180 }
-                    };
-
-                    html5QrCode.start(
-                        cameraId, 
-                        config,
-                        function (decodedText, decodedResult) {
-                            if (decodedText !== lastResult) {
-                                ++countResults;
-                                lastResult = decodedText;
-
-                                var result = typeof JSON.parse(decodedText) === "string" ? JSON.parse(JSON.parse(decodedText)) : JSON.parse(decodedText);
-                                console.log(result);
-                            }
-
-                            html5QrCode.clear();
-                            reloadCarpoolPage();
-                            showToastMessage('Scan successful', 'success', 2500);
-                        },
-                        function (err) {
-                        })
-                    .catch((err) => {
-                        console.error(err);
-                        showToastMessage('Scan failed', 'error', 2500);
-                        reloadCarpoolPage();
-                    });
-                } else {
-                    reloadCarpoolPage();
-                    showToastMessage('No cameras found', 'error', 2500);
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                reloadCarpoolPage();
-                showToastMessage('Camera permission blocked', 'error', 2500);
-            });
-        }
         function submitVehicleIDToRide () {
             showToastMessage('Submit successful', 'success', 2500);
-            reloadCarpoolPage();
-        }
-        function openQRScanToRide () {
-            hideMainBottomNavbar();
-            secondary_top_navbar.style.display = 'flex';
-            main_top_navbar.style.display = 'none';
-            scanQRCodeToRide();
-            carpool_main_page.style.display = 'none';
-            carpool_scan_to_ride_page.style.display = 'block';
-
-            submit_vehicle_id_button.disabled = true;
-            carpool_vehicle_id_input.disabled = true;
-            delay(function () {
-                carpool_vehicle_id_input.disabled = false;
-                submit_vehicle_id_button.disabled = false;
-            }, 1500);
-        }
-        function closeQRScanToRide () {
             reloadCarpoolPage();
         }
         function openRideList () {
@@ -422,9 +261,8 @@
             });
         }
 
-        scan_qr_carpool_button.addEventListener('click', openQRScanToRide);
         submit_vehicle_id_button.addEventListener('click', submitVehicleIDToRide)
-        back_to_previous_carpool_button.addEventListener('click', closeQRScanToRide);
+        back_to_previous_page_button.addEventListener('click', reloadCarpoolPage);
         carpool_ride_list_button.addEventListener('click', openRideList);
 
         document.addEventListener('DOMContentLoaded', function () {
