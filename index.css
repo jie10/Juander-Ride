@@ -56,10 +56,17 @@
     transform: translate(-50%, -50%);
     border: 1px solid transparent;
     border-radius: 18px;
+    overflow: hidden;
 }
 .carpool-container .more-carpool-buttons button {
     background-color: transparent;
     border: 1px solid transparent;
+}
+.carpool-container .more-carpool-buttons .carpool-ride-list-button {
+    border-right: 1px solid #C0CED8;
+}
+.carpool-container .more-carpool-buttons .active-tab-button {
+    background-color: #ffe88a;
 }
 #carpool-bing-map {
     position: relative;
@@ -82,9 +89,7 @@
     margin: auto;
 }
 .carpool-main-page {
-    background-image: url('./images/sample/google_map.png');
-    background-size: cover;
-    background-position: center;
+    background-color: #f7f7f7;
 }
 .carpool-main-page,
 .carpool-scan-to-ride-page,

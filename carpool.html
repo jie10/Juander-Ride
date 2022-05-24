@@ -18,6 +18,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js" integrity="sha512-7x7HoEikRZhV0FAORWP+hrUzl75JW/uLHBbg2kHnPdFmScpIeHY0ieUVSacjusrKrlA/RsA2tDOBvisFmKc3xw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
     <!-- HTML5 QR code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.2.0/html5-qrcode.min.js" defer></script>
+    <!-- TOM SELECT -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.0.3/css/tom-select.min.css" integrity="sha512-HZ7LD8/WlBbdwTrhR7B+tpXfuD21i53SQbzDYeQLKpftG7qfsKKOoSVlm582hTHd5d/R1/qvpqiW6/grsJ6xrQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.0.2/js/tom-select.complete.js" integrity="sha512-XmIHhMRKPvdOCojjxP/m6kxwBhBrT+eMIDjzCojVdkoOF0DseV+7KfFZeW7HtZ48yrW7Keu/EBoGTLMeYtfjLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- BING MAPS -->
     <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
 </head>
@@ -45,25 +48,19 @@
             <div class="container carpool-container tab-page-active" id="carpool_container">
                 <div class="carpool-main-page" id="carpool_main_page">
                     <div class="more-carpool-buttons d-flex">
-                        <button type="button" class="btn btn-light carpool-ride-list-button" style="border-right: 1px solid #C0CED8;" id="carpool_ride_list_button">Find Carpool</button>
-                        <button type="button" class="btn btn-light" id="carpool_locate_me_button">Share a Ride</button>
+                        <button type="button" class="btn btn-light carpool-ride-list-button active-tab-button" id="carpool_ride_list_button">Find Carpool</button>
+                        <button type="button" class="btn btn-light share-a-ride-button" id="share_a_ride_button">Share a Ride</button>
+                    </div>
+                    <div class="carpool-ride-list-container" id="carpool_ride_list_container" style="display: block;">
+                        <p class="text-muted no-carpool-rides-found absolute-center text-center">There are currently no vehicles nearby</p>
+                    </div>
+                    <div class="share-a-ride-container" id="share_a_ride_container" style="display: none;">
+                        <p class="text-muted no-carpool-rides-found absolute-center text-center">HiThere are currently no vehicles nearby</p>
                     </div>
                 </div>
                 <div class="carpool-page-loader d-flex justify-content-center m-5" id="carpool_page_loader" style="display: none !important;">
                     <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
-                </div>
-                <div class="carpool-scan-to-ride-page" id="carpool_scan_to_ride_page" style="display: none;">
-                    <div class="scan-qr-to-ride-reader" id="scan_qr_to_ride_reader"></div>
-                    <p class="text-center pt-3 pb-3">Scan driver's QR code or enter vehicle ID to ride</p>
-                    <div class="form-group text-center">
-                        <input type="text" class="form-control d-flex justify-content-center carpool-vehicle-id-input" id="carpool_vehicle_id_input" aria-describedby="carpool_vehicle_id_help" placeholder="Enter vehicle ID">
-                        <small id="carpool_vehicle_id_help" class="form-text text-muted">You can find Vehicle ID from the bottom of QR Code</small>
-                    </div>
-                    <button type="submit" class="btn btn-primary submit-vehicle-id-button mt-3 mb-3 d-flex justify-content-center" id="submit_vehicle_id_button">Submit</button>
-                </div>
-                <div class="carpool-ride-list-container" id="carpool_ride_list_container" style="display: none;">
-                    <p class="text-muted no-carpool-rides-found absolute-center text-center">There are currently no vehicles nearby</p>
-                </div>
+                </div>  
             </div>
             <div class="container p-3 error-container" id="error_page"></div>
         </div>
@@ -74,7 +71,7 @@
                         <a class="col text-center p-3 d-flex flex-column carpool-tab-button tab-active" id="carpool_tab_button" href="./carpool.html">
                             <i class="fa-solid fa-car-side"></i>Carpool
                         </a>
-                        <a class="col text-center p-3 d-flex flex-column shuttle-tab-button" id="shuttle_tab_button">
+                        <a class="col text-center p-3 d-flex flex-column shuttle-tab-button" id="shuttle_tab_button" href="./shuttle.html">
                             <i class="fa-solid fa-van-shuttle"></i>Shuttle
                         </a>
                         <a class="col text-center p-3 d-flex flex-column user-account-tab-button" id="user_account_tab_button" href="./account.html">
@@ -95,21 +92,21 @@
         var shuttle_container = document.getElementById('shuttle_container');
         var user_account_container = document.getElementById('user_account_container');
         var carpool_ride_list_container = document.getElementById('carpool_ride_list_container');
+        var share_a_ride_container = document.getElementById('share_a_ride_container');
         var carpool_main_page = document.getElementById('carpool_main_page');
         var error_page = document.getElementById('error_page');
-        var carpool_scan_to_ride_page = document.getElementById('carpool_scan_to_ride_page');
         var carpool_tab_button = document.getElementById('carpool_tab_button');
         var shuttle_tab_button = document.getElementById('shuttle_tab_button');
         var user_account_tab_button = document.getElementById('user_account_tab_button');
-        var carpool_locate_me_button = document.getElementById('carpool_locate_me_button');
-        var submit_vehicle_id_button = document.getElementById('submit_vehicle_id_button');
-        var back_to_previous_page_button = document.getElementById('back_to_previous_page_button');
-        var carpool_vehicle_id_input = document.getElementById('carpool_vehicle_id_input');
+        var carpool_ride_list_button = document.getElementById('carpool_ride_list_button');
+        var share_a_ride_button = document.getElementById('share_a_ride_button');
+        var back_to_previous_page_button = document.getElementById('back_to_previous_page_button'); 
         var carpool_ride_list_button = document.getElementById('carpool_ride_list_button');
 
         function delay(callback, TIMEOUT_IN_SECONDS) {
             setTimeout(callback, TIMEOUT_IN_SECONDS);
         }
+
         function showTimedAlertMessage(title, message, status, TIMEOUT_IN_SECONDS) {
             var Alert = Swal.mixin({
                 showConfirmButton: false,
@@ -127,9 +124,49 @@
             error_page.style.display = 'block';
             error_page.innerHTML = '<p class="text-muted absolute-center text-center">' + error.message + '</p>';
         }
+        function showCarpoolPageLoader () {
+            carpool_page_loader.style.display = 'flex';
+        }
+        function showMainBottomNavbar () {
+            main_bottom_navbar.style.display = 'block';
+        }
+        function showToastMessage (title, status, TIMEOUT_IN_SECONDS) {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: TIMEOUT_IN_SECONDS,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            Toast.fire({
+                icon: status,
+                title: title
+            });
+        }
+        function showCarpoolRideListContainer() {
+            carpool_ride_list_container.style.display = 'block';
+            share_a_ride_container.style.display = 'none';
+        }
+        function showShareARideContainer() {
+            carpool_ride_list_container.style.display = 'none';
+            share_a_ride_container.style.display = 'block';
+        }
+
         function hideErrorPage () {
             error_page.style.display = 'none';
         }
+        function hideCarpoolPageLoader () {
+            carpool_page_loader.style.display = 'none';
+        }
+        function hideMainBottomNavbar () {
+            main_bottom_navbar.style.display = 'none';
+        }
+
         function loadCarpoolRidesList () {
             var withResults = '<div class=\"container carpool-rides-list\">' +
                                     carpools.map(function (ride) {
@@ -172,49 +209,15 @@
             var noResults = '<p class=\"text-muted no-carpool-rides-found absolute-center text-center\">There are currently no vehicles nearby</p>';
             return carpools.length > 0 ? withResults : noResults;
         }
-        function showCarpoolPageLoader () {
-            carpool_page_loader.style.display = 'flex';
-        }
-        function hideCarpoolPageLoader () {
-            carpool_page_loader.style.display = 'none';
-        }
-        function showMainBottomNavbar () {
-            main_bottom_navbar.style.display = 'block';
-        }
-        function hideMainBottomNavbar () {
-            main_bottom_navbar.style.display = 'none';
-        }
+
         function reloadCarpoolPage () {
             showMainBottomNavbar();
             main_top_navbar.style.display = 'flex';
             secondary_top_navbar.style.display = 'none';
-            carpool_scan_to_ride_page.style.display = 'none';
-            carpool_ride_list_container.style.display = 'none';
             carpool_main_page.style.display = 'block';
             error_page.style.display = 'none';
         }
-        function showToastMessage (title, status, TIMEOUT_IN_SECONDS) {
-            var Toast = Swal.mixin({
-                toast: true,
-                position: 'top-right',
-                showConfirmButton: false,
-                timer: TIMEOUT_IN_SECONDS,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
 
-            Toast.fire({
-                icon: status,
-                title: title
-            });
-        }
-        function submitVehicleIDToRide () {
-            showToastMessage('Submit successful', 'success', 2500);
-            reloadCarpoolPage();
-        }
         function openRideList () {
             hideMainBottomNavbar();
             carpool_ride_list_container.style.display = 'block';
@@ -230,12 +233,29 @@
             });
         }
 
-        submit_vehicle_id_button.addEventListener('click', submitVehicleIDToRide)
+        function onCarpoolRidelist () {
+            if (share_a_ride_button.classList.contains('active-tab-button')) {
+                share_a_ride_button.classList.remove('active-tab-button');
+            }
+
+            carpool_ride_list_button.classList.add('active-tab-button');
+            showCarpoolRideListContainer();
+        }
+        function onShareCarpoolRide () {
+            if (carpool_ride_list_button.classList.contains('active-tab-button')) {
+                carpool_ride_list_button.classList.remove('active-tab-button');
+            }
+
+            share_a_ride_button.classList.add('active-tab-button');
+            showShareARideContainer();
+        }
+
         back_to_previous_page_button.addEventListener('click', reloadCarpoolPage);
-        carpool_ride_list_button.addEventListener('click', openRideList);
+        carpool_ride_list_button.addEventListener('click', onCarpoolRidelist);
+        share_a_ride_button.addEventListener('click', onShareCarpoolRide)
 
         document.addEventListener('DOMContentLoaded', function () {
-            reloadCarpoolPage();
+            reloadCarpoolPage(); 
         });
     </script>
 </body>
