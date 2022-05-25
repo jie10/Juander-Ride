@@ -51,7 +51,6 @@ var users = [
         "job_role": "Driver",
         "avatar_image": "avatar_3.jpg",
         "is_carpool_driver": true,
-        "vehicle_id": 11188999,
         "carpool": {
             "location": "Pasay City",
             "pick_up_point": "",
@@ -82,21 +81,7 @@ var carpools = [
         "pick_up_point": "SM Bacoor Parking Area",
         "location": "Cavite",
         "pick_up_location": "14.444506521713812,120.94977917866827",
-        "employee_id": "098912"
-    },
-    {
-        "_id": "5d2dc535977945d7ac0645183e5b1ee2",
-        "ride_type": "car",
-        "available_seats": 7,
-        "passenger_capacity": 7,
-        "vehicle_type": "suv",
-        "vehicle_brand": "Toyota",
-        "vehicle_model": "Innova Crysta 2.8 GX AT",
-        "vehicle_color": "red",
-        "plate_number": "RGB 1234",
-        "pick_up_point": "SM Mall of Asia North Parking Entrance",
-        "location": "Pasay",
-        "pick_up_location": "14.537223302783715,120.98259705364497",
-        "employee_id": "067834"
+        "employee_id": "00208245",
+        "passengers": []
     }
 ];

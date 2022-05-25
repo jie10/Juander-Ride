@@ -21,8 +21,9 @@
     <!-- TOM SELECT -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.0.3/css/tom-select.min.css" integrity="sha512-HZ7LD8/WlBbdwTrhR7B+tpXfuD21i53SQbzDYeQLKpftG7qfsKKOoSVlm582hTHd5d/R1/qvpqiW6/grsJ6xrQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.0.2/js/tom-select.complete.js" integrity="sha512-XmIHhMRKPvdOCojjxP/m6kxwBhBrT+eMIDjzCojVdkoOF0DseV+7KfFZeW7HtZ48yrW7Keu/EBoGTLMeYtfjLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- BING MAPS -->
-    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
+    <!-- SIMPLE PICKER -->
+    <link rel="stylesheet" href="./lib/simplepicker.css" />
+    <script type="text/javascript" src="./lib/simplepicker.js"></script>
 </head>
 <body>
     <div class="container-fluid d-flex flex-column" style="min-height: 100vh;">
@@ -47,12 +48,74 @@
         <div class="row" style="flex-grow: 1;">
             <div class="container carpool-container tab-page-active" id="carpool_container">
                 <div class="carpool-main-page" id="carpool_main_page">
-                    <div class="more-carpool-buttons d-flex">
-                        <button type="button" class="btn btn-light carpool-ride-list-button active-tab-button" id="carpool_ride_list_button">Find Carpool</button>
-                        <button type="button" class="btn btn-light share-a-ride-button" id="share_a_ride_button">Share a Ride</button>
+                    <div class="more-carpool-buttons align-items-center justify-content-center" id="more_carpool_buttons">
+                        <button type="button" class="btn btn-light carpool-ride-list-button active-tab-button" id="carpool_ride_list_button">Find Pool</button>
+                        <button type="button" class="btn btn-light share-a-ride-button" id="share_a_ride_button">Share Ride</button>
                     </div>
                     <div class="carpool-ride-list-container" id="carpool_ride_list_container" style="display: block;">
-                        <p class="text-muted no-carpool-rides-found absolute-center text-center">There are currently no vehicles nearby</p>
+                        <div class="navigate-container container-fluid" id="find_carpool_navigate_container">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-md">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-circle"></i></span>
+                                            <input type="text" class="form-control" placeholder="Pick-up at?" aria-label="Search pick-up point" aria-describedby="search-pick-up-point" id="search_pick_up_point">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-location-dot"></i></span>
+                                            <input type="text" class="form-control" placeholder="Where to?" aria-label="Search drop-off point" aria-describedby="search-drop-off-point" id="search_drop_off_point">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- <div class="col-8 col-md-4">
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" placeholder="When to pick-up?" aria-label="Set Pick-up Datetime" aria-describedby="pick-up-datetime" id="pick_up_datetime" readonly>
+                                            <span class="input-group-text" id="basic-addon3" style="background-color: transparent;"><i class="fa-solid fa-calendar-days"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-2">
+                                        <div class="input-group mb-3">
+                                            <input type="number" min="0" max="30" class="form-control" placeholder="0" aria-label="Set Seats Count" aria-describedby="seats_count" id="seats_count">
+                                            <span class="input-group-text" id="basic-addon4" style="background-color: transparent;"><i class="fa-solid fa-car"></i></span>
+                                        </div>
+                                    </div> -->
+                                    <div class="col">
+                                        <div class="input-group mb-3 pt-2 pb-2 ps-2 d-flex justify-content-start justify-content-md-center">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="is_to_drop_switch">
+                                                <label class="form-check-label" for="is_to_drop_switch">Drop me to a location?</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md d-grid gap-2 d-md-block">
+                                        <button type="button" class="btn btn-primary" id="find_pool_rider_button">Find Pool Rider</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="driver-pool-results" style="display: none;" id="driver_pool_results_container"></div>
+                        <div class="offcanvas offcanvas-bottom" style="height: 50vh;" tabindex="-1" id="showConfirmCarpoolDriver" aria-labelledby="showConfirmCarpoolDriverLabel">
+                            <div class="offcanvas-header">
+                              <div style="width: 50px; height: 4px; background-color:#C0CED8; margin: auto;"></div>
+                            </div>
+                            <div class="offcanvas-body small">
+                              <div class="container">
+                                  <div class="row">
+                                      <div class="col-2">
+                                            <button type="button" class="btn btn-primary" style="border-radius: 50%;">
+                                                <i class="fa-solid fa-message text-light"></i>
+                                            </button>
+                                      </div>
+                                    <div class="col d-block">
+                                        <button type="button" class="btn btn-primary" id="find_pool_rider_button">Join Ride</button>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="share-a-ride-container" id="share_a_ride_container" style="display: none;">
                         <p class="text-muted no-carpool-rides-found absolute-center text-center">HiThere are currently no vehicles nearby</p>
@@ -84,6 +147,17 @@
     </div>
     <script type="text/javascript" src="./data.js"></script>
     <script type="text/javascript">
+        var simplepicker = new SimplePicker({
+            zIndex: 10
+        });
+        var find_pool_rider_button = document.getElementById('find_pool_rider_button');
+        var more_carpool_buttons = document.getElementById('more_carpool_buttons');
+        var find_carpool_navigate_container = document.getElementById('find_carpool_navigate_container');
+        var driver_pool_results_container = document.getElementById('driver_pool_results_container');
+        var search_pick_up_point = document.getElementById('search_pick_up_point');
+        var search_drop_off_point = document.getElementById('search_drop_off_point');
+        var is_to_drop_switch = document.getElementById('is_to_drop_switch');
+        var pick_up_datetime = document.getElementById('pick_up_datetime');
         var main_top_navbar = document.getElementById('main_top_navbar');
         var main_bottom_navbar = document.getElementById('main_bottom_navbar');
         var secondary_top_navbar = document.getElementById('secondary_top_navbar');
@@ -102,6 +176,13 @@
         var share_a_ride_button = document.getElementById('share_a_ride_button');
         var back_to_previous_page_button = document.getElementById('back_to_previous_page_button'); 
         var carpool_ride_list_button = document.getElementById('carpool_ride_list_button');
+
+        var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
+                                "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;\" role=\"status\">" +
+                                    "<span class=\"visually-hidden\">Loading...</span>" +
+                                "</div>" +
+                            "</div>";
+        var NO_RESULTS_FOUND = "<p class=\"text-muted absolute-center text-center\">No results found.</p>";
 
         function delay(callback, TIMEOUT_IN_SECONDS) {
             setTimeout(callback, TIMEOUT_IN_SECONDS);
@@ -148,6 +229,14 @@
                 title: title
             });
         }
+        function showMainTopNavbar() {
+            main_top_navbar.style.display = 'flex';
+            secondary_top_navbar.style.display = 'none';
+        }
+        function showSecondaryTopNavbar() {
+            main_top_navbar.style.display = 'none';
+            secondary_top_navbar.style.display = 'flex';
+        }
         function showCarpoolRideListContainer() {
             carpool_ride_list_container.style.display = 'block';
             share_a_ride_container.style.display = 'none';
@@ -155,6 +244,17 @@
         function showShareARideContainer() {
             carpool_ride_list_container.style.display = 'none';
             share_a_ride_container.style.display = 'block';
+        }
+        function showFindCarpoolNavigateContainer() {
+            find_carpool_navigate_container.style.display = "block";
+            driver_pool_results_container.style.display = "none";
+        }
+        function showDriverPoolListContainer() {
+            find_carpool_navigate_container.style.display = "none";
+            driver_pool_results_container.style.display = "block";
+        }
+        function showMoreCarpoolButtonsContainer () {
+            more_carpool_buttons.style.display = 'flex';
         }
 
         function hideErrorPage () {
@@ -165,6 +265,9 @@
         }
         function hideMainBottomNavbar () {
             main_bottom_navbar.style.display = 'none';
+        }
+        function hideMoreCarpoolButtonsContainer () {
+            more_carpool_buttons.style.display = 'none';
         }
 
         function loadCarpoolRidesList () {
@@ -209,11 +312,42 @@
             var noResults = '<p class=\"text-muted no-carpool-rides-found absolute-center text-center\">There are currently no vehicles nearby</p>';
             return carpools.length > 0 ? withResults : noResults;
         }
+        function loadCarpoolDriversList() {
+            if (carpools.length > 0) {
+                driver_pool_results_container.innerHTML = '<div class=\"container\">' + '<div class=\"list-group\">' + carpools.map(function (driver) {
+                    var user = users.filter(function (user) {
+                        return user.employee_id === driver.employee_id;
+                    })[0];
+                    return user ? '<button type=\"button\" class=\"list-group-item list-group-item-action p-4 carpool-driver-to-choose-button\" id=\"' + driver._id + '\" data-bs-toggle="offcanvas" data-bs-target="#showConfirmCarpoolDriver" aria-controls=\"showConfirmCarpoolDriver\">'
+                                    + '<div class=\"row\">'
+                                        + '<div class=\"col-2 col-sm-3 col-md-2 d-flex justify-content-center align-items-center ms-3 me-3 ms-sm-0 me-sm-0\">'
+                                            + '<div style=\"padding: 1rem; background-color: #f7f7f7; border-radius: 50%;\"><i style=\"font-size: 2rem;\" class="fa-solid fa-user"></i></div>'
+                                        + '</div>'
+                                        + '<div class=\"col\">'
+                                            + '<h4>' + user.name + '</h4>'
+                                            + '<p class=\"text-muted\">' + user.job_role + '</p>'
+                                            + '<span class=\"badge rounded-pill bg-primary mt-0\">' + user.department + '</span>'
+                                        + '</div>'
+                                    + '</div>'
+                                    + '</button>' : '';
+                }).join('') + '</div>' + '</div>';
+
+                document.querySelectorAll('.carpool-driver-to-choose-button').forEach(function (btn) {
+                    btn.addEventListener('click', function (e) {
+                        console.log(e.currentTarget)
+                    })
+                });
+            } else {
+                driver_pool_results_container.innerHTML = NO_RESULTS_FOUND;
+            }
+        }
 
         function reloadCarpoolPage () {
             showMainBottomNavbar();
-            main_top_navbar.style.display = 'flex';
-            secondary_top_navbar.style.display = 'none';
+            onIsToDropSwitch();
+            showFindCarpoolNavigateContainer();
+            showMainTopNavbar();
+            showMoreCarpoolButtonsContainer();
             carpool_main_page.style.display = 'block';
             error_page.style.display = 'none';
         }
@@ -240,6 +374,7 @@
 
             carpool_ride_list_button.classList.add('active-tab-button');
             showCarpoolRideListContainer();
+            showFindCarpoolNavigateContainer();
         }
         function onShareCarpoolRide () {
             if (carpool_ride_list_button.classList.contains('active-tab-button')) {
@@ -249,11 +384,41 @@
             share_a_ride_button.classList.add('active-tab-button');
             showShareARideContainer();
         }
+        function onPickUpDatetime () {
+            simplepicker.open();
+        }
+        function onIsToDropSwitch () {
+            if (is_to_drop_switch.checked) {
+                search_drop_off_point.disabled = false;
+                search_pick_up_point.disabled = true;
+                search_drop_off_point.placeholder = "Where to?";
+                search_pick_up_point.placeholder = "";
+            } else {
+                search_pick_up_point.disabled = false;
+                search_drop_off_point.disabled = true;
+                search_drop_off_point.placeholder = "";
+                search_pick_up_point.placeholder = "Pick-up at?";
+            }
+        }
+        function onFindCarpoolRide () {
+            driver_pool_results_container.innerHTML = PAGE_LOAD_SPINNER;
+            showDriverPoolListContainer();
+            showSecondaryTopNavbar();
+            hideMoreCarpoolButtonsContainer();
+            hideMainBottomNavbar();
+            delay(loadCarpoolDriversList, 1500);
+        }
 
         back_to_previous_page_button.addEventListener('click', reloadCarpoolPage);
         carpool_ride_list_button.addEventListener('click', onCarpoolRidelist);
-        share_a_ride_button.addEventListener('click', onShareCarpoolRide)
+        share_a_ride_button.addEventListener('click', onShareCarpoolRide);
+        is_to_drop_switch.addEventListener('change', onIsToDropSwitch);
+        find_pool_rider_button.addEventListener('click', onFindCarpoolRide);
+        // pick_up_datetime.addEventListener('click', onPickUpDatetime)
 
+        // simplepicker.on('submit', (date, readableDate) => {
+        //     pick_up_datetime.value = readableDate;
+        // });
         document.addEventListener('DOMContentLoaded', function () {
             reloadCarpoolPage(); 
         });

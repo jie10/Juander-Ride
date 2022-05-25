@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;700&display=swap');
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
 /** TOP NAVBAR */
 .main-top-navbar,
 .secondary-top-navbar {
@@ -47,20 +53,21 @@
     background-size: cover;
 }
 .carpool-container .more-carpool-buttons {
-    position: fixed;
     width: fit-content;
     background-color: #FFCD00;
-    margin-right: 16px;
-    top: 85px;
-    left: 50%;
-    transform: translate(-50%, -50%);
     border: 1px solid transparent;
     border-radius: 18px;
     overflow: hidden;
+    height: 38px;
+    position: fixed;
+    top: 85px;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 .carpool-container .more-carpool-buttons button {
     background-color: transparent;
     border: 1px solid transparent;
+    width: 120px;
 }
 .carpool-container .more-carpool-buttons .carpool-ride-list-button {
     border-right: 1px solid #C0CED8;
@@ -102,7 +109,7 @@
 }
 .carpool-scan-to-ride-page,
 .carpool-ride-list-container {
-    background-color: #FFFFFF;
+    background-color: #F7F7F7;
 }
 .scan-qr-to-ride-reader {
     width: 450px;
@@ -141,7 +148,15 @@
 .carpool-rides-list .item .pick-up-location-link:hover {
     text-decoration: underline;
 }
-
+.navigate-container {
+    background-color: #FFFFFF;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: 0;
+    border-top: 1px solid #C0CED8;
+    padding: 40px 20px;
+}
 
 /** SHUTTLE */
 /* .carpool-container {
