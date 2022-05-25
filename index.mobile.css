@@ -10,8 +10,17 @@
         font-size: 3rem;
     }
 }
-@media only screen and (max-width: 797px) {
-
+@media only screen and (max-width: 600px) {
+    /** CARPOOL */
+    .carpool-ride-list-container .navigate-container {
+        bottom: 55px;
+    }
+    .carpool-ride-list-container .navigate-container .container {
+        width: 80% !important;
+    }
+    .carpool-ride-list-container .driver-pool-results .container {
+        width: 80% !important;
+    }
 }
 @media only screen and (max-width: 480px) {
     /** BOTTOM NAVBAR */
@@ -21,12 +30,31 @@
         font-size: 12px;
     }
     /** CARPOOL */
+    .carpool-ride-list-container .navigate-container {
+        font-size: 0.75rem;
+    }
+    .carpool-ride-list-container .navigate-container .btn {
+        font-size: 0.75rem;
+    }
+    .carpool-ride-list-container .navigate-container .container {
+        width: 100% !important;
+    }
+    .carpool-ride-list-container .driver-pool-results .container {
+        width: 100% !important;
+        padding: 0;
+    }
+    .carpool-ride-list-container .navigate-container .btn {
+        font-size: 0.75rem;
+    }
     .carpool-rides-list .item .main-details .icon {
         font-size: 2rem;
     }
     .carpool-rides-list {
         padding: 0;
         margin: 0;
+    }
+    .carpool-container .more-carpool-buttons button {
+        font-size: 0.75rem;
     }
     .scan-qr-carpool-button,
     .submit-vehicle-id-button,
@@ -38,12 +66,6 @@
     }
 }
 @media only screen and (max-width: 320px) {
-    /** CARPOOL */
-    .carpool-container .more-carpool-buttons button {
-        font-size: 0.75rem;
-    }
-
-
     /** BOTTOM NAVBAR */
     .main-bottom-navbar .carpool-tab-button,
     .main-bottom-navbar .shuttle-tab-button,

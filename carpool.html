@@ -55,18 +55,12 @@
                     <div class="carpool-ride-list-container" id="carpool_ride_list_container" style="display: block;">
                         <div class="navigate-container container-fluid" id="find_carpool_navigate_container">
                             <div class="container">
-                                <div class="row">
-                                    <div class="col-12 col-md">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-circle"></i></span>
-                                            <input type="text" class="form-control" placeholder="Pick-up at?" aria-label="Search pick-up point" aria-describedby="search-pick-up-point" id="search_pick_up_point">
-                                        </div>
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <input type="text" class="form-control" placeholder="Pick-up at?" aria-label="Search pick-up point" aria-describedby="search-pick-up-point" id="search_pick_up_point">
                                     </div>
-                                    <div class="col-12 col-md">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-location-dot"></i></span>
-                                            <input type="text" class="form-control" placeholder="Where to?" aria-label="Search drop-off point" aria-describedby="search-drop-off-point" id="search_drop_off_point">
-                                        </div>
+                                    <div class="col-12">
+                                        <input type="text" class="form-control" placeholder="Drop-off to?" aria-label="Search drop-off point" aria-describedby="search-drop-off-point" id="search_drop_off_point">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -82,16 +76,16 @@
                                             <span class="input-group-text" id="basic-addon4" style="background-color: transparent;"><i class="fa-solid fa-car"></i></span>
                                         </div>
                                     </div> -->
-                                    <div class="col">
-                                        <div class="input-group mb-3 pt-2 pb-2 ps-2 d-flex justify-content-start justify-content-md-center">
+                                    <div class="col-12">
+                                        <div class="input-group mb-3 pt-2 pb-2 ps-2 d-flex justify-content-center">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="is_to_drop_switch">
-                                                <label class="form-check-label" for="is_to_drop_switch">Drop me to a location?</label>
+                                                <label class="form-check-label" for="is_to_drop_switch">Switch to Drop-off</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md d-grid gap-2 d-md-block">
-                                        <button type="button" class="btn btn-primary" id="find_pool_rider_button">Find Pool Rider</button>
+                                    <div class="col-md d-grid gap-2 d-block">
+                                        <button type="button" class="btn btn-primary rounded-pill" id="find_pool_rider_button">Find Pool Rider</button>
                                     </div>
                                 </div>
                             </div>
@@ -334,8 +328,7 @@
                 driver_pool_results_container.innerHTML = NO_RESULTS_FOUND;
             }
         }
-
-        function reloadCarpoolPage () {
+        function loadCarpoolMainPage() {
             showMainBottomNavbar();
             onIsToDropSwitch();
             showFindCarpoolNavigateContainer();
@@ -343,6 +336,10 @@
             showMoreCarpoolButtonsContainer();
             carpool_main_page.style.display = 'block';
             error_page.style.display = 'none';
+        }
+
+        function reloadCarpoolPage () {
+            loadCarpoolMainPage();
         }
 
         function openRideList () {
@@ -381,16 +378,15 @@
             simplepicker.open();
         }
         function onIsToDropSwitch () {
+            search_drop_off_point.value = '';
+            search_pick_up_point.value = '';
+
             if (is_to_drop_switch.checked) {
-                search_drop_off_point.disabled = false;
-                search_pick_up_point.disabled = true;
-                search_drop_off_point.placeholder = "Where to?";
-                search_pick_up_point.placeholder = "";
+                search_drop_off_point.style.display = 'block';
+                search_pick_up_point.style.display = 'none';
             } else {
-                search_pick_up_point.disabled = false;
-                search_drop_off_point.disabled = true;
-                search_drop_off_point.placeholder = "";
-                search_pick_up_point.placeholder = "Pick-up at?";
+                search_pick_up_point.style.display = 'block';
+                search_drop_off_point.style.display = 'none';
             }
         }
         function onFindCarpoolRide () {
