@@ -96,10 +96,9 @@ body {
 .carpool-container .more-carpool-buttons button {
     background-color: transparent;
     border: 1px solid transparent;
+    font-size: 0.875rem;
+    font-weight: 700;
     width: 120px;
-}
-.carpool-container .more-carpool-buttons .carpool-ride-list-button {
-    border-right: 1px solid #C0CED8;
 }
 .carpool-container .more-carpool-buttons .active-tab-button {
     background-color: #ffe88a;

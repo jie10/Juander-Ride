@@ -39,7 +39,7 @@
 }
 @media only screen and (max-width: 320px) {
     /** CARPOOL */
-    .scan-qr-to-ride-reader  {
-        width: 280px;
+    .carpool-container .more-carpool-buttons button {
+        font-size: 0.75rem;
     }
 }
