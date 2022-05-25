@@ -37,28 +37,28 @@ body {
     left: 0;
     right: 0;
 }
-.carpool-tab-button,
-.shuttle-tab-button,
-.user-account-tab-button {
+.main-bottom-navbar .carpool-tab-button,
+.main-bottom-navbar .shuttle-tab-button,
+.main-bottom-navbar .user-account-tab-button {
     width: 156px;
     color: #373737;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     cursor: pointer;
     text-decoration: none;
-    padding: 12px 8px;
+    padding: 9.5px 8px;
 }
-.carpool-tab-button i,
-.shuttle-tab-button i,
-.user-account-tab-button i {
+.main-bottom-navbar .carpool-tab-button i,
+.main-bottom-navbar .shuttle-tab-button i,
+.main-bottom-navbar .user-account-tab-button i {
     font-size: 1rem;
 }
-.carpool-tab-button:hover,
-.shuttle-tab-button:hover,
-.user-account-tab-button:hover {
+.main-bottom-navbar .carpool-tab-button:hover,
+.main-bottom-navbar .shuttle-tab-button:hover,
+.main-bottom-navbar .user-account-tab-button:hover {
     color: #373737;
 }
-.tab-active,
-.tab-active:hover {
+.main-bottom-navbar .tab-active,
+.main-bottom-navbar .tab-active:hover {
     color: #0066A3 !important;
 }
 

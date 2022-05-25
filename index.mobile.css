@@ -42,4 +42,17 @@
     .carpool-container .more-carpool-buttons button {
         font-size: 0.75rem;
     }
+
+
+    /** BOTTOM NAVBAR */
+    .main-bottom-navbar .carpool-tab-button,
+    .main-bottom-navbar .shuttle-tab-button,
+    .main-bottom-navbar .user-account-tab-button {
+        font-size: 0.75rem;
+    }
+    .main-bottom-navbar .carpool-tab-button i,
+    .main-bottom-navbar .shuttle-tab-button i,
+    .main-bottom-navbar .user-account-tab-button i {
+        font-size: 0.875rem;
+    }
 }
