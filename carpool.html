@@ -27,21 +27,21 @@
 </head>
 <body>
     <div class="container-fluid d-flex flex-column" style="min-height: 100vh;">
-        <div class="row p-2 main-top-navbar" id="main_top_navbar">
+        <div class="row main-top-navbar" id="main_top_navbar">
             <div class="col"></div>
             <div class="col-6 d-flex my-auto justify-content-center">
-                <span class="h3" style="color: #0066A3; margin-bottom: 0;">Juander</span>
+                <span class="h5 nav-brand">Juander</span>
             </div>
             <div class="col"></div>
         </div>
-        <div class="row p-2 secondary-top-navbar" id="secondary_top_navbar" style="display: none;">
+        <div class="row secondary-top-navbar" id="secondary_top_navbar" style="display: none;">
             <div class="col d-flex justify-content-start">
                 <button type="button" class="btn btn-primary-outline" id="back_to_previous_page_button" style="color: #373737;">
                     <i class="fa-solid fa-arrow-left-long"></i>
                 </button>
             </div>
             <div class="col-6 d-flex my-auto justify-content-center">
-                <span class="h4" style="color: #0066A3; margin-bottom: 0;">Juander</span>
+                <span class="h5 nav-brand">Juander</span>
             </div>
             <div class="col"></div>
         </div>
@@ -121,27 +121,20 @@
                         <p class="text-muted no-carpool-rides-found absolute-center text-center">HiThere are currently no vehicles nearby</p>
                     </div>
                 </div>
-                <div class="carpool-page-loader d-flex justify-content-center m-5" id="carpool_page_loader" style="display: none !important;">
-                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
-                </div>  
             </div>
             <div class="container p-3 error-container" id="error_page"></div>
         </div>
-        <div class="row main-bottom-navbar" id="main_bottom_navbar">
-            <div class="col" style="background-color: #FFFFFF; border-top: 1px solid #C0CED8;">
-                <div class="container">
-                    <div class="row">
-                        <a class="col text-center p-3 d-flex flex-column carpool-tab-button tab-active" id="carpool_tab_button" href="./carpool.html">
-                            <i class="fa-solid fa-car-side"></i>Carpool
-                        </a>
-                        <a class="col text-center p-3 d-flex flex-column shuttle-tab-button" id="shuttle_tab_button" href="./shuttle.html">
-                            <i class="fa-solid fa-van-shuttle"></i>Shuttle
-                        </a>
-                        <a class="col text-center p-3 d-flex flex-column user-account-tab-button" id="user_account_tab_button" href="./account.html">
-                            <i class="fa-solid fa-user"></i>Account
-                        </a>
-                    </div>
-                </div>
+        <div class="main-bottom-navbar" id="main_bottom_navbar">
+            <div class="container d-flex justify-content-center">
+                <a class="text-center d-flex flex-column carpool-tab-button tab-active" id="carpool_tab_button" href="./carpool.html">
+                    <i class="fa-solid fa-car-side"></i>Carpool
+                </a>
+                <a class="text-center d-flex flex-column shuttle-tab-button" id="shuttle_tab_button" href="./shuttle.html">
+                    <i class="fa-solid fa-van-shuttle"></i>Shuttle
+                </a>
+                <a class="text-center d-flex flex-column user-account-tab-button" id="user_account_tab_button" href="./account.html">
+                    <i class="fa-solid fa-user"></i>Account
+                </a>
             </div>
         </div>
     </div>

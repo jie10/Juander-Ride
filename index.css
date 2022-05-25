@@ -7,7 +7,19 @@ body {
 /** TOP NAVBAR */
 .main-top-navbar,
 .secondary-top-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    height: 50px;
+    padding: 8px 0;
     background-color: #FFCD00;
+}
+.main-top-navbar .nav-brand,
+.secondary-top-navbar .nav-brand {
+    color: #0066A3;
+    margin: 0;
 }
 .active-navbar {
     display: block;
@@ -15,13 +27,30 @@ body {
 
 
 /** BOTTOM NAVBAR */
+.main-bottom-navbar {
+    background-color: #FFFFFF;
+    border-top: 1px solid #C0CED8;
+    position: fixed;
+    width: 100%;
+    height: 56px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
 .carpool-tab-button,
 .shuttle-tab-button,
 .user-account-tab-button {
+    width: 156px;
     color: #373737;
-    font-size: 14px;
+    font-size: 0.75rem;
     cursor: pointer;
     text-decoration: none;
+    padding: 12px 8px;
+}
+.carpool-tab-button i,
+.shuttle-tab-button i,
+.user-account-tab-button i {
+    font-size: 1rem;
 }
 .carpool-tab-button:hover,
 .shuttle-tab-button:hover,
