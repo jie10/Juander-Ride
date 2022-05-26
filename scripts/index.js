@@ -9,6 +9,18 @@ function highlightErrorInput() {
     user_email.style.borderColor = hasError ? 'red' : '#ced4da';
     document.querySelector('.invalid-feedback').style.display = hasError ? 'block' : 'none';
 }
+function checkCurrentSession() {
+    var email = localStorage.getItem(USER_LOGIN_EMAIL_KEY);
+
+    if (email) {
+        moveToHomepage();
+    } else {
+        document.querySelector('.login-page-container').style.display = 'block';
+    }
+}
+function moveToHomepage() {
+    window.location.href = '/pages/carpool.html';
+}
 function onTyping() {
     hasError = false;
     highlightErrorInput();
@@ -19,7 +31,7 @@ function onLogin() {
 
     if (emailPattern.test(email) === true && email.length > 0) {
         localStorage.setItem(USER_LOGIN_EMAIL_KEY, email);
-        console.log(localStorage.getItem(USER_LOGIN_EMAIL_KEY));
+        moveToHomepage();
     } else {
         hasError = true;
         highlightErrorInput();
@@ -28,3 +40,7 @@ function onLogin() {
 
 user_email.addEventListener('keyup', onTyping);
 login_button.addEventListener('click', onLogin);
+
+document.addEventListener('DOMContentLoaded', function () {
+    checkCurrentSession(); 
+});

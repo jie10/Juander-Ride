@@ -36,6 +36,7 @@ var search_pick_up_point_rider = document.getElementById('search_pick_up_point_r
 var search_drop_off_point_rider = document.getElementById('search_drop_off_point_rider');
 var is_to_drop_switch_rider = document.getElementById('is_to_drop_switch_rider');
 
+var USER_LOGIN_EMAIL_KEY = 'email';
 var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
                         "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;\" role=\"status\">" +
                             "<span class=\"visually-hidden\">Loading...</span>" +
@@ -63,6 +64,19 @@ function showErrorPage (error) {
     console.error(error.message);
     error_page.style.display = 'block';
     error_page.innerHTML = '<p class="text-muted absolute-center text-center">' + error.message + '</p>';
+}
+function checkCurrentSession() {
+    var email = localStorage.getItem(USER_LOGIN_EMAIL_KEY);
+
+    if (email) {
+        document.querySelector('.carpool-page-container').style.display = 'block';
+        reloadCarpoolPage(); 
+    } else {
+        moveToLoginpage();
+    }
+}
+function moveToLoginpage() {
+    window.location.href = '../index.html';
 }
 function showCarpoolPageLoader () {
     carpool_page_loader.style.display = 'flex';
@@ -317,5 +331,5 @@ share_a_ride_button.addEventListener('click', onShareCarpoolRide);
 is_to_drop_switch_rider.addEventListener('click', onIsToDropSwitchRider);
 
 document.addEventListener('DOMContentLoaded', function () {
-    reloadCarpoolPage(); 
+    checkCurrentSession();
 });
