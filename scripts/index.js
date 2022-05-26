@@ -38,7 +38,13 @@ function onLogin() {
     }
 }
 
-user_email.addEventListener('keyup', onTyping);
+user_email.addEventListener('keydown', onTyping);
+user_email.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        onLogin();
+    }
+});
 login_button.addEventListener('click', onLogin);
 
 document.addEventListener('DOMContentLoaded', function () {
