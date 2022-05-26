@@ -1,0 +1,251 @@
+/** CARPOOL PAGES CONTAINER */
+.carpool-container,
+.shuttle-container,
+.user-account-container {
+    display: none;
+    padding: 0 !important;
+}
+.tab-page-active {
+    display: block;
+}
+
+
+/** CARPOOL - FIND POOL */
+.carpool-container {
+    position: relative;
+    background-position: center;
+    background-size: cover;
+}
+.carpool-container .more-carpool-buttons {
+    width: fit-content;
+    background-color: #FFCD00;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    overflow: hidden;
+    height: 38px;
+    position: fixed;
+    top: 85px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.carpool-container .more-carpool-buttons button {
+    background-color: transparent;
+    border: 1px solid transparent;
+    font-size: 0.875rem;
+    font-weight: 700;
+    width: 120px;
+}
+.carpool-container .more-carpool-buttons .active-tab-button {
+    background-color: #ffe88a;
+}
+#carpool-bing-map {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.scan-qr-carpool-button {
+    position: fixed;
+    width: 250px;
+    bottom: 75px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.carpool-vehicle-id-input {
+    width: 250px !important;
+    margin: auto;
+}
+.submit-vehicle-id-button {
+    width: 250px !important;
+    margin: auto;
+}
+.carpool-main-page {
+    background-color: #f7f7f7;
+}
+.carpool-main-page,
+.carpool-scan-to-ride-page,
+.carpool-ride-list-container,
+.share-a-ride-container {
+    height: 100%;
+}
+.carpool-scan-to-ride-page,
+.carpool-ride-list-container,
+.share-a-ride-container {
+    padding: 20px;
+}
+.carpool-scan-to-ride-page,
+.carpool-ride-list-container,
+.share-a-ride-container {
+    background-color: #F7F7F7;
+}
+.scan-qr-to-ride-reader {
+    width: 450px;
+    margin: 0 auto;
+}
+.carpool-rides-list .item {
+    background-color: #f7f7f7;
+    margin: 16px 0;
+    padding: 16px 8px;
+    border-radius: 16px;
+}
+.carpool-rides-list .item .details span {
+    display: block;
+}
+.carpool-rides-list .item .details {
+    margin: 8px 0;
+}
+.carpool-rides-list .item .details .label {
+    padding: 0;
+    margin: 0;
+    font-weight: 700;
+}
+.carpool-rides-list .item .main-details .icon {
+    font-size: 4rem;
+}
+.carpool-rides-list .item .pick-up-location-link {
+    text-decoration: none;
+    margin-left: 8px;
+}
+.carpool-rides-list .item .pick-up-location-link:hover {
+    text-decoration: underline;
+}
+.carpool-ride-list-container .navigate-container {
+    background-color: #FFFFFF;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: 56px;
+    border-top: 1px solid #C0CED8;
+    padding: 40px 20px;
+    z-index: 1;
+}
+.carpool-ride-list-container .navigate-container .container {
+    width: 400px !important;
+}
+.carpool-ride-list-container .driver-pool-results {
+    padding: 60px 0;
+}
+.carpool-ride-list-container .driver-pool-results .container {
+    width: 400px !important;
+}
+.carpool-ride-list-container .driver-pool-results .avatar-container {
+    height: 50px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+.carpool-ride-list-container .driver-pool-results .avatar {
+    height: 100%;
+}
+.carpool-ride-list-container .driver-pool-results .carpool-driver-to-choose-button {
+    border-radius: 8px;
+    padding: 16px 8px;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .container {
+    width: 400px !important;
+    padding: 0;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-header .avatar-container {
+    height: 50px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-header .avatar {
+    height: 100%;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-header .carpool-driver-to-choose-button {
+    border-radius: 8px;
+    padding: 16px 8px;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar-container {
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: auto;
+    margin-bottom: 6px;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar {
+    height: 100%;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar-name {
+    font-size: 0.75rem;
+    text-align: center;
+    font-weight: 700;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar-name-unavailable {
+    color: #cccccc !important;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-others h6 {
+    font-size: 0.75rem;
+    margin-bottom: 3px;
+    color: #cccccc;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-others p {
+    font-size: 0.875rem;
+    margin: 0;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-others a {
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-others a:hover {
+    text-decoration: underline;
+}
+.option-buttons {
+    width: 80%;
+    margin: auto;
+}
+.on-trip-container {
+    background-color: #FFFFFF;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: 56px;
+    border-top: 1px solid #C0CED8;
+    padding: 20px;
+    z-index: 1;
+}
+.on-trip-container .container {
+    height: 100%;
+    width: 400px !important;
+    padding: 0;
+}
+.on-trip-container .driver-info-header .avatar-container {
+    height: 50px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+.on-trip-container .driver-info-header .avatar {
+    height: 100%;
+}
+.trip-completed-container {
+    height: 100%;
+}
+.trip-completed-container h2 {
+    margin: 0;
+    margin-bottom: 8px;
+}
+.trip-completed-container p {
+    color: #cccccc;
+    font-weight: 700;
+    font-size: 1rem;
+}
+.trip-completed-container button {
+    border-radius: 24px;
+    width: 234px;
+}
+
+
+/** CARPOOL - SHARE A RIDE */
+.share-a-ride-container .navigate-container {
+    background-color: #FFFFFF;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: 56px;
+    border-top: 1px solid #C0CED8;
+    padding: 40px 20px;
+    z-index: 1;
+}
+.share-a-ride-container .navigate-container .container {
+    width: 400px !important;
+}

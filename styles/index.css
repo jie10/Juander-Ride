@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #ffb31d !important;
+    font-family: 'Roboto', sans-serif;
+}
+
+.navbar {
+    width: 160px;
+    height: 100vh;
+    position: fixed;
+    margin-left: -300px;
+    background-color: #ff6920;
+    transition: 0.4s;
+}
+
+.nav-link {
+    font-size: 1.25em;
+}
+
+.nav-link:active,
+.nav-link:focus,
+.nav-link:hover {
+    background-color: #ffffff26;
+}
+
+.dropdown-menu {
+    background-color: #ff6920;
+}
+
+.dropdown-item:active,
+.dropdown-item:focus,
+.dropdown-item:hover {
+    background-color: #ffffff26;
+}
+
+.active-nav {
+    margin-left: 0;
+}
+/* for main section */
+
+.main {
+    background: #F7F7F7;
+    /* margin-top: 20px; */
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    min-height: 55vh;
+    height: 100%;
+}
+
+.main-header-text {
+    padding-top: 15px;
+}
+
+.header-txt {
+    padding-top: 15px;
+    text-align: center;
+    color: #ff6920;
+    font-size: 40px;
+    margin-bottom: 0px !important;
+    /* font-style: italic; */
+}
+
+.headertxt {
+    text-align: center;
+}
+
+.homeButtons {
+    padding: 10px;
+}
+
+.homeBtn {
+    display: flex;
+    background: #F7F7F7;
+    padding: 15px 40px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.info {
+    flex: 1;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 15px;
+}
+
+.homeBtn .title {
+    font-weight: bold;
+}
+
+.homeBtn .description {
+    color: #665E77;
+}
+
+.homeBtn .slots {
+    color: #7358D4;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #3E3049;
+}
+
+.p-4 {
+    padding: 0px 1.5rem!important;
+    /* margin-top: 10px; */
+}
+
+.buttons {
+    display: flex;
+    padding: 10px;
+}
+
+input {
+    flex: 1;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    background: white;
+    margin: 5px;
+    flex-direction: column;
+    width: 100%;
+}
+
+.info {
+    margin-bottom: 0px;
+}
+
+.fields {
+    display: block;
+    padding: 10px;
+}
+
+.button {
+    flex: 1;
+    /* height: 110px; */
+    padding: 15px;
+    border-radius: 10px;
+    background: #F7F7F7;
+    margin: 5px;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    width: 100%;
+    display: block;
+}
+
+.welcome-rems {
+    padding-bottom: 30px;
+}
+
+.pagename {
+    font-weight: bold;
+    font-size: 30px;
+    margin-bottom: 0px;
+    color: #ff6920;
+}
+
+.pagedescription {
+    font-size: 15px;
+    color: #373737a6;
+    margin-bottom: 0px;
+    font-weight: 500;
+}
+
+.login-btn {
+    background-color: #ff6920;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 24px;
+    width: 100%;
+}
+
+.generate-btn {
+    text-align: center;
+    /* padding: 30px; */
+    padding: 10px;
+}
+
+.active-cont {
+    margin-left: 145px;
+}
+
+.slotAvail {
+    font-size: 35px;
+    font-weight: bold;
+    color: #ff6920;
+    margin-bottom: 0px;
+}
+
+.slotDesc {
+    margin-bottom: 0px;
+    color: #665E77;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+#menu-btn {
+    background-color: #ff6920;
+    color: #fff;
+}
+
+#menu-btn:focus {
+    box-shadow: 0 0 0 0.25rem #ff692044;
+}

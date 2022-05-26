@@ -1,0 +1,17 @@
+/** HELPERS */
+.highlight {
+    font-weight: 700;
+    margin-right: 6px;
+}
+.other-highlight {
+    font-weight: 700;
+    margin-right: 6px;
+    font-size: 0.75rem;
+    color: #cccccc;
+}
+.absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

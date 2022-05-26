@@ -1,0 +1,21 @@
+/** TOP NAVBAR */
+.main-top-navbar,
+.secondary-top-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    height: 50px;
+    padding: 8px 0;
+    background-color: #FFCD00;
+}
+.main-top-navbar .nav-brand,
+.secondary-top-navbar .nav-brand {
+    color: #0066A3;
+    margin: 0;
+    font-weight: 700;
+}
+.active-navbar {
+    display: block;
+}
