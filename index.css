@@ -297,7 +297,22 @@ body {
 .on-trip-container .driver-info-header .avatar {
     height: 100%;
 }
-
+.trip-completed-container {
+    height: 100%;
+}
+.trip-completed-container h2 {
+    margin: 0;
+    margin-bottom: 8px;
+}
+.trip-completed-container p {
+    color: #cccccc;
+    font-weight: 700;
+    font-size: 1rem;
+}
+.trip-completed-container button {
+    border-radius: 24px;
+    width: 234px;
+}
 
 /** TOM SELECT LIBRARY */
 .ts-wrapper {

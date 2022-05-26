@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juander | Ride Partner for CEB Employees</title>
+    <title>Juander Ride</title>
     <link rel="icon" type="image/x-icon" href="./images/icons/juander-icon.ico">
     <link href="index.css" rel="stylesheet" type="text/css" />
     <link href="index.mobile.css" rel="stylesheet" type="text/css" />
@@ -112,34 +112,43 @@
                                 </div>
                               </div>
                         </div>
-                        <div class="on-trip-container container-fluid" id="carpool_on_trip_container" style="display: none;">
-                            <div class="container d-flex flex-column">
-                                <div class="row driver-info-header">
-                                    <div class="col-4 col-sm-3 d-flex justify-content-center" style="width: 75px; ">
-                                        <div class="avatar-container">
-                                            <img class="avatar" src="./images/sample/avatar_3.jpg" />
+                        <div class="container-fluid" id="carpool_on_trip_container" style="display: none;">
+                            <div class="on-trip-container">
+                                <div class="container d-flex flex-column">
+                                    <div class="row driver-info-header">
+                                        <div class="col-4 col-sm-3 d-flex justify-content-center" style="width: 75px; ">
+                                            <div class="avatar-container">
+                                                <img class="avatar" src="./images/sample/avatar_3.jpg" />
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex flex-column">
+                                            <div class="row">
+                                            <div class="col d-flex justify-content-between">
+                                                <span class="h6 mb-0">Bob Santos</span>
+                                                <span class="badge rounded-pill bg-primary mt-0" style="margin-right: 5px;">Admin</span>
+                                            </div>
+                                            </div>
+                                            <span class="text-muted">Makati</span>
                                         </div>
                                     </div>
-                                    <div class="col d-flex flex-column">
-                                        <div class="row">
-                                        <div class="col d-flex justify-content-between">
-                                            <span class="h6 mb-0">Bob Santos</span>
-                                            <span class="badge rounded-pill bg-primary mt-0" style="margin-right: 5px;">Admin</span>
+                                    <div class="row my-3 mx-auto option-buttons">
+                                        <div class="col-2 d-flex justify-content-center">
+                                            <a type="button" target="_blank" href="https://teams.microsoft.com/l/chat/0/0?users=jemimahberyl.sai@cebupacificair.com" class="btn btn-primary" style="border-radius: 50%; background-color: transparent;">
+                                                <i class="fa-solid fa-message" style="color: #0D6EFD;"></i>
+                                            </a>
                                         </div>
+                                        <div class="col d-flex justify-content-center">
+                                            <a type="button" href="tel:+6396170961709" class="btn btn-primary" id="call_rider_button" style="border-radius: 24px; width: 100%;">Call Rider</a>
                                         </div>
-                                        <span class="text-muted">Makati</span>
                                     </div>
                                 </div>
-                                <div class="row my-3 mx-auto option-buttons">
-                                    <div class="col-2 d-flex justify-content-center">
-                                        <a type="button" target="_blank" href="https://teams.microsoft.com/l/chat/0/0?users=jemimahberyl.sai@cebupacificair.com" class="btn btn-primary" style="border-radius: 50%; background-color: transparent;">
-                                            <i class="fa-solid fa-message" style="color: #0D6EFD;"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col d-flex justify-content-center">
-                                        <a type="button" href="tel:+6396170961709" class="btn btn-primary" id="call_rider_button" style="border-radius: 24px; width: 100%;">Call Rider</a>
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="trip-completed-container" id="trip_completed_container" style="display: none;">
+                            <div class="absolute-center text-center" style="top: 40%; width: 100%;">
+                                <h2>Trip Completed</h2>
+                                <p>Hope you had a great car pooling experience</p>
+                                <button type="button" class="btn btn-primary" id="trip_completed_button">Done</button>
                             </div>
                         </div>
                         <div class="offcanvas offcanvas-bottom show-confirm-carpool-driver-container" style="height: 80vh;" tabindex="-1" id="show_confirm_carpool_rider" aria-labelledby="show_confirm_carpool_rider_label">
@@ -285,6 +294,8 @@
         var show_confirm_carpool_rider = document.getElementById('show_confirm_carpool_rider');
         var join_pool_rider_button = document.getElementById('join_pool_rider_button');
         var carpool_on_trip_container = document.getElementById('carpool_on_trip_container');
+        var trip_completed_button = document.getElementById('trip_completed_button');
+        var trip_completed_container = document.getElementById('trip_completed_container');
 
         var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
                                 "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;\" role=\"status\">" +
@@ -369,6 +380,10 @@
             carpool_on_trip_container.style.display = 'block';
             find_carpool_navigate_container.style.display = "none";
         }
+        function showTripCompleted () {
+            carpool_on_trip_container.style.display = 'none';
+            trip_completed_container.style.display = 'block';
+        }
 
         function hideErrorPage () {
             error_page.style.display = 'none';
@@ -384,6 +399,9 @@
         }
         function hideDriverPoolResultsContainer () {
             driver_pool_results_container.style.display = 'none';
+        }
+        function hideTripCompleted () {
+            trip_completed_container.style.display = 'none';
         }
 
         function loadCarpoolDriversList() {
@@ -421,12 +439,14 @@
                 driver_pool_results_container.innerHTML = NO_RESULTS_FOUND;
             }
         }
-
+        function loadTripCompletedScreen() {
+            showTripCompleted();
+        }
         function loadCarpoolOnTripScreen() {
-            carpool_ride_list_container.innerHTML = '<div style="height: 100%;">'
+            carpool_on_trip_container.innerHTML = '<div style="height: 100%;">'
                                                     + '<p class=\"display-6 absolute-center text-center\" style=\"top: 40%; width: 100%;\">We\'re on our way!</p>'
                                                     + '</div>'
-                                                        + '<div class="on-trip-container container-fluid" id="carpool_on_trip_container" style="display: block;">'
+                                                        + '<div class="on-trip-container container-fluid">'
                                                             + '<div class=\"container d-flex flex-column\">'
                                                                     + '<div class=\"row driver-info-header\">'
                                                                         + '<div class=\"col-4 col-sm-3 d-flex justify-content-center\" style=\"width: 75px; \">'
@@ -518,9 +538,15 @@
             onIsToDropSwitch();
             showMainTopNavbar();
 
-            carpool_ride_list_container.innerHTML = PAGE_LOAD_SPINNER;
+            carpool_on_trip_container.innerHTML = PAGE_LOAD_SPINNER;
 
+            // delay(loadCarpoolOnTripScreen, 1500);
             delay(loadCarpoolOnTripScreen, 1500);
+            delay(loadTripCompletedScreen, 10000); // if trip was completed scenario
+        }
+        function onTripCompleted () {
+            hideTripCompleted();
+            delay(reloadCarpoolPage, 500);
         }
 
         back_to_previous_page_button.addEventListener('click', reloadCarpoolPage);
@@ -529,6 +555,7 @@
         is_to_drop_switch.addEventListener('change', onIsToDropSwitch);
         find_pool_rider_button.addEventListener('click', onFindCarpoolRide);
         join_pool_rider_button.addEventListener('click', onJoinPoolRider);
+        trip_completed_button.addEventListener('click', onTripCompleted);
         // pick_up_datetime.addEventListener('click', onPickUpDatetime)
 
         // simplepicker.on('submit', (date, readableDate) => {
