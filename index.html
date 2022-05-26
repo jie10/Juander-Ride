@@ -27,10 +27,11 @@
                 <form class="row g-3 login-form">
                     <div class="col">
                         <label for="user_email" class="form-label login-email-input-label">Email</label>
-                        <input type="email" class="form-control login-email-input" id="user_email" name="user_email" placeholder="Enter your Email" autocomplete="off" required>
+                        <input type="email" class="form-control login-email-input" id="user_email" name="user_email" placeholder="Enter your Email" autocomplete="off">
+                        <div class="invalid-feedback">Please choose a valid email</div>
                     </div>
                     <div class="col-12 d-flex justify-content-center">
-                      <button type="submit" class="btn btn-primary login-button" id="login_button">Login</button>
+                      <button type="button" class="btn btn-primary login-button" id="login_button">Login</button>
                     </div>
                 </form>
             </section>
