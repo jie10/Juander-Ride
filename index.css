@@ -241,6 +241,21 @@ body {
 .show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar-name-unavailable {
     color: #cccccc !important;
 }
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-others h6 {
+    font-size: 0.875rem;
+    margin-bottom: 0;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-others p {
+    font-size: 0.75rem;
+    margin: 0;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-others a {
+    font-size: 0.75rem;
+    text-decoration: none;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-others a:hover {
+    text-decoration: underline;
+}
 
 
 /** TOM SELECT LIBRARY */
