@@ -13,7 +13,7 @@
 @media only screen and (max-width: 600px) {
     /** CARPOOL */
     .carpool-ride-list-container .navigate-container {
-        bottom: 55px;
+        bottom: 56px;
     }
     .carpool-ride-list-container .navigate-container .container {
         width: 80% !important;
@@ -26,6 +26,9 @@
     }
     .on-trip-container .container {
         width: 80% !important;
+    }
+    .share-a-ride-container .navigate-container {
+        bottom: 56px;
     }
 }
 @media only screen and (max-width: 480px) {
@@ -77,6 +80,15 @@
     .carpool-rides-list {
         padding: 0;
         margin: 0;
+    }
+    .share-a-ride-container .navigate-container {
+        font-size: 0.75rem;
+    }
+    .share-a-ride-container .navigate-container .btn {
+        font-size: 0.75rem;
+    }
+    .share-a-ride-container .navigate-container .container {
+        width: 100% !important;
     }
     .carpool-container .more-carpool-buttons button {
         font-size: 0.75rem;

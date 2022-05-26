@@ -140,15 +140,18 @@ body {
 }
 .carpool-main-page,
 .carpool-scan-to-ride-page,
-.carpool-ride-list-container {
+.carpool-ride-list-container,
+.share-a-ride-container {
     height: 100%;
 }
 .carpool-scan-to-ride-page,
-.carpool-ride-list-container {
+.carpool-ride-list-container,
+.share-a-ride-container {
     padding: 20px;
 }
 .carpool-scan-to-ride-page,
-.carpool-ride-list-container {
+.carpool-ride-list-container,
+.share-a-ride-container {
     background-color: #F7F7F7;
 }
 .scan-qr-to-ride-reader {
