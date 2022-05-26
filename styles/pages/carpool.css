@@ -119,13 +119,13 @@
     z-index: 1;
 }
 .carpool-ride-list-container .navigate-container .container {
-    width: 400px !important;
+    width: 480px !important;
 }
 .carpool-ride-list-container .driver-pool-results {
     padding: 60px 0;
 }
 .carpool-ride-list-container .driver-pool-results .container {
-    width: 400px !important;
+    width: 480px !important;
 }
 .carpool-ride-list-container .driver-pool-results .avatar-container {
     height: 50px;
@@ -140,7 +140,7 @@
     padding: 16px 8px;
 }
 .show-confirm-carpool-driver-container .offcanvas-body .container {
-    width: 400px !important;
+    width: 480px !important;
     padding: 0;
 }
 .show-confirm-carpool-driver-container .offcanvas-body .driver-info-header .avatar-container {
@@ -206,7 +206,7 @@
 }
 .on-trip-container .container {
     height: 100%;
-    width: 400px !important;
+    width: 480px !important;
     padding: 0;
 }
 .on-trip-container .driver-info-header .avatar-container {
@@ -247,5 +247,5 @@
     z-index: 1;
 }
 .share-a-ride-container .navigate-container .container {
-    width: 400px !important;
+    width: 480px !important;
 }
