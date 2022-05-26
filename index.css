@@ -195,6 +195,52 @@ body {
 .carpool-ride-list-container .driver-pool-results .container {
     width: 400px !important;
 }
+.carpool-ride-list-container .driver-pool-results .avatar-container {
+    height: 50px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+.carpool-ride-list-container .driver-pool-results .avatar {
+    height: 100%;
+}
+.carpool-ride-list-container .driver-pool-results .carpool-driver-to-choose-button {
+    border-radius: 8px;
+    padding: 16px 8px;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .container {
+    width: 400px !important;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-header .avatar-container {
+    height: 50px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-header .avatar {
+    height: 100%;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-header .carpool-driver-to-choose-button {
+    border-radius: 8px;
+    padding: 16px 8px;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar-container {
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: auto;
+    margin-bottom: 6px;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar {
+    height: 100%;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar-name {
+    font-size: 0.75rem;
+    text-align: center;
+    font-weight: 700;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar-name-unavailable {
+    color: #cccccc !important;
+}
 
 
 /** TOM SELECT LIBRARY */

@@ -40,9 +40,7 @@
                     <i class="fa-solid fa-arrow-left-long"></i>
                 </button>
             </div>
-            <div class="col-6 d-flex my-auto justify-content-center">
-                <span class="h5 nav-brand">Juander</span>
-            </div>
+            <div class="col"></div>
             <div class="col"></div>
         </div>
         <div class="row" style="flex-grow: 1;">
@@ -85,18 +83,104 @@
                                         </div>
                                     </div>
                                     <div class="col-md d-grid gap-2 d-block">
-                                        <button type="button" class="btn btn-primary rounded-pill" id="find_pool_rider_button">Find Pool Rider</button>
+                                        <button type="button" class="btn btn-primary rounded-pill mx-4 mx-sm-5" id="find_pool_rider_button">Find Pool Rider</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="driver-pool-results" style="display: none;" id="driver_pool_results_container"></div>
-                        <div class="offcanvas offcanvas-bottom" style="height: 50vh;" tabindex="-1" id="showConfirmCarpoolDriver" aria-labelledby="showConfirmCarpoolDriverLabel">
+                        <div class="driver-pool-results" style="display: none;" id="driver_pool_results_container">
+                            <div class="container">
+                                <div class="list-group">
+                                  <button type="button" class="list-group-item list-group-item-action carpool-driver-to-choose-button" id="5610c8a7eb88429ba249cc27b2f9893a" data-bs-toggle="offcanvas" data-bs-target="#showConfirmCarpoolDriver" aria-controls="showConfirmCarpoolDriver">
+                                    <div class="row">
+                                      <div class="col-4 col-sm-3 d-flex justify-content-center" style="width: 75px; padding-right: 0;">
+                                        <div class="avatar-container">
+                                            <img class="avatar" src="./images/sample/avatar_3.jpg" />
+                                        </div>
+                                      </div>
+                                      <div class="col d-flex flex-column">
+                                        <div class="row">
+                                           <div class="col d-flex justify-content-between">
+                                                <span class="h6 mb-0">Bob Santos</span>
+                                                <span class="badge rounded-pill bg-primary mt-0" style="margin-right: 5px;">Admin</span>
+                                           </div>
+                                        </div>
+                                        <span class="text-muted">Makati</span>
+                                      </div>
+                                    </div>
+                                  </button>
+                                </div>
+                              </div>
+                        </div>
+                        <div class="offcanvas offcanvas-bottom show-confirm-carpool-driver-container" style="height: 80vh;" tabindex="-1" id="showConfirmCarpoolDriver" aria-labelledby="showConfirmCarpoolDriverLabel">
                             <div class="offcanvas-header">
                               <div style="width: 50px; height: 4px; background-color:#C0CED8; margin: auto;"></div>
                             </div>
                             <div class="offcanvas-body small">
                               <div class="container">
+                                    <div class="row driver-info-header">
+                                        <div class="col-4 col-sm-3 d-flex justify-content-center" style="width: 75px; padding-right: 0;">
+                                            <div class="avatar-container">
+                                                <img class="avatar" src="./images/sample/avatar_3.jpg" />
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex flex-column">
+                                            <div class="row">
+                                            <div class="col d-flex justify-content-between">
+                                                <span class="h6 mb-0">Bob Santos</span>
+                                                <span class="badge rounded-pill bg-primary mt-0" style="margin-right: 5px;">Admin</span>
+                                            </div>
+                                            </div>
+                                            <span class="text-muted">Makati</span>
+                                        </div>
+                                    </div>
+                                    <div class="row driver-info-passengers" style="margin: 24px 0;">
+                                        <div class="col">
+                                            <h6 style="margin-bottom: 16px;">Co-passengers</h6>
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="avatar-container">
+                                                            <img class="avatar" src="./images/sample/avatar_2.jpg" />
+                                                        </div>
+                                                        <p class="text-muted avatar-name">Rachel Reyes</p>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="avatar-container">
+                                                            <img class="avatar" src="./images/sample/no-avatar.png" />
+                                                        </div>
+                                                        <p class="text-muted avatar-name avatar-name-unavailable">Empty Seat</p>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="avatar-container">
+                                                            <img class="avatar" src="./images/sample/no-avatar.png" />
+                                                        </div>
+                                                        <p class="text-muted avatar-name avatar-name-unavailable">Empty Seat</p>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="avatar-container">
+                                                            <img class="avatar" src="./images/sample/no-avatar.png" />
+                                                        </div>
+                                                        <p class="text-muted avatar-name avatar-name-unavailable">Empty Seat</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row driver-info-others" style="margin: 24px 0;">
+                                        <div class="col">
+                                            <h6>Vehicle Info</h6>
+                                            <p class="text-muted"><span class="highlight">Toyota VIOS</span> LTO 1234 | Sedan | Red </p>
+                                        </div>
+                                        <div class="col">
+                                            <h6>Pick-up Point</h6>
+                                            <a class="text-muted" target="_blank" href="https://maps.google.com/?q=14.549221746466461,121.02580559649839">Park Square</a>
+                                        </div>
+                                        <div class="col">
+                                            <h6>Drop-off Point</h6>
+                                            <a class="text-muted" target="_blank" href="https://maps.google.com/?q=14.522664185042176,121.00126725255578">Cebu Pacific AOC</a>
+                                        </div>
+                                    </div>
                                   <div class="row">
                                       <div class="col-2">
                                             <button type="button" class="btn btn-primary" style="border-radius: 50%;">
@@ -112,7 +196,7 @@
                         </div>
                     </div>
                     <div class="share-a-ride-container" id="share_a_ride_container" style="display: none;">
-                        <p class="text-muted no-carpool-rides-found absolute-center text-center">HiThere are currently no vehicles nearby</p>
+                        <p class="text-muted no-carpool-rides-found absolute-center text-center">Feature coming soon!</p>
                     </div>
                 </div>
             </div>
@@ -300,33 +384,33 @@
             return carpools.length > 0 ? withResults : noResults;
         }
         function loadCarpoolDriversList() {
-            if (carpools.length > 0) {
-                driver_pool_results_container.innerHTML = '<div class=\"container\">' + '<div class=\"list-group\">' + carpools.map(function (driver) {
-                    var user = users.filter(function (user) {
-                        return user.employee_id === driver.employee_id;
-                    })[0];
-                    return user ? '<button type=\"button\" class=\"list-group-item list-group-item-action p-4 carpool-driver-to-choose-button\" id=\"' + driver._id + '\" data-bs-toggle="offcanvas" data-bs-target="#showConfirmCarpoolDriver" aria-controls=\"showConfirmCarpoolDriver\">'
-                                    + '<div class=\"row\">'
-                                        + '<div class=\"col-2 col-sm-3 col-md-2 d-flex justify-content-center align-items-center ms-3 me-3 ms-sm-0 me-sm-0\">'
-                                            + '<div style=\"padding: 1rem; background-color: #f7f7f7; border-radius: 50%;\"><i style=\"font-size: 2rem;\" class="fa-solid fa-user"></i></div>'
-                                        + '</div>'
-                                        + '<div class=\"col\">'
-                                            + '<h4>' + user.name + '</h4>'
-                                            + '<p class=\"text-muted\">' + user.job_role + '</p>'
-                                            + '<span class=\"badge rounded-pill bg-primary mt-0\">' + user.department + '</span>'
-                                        + '</div>'
-                                    + '</div>'
-                                    + '</button>' : '';
-                }).join('') + '</div>' + '</div>';
+            // if (carpools.length > 0) {
+            //     driver_pool_results_container.innerHTML = '<div class=\"container\">' + '<div class=\"list-group\">' + carpools.map(function (driver) {
+            //         var user = users.filter(function (user) {
+            //             return user.employee_id === driver.employee_id;
+            //         })[0];
+            //         return user ? '<button type=\"button\" class=\"list-group-item list-group-item-action p-4 carpool-driver-to-choose-button\" id=\"' + driver._id + '\" data-bs-toggle="offcanvas" data-bs-target="#showConfirmCarpoolDriver" aria-controls=\"showConfirmCarpoolDriver\">'
+            //                         + '<div class=\"row\">'
+            //                             + '<div class=\"col-2 col-sm-3 col-md-2 d-flex justify-content-center align-items-center ms-3 me-3 ms-sm-0 me-sm-0\">'
+            //                                 + '<div style=\"padding: 1rem; background-color: #f7f7f7; border-radius: 50%;\"><i style=\"font-size: 2rem;\" class="fa-solid fa-user"></i></div>'
+            //                             + '</div>'
+            //                             + '<div class=\"col\">'
+            //                                 + '<h4>' + user.name + '</h4>'
+            //                                 + '<p class=\"text-muted\">' + user.job_role + '</p>'
+            //                                 + '<span class=\"badge rounded-pill bg-primary mt-0\">' + user.department + '</span>'
+            //                             + '</div>'
+            //                         + '</div>'
+            //                         + '</button>' : '';
+            //     }).join('') + '</div>' + '</div>';
 
-                document.querySelectorAll('.carpool-driver-to-choose-button').forEach(function (btn) {
-                    btn.addEventListener('click', function (e) {
-                        console.log(e.currentTarget)
-                    })
-                });
-            } else {
-                driver_pool_results_container.innerHTML = NO_RESULTS_FOUND;
-            }
+            //     document.querySelectorAll('.carpool-driver-to-choose-button').forEach(function (btn) {
+            //         btn.addEventListener('click', function (e) {
+            //             console.log(e.currentTarget)
+            //         })
+            //     });
+            // } else {
+            //     driver_pool_results_container.innerHTML = NO_RESULTS_FOUND;
+            // }
         }
         function loadCarpoolMainPage() {
             showMainBottomNavbar();
@@ -390,7 +474,7 @@
             }
         }
         function onFindCarpoolRide () {
-            driver_pool_results_container.innerHTML = PAGE_LOAD_SPINNER;
+            // driver_pool_results_container.innerHTML = PAGE_LOAD_SPINNER;
             showDriverPoolListContainer();
             showSecondaryTopNavbar();
             hideMoreCarpoolButtonsContainer();

@@ -21,6 +21,9 @@
     .carpool-ride-list-container .driver-pool-results .container {
         width: 80% !important;
     }
+    .show-confirm-carpool-driver-container .offcanvas-body .container {
+        width: 80% !important;
+    }
 }
 @media only screen and (max-width: 480px) {
     /** BOTTOM NAVBAR */
@@ -42,6 +45,14 @@
     .carpool-ride-list-container .driver-pool-results .container {
         width: 100% !important;
         padding: 0;
+    }
+    .show-confirm-carpool-driver-container .offcanvas-body .container {
+        width: 100% !important;
+        padding: 0;
+    }
+    .show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar-container {
+        height: 40px;
+        width: 40px;
     }
     .carpool-ride-list-container .navigate-container .btn {
         font-size: 0.75rem;
