@@ -313,6 +313,20 @@ body {
     border-radius: 24px;
     width: 234px;
 }
+/** CARPOOL - SHARE A RIDE */
+.share-a-ride-container .navigate-container {
+    background-color: #FFFFFF;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: 56px;
+    border-top: 1px solid #C0CED8;
+    padding: 40px 20px;
+    z-index: 1;
+}
+.share-a-ride-container .navigate-container .container {
+    width: 400px !important;
+}
 
 /** TOM SELECT LIBRARY */
 .ts-wrapper {

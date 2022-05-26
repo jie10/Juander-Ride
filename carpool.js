@@ -1,6 +1,7 @@
 var simplepicker = new SimplePicker({
     zIndex: 10
 });
+/** FIND CARPOOL */
 var find_pool_rider_button = document.getElementById('find_pool_rider_button');
 var more_carpool_buttons = document.getElementById('more_carpool_buttons');
 var find_carpool_navigate_container = document.getElementById('find_carpool_navigate_container');
@@ -32,6 +33,12 @@ var join_pool_rider_button = document.getElementById('join_pool_rider_button');
 var carpool_on_trip_container = document.getElementById('carpool_on_trip_container');
 var trip_completed_button = document.getElementById('trip_completed_button');
 var trip_completed_container = document.getElementById('trip_completed_container');
+/** SHARE-A-RIDE */
+var share_ride_navigate_container = document.getElementById('share_ride_navigate_container');
+var share_pool_ride_button_rider = document.getElementById('share_pool_ride_button_rider');
+var search_pick_up_point_rider = document.getElementById('search_pick_up_point_rider');
+var search_drop_off_point_rider = document.getElementById('search_drop_off_point_rider');
+var is_to_drop_switch_rider = document.getElementById('is_to_drop_switch_rider');
 
 var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
                         "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;\" role=\"status\">" +
@@ -97,10 +104,6 @@ function showCarpoolRideListContainer() {
     carpool_ride_list_container.style.display = 'block';
     share_a_ride_container.style.display = 'none';
 }
-function showShareARideContainer() {
-    carpool_ride_list_container.style.display = 'none';
-    share_a_ride_container.style.display = 'block';
-}
 function showFindCarpoolNavigateContainer() {
     find_carpool_navigate_container.style.display = "block";
     driver_pool_results_container.style.display = "none";
@@ -119,6 +122,13 @@ function showCarpoolOnTripContainer () {
 function showTripCompleted () {
     carpool_on_trip_container.style.display = 'none';
     trip_completed_container.style.display = 'block';
+}
+function showShareARideContainer() {
+    carpool_ride_list_container.style.display = 'none';
+    share_a_ride_container.style.display = 'block';
+}
+function showShareRideNavigateContainer() {
+    share_ride_navigate_container.style.display = "block";
 }
 
 function hideErrorPage () {
@@ -219,6 +229,8 @@ function loadCarpoolMainPage() {
     showFindCarpoolNavigateContainer();
     showMainTopNavbar();
     showMoreCarpoolButtonsContainer();
+    is_to_drop_switch.checked = false;
+    is_to_drop_switch_rider.checked = false;
     carpool_main_page.style.display = 'block';
     error_page.style.display = 'none';
 }
@@ -232,17 +244,10 @@ function onCarpoolRidelist () {
         share_a_ride_button.classList.remove('active-tab-button');
     }
 
+    is_to_drop_switch_rider.checked = false;
     carpool_ride_list_button.classList.add('active-tab-button');
     showCarpoolRideListContainer();
     showFindCarpoolNavigateContainer();
-}
-function onShareCarpoolRide () {
-    if (carpool_ride_list_button.classList.contains('active-tab-button')) {
-        carpool_ride_list_button.classList.remove('active-tab-button');
-    }
-
-    share_a_ride_button.classList.add('active-tab-button');
-    showShareARideContainer();
 }
 function onPickUpDatetime () {
     simplepicker.open();
@@ -284,14 +289,39 @@ function onTripCompleted () {
     hideTripCompleted();
     delay(reloadCarpoolPage, 500);
 }
+function onIsToDropSwitchRider () {
+    search_drop_off_point_rider.value = '';
+    search_pick_up_point_rider.value = '';
+
+    if (is_to_drop_switch_rider.checked) {
+        search_drop_off_point_rider.style.display = 'block';
+        search_pick_up_point_rider.style.display = 'none';
+    } else {
+        search_pick_up_point_rider.style.display = 'block';
+        search_drop_off_point_rider.style.display = 'none';
+    }
+}
+function onShareCarpoolRide () {
+    if (carpool_ride_list_button.classList.contains('active-tab-button')) {
+        carpool_ride_list_button.classList.remove('active-tab-button');
+    }
+
+    share_a_ride_button.classList.add('active-tab-button');
+    is_to_drop_switch.checked = false;
+    showShareARideContainer();
+    showShareRideNavigateContainer();
+    onIsToDropSwitchRider();
+}
 
 back_to_previous_page_button.addEventListener('click', reloadCarpoolPage);
 carpool_ride_list_button.addEventListener('click', onCarpoolRidelist);
-share_a_ride_button.addEventListener('click', onShareCarpoolRide);
 is_to_drop_switch.addEventListener('change', onIsToDropSwitch);
 find_pool_rider_button.addEventListener('click', onFindCarpoolRide);
 join_pool_rider_button.addEventListener('click', onJoinPoolRider);
 trip_completed_button.addEventListener('click', onTripCompleted);
+
+share_a_ride_button.addEventListener('click', onShareCarpoolRide);
+is_to_drop_switch_rider.addEventListener('click', onIsToDropSwitchRider);
 // pick_up_datetime.addEventListener('click', onPickUpDatetime)
 
 // simplepicker.on('submit', (date, readableDate) => {
