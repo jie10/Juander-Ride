@@ -24,6 +24,9 @@
     .show-confirm-carpool-driver-container .offcanvas-body .container {
         width: 80% !important;
     }
+    .on-trip-container .container {
+        width: 80% !important;
+    }
 }
 @media only screen and (max-width: 480px) {
     /** BOTTOM NAVBAR */
@@ -33,6 +36,10 @@
         font-size: 12px;
     }
     /** CARPOOL */
+    .option-buttons {
+        width: 80%;
+        margin: auto;
+    }
     .carpool-ride-list-container .navigate-container {
         font-size: 0.75rem;
     }
@@ -47,6 +54,13 @@
         padding: 0;
     }
     .show-confirm-carpool-driver-container .offcanvas-body .container {
+        width: 100% !important;
+        padding: 0;
+    }
+    .on-trip-container {
+        padding: 15px;
+    }
+    .on-trip-container .container {
         width: 100% !important;
         padding: 0;
     }
@@ -87,5 +101,10 @@
     .main-bottom-navbar .shuttle-tab-button i,
     .main-bottom-navbar .user-account-tab-button i {
         font-size: 0.875rem;
+    }
+    /** CARPOOL */
+    .option-buttons {
+        width: 95%;
+        margin: auto;
     }
 }
