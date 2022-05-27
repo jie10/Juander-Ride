@@ -7,6 +7,7 @@
     <title>Juander Ride</title>
     <!-- FAVICON -->
     <link rel="icon" type="image/x-icon" href="../images/icons/juander-icon.ico">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- FONTAWESOME-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- BOOTSTRAP 5 -->
@@ -15,21 +16,55 @@
     <!-- CUSTOM CSS -->
     <link href="../styles/default.css" rel="stylesheet" type="text/css"/>
     <link href="../styles/utils/helpers.css" rel="stylesheet" type="text/css"/>
-    <link href="../styles/components/top-navbar.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles/pages/account.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles/pages/account.mobile.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles/components/profile-navbar.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles/components/profile-navbar.mobile.css" rel="stylesheet" type="text/css"/>
     <link href="../styles/components/bottom-navbar.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
     <div class="container-fluid d-flex flex-column" style="min-height: 100vh;">
-        <div class="row p-2 main-top-navbar" id="main_top_navbar">
-            <div class="col"></div>
-            <div class="col-6 d-flex my-auto justify-content-center">
-                <span class="h5 nav-brand">Juander</span>
+        <div class="profile-navbar" id="profile_navbar">
+            <div class="container d-flex">
+                <div class="avatar-container">
+                    <img class="avatar" src="../images/sample/no-avatar.png" />
+                </div>
+                <div class="profile-info d-flex flex-column justify-content-center align-items-start">
+                    <span class="user-name">Sheldon Cooper</span>
+                    <span class="user-role">Engineer</span>
+                    <span class="badge rounded-pill bg-primary user-position">Technology and Innovation</span>
+                </div>
             </div>
-            <div class="col"></div>
         </div>
         <div class="row" style="flex-grow: 1;">
-            <div class="container p-3">
-                <p class="absolute-center text-center">Feature coming soon!</p>
+            <div class="account-page-container">
+                <div class="profile-status-container">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4 col-sm d-flex justify-content-center">
+                                <span class="status-icon material-icons-round">star</span>
+                                <div class="status-details">
+                                    <span class="status-points">450</span>
+                                    <span class="status-title">Points</span>
+                                </div>
+                            </div>
+                            <div class="col-4 col-sm d-flex justify-content-center">
+                                <span class="status-icon material-icons-round">military_tech</span>
+                                <div class="status-details">
+                                    <span class="status-points">57</span>
+                                    <span class="status-title">Badges</span>
+                                </div>
+                            </div>
+                            <div class="col-4 col-sm d-flex justify-content-center">
+                                <span class="status-icon material-icons-round">auto_awesome</span>
+                                <div class="status-details">
+                                    <span class="status-points">10</span>
+                                    <span class="status-title">Items</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="main-bottom-navbar" id="main_bottom_navbar">

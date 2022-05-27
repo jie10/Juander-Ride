@@ -1,0 +1,31 @@
+@media only screen and (max-width: 480px) {
+    .profile-navbar {
+        border-radius: 0 0 50px 50px;
+    }
+}
+@media only screen and (max-width: 320px) {
+    .profile-navbar {
+        border-radius: 0 0 40px 40px;
+    }
+    .profile-navbar {
+        padding: 16px 24px;
+    }
+    .profile-navbar .avatar-container {
+        height: 47px;
+        width: 47px;
+        margin: auto 8px auto 0;
+    }
+    
+    .profile-navbar .profile-info .user-name {
+        font-size: 1rem !important;
+    }
+    
+    .profile-navbar .profile-info .user-role {
+        margin: 0 0 8px 0;
+        font-size: 0.75rem;
+    }
+    
+    .profile-navbar .profile-info .user-position {
+        font-size: 0.75rem;
+    }
+}

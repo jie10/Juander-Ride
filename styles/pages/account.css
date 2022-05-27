@@ -1,0 +1,27 @@
+.account-page-container {
+    padding: 143px 0 0 0;
+}
+.profile-status-container {
+    padding: 24px 24px 36px 24px;
+}
+.profile-status-container .container {
+    height: 100%;
+    width: 480px !important;
+    padding: 0;
+}
+.profile-status-container .status-icon {
+    margin-right: 24px;
+    color: #006fc1;
+}
+.profile-status-container .status-details span {
+    display: block;
+}
+.profile-status-container .status-points {
+    font-weight: 700;
+    color: #006fc1;
+    font-size: 18px;
+}
+.profile-status-container .status-title {
+    font-weight: 300;
+    font-size: 0.875rem;
+}

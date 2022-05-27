@@ -1,0 +1,57 @@
+/** TOP NAVBAR */
+.profile-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background-color: #FFCD00;
+    width: 100%;
+    border-bottom: 2px solid #f1f1f1;
+    padding: 24px 30px;
+    border-radius: 0 0 60px 60px;
+}
+.profile-navbar .container {
+    height: 100%;
+    width: 480px !important;
+    padding: 0;
+}
+.profile-navbar .avatar-container {
+    border: 4px solid #fff;
+    border-radius: 50%;
+    height: 93px;
+    width: 93px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: auto 16px auto 0;
+}
+.profile-navbar .avatar {
+    height: 100%;
+    width: 100%;
+}
+.profile-navbar .profile-info {
+    flex-grow: 1;
+}
+.profile-navbar .profile-info span {
+    display: block;
+    line-height: normal;
+    font-size: 0.75rem;
+}
+.profile-navbar .profile-info .user-name {
+    font-weight: 700;
+    color: #006fc1;
+    margin: 0;
+    font-size: 1.25rem !important;
+    padding: 0 4px;
+}
+.profile-navbar .profile-info .user-role {
+    font-weight: 700;
+    color: #006fc1;
+    margin: 0 0 16px 0;
+    padding: 0 4px;
+}
+.profile-navbar .profile-info .user-position {
+    background-color: #ffe88a !important;
+    color: #333;
+    border-radius: 24px;
+    font-weight: 700;
+}
