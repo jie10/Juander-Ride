@@ -1,0 +1,313 @@
+<html lang="en">
+
+<head>
+    <title>Juander</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no, user-scalable=no">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .material-icons-round:before {
+            display: none;
+        }
+
+        html {
+            min-height: -webkit-fill-available;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            margin: 0;
+            color: #373737;
+        }
+
+        .content {
+            height: 100vh;
+            flex-direction: column;
+            display: flex;
+            background: #f7f7f7;
+        }
+
+        .topnav {
+            width: 100%;
+            border-bottom: 2px solid #f1f1f1;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            display: flex;
+            background: #ffcd00;
+            border-radius: 0 0 60px 60px;
+        }
+
+        .topnav a {
+            float: left;
+            color: #000;
+            text-decoration: none;
+            text-align: center;
+            align-self: flex-end;
+        }
+
+        .topnav h1 {
+            margin: 10px 25px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #0060a7;
+        }
+
+        .botnav {
+            width: 100%;
+            border-top: 2px solid #f1f1f1;
+            padding: 10px 0;
+            background: #fff;
+            position: sticky;
+            bottom: 0;
+        }
+
+        .botnav a {
+            float: left;
+            color: #000;
+            text-decoration: none;
+            width: 33.33%;
+            text-align: center;
+            height: 40px;
+        }
+
+        .botnav a:focus,
+        .botnav a:hover {
+            background-color: transparent;
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent;
+            text-decoration: none;
+        }
+
+        .botnav a.active {
+            color: #0060a7;
+        }
+
+        .middle-content {
+            width: 100%;
+            overflow-y: auto;
+            overflow-x: auto;
+            /*padding: 15px;*/
+            height: 100%;
+            background: #f7f7f7;
+        }
+
+        .topnav .material-icons-round {
+            color: #006fc1;
+            font-size: 30px;
+        }
+
+        .middle-content .material-icons-round {
+            color: #006fc1;
+        }
+
+        .topnav .profile-pic {
+            width: 93px;
+            height: 93px;
+            border: 5px solid #fff;
+            border-radius: 100px;
+            margin: 20px 15px;
+        }
+
+        .topnav .profile-pic img {
+            width: 100%;
+            height: auto;
+            border-radius: 100px;
+        }
+
+        .topnav .profile-info p:first-child {
+            font-size: 20px;
+            font-weight: bold;
+            color: #006fc1;
+            margin-bottom: 0;
+        }
+
+        .topnav .profile-info p:nth-child(2) {
+            font-weight: bold;
+            color: #006fc1;
+            margin-top: 5;
+        }
+
+        .topnav .profile-info p:nth-child(3) {
+            background: #ffe88a;
+            padding: 10px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .topnav .message {
+            margin-left: auto;
+            margin-right: 20px;
+            margin-top: 20px;
+        }
+
+        .status-points {
+            display: flex;
+        }
+
+        .status-points>div {
+            flex: 1;
+            text-align: center;
+            padding: 35px 10px;
+        }
+
+        .status-points>div>div {
+            width: 50%;
+            float: left;
+        }
+
+        .status-points>div>div:nth-child(2) {
+            text-align: left;
+        }
+
+        .status-points>div>div>div:first-child {
+            color: #006fc1;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .menu-list {
+            float: left;
+            padding-bottom: 20px;
+            margin: 0 20px;
+        }
+
+        .menu-box {
+            padding: 25px 25px;
+            border-top: 5px solid #ffcd00;
+            background: #fff;
+            float: left;
+            width: 100%;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 4px 24px rgb(0 0 0 / 18%);
+        }
+
+        .menu-box a {
+            color: #333;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .menu-box a div.title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .menu-box a div.text {
+            margin-bottom: 5px;
+        }
+
+        .menu-box a>div:first-child {
+            width: 12%;
+            float: left;
+        }
+
+        .menu-box a>div:nth-child(2) {
+            width: 88%;
+            float: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="topnav">
+            <div class="profile-pic"><img
+                    src="https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png">
+            </div>
+            <div class="profile-info">
+                <p>Sheldon Cooper</p>
+                <p>Engineer</p>
+                <p>Technology and Innovation</p>
+            </div>
+            <div class="message"><a
+                    href="https://techinnovationresearch-eval-prod.apigee.net/legends-inflight/messages"><span
+                        class="material-icons-round">mail</span></a></div>
+        </div>
+        <div class="middle-content">
+            <div class="status-points">
+                <div>
+                    <div><span class="material-icons-round">star</span></div>
+                    <div>
+                        <div>450</div>
+                        <div>Points</div>
+                    </div>
+                </div>
+                <div>
+                    <div><span class="material-icons-round">military_tech</span></div>
+                    <div>
+                        <div>57</div>
+                        <div>Badges</div>
+                    </div>
+                </div>
+                <div>
+                    <div><span class="material-icons-round">auto_awesome</span></div>
+                    <div>
+                        <div>10</div>
+                        <div>Items</div>
+                    </div>
+                </div>
+            </div>
+            <div id="menuList">
+                <div class="menu-list">
+                    <div class="menu-box"> 
+                        <a href="shuttle.html">
+                            <div><span class="material-icons-round">emoji_transportation</span></div>
+                            <div>
+                                <div class="title">Route 1</div>
+                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                            </div>
+                        </a> 
+                    </div>
+                    <div class="menu-box"> 
+                        <a href="shuttle.html">
+                            <div><span class="material-icons-round">emoji_transportation</span></div>
+                            <div>
+                                <div class="title">Route 2</div>
+                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                            </div>
+                        </a> 
+                    </div>
+                    <div class="menu-box"> 
+                        <a href="shuttle.html">
+                            <div><span class="material-icons-round">emoji_transportation</span></div>
+                            <div>
+                                <div class="title">Route 3</div>
+                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                            </div>
+                        </a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="botnav">
+            <a href="#">
+                <span class="material-icons-round">home</span>
+                <div>Newsfeed</div>
+            </a> 
+            <a href="#">
+                <span class="material-icons-round">pending_actions</span>
+                <div>KPI</div>
+            </a> 
+            <a class="active" href="route.html">
+                <span class="material-icons-round">person</span>
+                <div>Profile</div>
+            </a> 
+        </div>
+    </div>
+    <script type="text/javascript"
+        src="https://techinnovationresearch-eval-prod.apigee.net/legends-inflight/newsfeedlist"></script>
+    <script type="text/javascript"> </script>
+    </div>
+</body>
+
+</html>

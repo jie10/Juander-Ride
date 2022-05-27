@@ -1,0 +1,412 @@
+<html lang="en">
+
+<head>
+    <title>Juander</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no, user-scalable=no">
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.2.0/html5-qrcode.min.js"></script>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .material-icons-round:before {
+            display: none;
+        }
+
+        html {
+            min-height: -webkit-fill-available;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            margin: 0;
+            color: #373737;
+        }
+
+        .content {
+            height: 100vh;
+            flex-direction: column;
+            display: flex;
+            background: #f7f7f7;
+        }
+
+        .topnav {
+            width: 100%;
+            border-bottom: 2px solid #f1f1f1;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            display: flex;
+            background: #ffcd00;
+            border-radius: 0 0 60px 60px;
+        }
+
+        .topnav a {
+            float: left;
+            color: #000;
+            text-decoration: none;
+            text-align: center;
+            align-self: flex-end;
+        }
+
+        .topnav h1 {
+            margin: 10px 25px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #0060a7;
+        }
+
+        .botnav {
+            width: 100%;
+            border-top: 2px solid #f1f1f1;
+            padding: 10px 0;
+            background: #fff;
+            position: sticky;
+            bottom: 0;
+        }
+
+        .botnav a {
+            float: left;
+            color: #000;
+            text-decoration: none;
+            width: 33.33%;
+            text-align: center;
+            height: 40px;
+        }
+
+        .botnav a:focus,
+        .botnav a:hover {
+            background-color: transparent;
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent;
+            text-decoration: none;
+        }
+
+        .botnav a.active {
+            color: #0060a7;
+        }
+
+        .middle-content {
+            width: 100%;
+            overflow-y: auto;
+            overflow-x: auto;
+            /*padding: 15px;*/
+            height: 100%;
+            background: #f7f7f7;
+        }
+
+        .topnav .material-icons-round {
+            color: #006fc1;
+            font-size: 30px;
+        }
+
+        .middle-content .material-icons-round {
+            color: #006fc1;
+        }
+
+        .topnav .profile-pic {
+            width: 93px;
+            height: 93px;
+            border: 5px solid #fff;
+            border-radius: 100px;
+            margin: 20px 15px;
+        }
+
+        .topnav .profile-pic img {
+            width: 100%;
+            height: auto;
+            border-radius: 100px;
+        }
+
+        .topnav .profile-info p:first-child {
+            font-size: 20px;
+            font-weight: bold;
+            color: #006fc1;
+            margin-bottom: 0;
+        }
+
+        .topnav .profile-info p:nth-child(2) {
+            font-weight: bold;
+            color: #006fc1;
+            margin-top: 5;
+        }
+
+        .topnav .profile-info p:nth-child(3) {
+            background: #ffe88a;
+            padding: 10px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .topnav .message {
+            margin-left: auto;
+            margin-right: 20px;
+            margin-top: 20px;
+        }
+
+        .status-points {
+            display: flex;
+        }
+
+        .status-points>div {
+            flex: 1;
+            text-align: center;
+            padding: 35px 10px;
+        }
+
+        .status-points>div>div {
+            width: 50%;
+            float: left;
+        }
+
+        .status-points>div>div:nth-child(2) {
+            text-align: left;
+        }
+
+        .status-points>div>div>div:first-child {
+            color: #006fc1;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .menu-list {
+            float: left;
+            padding-bottom: 20px;
+            margin: 0 20px;
+        }
+
+        .menu-box {
+            padding: 25px 25px;
+            border-top: 5px solid #ffcd00;
+            background: #fff;
+            float: left;
+            width: 100%;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 4px 24px rgb(0 0 0 / 18%);
+        }
+
+        .menu-box a {
+            color: #333;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .menu-box a div.title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .menu-box a div.text {
+            margin-bottom: 5px;
+        }
+
+        .menu-box a>div:first-child {
+            width: 12%;
+            float: left;
+        }
+
+        .menu-box a>div:nth-child(2) {
+            width: 88%;
+            float: left;
+        }
+        .menu-box.selected {
+            background:  #ffcd00;
+        }
+        .menu-box.selected .passenger > div:nth-child(1) {
+            background: #ffe88a;
+            padding: 3px 12px;
+            border-radius: 30px;
+        }
+        .menu-box.selected a div.title {
+            color: #0060a7;
+        }
+        .menu-box.selected .passenger > div:nth-child(2) span {
+            color: #0060a7;
+        }
+        .passenger {
+            float: left;
+            width: 100%;
+        }
+        .passenger > div{
+            float: left;
+            margin-bottom: 0;
+        }
+        .passenger > div:first-child span {
+            font-size: 50px;
+        }
+        .passenger > div:nth-child(1) {
+            text-align: left;
+            margin: 0 20px;
+            background: #fff;
+            padding: 3px 12px;
+            border-radius: 30px;
+        }
+        .passenger > div:nth-child(1) p{
+           font-size: 20px;
+           font-weight: bold;
+           margin: 5px;
+        }
+
+        .passenger > div:nth-child(2) {
+            float: right;
+            margin: 0 20px;
+            
+        }
+        .passenger > div:nth-child(2) span:first-child {
+            font-size: 42px;
+            vertical-align: middle;
+        }
+        .passenger > div:nth-child(2) span {
+            font-size: 32px;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+        .confirm-button button {
+            background-color: #0060a7;
+        }
+        .confirm-button{
+            padding-bottom: 20px;
+            margin: 0 20px;
+
+        }
+        
+        .confirm-button button {
+            background-color: #0060a7;
+            color: #fff;
+            margin-top: 0;
+            font-size: 18px;
+            padding: 20px 10px;
+            border-radius: 10px;
+            width: 100%;
+            border: none;
+            font-weight: bold;
+        }
+        .confirm-button button:disabled {
+            background-color: grey;
+            
+            
+        }
+
+        
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="topnav">
+            <div class="profile-pic"><img
+                    src="https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png">
+            </div>
+            <div class="profile-info">
+                <p>Sheldon Cooper</p>
+                <p>Engineer</p>
+                <p>Technology and Innovation</p>
+            </div>
+            <div class="message"><a
+                    href="https://techinnovationresearch-eval-prod.apigee.net/legends-inflight/messages"><span
+                        class="material-icons-round">mail</span></a></div>
+        </div>
+        <div class="middle-content">
+            <div id="shuttle">
+                <div class="menu-list">
+                    <div class="menu-box"> 
+                        <a id="route-1">
+                            <div><span class="material-icons-round">airport_shuttle</span></div>
+                            <div>
+                                <div class="title">Shuttle 1</div>
+                            </div>
+                            <div class="passenger">
+                                <div>
+                                    <p>Pasay</p>
+                                </div>
+                                <div>
+                                    <span class="material-icons-round">boy</span>
+                                    <span>20</span>
+                                </div>
+                            </div>
+                        </a> 
+                    </div>
+                    <div class="menu-box"> 
+                        <a id="route-2">
+                            <div><span class="material-icons-round">airport_shuttle</span></div>
+                            <div>
+                                <div class="title">Shuttle 2</div>
+                            </div>
+                            <div class="passenger">
+                                <div>
+                                    <p>Manila</p>
+                                </div>
+                                <div>
+                                    <span class="material-icons-round">boy</span>
+                                    <span>20</span>
+                                </div>
+                            </div>
+                        </a> 
+                    </div>
+                    <div class="menu-box"> 
+                        <a id="route-3">
+                            <div><span class="material-icons-round">airport_shuttle</span></div>
+                            <div>
+                                <div class="title">Shuttle 3</div>
+                            </div>
+                            <div class="passenger">
+                                <div>
+                                    <p>Cavite</p>
+                                </div>
+                                <div>
+                                    <span class="material-icons-round">boy</span>
+                                    <span>20</span>
+                                </div>
+                            </div>
+                        </a> 
+                    </div>
+                </div>
+                <div class="confirm-button">
+                    <a href="confirm-code.html"><button disabled="disabled">Scan</button></a>
+                </div>
+            </div>
+        </div>
+        <div class="botnav"> 
+            <a href="#">
+                <span class="material-icons-round">home</span>
+                <div>Newsfeed</div>
+            </a> 
+            <a href="#">
+                <span class="material-icons-round">pending_actions</span>
+                <div>KPI</div>
+            </a> 
+            <a class="active" href="route.html">
+                <span class="material-icons-round">person</span>
+                <div>Profile</div>
+            </a> 
+        </div>
+    </div>
+    <script type="text/javascript"
+        src="https://techinnovationresearch-eval-prod.apigee.net/legends-inflight/newsfeedlist"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+    	    $('.menu-box').on('click',function () {
+                  $(this).toggleClass('selected').siblings().removeClass('selected');
+                  if ($(this).hasClass('selected')) {
+                      $('.confirm-button a button').attr('disabled',false);
+                  }
+                  if (!$(this).hasClass('selected')) {
+                      $('.confirm-button a button').attr('disabled','disabled');
+                  }
+                 
+            })
+        })
+    </script>
+    </div>
+</body>
+
+</html>
