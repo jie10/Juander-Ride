@@ -36,6 +36,7 @@ var search_pick_up_point_rider = document.getElementById('search_pick_up_point_r
 var search_drop_off_point_rider = document.getElementById('search_drop_off_point_rider');
 var is_to_drop_switch_rider = document.getElementById('is_to_drop_switch_rider');
 
+var MATCH_TRIP_STATIC_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/match';
 var USER_LOGIN_DATA_KEY = 'user_login_data';
 var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
                         "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;\" role=\"status\">" +
@@ -161,39 +162,98 @@ function hideTripCompleted () {
 }
 
 function loadCarpoolDriversList() {
-    if (carpools.length > 0) {
-        driver_pool_results_container.innerHTML = '<div class=\"container\">' + '<div class=\"list-group\">' + carpools.map(function (driver) {
-            var user = users.filter(function (user) {
-                return user.employee_id === driver.employee_id;
-            })[0];
-            return user ? '<button type=\"button\" class=\"list-group-item list-group-item-action carpool-driver-to-choose-button\" id=\"' + driver._id + '\" data-bs-toggle="offcanvas" data-bs-target="#show_confirm_carpool_rider" aria-controls=\"show_confirm_carpool_rider\">'
-                            + '<div class=\"row\">'
-                                + '<div class=\"col-4 col-sm-3 d-flex justify-content-center\" style=\"width: 75px; \">'
-                                    + '<div class=\"avatar-container\">'
-                                        + '<img class=\"avatar\" src=\"../images/sample/avatar_3.jpg\" />'
-                                    + '</div>'
-                                + '</div>'
-                                + '<div class=\"col d-flex flex-column\">'
+    var pointA = is_to_drop_switch.checked ? search_drop_off_point.value : search_pick_up_point.value;
+
+    var options = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ pointA: pointA })
+    };
+
+    fetch(MATCH_TRIP_STATIC_API_ENDPOINT, options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            if (data.length > 0) {
+                driver_pool_results_container.innerHTML = '<div class=\"container\">' + '<div class=\"list-group\">' + data.map(function (driver, i) {
+                    var rider_fullname = driver.fullname ? driver.fullname : 'Unknown';
+                    var is_pool_available = driver.seats > 0 ? 'Available' : 'Unavailable';
+                    var is_pool_available_color = driver.seats > 0 ? 'bg-primary' : '.bg-secondary';
+                    var rider_location = driver.origin.split(', ');
+                    var location = rider_location[rider_location.length - 1];
+    
+                    return '<button type=\"button\" class=\"list-group-item list-group-item-action carpool-driver-to-choose-button\" id=\"' + i + '\" data-bs-toggle="offcanvas" data-bs-target="#show_confirm_carpool_rider" aria-controls=\"show_confirm_carpool_rider\">'
                                     + '<div class=\"row\">'
-                                        + '<div class=\"col d-flex justify-content-between\">'
-                                            + '<span class=\"h6 mb-0\">' + user.name + '</span>'
-                                            + '<span class=\"badge rounded-pill bg-primary mt-0\" style=\"margin-right: 5px;\">' + user.job_role + ' </span>'
+                                        + '<div class=\"col-4 col-sm-3 d-flex justify-content-center\" style=\"width: 75px; \">'
+                                            + '<div class=\"avatar-container\">'
+                                                + '<img class=\"avatar\" src=\"../images/sample/no-avatar.png\" />'
+                                            + '</div>'
+                                        + '</div>'
+                                        + '<div class=\"col d-flex flex-column\">'
+                                            + '<div class=\"row\">'
+                                                + '<div class=\"col d-flex justify-content-between align-items-center\">'
+                                                    + '<span class=\"h6 mb-0\">' + rider_fullname + '</span>'
+                                                    + '<span class=\"badge rounded-pill ' + is_pool_available_color + ' mt-0\" style=\"margin-right: 5px;\">' + is_pool_available + ' </span>'
+                                                + '</div>'
+                                            + '</div>'
+                                            + '<span class=\"text-muted\">' + location + '</span>'
                                         + '</div>'
                                     + '</div>'
-                                    + '<span class=\"text-muted\">Makati</span>'
-                                + '</div>'
-                            + '</div>'
-                            + '</button>' : '';
-        }).join('') + '</div>' + '</div>';
+                                + '</button>';
+                }).join('') + '</div>' + '</div>';
+        
+                document.querySelectorAll('.carpool-driver-to-choose-button').forEach(function (btn) {
+                    btn.addEventListener('click', function (e) {
+                        var id = btn.id;
+                        var rider_location = data[id].origin.split(', ');
+                        var location = rider_location[rider_location.length - 1];
+                        var pick_up_point = is_to_drop_switch.checked ? 'Cebu Pacific AOC' : data[id].origin;
+                        var drop_off_point = is_to_drop_switch.checked ? data[id].origin : 'Cebu Pacific AOC';
+                        var is_pool_available = data[id].seats > 0 ? 'Available' : 'Unavailable';
+                        var seats_available = data[id].seats ? data[id].seats : 0;
+                        var rider_phone_number = data[id].phone ? data[id].phone : '#';
+                        var rider_teams_email = data[id].email ? data[id].email : '#';
+                        var rider_department = data[id].department ? data[id].department : 'Cebu Pacific Air Inc.';
+                        var rider_fullname = data[id].fullname ? data[id].fullname : 'Unknown';
+                        var offcanvas_rider_is_available = document.querySelector('.offcanvas_rider_is_available')
+                        var offcanvas_phone_number = document.querySelector('.offcanvas_phone_number');
 
-        document.querySelectorAll('.carpool-driver-to-choose-button').forEach(function (btn) {
-            btn.addEventListener('click', function (e) {
-                // TODO - Add API action here
-            })
+                        document.querySelector('.offcanvas_rider_fullname').innerHTML = rider_fullname;
+
+                        offcanvas_rider_is_available.innerHTML = is_pool_available;
+
+                        document.querySelector('.offcanvas_rider_location').innerHTML = location;
+                        document.querySelector('.offcanvas_rider_department').innerHTML = rider_department;
+                        document.querySelector('.offcanvas_seats_count').innerHTML = seats_available + ' seats available';
+                        document.querySelector('.offcanvas_pick_up_point').innerHTML = pick_up_point;
+                        document.querySelector('.offcanvas_drop_off_point').innerHTML = drop_off_point;
+                        document.querySelector('.offcanvas_teams_email a').href = 'https://teams.microsoft.com/l/chat/0/0?users=' + rider_teams_email;
+                        offcanvas_phone_number.href = 'tel:' + rider_phone_number;
+                        offcanvas_phone_number.innerHTML = rider_phone_number;
+
+                        if (offcanvas_rider_is_available.classList.contains('bg-primary') && seats_available < 1) {
+                            offcanvas_rider_is_available.classList.remove('bg-primary');
+                            offcanvas_rider_is_available.classList.add('bg-secondary');
+                        } else {
+                            offcanvas_rider_is_available.classList.add('bg-primary');
+                            offcanvas_rider_is_available.classList.remove('bg-secondary');
+                        }
+                        console.log(btn.id)
+                    })
+                });
+            } else {
+                driver_pool_results_container.innerHTML = NO_RESULTS_FOUND;
+            }
+        })
+        .catch(function (err) {
+            console.error(err);
+            alert('ERROR: ' + err);
         });
-    } else {
-        driver_pool_results_container.innerHTML = NO_RESULTS_FOUND;
-    }
+
+
 }
 function loadTripCompletedScreen() {
     showTripCompleted();

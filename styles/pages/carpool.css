@@ -138,6 +138,10 @@
 .carpool-ride-list-container .driver-pool-results .carpool-driver-to-choose-button {
     border-radius: 8px;
     padding: 16px 8px;
+    margin-bottom: 16px;
+}
+.carpool-ride-list-container .driver-pool-results .carpool-driver-to-choose-button .h6{
+    font-weight: 700;
 }
 .show-confirm-carpool-driver-container .offcanvas-body .container {
     width: 480px !important;
@@ -154,6 +158,12 @@
 .show-confirm-carpool-driver-container .offcanvas-body .driver-info-header .carpool-driver-to-choose-button {
     border-radius: 8px;
     padding: 16px 8px;
+}
+.show-confirm-carpool-driver-container .offcanvas-body .driver-info-header .h6 {
+    font-size: 1rem;
+    font-weight: 700;
+    word-wrap: break-word;
+    -ms-word-wrap: break-word;
 }
 .show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar-container {
     height: 50px;

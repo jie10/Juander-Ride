@@ -119,4 +119,16 @@
         width: 95%;
         margin: auto;
     }
+    .carpool-ride-list-container .driver-pool-results {
+        padding: 50px 0;
+    }
+    .carpool-ride-list-container .driver-pool-results .avatar-container {
+        height: 45px;
+    }
+    .carpool-ride-list-container .driver-pool-results .carpool-driver-to-choose-button span {
+        font-size: 0.75rem;
+    }
+    .carpool-ride-list-container .driver-pool-results .carpool-driver-to-choose-button .h6{
+        font-size: 0.875rem;
+    }
 }

@@ -98,7 +98,7 @@
                                       </div>
                                       <div class="col d-flex flex-column">
                                         <div class="row">
-                                           <div class="col d-flex justify-content-between">
+                                           <div class="col d-flex justify-content-between align-items-center">
                                                 <span class="h6 mb-0">Bob Santos</span>
                                                 <span class="badge rounded-pill bg-primary mt-0" style="margin-right: 5px;">Admin</span>
                                            </div>
@@ -158,20 +158,20 @@
                                     <div class="row driver-info-header">
                                         <div class="col-4 col-sm-3 d-flex justify-content-center" style="width: 75px; ">
                                             <div class="avatar-container">
-                                                <img class="avatar" src="../images/sample/avatar_3.jpg" />
+                                                <img class="avatar" src="../images/sample/no-avatar.png" />
                                             </div>
                                         </div>
                                         <div class="col d-flex flex-column">
                                             <div class="row">
-                                            <div class="col d-flex justify-content-between">
-                                                <span class="h6 mb-0">Bob Santos</span>
-                                                <span class="badge rounded-pill bg-primary mt-0" style="margin-right: 5px;">Admin</span>
+                                            <div class="col d-flex justify-content-between align-items-center">
+                                                <span class="h6 mb-0 offcanvas_rider_fullname">Bob Santos</span>
+                                                <span class="badge rounded-pill bg-primary mt-0 offcanvas_rider_is_available" style="margin-right: 5px;">Admin</span>
                                             </div>
                                             </div>
-                                            <span class="text-muted">Makati</span>
+                                            <span class="text-muted offcanvas_rider_location">Makati</span>
                                         </div>
                                     </div>
-                                    <div class="row driver-info-passengers" style="margin: 24px 0 8px 0;">
+                                    <!-- <div class="row driver-info-passengers" style="margin: 24px 0 8px 0;">
                                         <div class="col">
                                             <h6 style="margin-bottom: 16px;">Co-passengers</h6>
                                             <div class="container">
@@ -203,9 +203,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="driver-info-others" style="margin: 0 12px; flex-grow: 1;">
-                                        <div class="mb-3">
+                                    </div> -->
+                                    <div class="driver-info-others" style="margin: 24px 12px; flex-grow: 1;">
+                                        <!-- <div class="mb-3">
                                             <h6>Vehicle Info</h6>
                                             <p class="text-muted">
                                                 <span class="highlight">Toyota VIOS</span>
@@ -213,23 +213,35 @@
                                                 <span class="other-highlight">LTO 1234</span>
                                                 <span class="other-highlight">Red</span>
                                             </p>
+                                        </div> -->
+                                        <div class="mb-3">
+                                            <h6>Department</h6>
+                                            <a class="text-muted offcanvas_rider_department" target="_blank" href="#">Admin</a>
+                                        </div>
+                                        <div class="mb-3">
+                                            <h6>Seats Available</h6>
+                                            <a class="text-muted offcanvas_seats_count" target="_blank" href="#">4 seats available</a>
                                         </div>
                                         <div class="mb-3">
                                             <h6>Pick-up Point</h6>
-                                            <a class="text-muted" target="_blank" href="https://maps.google.com/?q=14.549221746466461,121.02580559649839">Park Square</a>
+                                            <a class="text-muted offcanvas_pick_up_point" target="_blank" href="#">Park Square</a>
                                         </div>
                                         <div class="mb-3">
                                             <h6>Drop-off Point</h6>
-                                            <a class="text-muted" target="_blank" href="https://maps.google.com/?q=14.522664185042176,121.00126725255578">Cebu Pacific AOC</a>
+                                            <a class="text-muted offcanvas_drop_off_point" target="_blank" href="#">Cebu Pacific AOC</a>
+                                        </div>
+                                        <div class="mb-3">
+                                            <h6>Contact No.</h6>
+                                            <a class="text-muted offcanvas_phone_number" href="#">+639871234567</a>
                                         </div>
                                     </div>
                                     <div class="row mb-3 mx-auto option-buttons">
-                                        <div class="col-2 d-flex justify-content-center">
+                                        <div class="col-2 d-flex justify-content-center align-items-center offcanvas_teams_email">
                                                 <a type="button" target="_blank" href="https://teams.microsoft.com/l/chat/0/0?users=jemimahberyl.sai@cebupacificair.com" class="btn btn-primary" style="border-radius: 50%; background-color: transparent;">
                                                     <i class="fa-solid fa-message" style="color: #0D6EFD;"></i>
                                                 </a>
                                         </div>
-                                        <div class="col d-flex justify-content-center">
+                                        <div class="col d-flex justify-content-center align-items-center">
                                             <button type="button" class="btn btn-primary" id="join_pool_rider_button" style="border-radius: 24px; width: 100%;" data-bs-dismiss="offcanvas">Join Ride</button>
                                         </div>
                                     </div>
