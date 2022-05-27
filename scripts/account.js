@@ -3,15 +3,15 @@ var my_bookings_button = document.getElementById('my_bookings_button');
 var settings_button = document.getElementById('settings_button');
 var logout_button = document.getElementById('logout_button');
 
-var USER_LOGIN_EMAIL_KEY = 'email';
+var USER_LOGIN_DATA_KEY = 'user_login_data';
 
 function moveToLoginpage() {
     window.location.href = '../index.html';
 }
 function checkCurrentSession() {
-    var email = localStorage.getItem(USER_LOGIN_EMAIL_KEY);
+    var user_login_data = localStorage.getItem(USER_LOGIN_DATA_KEY);
 
-    if (email) {
+    if (user_login_data) {
         document.querySelector('.account-page-container').style.display = 'block';
         // TODO - load current user details here from API
     } else {
@@ -19,7 +19,7 @@ function checkCurrentSession() {
     }
 }
 function logoutCurrentSession() {
-    localStorage.removeItem(USER_LOGIN_EMAIL_KEY);
+    localStorage.removeItem(USER_LOGIN_DATA_KEY);
     moveToLoginpage();
 }
 
