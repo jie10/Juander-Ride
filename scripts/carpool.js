@@ -278,7 +278,7 @@ function loadCarpoolDriversList() {
                                                 + '<p class=\"text-muted avatar-name avatar-name-unavailable\">Empty Seat</p>'
                                             + '</div>';
                             }
-                            console.log(blocks)
+
                             offcanvas_rider_passengers_list.innerHTML = blocks;
                         }
 
