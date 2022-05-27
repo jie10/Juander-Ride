@@ -44,7 +44,18 @@ function onSettings() {
     // TODO - move to settings component or page
 }
 function onLogout() {
-    logoutCurrentSession();
+    Swal.fire({
+        icon: 'question',
+        title: 'Log out',
+        text: 'Are you sure you want to continue?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            logoutCurrentSession();
+        }
+    });
 }
 
 my_trips_button.addEventListener('click', onMyTrips);
