@@ -13,7 +13,7 @@ function checkCurrentSession() {
 
     if (user_login_data) {
         document.querySelector('.account-page-container').style.display = 'block';
-        // TODO - load current user details here from API
+        loadUserDetails();
     } else {
         moveToLoginpage();
     }
@@ -21,6 +21,17 @@ function checkCurrentSession() {
 function logoutCurrentSession() {
     localStorage.removeItem(USER_LOGIN_DATA_KEY);
     moveToLoginpage();
+}
+
+function loadUserDetails() {
+    var user_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
+
+    document.querySelector('.user-name').innerHTML = user_data.displayName ? user_data.displayName : user_data.email;
+    document.querySelector('.user-role').innerHTML = user_data.jobTitle ? user_data.jobTitle : 'CEB employee';
+    document.querySelector('.user-position').innerHTML = user_data.jobTitle ? user_data.jobTitle : 'Cebu Pacifir Air, Inc.';
+    document.querySelector('.points-count').innerHTML = user_data.points ? user_data.points : 0;
+    document.querySelector('.badges-count').innerHTML = user_data.badges ? user_data.badges : 0;
+    document.querySelector('.items-count').innerHTML = user_data.items ? user_data : 0;
 }
 
 function onMyTrips() {
