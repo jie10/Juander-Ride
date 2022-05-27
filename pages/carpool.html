@@ -15,6 +15,8 @@
     <!-- SWAL 2-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.css" integrity="sha512-y4S4cBeErz9ykN3iwUC4kmP/Ca+zd8n8FDzlVbq5Nr73gn1VBXZhpriQ7avR+8fQLpyq4izWm0b8s6q4Vedb9w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js" integrity="sha512-7x7HoEikRZhV0FAORWP+hrUzl75JW/uLHBbg2kHnPdFmScpIeHY0ieUVSacjusrKrlA/RsA2tDOBvisFmKc3xw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <!-- MOMENT JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- CUSTOM CSS -->
     <link href="../styles/default.css" rel="stylesheet" type="text/css"/>
     <link href="../styles/utils/helpers.css" rel="stylesheet" type="text/css"/>
@@ -121,21 +123,20 @@
                                         </div>
                                         <div class="col d-flex flex-column">
                                             <div class="row">
-                                            <div class="col d-flex justify-content-between">
-                                                <span class="h6 mb-0">Bob Santos</span>
-                                                <span class="badge rounded-pill bg-primary mt-0" style="margin-right: 5px;">Admin</span>
+                                            <div class="col d-flex justify-content-between align-items-center">
+                                                <span class="h6 mb-0 on_trip_rider_fullname">Bob Santos</span>
                                             </div>
                                             </div>
-                                            <span class="text-muted">Makati</span>
+                                            <span class="text-muted on_trip_rider_location">Makati</span>
                                         </div>
                                     </div>
                                     <div class="row my-3 mx-auto option-buttons">
-                                        <div class="col-2 d-flex justify-content-center">
+                                        <div class="col-2 d-flex justify-content-center on_trip_rider_teams_email">
                                             <a type="button" target="_blank" href="https://teams.microsoft.com/l/chat/0/0?users=jemimahberyl.sai@cebupacificair.com" class="btn btn-primary" style="border-radius: 50%; background-color: transparent;">
                                                 <i class="fa-solid fa-message" style="color: #0D6EFD;"></i>
                                             </a>
                                         </div>
-                                        <div class="col d-flex justify-content-center">
+                                        <div class="col d-flex justify-content-center on_trip_phone_number">
                                             <a type="button" href="tel:+6396170961709" class="btn btn-primary" id="call_rider_button" style="border-radius: 24px; width: 100%;">Call Rider</a>
                                         </div>
                                     </div>
@@ -171,40 +172,15 @@
                                             <span class="text-muted offcanvas_rider_location">Makati</span>
                                         </div>
                                     </div>
-                                    <!-- <div class="row driver-info-passengers" style="margin: 24px 0 8px 0;">
+                                    <div class="row driver-info-passengers" style="margin: 24px 0 8px 0;">
                                         <div class="col">
                                             <h6 style="margin-bottom: 16px;">Co-passengers</h6>
                                             <div class="container">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="avatar-container">
-                                                            <img class="avatar" src="../images/sample/avatar_2.jpg" />
-                                                        </div>
-                                                        <p class="text-muted avatar-name">Rachel Reyes</p>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="avatar-container">
-                                                            <img class="avatar" src="../images/sample/no-avatar.png" />
-                                                        </div>
-                                                        <p class="text-muted avatar-name avatar-name-unavailable">Empty Seat</p>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="avatar-container">
-                                                            <img class="avatar" src="../images/sample/no-avatar.png" />
-                                                        </div>
-                                                        <p class="text-muted avatar-name avatar-name-unavailable">Empty Seat</p>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="avatar-container">
-                                                            <img class="avatar" src="../images/sample/no-avatar.png" />
-                                                        </div>
-                                                        <p class="text-muted avatar-name avatar-name-unavailable">Empty Seat</p>
-                                                    </div>
-                                                </div>
+                                                <div class="row offcanvas_rider_passengers_list"></div>
                                             </div>
                                         </div>
-                                    </div> -->
-                                    <div class="driver-info-others" style="margin: 24px 12px; flex-grow: 1;">
+                                    </div>
+                                    <div class="driver-info-others" style="margin: 0 12px; flex-grow: 1;">
                                         <!-- <div class="mb-3">
                                             <h6>Vehicle Info</h6>
                                             <p class="text-muted">
@@ -216,11 +192,15 @@
                                         </div> -->
                                         <div class="mb-3">
                                             <h6>Department</h6>
-                                            <a class="text-muted offcanvas_rider_department" target="_blank" href="#">Admin</a>
+                                            <p class="text-muted offcanvas_rider_department">Admin</p>
                                         </div>
                                         <div class="mb-3">
                                             <h6>Seats Available</h6>
-                                            <a class="text-muted offcanvas_seats_count" target="_blank" href="#">4 seats available</a>
+                                            <p class="text-muted offcanvas_seats_count">4 seats available</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <h6>Departure Time</h6>
+                                            <p class="text-muted offcanvas_departure_time">6:30 am</p>
                                         </div>
                                         <div class="mb-3">
                                             <h6>Pick-up Point</h6>
@@ -235,7 +215,7 @@
                                             <a class="text-muted offcanvas_phone_number" href="#">+639871234567</a>
                                         </div>
                                     </div>
-                                    <div class="row mb-3 mx-auto option-buttons">
+                                    <div class="row pb-4 mx-auto option-buttons">
                                         <div class="col-2 d-flex justify-content-center align-items-center offcanvas_teams_email">
                                                 <a type="button" target="_blank" href="https://teams.microsoft.com/l/chat/0/0?users=jemimahberyl.sai@cebupacificair.com" class="btn btn-primary" style="border-radius: 50%; background-color: transparent;">
                                                     <i class="fa-solid fa-message" style="color: #0D6EFD;"></i>

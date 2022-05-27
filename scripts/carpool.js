@@ -36,7 +36,8 @@ var search_pick_up_point_rider = document.getElementById('search_pick_up_point_r
 var search_drop_off_point_rider = document.getElementById('search_drop_off_point_rider');
 var is_to_drop_switch_rider = document.getElementById('is_to_drop_switch_rider');
 
-var MATCH_TRIP_STATIC_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/match';
+var MATCH_TRIP_DYNAMIC_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/match/trip';
+var BOOK_RIDE_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
 var USER_LOGIN_DATA_KEY = 'user_login_data';
 var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
                         "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;\" role=\"status\">" +
@@ -169,10 +170,10 @@ function loadCarpoolDriversList() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ pointA: pointA })
+        body: JSON.stringify({ pointA: pointA, tripType: 0 })
     };
 
-    fetch(MATCH_TRIP_STATIC_API_ENDPOINT, options)
+    fetch(MATCH_TRIP_DYNAMIC_API_ENDPOINT, options)
         .then(function (result) {
             return result.json();
         })
@@ -213,21 +214,25 @@ function loadCarpoolDriversList() {
                         var pick_up_point = is_to_drop_switch.checked ? 'Cebu Pacific AOC' : data[id].origin;
                         var drop_off_point = is_to_drop_switch.checked ? data[id].origin : 'Cebu Pacific AOC';
                         var is_pool_available = data[id].seats > 0 ? 'Available' : 'Unavailable';
-                        var seats_available = data[id].seats ? data[id].seats : 0;
+                        var rider_passengers = data[id].riders ? data[id].riders : null;
+                        var rider_passengers_count = rider_passengers ? rider_passengers.length : 0;
+                        var seats_available = data[id].seats ? data[id].seats - rider_passengers_count : 0;
                         var rider_phone_number = data[id].phone ? data[id].phone : '#';
                         var rider_teams_email = data[id].email ? data[id].email : '#';
                         var rider_department = data[id].department ? data[id].department : 'Cebu Pacific Air Inc.';
                         var rider_fullname = data[id].fullname ? data[id].fullname : 'Unknown';
+                        var rider_depart_time = data[id].departTime ? moment(data[id].departTime).format('h:mm a') : 'Unknown';
+                        var rider_passengers = data[id].riders ? data[id].riders : null;
                         var offcanvas_rider_is_available = document.querySelector('.offcanvas_rider_is_available')
                         var offcanvas_phone_number = document.querySelector('.offcanvas_phone_number');
+                        var offcanvas_rider_passengers_list = document.querySelector('.offcanvas_rider_passengers_list');
 
                         document.querySelector('.offcanvas_rider_fullname').innerHTML = rider_fullname;
-
                         offcanvas_rider_is_available.innerHTML = is_pool_available;
-
                         document.querySelector('.offcanvas_rider_location').innerHTML = location;
                         document.querySelector('.offcanvas_rider_department').innerHTML = rider_department;
                         document.querySelector('.offcanvas_seats_count').innerHTML = seats_available + ' seats available';
+                        document.querySelector('.offcanvas_departure_time').innerHTML = rider_depart_time;
                         document.querySelector('.offcanvas_pick_up_point').innerHTML = pick_up_point;
                         document.querySelector('.offcanvas_drop_off_point').innerHTML = drop_off_point;
                         document.querySelector('.offcanvas_teams_email a').href = 'https://teams.microsoft.com/l/chat/0/0?users=' + rider_teams_email;
@@ -241,8 +246,44 @@ function loadCarpoolDriversList() {
                             offcanvas_rider_is_available.classList.add('bg-primary');
                             offcanvas_rider_is_available.classList.remove('bg-secondary');
                         }
-                        console.log(btn.id)
-                    })
+
+                        if (rider_passengers_count > 1) {
+                            var blocks = '';
+
+                            for (var i = 0; i < seats_available; i++) {
+                                blocks += '<div class=\"col\">'
+                                                                                + '<div class=\"avatar-container\">'
+                                                                                +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
+                                                                                + '</div>'
+                                                                                + '<p class=\"text-muted avatar-name avatar-name-unavailable\">Empty Seat</p>'
+                                                                            + '</div>';
+                            }
+
+                            offcanvas_rider_passengers_list.innerHTML = rider_passengers.map(function (passenger) {
+                                return '<div class=\"col\">'
+                                                + '<div class=\"avatar-container\">'
+                                                +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
+                                                + '</div>'
+                                                + '<p class=\"text-muted avatar-name\">' + passenger + '</p>'
+                                            + '</div>';
+                                }).join('') + blocks;
+                        } else {
+                            var blocks = '';
+
+                            for (var i = 0; i < seats_available; i++) {
+                                blocks += '<div class=\"col\">'
+                                                + '<div class=\"avatar-container\">'
+                                                +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
+                                                + '</div>'
+                                                + '<p class=\"text-muted avatar-name avatar-name-unavailable\">Empty Seat</p>'
+                                            + '</div>';
+                            }
+                            console.log(blocks)
+                            offcanvas_rider_passengers_list.innerHTML = blocks;
+                        }
+
+                        join_pool_rider_button.addEventListener('click', onJoinPoolRider(data[id]));
+                    });
                 });
             } else {
                 driver_pool_results_container.innerHTML = NO_RESULTS_FOUND;
@@ -258,36 +299,67 @@ function loadCarpoolDriversList() {
 function loadTripCompletedScreen() {
     showTripCompleted();
 }
-function loadCarpoolOnTripScreen() {
+function loadCarpoolOnTripScreen(rider) {
+    var origin = rider.origin.split(', ');
+    var tripID = rider._id;
+    var passenger = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
+    var payload = {
+        "tripID": tripID,
+        "email": passenger.email,
+        "ridername": passenger.displayName,
+        "driver": rider.email,
+        "drivername": rider.fullname,
+        "destination": rider.origin,
+        "booktype": 0
+    }
+    var options = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    };
+
+    fetch(BOOK_RIDE_API_ENDPOINT, options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            console.log(data);
+        })
+        .catch(function (err) {
+            console.error(err);
+            alert('ERROR: ' + err);
+        });
+
     carpool_on_trip_container.innerHTML = '<div style="height: 100%;">'
-                                            + '<p class=\"display-6 absolute-center text-center\" style=\"top: 40%; width: 100%;\">We\'re on our way!</p>'
+                                            + '<p class=\"display-6 absolute-center text-center\" style=\"top: 40%; width: 100%;\">Booking request sent</p>'
                                             + '</div>'
                                                 + '<div class="on-trip-container container-fluid">'
                                                     + '<div class=\"container d-flex flex-column\">'
                                                             + '<div class=\"row driver-info-header\">'
                                                                 + '<div class=\"col-4 col-sm-3 d-flex justify-content-center\" style=\"width: 75px; \">'
                                                                     + '<div class=\"avatar-container\">'
-                                                                        + '<img class=\"avatar\" src=\"../images/sample/avatar_3.jpg\" />'
+                                                                        + '<img class=\"avatar\" src=\"../images/sample/no-avatar.png\" />'
                                                                     + '</div>'
                                                                 + '</div>'
                                                                 + '<div class=\"col d-flex flex-column\">'
                                                                     + '<div class=\"row\">'
                                                                         + '<div class=\"col d-flex justify-content-between\">'
-                                                                            + '<span class=\"h6 mb-0\">Bob Santos</span>'
-                                                                            + '<span class=\"badge rounded-pill bg-primary mt-0\" style=\"margin-right: 5px;\">Admin</span>'
+                                                                            + '<span class=\"h6 mb-0\">' + rider.fullname + '</span>'
                                                                         + '</div>'
                                                                     + '</div>'
-                                                                    + '<span class=\"text-muted\">Makati</span>'
+                                                                    + '<span class=\"text-muted\">' + origin[origin.length - 1] + '</span>'
                                                                 + '</div>'
                                                             + '</div>'
                                                             + '<div class=\"row my-3 mx-auto option-buttons\">'
                                                                 + '<div class=\"col-2 d-flex justify-content-center\">'
-                                                                        + '<a type=\"button\" target=\"_blank\" href=\"https://teams.microsoft.com/l/chat/0/0?users=jemimahberyl.sai@cebupacificair.com\" class=\"btn btn-primary\" style=\"border-radius: 50%; background-color: transparent;\">'
+                                                                        + '<a type=\"button\" target=\"_blank\" href=\"https://teams.microsoft.com/l/chat/0/0?users=' + rider.email + '\" class=\"btn btn-primary\" style=\"border-radius: 50%; background-color: transparent;\">'
                                                                             + '<i class=\"fa-solid fa-message\" style=\"color: #0D6EFD;\"></i>'
                                                                         + '</a>'
                                                                 + '</div>'
                                                                 + '<div class=\"col d-flex justify-content-center\">'
-                                                                    + '<a type=\"button\" href=\"tel:+6396170961709\" class=\"btn btn-primary\" id=\"call_rider_button\" style=\"border-radius: 24px; width: 100%;\">Call Rider</a>'
+                                                                    + '<a type=\"button\" href=\"tel:+' + rider.phone + '\" class=\"btn btn-primary\" id=\"call_rider_button\" style=\"border-radius: 24px; width: 100%;\">Call Driver</a>'
                                                                 + '</div>'
                                                         + '</div>'
                                                         + '</div>'
@@ -339,18 +411,19 @@ function onFindCarpoolRide () {
     hideMainBottomNavbar();
     delay(loadCarpoolDriversList, 1500);
 }
-function onJoinPoolRider () {
-    hideDriverPoolResultsContainer();
-    showCarpoolOnTripContainer();
-    showMainBottomNavbar();
-    onIsToDropSwitch();
-    showMainTopNavbar();
-
-    carpool_on_trip_container.innerHTML = PAGE_LOAD_SPINNER;
-
-    // delay(loadCarpoolOnTripScreen, 1500);
-    delay(loadCarpoolOnTripScreen, 1500);
-    delay(loadTripCompletedScreen, 10000); // if trip was completed scenario
+function onJoinPoolRider (rider) {
+    return function () {
+        hideDriverPoolResultsContainer();
+        showCarpoolOnTripContainer();
+        showMainBottomNavbar();
+        onIsToDropSwitch();
+        showMainTopNavbar();
+    
+        carpool_on_trip_container.innerHTML = PAGE_LOAD_SPINNER;
+    
+        delay(loadCarpoolOnTripScreen(rider), 1500);
+        // delay(loadTripCompletedScreen, 10000); // if trip was completed scenario
+    }
 }
 function onTripCompleted () {
     hideTripCompleted();
@@ -384,9 +457,7 @@ back_to_previous_page_button.addEventListener('click', reloadCarpoolPage);
 carpool_ride_list_button.addEventListener('click', onCarpoolRidelist);
 is_to_drop_switch.addEventListener('change', onIsToDropSwitch);
 find_pool_rider_button.addEventListener('click', onFindCarpoolRide);
-join_pool_rider_button.addEventListener('click', onJoinPoolRider);
 trip_completed_button.addEventListener('click', onTripCompleted);
-
 share_a_ride_button.addEventListener('click', onShareCarpoolRide);
 is_to_drop_switch_rider.addEventListener('click', onIsToDropSwitchRider);
 
