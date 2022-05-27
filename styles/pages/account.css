@@ -1,11 +1,10 @@
-.account-page-container {
+.account-page-body-container {
     padding: 143px 0 0 0;
 }
 .profile-status-container {
     padding: 24px 24px 36px 24px;
 }
 .profile-status-container .container {
-    height: 100%;
     width: 480px !important;
     padding: 0;
 }
@@ -24,4 +23,44 @@
 .profile-status-container .status-title {
     font-weight: 300;
     font-size: 0.875rem;
+}
+
+
+.account-menu-list-container {
+    padding: 0 0 36px 0;
+}
+.account-menu-list-container .container {
+    width: 480px !important;
+    padding: 0;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 16px;
+    border: 1px solid #C0CED8;
+    border-radius: 8px;
+}
+.account-menu-list-container .menu-list .menu-list-item {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 8px;
+}
+.account-menu-list-container .menu-list .menu-list-item .setting-desc {
+    text-align: left;
+    font-size: 1rem;
+}
+.account-menu-list-container .menu-list .menu-list-item .setting-desc span {
+    display: block;
+}
+.account-menu-list-container .menu-list .menu-list-item .setting-desc .title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0060a7;
+}
+.account-menu-list-container .menu-list .menu-list-item .setting-desc .description {
+    font-size: 0.875rem;
+}
+.account-menu-list-container .menu-list .menu-list-item .setting-icon .icon {
+    color: #ffcd00;
+    font-size: 1rem !important;
+    margin: 8px 16px;
 }

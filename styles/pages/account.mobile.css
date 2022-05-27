@@ -2,8 +2,24 @@
     .profile-status-container .container {
         width: 80% !important;
     }
+
+    .account-menu-list-container .container {
+        width: 80% !important;
+    }
 }
 @media only screen and (max-width: 480px) {
+    .account-menu-list-container .menu-list .menu-list-item {
+        padding: 8px 0;
+    }
+    .account-menu-list-container .menu-list .menu-list-item .setting-icon .icon {
+        margin: 4px 8px;
+    }
+    .account-menu-list-container .menu-list .menu-list-item .setting-desc .title {
+        font-size: 0.875rem;
+    }
+    .account-menu-list-container .menu-list .menu-list-item .setting-desc .description {
+        font-size: 0.75rem;
+    }
     .profile-status-container .status-icon {
         margin-right: 12px;
         font-size: 1rem;
@@ -16,9 +32,10 @@
     }
 }
 @media only screen and (max-width: 320px) {
-    .account-page-container {
+    .account-page-body-container {
         padding: 95px 0 0 0;
     }
+
     .profile-status-container {
         padding: 24px 0 36px 0;
     }

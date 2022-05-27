@@ -23,7 +23,7 @@
     <link href="../styles/components/bottom-navbar.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-    <div class="container-fluid d-flex flex-column" style="min-height: 100vh;">
+    <div class="container-fluid d-flex flex-column account-page-container" style="min-height: 100vh;" style="display: none;">
         <div class="profile-navbar" id="profile_navbar">
             <div class="container d-flex">
                 <div class="avatar-container">
@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="row" style="flex-grow: 1;">
-            <div class="account-page-container">
+            <div class="account-page-body-container">
                 <div class="profile-status-container">
                     <div class="container">
                         <div class="row">
@@ -65,6 +65,46 @@
                         </div>
                     </div>
                 </div>
+                <div class="account-menu-list-container">
+                    <div class="container menu-list d-flex flex-column">
+                        <button type="button" class="menu-list-item d-flex" id="my_trips_button">
+                            <div class="setting-icon">
+                                <span class="material-icons-round icon">directions_car</span>
+                            </div>
+                            <div class="setting-desc">
+                                <span class="title">My Trips</span>
+                                <span class="description">View your carpool/shuttle trips</span>
+                            </div>
+                        </button>
+                        <button type="button" class="menu-list-item d-flex" id="my_bookings_button">
+                            <div class="setting-icon">
+                                <span class="material-icons-round icon">book_online</span>
+                            </div>
+                            <div class="setting-desc">
+                                <span class="title">My Bookings</span>
+                                <span class="description">View your bookings history</span>
+                            </div>
+                        </button>
+                        <button type="button" class="menu-list-item d-flex" id="settings_button">
+                            <div class="setting-icon">
+                                <span class="material-icons-round icon">settings</span>
+                            </div>
+                            <div class="setting-desc">
+                                <span class="title">Settings</span>
+                                <span class="description">Update your account settings</span>
+                            </div>
+                        </button>
+                        <button type="button" class="menu-list-item d-flex" id="logout_button">
+                            <div class="setting-icon">
+                                <span class="material-icons-round icon">logout</span>
+                            </div>
+                            <div class="setting-desc">
+                                <span class="title">Log out</span>
+                                <span class="description">Log out your account</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="main-bottom-navbar" id="main_bottom_navbar">
@@ -81,5 +121,6 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="../scripts/account.js"></script>
 </body>
 </html>
