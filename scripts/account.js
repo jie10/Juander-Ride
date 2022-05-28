@@ -14,6 +14,7 @@ var USER_LOGIN_DATA_KEY = 'user_login_data';
 var RIDER_BOOKING_HISTORY_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/rider';
 var DRIVER_BOOKINGS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/driver';
 var CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
+var COMPLETE_TRIP_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
 var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
                             "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;\" role=\"status\">" +
                                 "<span class=\"visually-hidden\">Loading...</span>" +
@@ -29,7 +30,7 @@ function getStatusIndicator(status) {
     switch(status) {
         case 0:
             return {
-                trip_status: 'On Trip',
+                trip_status: 'Pending for approval',
                 color: 'text-info',
                 origin: 'Coming from ',
                 destination: 'Going to ',
@@ -37,15 +38,15 @@ function getStatusIndicator(status) {
             }
         case 1:
             return {
-                trip_status: 'Trip Confirmed',
+                trip_status: 'On Trip',
                 color: 'text-warning',
-                origin: 'Came from ',
-                destination: 'Went to ',
-                action: 'Shared ride with '
+                origin: 'Coming from ',
+                destination: 'Going to ',
+                action: 'On trip with '
             }
         case 2:
             return {
-                trip_status: 'Trip Cancelled',
+                trip_status: 'Booking Cancelled',
                 color: 'text-danger',
                 origin: 'Came from ',
                 destination: 'Went to ',
@@ -115,6 +116,30 @@ function reloadAccountMainPage() {
     showMainAccountPageContainer();
 }
 
+function loadBookingButtons(status, _id) {
+    switch(status) {
+        case 0:
+            return '<div class="d-grid gap-2 d-sm-flex justify-content-sm-end mt-4">'
+                        + '<button type="button" onclick=\"onCancelBooking(this)\" class=\"btn btn-secondary order-1 \" id=\"' + _id + '_cancel\">Cancel</button>'
+                        + '<button type="button" onclick=\"onConfirmBooking(this)\" class=\"btn btn-primary order-sm-1\" id=\"' + _id + '_confirm\">Confirm</button>'
+                    + '</div>';
+        case 1:
+            return '<div class="d-grid gap-2 d-sm-flex justify-content-sm-end mt-4">'
+                        + '<button type="button" onclick=\"onCompleteTrip(this)\" class=\"btn btn-primary order-sm-1\" id=\"' + _id + '_complete\">Complete</button>'
+                    + '</div>';
+        default: return '';
+    }
+}
+function loadTripButtons(status, _id) {
+    switch(status) {
+        case 0:
+            return '<div class="d-grid gap-2 d-sm-flex justify-content-sm-end mt-4">'
+                        + '<button type="button" onclick=\"onCancelBooking(this)\" class=\"btn btn-secondary order-1 \" id=\"' + _id + '_cancel\">Cancel</button>'
+                        + '<button type="button" onclick=\"onConfirmBooking(this)\" class=\"btn btn-primary order-sm-1\" id=\"' + _id + '_confirm\">Confirm</button>'
+                    + '</div>';
+        default: return '';
+    }
+}
 function loadUserDetails() {
     var user_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
 
@@ -200,10 +225,7 @@ function loadDriverBookings() {
                                                                     + '<p class=\"whereTo\">' + '<span class=\"highlight\">' + bookingType + ' ' + bookingStatus.trip_status + '</span>' + '</p>'
                                                                     + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatus.color + '\">circle</span>' + bookingStatus.destination + destination + '</p>'
                                                                     + '<p class=\"whereTo\"><span class=\"material-icons-round\">circle</span>' + bookingStatus.action + ridername + '</p>'
-                                                                    + (val.status !== 0 ? '' : '<div class="d-grid gap-2 d-sm-flex justify-content-sm-end mt-4">'
-                                                                                                    + '<button type="button" onclick=\"onCancelBooking(this)\" class=\"btn btn-secondary order-1 \" id=\"' + _id + '_cancel\">Cancel</button>'
-                                                                                                    + '<button type="button" onclick=\"onConfirmBooking(this)\" class=\"btn btn-primary order-sm-1\" id=\"' + _id + '_confirm\">Confirm</button>'
-                                                                                                + '</div>')
+                                                                    + loadBookingButtons(val.status, _id)
                                                                 + '</div>';
                                                     }).join('');
                                                 + '</div>';
@@ -252,7 +274,57 @@ function confirmOrCancelBooking(_id, status) {
             reloadAccountMainPage();
         });
 }
+function completeTrip(_id, status) {
+    var payload = {
+        "status": status
+    };
+    var options = {
+        method: 'PUT',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    };
 
+    fetch(COMPLETE_TRIP_API_ENDPOINT + '/' + _id, options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Trip has been completed',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true
+            });
+
+            reloadAccountMainPage();
+        })
+        .catch(function (err) {
+            console.error(err);
+            alert('ERROR: ' + err);
+            reloadAccountMainPage();
+        });
+}
+
+function onCompleteTrip(e) {
+    var _id = e.id.replace('_complete', '');
+
+    Swal.fire({
+        title: 'Complete Trip',
+        text: 'Are you sure you want to continue?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: `No`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            confirmOrCancelBooking(_id, 3);
+        }
+    });
+}
 function onConfirmBooking(e) {
     var _id = e.id.replace('_confirm', '');
 
