@@ -1,0 +1,5 @@
+CARPOOL / SHUTTLE RIDE STATUS
+0 - pending
+1 - accepted
+2 - cancelled
+3 - done/finished

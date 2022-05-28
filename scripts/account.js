@@ -24,6 +24,43 @@ function delay(callback, TIMEOUT_IN_SECONDS) {
     setTimeout(callback, TIMEOUT_IN_SECONDS);
 }
 
+function getStatusIndicator(status) {
+    switch(status) {
+        case 0:
+            return {
+                trip_status: 'On Trip',
+                color: 'text-info',
+                origin: 'Coming from ',
+                destination: 'Going to ',
+                action: 'On trip with '
+            }
+        case 1:
+            return {
+                trip_status: 'Trip Confirmed',
+                color: 'text-warning',
+                origin: 'Came from ',
+                destination: 'Went to ',
+                action: 'Shared ride with '
+            }
+        case 2:
+            return {
+                trip_status: 'Trip Cancelled',
+                color: 'text-danger',
+                origin: 'Came from ',
+                destination: 'Went to ',
+                action: 'Shared ride with '
+            }
+        case 3:
+            return {
+                trip_status: 'Trip Completed',
+                color: 'text-success',
+                origin: 'Came from ',
+                destination: 'Went to ',
+                action: 'Shared ride with '
+            }
+        default: return null;
+    }
+}
 function moveToLoginpage() {
     window.location.href = '../index.html';
 }
@@ -107,20 +144,17 @@ function loadRiderBookingsHistory() {
                                                         var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D YYYY  h:mm a');
                                                         var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
                                                         var _id = val._id;
-                                                        var driver = val.drivername;
+                                                        var driver = val.driver ? val.driver.replace('@cebupacificair.com', '') : 'Unknown';
                                                         var destination = val.destination;
-                                                        var bookingStatus = val.status === 0 ? 'On Trip' : 'Trip Completed';
-                                                        var bookingStatusByColor = val.status === 0 ? 'text-info' : 'text-success';
-                                                        var bookingStatusByDestination = val.status === 0 ? 'Going to ' : 'Went to ';
-                                                        var bookingStatusByDriverAction = val.status === 0 ? 'On trip with ' : 'Shared ride with ';
+                                                        var bookingStatus = getStatusIndicator(val.status);
                                                         var bookingType = val.booktype === 0 ? 'Carpool' : 'Shuttle';
 
                                                         return '<div class=\"list-item\" id=\"' + _id + '\">'
                                                                     + '<p class=\"time\">' + timeFromNowFormat + '</p>'
                                                                     + '<p class=\"date\">' + timeFromNow + '</p>'
-                                                                    + '<p class=\"whereTo\">' + '<span class=\"highlight\">' + bookingType + ' ' + bookingStatus + '</span>' + '</p>'
-                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatusByColor + '\">circle</span>' + bookingStatusByDestination + destination + '</p>'
-                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatusByColor + '\">circle</span>' + bookingStatusByDriverAction + driver + '</p>'
+                                                                    + '<p class=\"whereTo\">' + '<span class=\"highlight\">' + bookingType + ' ' + bookingStatus.trip_status + '</span>' + '</p>'
+                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatus.color + '\">circle</span>' + bookingStatus.destination + destination + '</p>'
+                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round\">circle</span>' + bookingStatus.action + driver + '</p>'
                                                                 + '</div>';
                                                     }).join('');
                                                 + '</div>';
@@ -154,20 +188,21 @@ function loadDriverBookings() {
                                                         var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D YYYY  h:mm a');
                                                         var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
                                                         var _id = val._id;
-                                                        var ridername = val.ridername;
+                                                        var ridername = val.email ? val.email.replace('@cebupacificair.com', '') : 'Unknown';
                                                         var destination = val.destination;
-                                                        var bookingStatus = val.status === 0 ? 'On Trip' : 'Trip Completed';
-                                                        var bookingStatusByColor = val.status === 0 ? 'text-info' : 'text-success';
-                                                        var bookingStatusByDestination = val.status === 0 ? 'Going to ' : 'Went to ';
-                                                        var bookingStatusByDriverAction = val.status === 0 ? 'On trip with ' : 'Shared ride with ';
+                                                        var bookingStatus = getStatusIndicator(val.status);
                                                         var bookingType = val.booktype === 0 ? 'Carpool' : 'Shuttle';
 
                                                         return '<div class=\"list-item\" id=\"' + _id + '\">'
                                                                     + '<p class=\"time\">' + timeFromNowFormat + '</p>'
                                                                     + '<p class=\"date\">' + timeFromNow + '</p>'
-                                                                    + '<p class=\"whereTo\">' + '<span class=\"highlight\">' + bookingType + ' ' + bookingStatus + '</span>' + '</p>'
-                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatusByColor + '\">circle</span>' + bookingStatusByDestination + destination + '</p>'
-                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatusByColor + '\">circle</span>' + bookingStatusByDriverAction + ridername + '</p>'
+                                                                    + '<p class=\"whereTo\">' + '<span class=\"highlight\">' + bookingType + ' ' + bookingStatus.trip_status + '</span>' + '</p>'
+                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatus.color + '\">circle</span>' + bookingStatus.destination + destination + '</p>'
+                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round\">circle</span>' + bookingStatus.action + ridername + '</p>'
+                                                                    + (val.status !== 0 ? '' : '<div class="d-grid gap-2 d-sm-flex justify-content-sm-end mt-4">'
+                                                                                                    + '<button type="button" class=\"btn btn-secondary order-1\">Cancel</button>'
+                                                                                                    + '<button type="button" class=\"btn btn-primary order-sm-1\">Confirm</button>'
+                                                                                                + '</div>')
                                                                 + '</div>';
                                                     }).join('');
                                                 + '</div>';
