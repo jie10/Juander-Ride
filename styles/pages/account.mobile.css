@@ -6,6 +6,11 @@
     .account-menu-list-container .container {
         width: 80% !important;
     }
+
+    .my-trips-container .container {
+        width: 100% !important;
+        padding: 60px 0 0 0;
+    }
 }
 @media only screen and (max-width: 480px) {
     .account-menu-list-container .menu-list .menu-list-item {
@@ -30,6 +35,23 @@
     .profile-status-container .status-title {
         font-size: 0.75rem;
     }
+    .my-trips-container .container {
+        width: 100% !important;
+    }
+    .my-trips-container .time {
+        font-size: 1.25rem;
+        margin-top: 5px;
+    }
+    .my-trips-container .date {
+        font-size: 0.875rem;
+        line-height: normal;
+        padding-bottom: 8px;
+    }
+    .my-trips-container .whereTo {
+        font-size: 0.875rem;
+        line-height: normal;
+        margin-bottom: 8px;
+    }
 }
 @media only screen and (max-width: 320px) {
     .account-page-body-container {
@@ -38,5 +60,15 @@
 
     .profile-status-container {
         padding: 24px 0 36px 0;
+    }
+
+    .my-trips-container .time {
+        font-size: 1rem;
+    }
+    .my-trips-container .date {
+        font-size: 0.75rem;
+    }
+    .my-trips-container .whereTo {
+        font-size: 0.75rem;
     }
 }

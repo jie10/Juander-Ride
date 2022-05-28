@@ -64,3 +64,55 @@
     font-size: 1rem !important;
     margin: 8px 16px;
 }
+
+
+.my-trips-container .container {
+    width: 480px !important;
+    margin: auto;
+}
+.my-trips-container .tripHistory-list {
+    padding-top: 60px;
+}
+.my-trips-container .tripHistory-list .material-icons-round:before {
+    display: none;
+}
+.my-trips-container .tripHistory-list .material-icons-round {
+    font-size: 10px !important;
+    padding-right: 10px !important;
+}
+.my-trips-container .tripHistory-list>div {
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px 20px;
+    margin: 25px 20px;
+    box-shadow: 0 4px 24px rgb(0 0 0 / 18%);
+}
+.my-trips-container .tripHistory-list>div img {
+    height: auto;
+    width: 100%;
+}
+.my-trips-container .tripHistory-list>div {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin: 20px 20px;
+    box-shadow: 0 4px 24px rgb(0 0 0 / 18%);
+}
+.my-trips-container .time {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+.my-trips-container .date {
+    font-size: 16px;
+    color: gray;
+    line-height: 10px;
+    padding-bottom: 15px;
+}
+.my-trips-container .whereTo {
+    font-size: 16px;
+    color: gray;
+    line-height: 10px;
+    margin-bottom: 15px;
+}
