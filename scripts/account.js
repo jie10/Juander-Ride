@@ -13,6 +13,7 @@ var my_bookings_container = document.getElementById('my_bookings_container');
 var USER_LOGIN_DATA_KEY = 'user_login_data';
 var RIDER_BOOKING_HISTORY_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/rider';
 var DRIVER_BOOKINGS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/driver';
+var CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
 var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
                             "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;\" role=\"status\">" +
                                 "<span class=\"visually-hidden\">Loading...</span>" +
@@ -193,15 +194,15 @@ function loadDriverBookings() {
                                                         var bookingStatus = getStatusIndicator(val.status);
                                                         var bookingType = val.booktype === 0 ? 'Carpool' : 'Shuttle';
 
-                                                        return '<div class=\"list-item\" id=\"' + _id + '\">'
+                                                        return '<div class=\"list-item\" id=\"' + _id + '_booking\">'
                                                                     + '<p class=\"time\">' + timeFromNowFormat + '</p>'
                                                                     + '<p class=\"date\">' + timeFromNow + '</p>'
                                                                     + '<p class=\"whereTo\">' + '<span class=\"highlight\">' + bookingType + ' ' + bookingStatus.trip_status + '</span>' + '</p>'
                                                                     + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatus.color + '\">circle</span>' + bookingStatus.destination + destination + '</p>'
                                                                     + '<p class=\"whereTo\"><span class=\"material-icons-round\">circle</span>' + bookingStatus.action + ridername + '</p>'
                                                                     + (val.status !== 0 ? '' : '<div class="d-grid gap-2 d-sm-flex justify-content-sm-end mt-4">'
-                                                                                                    + '<button type="button" class=\"btn btn-secondary order-1\">Cancel</button>'
-                                                                                                    + '<button type="button" class=\"btn btn-primary order-sm-1\">Confirm</button>'
+                                                                                                    + '<button type="button" onclick=\"onCancelBooking(this)\" class=\"btn btn-secondary order-1 \" id=\"' + _id + '_cancel\">Cancel</button>'
+                                                                                                    + '<button type="button" onclick=\"onConfirmBooking(this)\" class=\"btn btn-primary order-sm-1\" id=\"' + _id + '_confirm\">Confirm</button>'
                                                                                                 + '</div>')
                                                                 + '</div>';
                                                     }).join('');
@@ -217,6 +218,73 @@ function loadDriverBookings() {
         });
 }
 
+function confirmOrCancelBooking(_id, status) {
+    var payload = {
+        "status": status
+    };
+    var options = {
+        method: 'PUT',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    };
+
+    fetch(CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT + '/' + _id, options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: status === 1 ? 'Booking has been confirmed' : 'Booking has been cancelled',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true
+            });
+
+            reloadAccountMainPage();
+        })
+        .catch(function (err) {
+            console.error(err);
+            alert('ERROR: ' + err);
+            reloadAccountMainPage();
+        });
+}
+
+function onConfirmBooking(e) {
+    var _id = e.id.replace('_confirm', '');
+
+    Swal.fire({
+        title: 'Confirm Booking',
+        text: 'Are you sure you want to continue?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: `No`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            confirmOrCancelBooking(_id, 1);
+        }
+    });
+}
+function onCancelBooking(e) {
+    var _id = e.id.replace('_cancel', '');
+
+    Swal.fire({
+        title: 'Cancel Booking',
+        text: 'Are you sure you want to continue?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: `No`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            confirmOrCancelBooking(_id, 2);
+        }
+    });
+}
 function onMyTrips() {
     showSecondaryTopNavbar();
     hideMainBottomNavbar();
