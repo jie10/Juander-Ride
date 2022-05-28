@@ -25,6 +25,13 @@ var NO_RESULTS_FOUND = "<p class=\"text-muted absolute-center text-center\">No r
 function delay(callback, TIMEOUT_IN_SECONDS) {
     setTimeout(callback, TIMEOUT_IN_SECONDS);
 }
+function sortDateTime(arr, order) {
+    if (order === 'desc') {
+        return arr.sort((a,b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+    } else {
+        return arr.sort((a,b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
+    }
+}
 
 function getStatusIndicator(status) {
     switch(status) {
@@ -165,8 +172,9 @@ function loadRiderBookingsHistory() {
         })
         .then(function (data) {
             if (data && data.length > 0) {
+                sortDateTime(data, 'desc');
                 my_trips_container.innerHTML = '<div class=\"tripHistory-list container\">' +
-                                                    data.map(function (val) { 
+                                                    data.sort((a,b) => b.updatedAt - a.updatedAt).map(function (val) { 
                                                         var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D YYYY  h:mm a');
                                                         var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
                                                         var _id = val._id;
@@ -209,6 +217,7 @@ function loadDriverBookings() {
         })
         .then(function (data) {
             if (data && data.length > 0) {
+                sortDateTime(data, 'desc');
                 my_bookings_container.innerHTML = '<div class=\"tripHistory-list container\">' +
                                                     data.map(function (val) { 
                                                         var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D YYYY  h:mm a');
