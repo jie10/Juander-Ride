@@ -8,6 +8,7 @@
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 999;
 }
 .main-bottom-navbar .carpool-tab-button,
 .main-bottom-navbar .shuttle-tab-button,

@@ -107,13 +107,13 @@
 .my-trips-container .date {
     font-size: 16px;
     color: gray;
-    line-height: 10px;
+    line-height: 1.25em;
     padding-bottom: 15px;
 }
 .my-trips-container .whereTo {
     font-size: 16px;
     color: gray;
-    line-height: 10px;
+    line-height: 1.25em;
     margin-bottom: 15px;
 }
 
@@ -159,12 +159,12 @@
 .my-bookings-container .date {
     font-size: 16px;
     color: gray;
-    line-height: 10px;
+    line-height: 1.25em;
     padding-bottom: 15px;
 }
 .my-bookings-container .whereTo {
     font-size: 16px;
     color: gray;
-    line-height: 10px;
+    line-height: 1.25em;
     margin-bottom: 15px;
 }

@@ -11,11 +11,6 @@
 
 
 /** CARPOOL - FIND POOL */
-.carpool-container {
-    position: relative;
-    background-position: center;
-    background-size: cover;
-}
 .carpool-container .more-carpool-buttons {
     width: fit-content;
     background-color: #FFCD00;
@@ -64,17 +59,20 @@
 .carpool-main-page,
 .carpool-scan-to-ride-page,
 .carpool-ride-list-container,
-.share-a-ride-container {
+.share-a-ride-container,
+.on-trip-driver-container {
     height: 100%;
 }
 .carpool-scan-to-ride-page,
 .carpool-ride-list-container,
-.share-a-ride-container {
+.share-a-ride-container,
+.on-trip-driver-container {
     padding: 20px;
 }
 .carpool-scan-to-ride-page,
 .carpool-ride-list-container,
-.share-a-ride-container {
+.share-a-ride-container,
+.on-trip-driver-container {
     background-color: #F7F7F7;
 }
 .scan-qr-to-ride-reader {
@@ -271,4 +269,66 @@
 .create-trip-container .create-trip-button {
     margin-top: 24px;
     width: 100%;
+}
+
+.on-trip-driver-container .on-trip-driver-body {
+    padding-top: 50px;
+    height: calc(100% - 35px);
+}
+
+.on-trip-driver-container .on-trip-driver-body .container {
+    width: 480px !important;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-header .avatar-container {
+    height: 50px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-header .avatar {
+    height: 100%;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-header .carpool-driver-to-choose-button {
+    border-radius: 8px;
+    padding: 16px 8px;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-header .h6 {
+    font-size: 1rem;
+    font-weight: 700;
+    word-wrap: break-word;
+    -ms-word-wrap: break-word;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar-container {
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: auto;
+    margin-bottom: 6px;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar {
+    height: 100%;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar-name {
+    font-size: 0.75rem;
+    text-align: center;
+    font-weight: 700;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar-name-unavailable {
+    color: #cccccc !important;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-others h6 {
+    font-size: 0.75rem;
+    margin-bottom: 3px;
+    color: #cccccc;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-others p {
+    font-size: 0.875rem;
+    margin: 0;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-others a {
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+.on-trip-driver-container .on-trip-driver-body .driver-info-others a:hover {
+    text-decoration: underline;
 }

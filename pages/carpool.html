@@ -120,7 +120,7 @@
                                     <div class="row driver-info-header">
                                         <div class="col-4 col-sm-3 d-flex justify-content-center" style="width: 75px; ">
                                             <div class="avatar-container">
-                                                <img class="avatar" src="../images/sample/avatar_3.jpg" />
+                                                <img class="avatar" src="../images/sample/no-avatar.png" />
                                             </div>
                                         </div>
                                         <div class="col d-flex flex-column">
@@ -287,6 +287,64 @@
                                         </div>    
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="on-trip-driver-container" id="on_trip_driver_container" style="display: none;">
+                        <div class="on-trip-driver-body">
+                            <div class="container d-flex flex-column" style="height: 100%;">
+                                <p class="no-results h6 absolute-center text-center" style="display: none;">No Bookings found</p>
+                                <div class="row driver-info-header">
+                                    <!-- <div class="col-4 col-sm-3 d-flex justify-content-center" style="width: 75px; ">
+                                        <div class="avatar-container">
+                                            <img class="avatar" src="../images/sample/no-avatar.png" />
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex flex-column">
+                                        <div class="row">
+                                            <div class="col d-flex justify-content-between align-items-center">
+                                                <span class="h6 mb-0 offcanvas_rider_fullname">Bob Santos</span>
+                                            </div>
+                                        </div>
+                                        <span class="text-muted offcanvas_rider_location">Makati</span>
+                                    </div> -->
+                                </div>
+                                <div class="row driver-info-passengers" style="margin: 24px 0 8px 0;">
+                                    <!-- <div class="col">
+                                        <h6 style="margin-bottom: 16px;">Co-passengers</h6>
+                                        <div class="container">
+                                            <div class="row offcanvas_rider_passengers_list"></div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <div class="driver-info-others" style="margin: 0 12px; flex-grow: 1;">
+                                    <!-- <div class="mb-3">
+                                        <h6>Department</h6>
+                                        <p class="text-muted offcanvas_rider_department">Admin</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Seats Available</h6>
+                                        <p class="text-muted offcanvas_seats_count">4 seats available</p>
+                                    </div> -->
+                                    <div class="mb-3">
+                                        <h6>Departure Time</h6>
+                                        <p class="text-muted offcanvas_driver_departure_time"></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Target Location</h6>
+                                        <a class="text-muted offcanvas_driver_target_location" target="_blank" href="#"></a>
+                                    </div>
+                                </div>
+                                <div class="row pb-4 mx-auto option-buttons">
+                                    <div class="col-2 d-flex justify-content-center align-items-center offcanvas_teams_email">
+                                        <a type="button" href="/" class="btn btn-primary" style="border-radius: 50%; background-color: transparent;">
+                                            <i class="fa-solid fa-arrow-rotate-right" style="color: #0D6EFD;"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col d-flex justify-content-center align-items-center">
+                                        <button type="button" class="btn btn-primary" id="complete_driver_trip_button" style="border-radius: 24px; width: 100%;">Complete Trip</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
