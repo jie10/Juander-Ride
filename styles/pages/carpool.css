@@ -259,3 +259,16 @@
 .share-a-ride-container .navigate-container .container {
     width: 480px !important;
 }
+
+.create-trip-container .container {
+    width: 480px !important;
+    margin-top: 60px;
+}
+.create-trip-container h4 {
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+.create-trip-container .create-trip-button {
+    margin-top: 24px;
+    width: 100%;
+}

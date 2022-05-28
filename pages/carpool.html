@@ -15,6 +15,8 @@
     <!-- SWAL 2-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.css" integrity="sha512-y4S4cBeErz9ykN3iwUC4kmP/Ca+zd8n8FDzlVbq5Nr73gn1VBXZhpriQ7avR+8fQLpyq4izWm0b8s6q4Vedb9w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js" integrity="sha512-7x7HoEikRZhV0FAORWP+hrUzl75JW/uLHBbg2kHnPdFmScpIeHY0ieUVSacjusrKrlA/RsA2tDOBvisFmKc3xw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <!-- CLEAVE JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js" integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- MOMENT JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- CUSTOM CSS -->
@@ -230,7 +232,7 @@
                         </div>
                     </div>
                     <div class="share-a-ride-container" id="share_a_ride_container" style="display: none;">
-                        <div class="navigate-container container-fluid" id="share_ride_navigate_container">
+                        <div class="navigate-container container-fluid" id="share_ride_navigate_container" style="display: none;">
                             <div class="container">
                                 <div class="row mb-3">
                                     <div class="col-12">
@@ -253,6 +255,38 @@
                                         <button type="button" class="btn btn-primary rounded-pill mx-4 mx-sm-5" id="share_pool_ride_button_rider">Share a Ride</button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="create-trip-container" id="create_trip_container" style="display: block;">
+                            <div class="container">
+                                <form class="row g-3">
+                                    <h4  class="float-none w-auto">Trip Info</h4>
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label for="driver_target_location" class="form-label">Target Location</label>
+                                            <input autocomplete="off" type="text" class="form-control" id="driver_target_location" readonly>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="driver_departure_date" class="form-label">Departure Date</label>
+                                            <input autocomplete="off" type="text" class="form-control" id="driver_departure_date" placeholder="YYYY-MM-DD" title="format: YYYY-MM-DD">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="driver_departure_time" class="form-label">Departure Time</label>
+                                            <input autocomplete="off" type="text" class="form-control" id="driver_departure_time" placeholder="hh:mm" title="format: hh:mm">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="driver_available_seats" class="form-label">No. of Seats</label>
+                                            <input autocomplete="off" type="number" min="0" max="30" class="form-control" id="driver_available_seats">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="driver_contact_no" class="form-label">Contact No.</label>
+                                            <input autocomplete="off" type="text" class="form-control" id="driver_contact_no" placeholder="9xx xxx xxxx" title="format: 9xx xxx xxxx">
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-center align-items-center">
+                                            <button type="button" class="btn btn-primary rounded-pill mx-4 mx-sm-5 create-trip-button" id="create_trip_button">Create Trip</button>      
+                                        </div>    
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
