@@ -8,9 +8,11 @@ var secondary_top_navbar = document.getElementById('secondary_top_navbar');
 var main_bottom_navbar = document.getElementById('main_bottom_navbar');
 var account_page_body_container = document.getElementById('account_page_body_container');
 var my_trips_container = document.getElementById('my_trips_container');
+var my_bookings_container = document.getElementById('my_bookings_container');
 
 var USER_LOGIN_DATA_KEY = 'user_login_data';
 var RIDER_BOOKING_HISTORY_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/rider';
+var DRIVER_BOOKINGS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/driver';
 var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
                             "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;\" role=\"status\">" +
                                 "<span class=\"visually-hidden\">Loading...</span>" +
@@ -54,10 +56,15 @@ function showMainBottomNavbar() {
 function showMainAccountPageContainer() {
     account_page_body_container.style.display = 'block';
     my_trips_container.style.display = 'none';
+    my_bookings_container.style.display = 'none';
 }
 function showMyTripsPageContainer() {
     account_page_body_container.style.display = 'none';
     my_trips_container.style.display = 'block';
+}
+function showMyBookingsPageContainer() {
+    account_page_body_container.style.display = 'none';
+    my_bookings_container.style.display = 'block';
 }
 
 function hideMainBottomNavbar() {
@@ -127,9 +134,55 @@ function loadRiderBookingsHistory() {
             reloadAccountMainPage();
         });
 }
+function loadDriverBookings() {
+    var email = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email;
+    var options = {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+
+    fetch(DRIVER_BOOKINGS_API_ENDPOINT + '/' + email, options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            if (data && data.length > 0) {
+                my_bookings_container.innerHTML = '<div class=\"tripHistory-list container\">' +
+                                                    data.map(function (val) { 
+                                                        var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D YYYY  h:mm a');
+                                                        var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
+                                                        var _id = val._id;
+                                                        var ridername = val.ridername;
+                                                        var destination = val.destination;
+                                                        var bookingStatus = val.status === 0 ? 'On Trip' : 'Trip Completed';
+                                                        var bookingStatusByColor = val.status === 0 ? 'text-info' : 'text-success';
+                                                        var bookingStatusByDestination = val.status === 0 ? 'Going to ' : 'Went to ';
+                                                        var bookingStatusByDriverAction = val.status === 0 ? 'On trip with ' : 'Shared ride with ';
+                                                        var bookingType = val.booktype === 0 ? 'Carpool' : 'Shuttle';
+
+                                                        return '<div class=\"list-item\" id=\"' + _id + '\">'
+                                                                    + '<p class=\"time\">' + timeFromNowFormat + '</p>'
+                                                                    + '<p class=\"date\">' + timeFromNow + '</p>'
+                                                                    + '<p class=\"whereTo\">' + '<span class=\"highlight\">' + bookingType + ' ' + bookingStatus + '</span>' + '</p>'
+                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatusByColor + '\">circle</span>' + bookingStatusByDestination + destination + '</p>'
+                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatusByColor + '\">circle</span>' + bookingStatusByDriverAction + ridername + '</p>'
+                                                                + '</div>';
+                                                    }).join('');
+                                                + '</div>';
+            } else {
+                my_bookings_container.innerHTML = NO_RESULTS_FOUND;
+            }
+        })
+        .catch(function (err) {
+            console.error(err);
+            alert('ERROR: ' + err);
+            reloadAccountMainPage();
+        });
+}
 
 function onMyTrips() {
-    // TODO - move to my trips component or page
     showSecondaryTopNavbar();
     hideMainBottomNavbar();
     showMyTripsPageContainer();
@@ -137,7 +190,11 @@ function onMyTrips() {
     delay(loadRiderBookingsHistory, 1500);
 }
 function onMyBookings() {
-    // TODO - move to my bookings component or page
+    showSecondaryTopNavbar();
+    hideMainBottomNavbar();
+    showMyBookingsPageContainer();
+    my_bookings_container.innerHTML = PAGE_LOAD_SPINNER;
+    delay(loadDriverBookings, 1500);
 }
 function onSettings() {
     // TODO - move to settings component or page

@@ -11,6 +11,11 @@
         width: 100% !important;
         padding: 60px 0 0 0;
     }
+
+    .my-bookings-container .container {
+        width: 100% !important;
+        padding: 60px 0 0 0;
+    }
 }
 @media only screen and (max-width: 480px) {
     .account-menu-list-container .menu-list .menu-list-item {
@@ -25,6 +30,7 @@
     .account-menu-list-container .menu-list .menu-list-item .setting-desc .description {
         font-size: 0.75rem;
     }
+
     .profile-status-container .status-icon {
         margin-right: 12px;
         font-size: 1rem;
@@ -35,6 +41,7 @@
     .profile-status-container .status-title {
         font-size: 0.75rem;
     }
+
     .my-trips-container .container {
         width: 100% !important;
     }
@@ -48,6 +55,24 @@
         padding-bottom: 8px;
     }
     .my-trips-container .whereTo {
+        font-size: 0.875rem;
+        line-height: normal;
+        margin-bottom: 8px;
+    }
+
+    .my-bookings-container .container {
+        width: 100% !important;
+    }
+    .my-bookings-container .time {
+        font-size: 1.25rem;
+        margin-top: 5px;
+    }
+    .my-bookings-container .date {
+        font-size: 0.875rem;
+        line-height: normal;
+        padding-bottom: 8px;
+    }
+    .my-bookings-container .whereTo {
         font-size: 0.875rem;
         line-height: normal;
         margin-bottom: 8px;
@@ -69,6 +94,16 @@
         font-size: 0.75rem;
     }
     .my-trips-container .whereTo {
+        font-size: 0.75rem;
+    }
+
+    .my-bookings-container .time {
+        font-size: 1rem;
+    }
+    .my-bookings-container .date {
+        font-size: 0.75rem;
+    }
+    .my-bookings-container .whereTo {
         font-size: 0.75rem;
     }
 }
