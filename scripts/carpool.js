@@ -307,19 +307,21 @@ function cancelTrip(_id, riders) {
             window.location.href = '/';
         });
 }
-function completeTrip(_id, status) {
+function completeTrip(_id, riders) {
     var payload = {
-        "status": status
+        tripID: _id,
+        riders: riders,
+        status: 2
     };
     var options = {
-        method: 'PUT',
+        method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(payload)
     };
 
-    fetch(COMPLETE_TRIP_API_ENDPOINT + '/' + _id, options)
+    fetch(UPDATE_TRIP_STATUS_API_ENDPOINT, options)
         .then(function (result) {
             return result.json();
         })
@@ -633,7 +635,7 @@ function loadOngoingBooking(created_trip_key, email) {
     
                     document.getElementById('start_driver_trip_button').addEventListener('click', onStartTrip(driver[0]._id, driver[0].riders));
                     document.getElementById('cancel_driver_trip_button').addEventListener('click', onCancelTrip(driver[0]._id, driver[0].riders));
-                    document.getElementById('complete_driver_trip_button').addEventListener('click', onCompleteTrip(driver[0]._id));
+                    document.getElementById('complete_driver_trip_button').addEventListener('click', onCompleteTrip(driver[0]._id, driver[0].riders));
                 } else {
                     document.querySelector('.no-results').style.display = 'block';
 
@@ -916,7 +918,7 @@ function onCancelTrip(_id, riders) {
         });
     }
 }
-function onCompleteTrip(_id) {
+function onCompleteTrip(_id, riders) {
     return function () {
         Swal.fire({
             title: 'Complete Trip',
@@ -927,7 +929,7 @@ function onCompleteTrip(_id) {
             cancelButtonText: `No`,
         }).then((result) => {
             if (result.isConfirmed) {
-                completeTrip(_id, 3);
+                completeTrip(_id, riders);
             }
         });
     }
