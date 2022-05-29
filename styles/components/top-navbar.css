@@ -8,11 +8,11 @@
     z-index: 999;
     height: 50px;
     padding: 8px 0;
-    background-color: #FFCD00;
+    background-color: #fee014;
 }
 .main-top-navbar .nav-brand,
 .secondary-top-navbar .nav-brand {
-    color: #0066A3;
+    color: #2472ba;
     margin: 0;
     font-weight: 700;
 }

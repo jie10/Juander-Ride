@@ -1,50 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juander Ride</title>
-    <!-- FAVICON -->
-    <link rel="icon" type="image/x-icon" href="../images/icons/juander-icon.ico">
-    <!-- FONTAWESOME-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- BOOTSTRAP 5 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
-    <!-- CUSTOM CSS -->
-    <link href="../styles/default.css" rel="stylesheet" type="text/css"/>
-    <link href="../styles/utils/helpers.css" rel="stylesheet" type="text/css"/>
-    <link href="../styles/components/top-navbar.css" rel="stylesheet" type="text/css"/>
-    <link href="../styles/components/bottom-navbar.css" rel="stylesheet" type="text/css"/>
-</head>
-<body>
-    <div class="container-fluid d-flex flex-column" style="min-height: 100vh;">
-        <div class="row p-2 main-top-navbar" id="main_top_navbar">
-            <div class="col"></div>
-            <div class="col-6 d-flex my-auto justify-content-center">
-                <span class="h5 nav-brand">Juander</span>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Juander Ride</title>
+        <!-- FAVICON -->
+        <link rel="icon" type="image/x-icon" href="../images/icons/juander-icon.ico">
+        <!-- FONTAWESOME-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- BOOTSTRAP 5 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+        <!-- LOTTIE -->
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+        <!-- QR SCANNER -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.2.0/html5-qrcode.min.js" defer></script>
+        <!-- CUSTOM CSS -->
+        <link href="../styles/default.css" rel="stylesheet" type="text/css"/>
+        <link href="../styles/utils/helpers.css" rel="stylesheet" type="text/css"/>
+        <link href="../styles/components/top-navbar.css" rel="stylesheet" type="text/css"/>
+        <link href="../styles/components/bottom-navbar.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div class="container-fluid d-flex flex-column" style="min-height: 100vh;">
+            <div>
+                <div class="row p-2 main-top-navbar" id="main_top_navbar">
+                    <div class="col"></div>
+                    <div class="col-6 d-flex my-auto justify-content-center">
+                        <span class="h5 nav-brand">Juander</span>
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <div id="shuttle_trip_container" class="row" style="flex-grow: 1; margin-top: 50px;">
+                    <ul id="shuttle_trip_list" style="margin-top: 6px; list-style-type: none;">
+
+                    </ul>
+                </div>
+                <div class="main-bottom-navbar" id="main_bottom_navbar">
+                    <div class="container d-flex justify-content-center">
+                        <a class="text-center d-flex flex-column carpool-tab-button" id="carpool_tab_button" href="../pages/carpool.html">
+                            <i class="fa-solid fa-car-side"></i>Carpool
+                        </a>
+                        <a class="text-center d-flex flex-column shuttle-tab-button tab-active" id="shuttle_tab_button" href="../pages/shuttle.html">
+                            <i class="fa-solid fa-van-shuttle"></i>Shuttle
+                        </a>
+                        <a class="text-center d-flex flex-column user-account-tab-button" id="user_account_tab_button" href="../pages/account.html">
+                            <i class="fa-solid fa-user"></i>Account
+                        </a>
+                    </div>
+                </div>
+                <div class="center" style="position: fixed; width: 100%; bottom: 0; left: 0; right: 0; margin-bottom: 70px; display: flex;">
+                    <div id="scan_qr_btn" style="flex-grow: 1; border-radius: 8px; height: 50px; background-color: #cccccc; margin-left: 12px; margin-right: 12px; visibility: collapse;">
+                        <p style="font-size: 1rem; color: #fff; padding-top: 10px; margin: 0; padding: 0; text-align: center; line-height: 50px;">Scan QR</p>
+                    </div>
+                </div>
             </div>
-            <div class="col"></div>
-        </div>
-        <div class="row" style="flex-grow: 1;">
-            <div class="container p-3">
-                <p class="absolute-center text-center">Feature coming soon!</p>
+            <div id="scanner_viewcontroller" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: collapse;">
+                <div style="display: flex; align-items: center; margin: 0; padding: 0; height: 50px; background-color: #fee014;">
+                    <div id="scanner_close_btn" style="flex-grow: 1;">
+                        <img src="../images/icons/round_close.png" style="width: 32px; padding-left: 12px"/>
+                    </div>
+                    <p class="h5 nav-brand" style="flex-grow: 4; font-weight: bold; padding: 0; margin: 0; text-align: center; color: #2472ba;">Scan QR</p>
+                    <div style="flex-grow: 1; width: 36px;">
+
+                    </div>
+                </div>
+                <div id="scan_ticket_reader" style="display: flex; align-content: center; justify-content: center;">
+                    
+                </div>
+            </div>
+            <div id="scanner_confirm_viewcontroller" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: collapse;">
+                <div style="display: flex; align-items: center; margin: 0; padding: 0; height: 50px; background-color: #fee014;">
+                    <p id="scanner_confirm_viewcontroller_title" class="h5 nav-brand" style="flex-grow: 4; font-weight: bold; padding: 0; margin: 0; text-align: center; color: #2472ba;"></p>
+                </div>
+                <div style="display: flex; margin-top: 64px; align-content: center; justify-content: center;">
+                    <img src="../images/sample/no-avatar.png" style=" height: 90px; border-radius: 8px;"/>
+                </div>
+                <div style="flex-grow: 1;">
+                    <div style="display: flex; margin-top: 56px;">
+                        <p style="flex-grow: 1; margin-left: 32px; font-size: 0.9rem; height: 8px;">Shuttle</p>
+                        <p id="scanner_confirm_viewcontroller_shuttle" style="flex-grow: 1; text-align: right; margin: 0; padding: 0; margin-right: 32px; font-size: 0.9rem; font-weight: bold;"></p>
+                    </div>
+                    <div style="display: flex; margin: 0; padding: 0;">
+                        <p style="flex-grow: 1; margin-left: 32px; font-size: 0.9rem; height: 8px;">Origin</p>
+                        <p id="scanner_confirm_viewcontroller_origin" style="flex-grow: 1; text-align: right; margin: 0; padding: 0; margin-right: 32px; font-size: 0.9rem; font-weight: bold;"></p>
+                    </div>
+                    <div style="display: flex; margin: 0; padding: 0;">
+                        <p style="flex-grow: 1; margin-left: 32px; font-size: 0.9rem; height: 8px;">Destination</p>
+                        <p id="scanner_confirm_viewcontroller_destination" style="flex-grow: 1; text-align: right; margin: 0; padding: 0; margin-right: 32px; font-size: 0.9rem; font-weight: bold;"></p>
+                    </div>
+                    <hr style="margin: 32px">
+                </div>
+                <div class="center" style="position: fixed; width: 100%; bottom: 0; left: 0; right: 0; margin-bottom: 32px; display: flex;">
+                    <div id="scanner_confirm_btn" style="flex-grow: 1; border-radius: 8px; height: 50px; background-color: #05a5df; margin-left: 12px; margin-right: 12px;">
+                        <p style="font-size: 1rem; color: #fff; padding-top: 10px; margin: 0; padding: 0; text-align: center; line-height: 50px;">Confirm</p>
+                    </div>
+                </div>
+            </div>
+            <div id="scanner_success_viewcontroller" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: collapse;">
+                <div style="display: flex; align-items: center; margin: 0; padding: 0; height: 50px; background-color: #fee014;">
+                    <p class="h5 nav-brand" style="flex-grow: 4; font-weight: bold; padding: 0; margin: 0; text-align: center; color: #2472ba;">EDSA Shuttle</p>
+                </div>
+                <div style="display: flex; margin-top: 64px; align-content: center; justify-content: center;">
+                    <img src="../images/sample/qrcode1.png" style=" height: 128px;"/>
+                </div>
+                <div style="flex-grow: 1;">
+                    <p id="scanner_success_viewcontroller_title" style="font-weight: bold; padding: 0; margin: 0; text-align: center; color: #2472ba; font-size: 1.5rem;">Thank you</p>
+                    <p id="scanner_success_viewcontroller_message" style="padding: 0; margin: 0; text-align: center; color: #2472ba; font-size: 0.9rem; padding-left: 100px; padding-right: 100px;">You successfully reserved your seat. Happy Juandering.</p>
+                    <hr style="margin: 32px">
+                    <p style="padding: 0; margin: 0; text-align: center; font-size: 0.7rem; padding-left: 100px; padding-right: 100px;">RIDE NUMBER</p>
+                    <p style="padding: 0; margin: 0; text-align: center; font-size: 1.1rem; padding-left: 100px; padding-right: 100px; font-weight: bold">TGB5GY</p>
+                </div>
+                <div class="center" style="position: fixed; width: 100%; bottom: 0; left: 0; right: 0; margin-bottom: 32px; display: flex;">
+                    <div id="scanner_continue_btn" style="flex-grow: 1; border-radius: 8px; height: 50px; background-color: #05a5df; margin-left: 12px; margin-right: 12px;">
+                        <p style="font-size: 1rem; color: #fff; padding-top: 10px; margin: 0; padding: 0; text-align: center; line-height: 50px;">Continue</p>
+                    </div>
+                </div>
+            </div>
+            <div id="activity_indicator" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: collapse; opacity: 0.9;">
+                <div style="display: flex; align-content: center; justify-content: center; align-items: center; height: 100%;">
+                    <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_o8zsifcp.json" background="transparent" speed="1" style="width: 160px; height: 160px;" loop autoplay></lottie-player>
+                </div>
             </div>
         </div>
-        <div class="main-bottom-navbar" id="main_bottom_navbar">
-            <div class="container d-flex justify-content-center">
-                <a class="text-center d-flex flex-column carpool-tab-button" id="carpool_tab_button" href="../pages/carpool.html">
-                    <i class="fa-solid fa-car-side"></i>Carpool
-                </a>
-                <a class="text-center d-flex flex-column shuttle-tab-button tab-active" id="shuttle_tab_button" href="../pages/shuttle.html">
-                    <i class="fa-solid fa-van-shuttle"></i>Shuttle
-                </a>
-                <a class="text-center d-flex flex-column user-account-tab-button" id="user_account_tab_button" href="../pages/account.html">
-                    <i class="fa-solid fa-user"></i>Account
-                </a>
-            </div>
-        </div>
-    </div>
-</body>
+        <script type="text/javascript" src="../scripts/shuttle.js"></script>
+    </body>
 </html>

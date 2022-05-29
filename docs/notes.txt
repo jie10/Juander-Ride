@@ -3,3 +3,17 @@ CARPOOL / SHUTTLE RIDE STATUS
 1 - accepted
 2 - cancelled
 3 - done/finished
+
+TRIP STATUS
+0 - inactive/pending
+1 - active/start ride
+2 - finished ride
+3 - cancelled ride
+
+booktype is for our indicator
+0 - pickup
+1 - dropoff (Office)
+
+tripType
+0 - carpool
+1 - shuttle
