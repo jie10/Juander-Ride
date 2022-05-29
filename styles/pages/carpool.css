@@ -272,7 +272,7 @@
 }
 
 .on-trip-driver-container .on-trip-driver-body {
-    padding-top: 50px;
+    padding: 45px 0 30px 0;
     height: calc(100% - 35px);
 }
 
@@ -312,6 +312,8 @@
     font-size: 0.75rem;
     text-align: center;
     font-weight: 700;
+    word-wrap: break-word;
+    -ms-word-wrap: break-word;
 }
 .on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar-name-unavailable {
     color: #cccccc !important;

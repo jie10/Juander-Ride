@@ -309,41 +309,37 @@
                                         <span class="text-muted offcanvas_rider_location">Makati</span>
                                     </div> -->
                                 </div>
-                                <div class="row driver-info-passengers" style="margin: 24px 0 8px 0;">
-                                    <!-- <div class="col">
-                                        <h6 style="margin-bottom: 16px;">Co-passengers</h6>
+                                <div class="row driver-info-passengers" style="margin: 0 0 8px;">
+                                    <div class="col">
+                                        <h6 style="margin-bottom: 16px; font-weight: 700;">Co-passengers</h6>
                                         <div class="container">
-                                            <div class="row offcanvas_rider_passengers_list"></div>
+                                            <div class="row offcanvas_driver_passengers_list"></div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div>
                                 <div class="driver-info-others" style="margin: 0 12px; flex-grow: 1;">
-                                    <!-- <div class="mb-3">
-                                        <h6>Department</h6>
-                                        <p class="text-muted offcanvas_rider_department">Admin</p>
-                                    </div>
                                     <div class="mb-3">
                                         <h6>Seats Available</h6>
-                                        <p class="text-muted offcanvas_seats_count">4 seats available</p>
-                                    </div> -->
+                                        <p class="text-muted offcanvas_driver_seats_count"></p>
+                                    </div>
                                     <div class="mb-3">
                                         <h6>Departure Time</h6>
                                         <p class="text-muted offcanvas_driver_departure_time"></p>
                                     </div>
                                     <div class="mb-3">
                                         <h6>Target Location</h6>
-                                        <a class="text-muted offcanvas_driver_target_location" target="_blank" href="#"></a>
+                                        <p class="text-muted offcanvas_driver_target_location"></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Trip Status</h6>
+                                        <p class="text-muted offcanvas_driver_trip_status"></p>
                                     </div>
                                 </div>
                                 <div class="row pb-4 mx-auto option-buttons">
-                                    <div class="col-2 d-flex justify-content-center align-items-center offcanvas_teams_email">
-                                        <a type="button" href="/" class="btn btn-primary" style="border-radius: 50%; background-color: transparent;">
-                                            <i class="fa-solid fa-arrow-rotate-right" style="color: #0D6EFD;"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col d-flex justify-content-center align-items-center">
-                                        <button type="button" class="btn btn-primary" id="complete_driver_trip_button" style="border-radius: 24px; width: 100%;">Complete Trip</button>
-                                    </div>
+                                    <a type="button" href="/" class="col-12 btn btn-outlined mb-2 order-4" id="refresh_driver_page_button" style="border-radius: 24px; width: 100%;">Refresh Page</a>
+                                    <button type="button" class="col-12 btn btn-secondary mb-2 order-2" id="cancel_driver_trip_button" style="border-radius: 24px; width: 100%;  display: none;">Cancel Trip</button>
+                                    <button type="button" class="col-12 btn btn-primary mb-2" id="start_driver_trip_button" style="border-radius: 24px; width: 100%;">Start Trip</button>
+                                    <button type="button" class="col-12 btn btn-primary mb-2" id="complete_driver_trip_button" style="border-radius: 24px; width: 100%; display: none;">Complete Trip</button>
                                 </div>
                             </div>
                         </div>

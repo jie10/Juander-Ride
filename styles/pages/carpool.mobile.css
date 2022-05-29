@@ -142,4 +142,7 @@
     .carpool-ride-list-container .driver-pool-results .carpool-driver-to-choose-button .h6{
         font-size: 0.875rem;
     }
+    .on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar-name {
+        font-size: 0.625rem;
+    }
 }
