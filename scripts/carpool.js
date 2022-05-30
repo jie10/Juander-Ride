@@ -193,7 +193,6 @@ function hideMainBottomNavbar () {
 /** SHARE-A-RIDE */
 function createTrip() {
     var user = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
-
     var target_location = driver_target_location.value ? driver_target_location.value : '';
     var available_seats = driver_available_seats.value ? driver_available_seats.value : 0;
     var departure_datetime = moment(driver_departure_date.value + ' ' + driver_departure_time.value).format("YYYY-MM-DDTHH:mm") + ':00.000Z';
@@ -216,20 +215,34 @@ function createTrip() {
         },
         body: JSON.stringify(payload)
     };
+    var given = moment(driver_departure_date.value + ' ' + driver_departure_time.value, "YYYY-MM-DD HH:mm");
+    var current = new Date();
+    var duration = moment.duration(given.diff(current)).asHours();
+    // console.log(duration)
+    // console.log('departure_datetime', departure_datetime)
+
+    // console.log(moment(driver_departure_date.value + ' ' + driver_departure_time.value).format("YYYY-MM-DDTHH:mm"))
+    // console.log(moment(driver_departure_date.value + ' ' + driver_departure_time.value).utc().fromNow())
+    // console.log('payload', JSON.stringify(payload))
+    // document.querySelector('.create-trip-container .container').style.display = 'none';
+    // document.querySelector('.create-trip-container').innerHTML = PAGE_LOAD_SPINNER;
 
     fetch(CREATE_TRIP_API_ENDPOINT, options)
         .then(function (result) {
             return result.json();
         })
         .then(function (data) {
+
             Swal.fire({
                 position: 'center',
                 icon: 'success',
                 title: 'Trip has been created',
                 showConfirmButton: false,
                 timer: 1500,
-                timerProgressBar: true
+                timerProgressBar: true,
+                allowOutsideClick: false
             });
+
             localStorage.setItem(CREATED_TRIP_KEY, data['0']);
             window.location.href = '/';
         })
@@ -258,6 +271,9 @@ function startTrip(_id, riders) {
             return result.json();
         })
         .then(function (data) {
+            document.querySelector('.on-trip-spinner').style.display = 'none';
+            document.querySelector('.on-trip-spinner').innerHTML = '';
+            document.querySelector('.on-trip-driver-body').style.display = 'block';
             localStorage.setItem(DRIVER_TRIP_STATUS_KEY, 'ongoing');
             document.getElementById('refresh_driver_page_button').style.display = 'none';
             document.getElementById('cancel_driver_trip_button').disabled = false;
@@ -292,6 +308,9 @@ function cancelTrip(_id, riders) {
             return result.json();
         })
         .then(function (data) {
+            document.querySelector('.on-trip-spinner').style.display = 'none';
+            document.querySelector('.on-trip-spinner').innerHTML = '';
+            document.querySelector('.on-trip-driver-body').style.display = 'block';
             document.getElementById('refresh_driver_page_button').style.display = 'block';
             document.getElementById('cancel_driver_trip_button').style.display = 'none';
             document.getElementById('start_driver_trip_button').style.display = 'none';
@@ -326,20 +345,23 @@ function completeTrip(_id, riders) {
             return result.json();
         })
         .then(function (data) {
-            if (data) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Trip has been completed',
-                    showConfirmButton: false,
-                    timer: 1500,
-                    timerProgressBar: true
-                });
-    
-                localStorage.removeItem(CREATED_TRIP_KEY);
-                localStorage.removeItem(DRIVER_TRIP_STATUS_KEY);
-                window.location.href = '/';
-            }
+            document.querySelector('.on-trip-spinner').style.display = 'none';
+            document.querySelector('.on-trip-spinner').innerHTML = '';
+            document.querySelector('.on-trip-driver-body').style.display = 'block';
+
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Trip has been completed',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+                allowOutsideClick: false
+            });
+
+            localStorage.removeItem(CREATED_TRIP_KEY);
+            localStorage.removeItem(DRIVER_TRIP_STATUS_KEY);
+            window.location.href = '/';
         })
         .catch(function (err) {
             console.error(err);
@@ -569,6 +591,9 @@ function loadOngoingBooking(created_trip_key, email) {
     showMainTopNavbar();
     hideMoreCarpoolButtonsContainer();
 
+    document.querySelector('.on-trip-spinner').style.display = 'block';
+    document.querySelector('.on-trip-spinner').innerHTML = PAGE_LOAD_SPINNER;
+    document.querySelector('.on-trip-driver-body').style.display = 'none';
     document.getElementById('cancel_driver_trip_button').disabled = true;
     document.getElementById('start_driver_trip_button').disabled = true;
     document.getElementById('complete_driver_trip_button').disabled = true;
@@ -582,21 +607,24 @@ function loadOngoingBooking(created_trip_key, email) {
                 var driver = data.filter(function(trip) {
                     return trip._id === created_trip_key;
                 });
-
+                
                 if (driver.length > 0) {
-                    document.getElementById('start_driver_trip_button').disabled = false;
-
-                    document.querySelector('.no-results').style.display = 'none';
-                    document.querySelector('.offcanvas_driver_seats_count').innerHTML = driver[0].seats + (driver[0].seats > 1 ? ' seats available' : ' seat available');
-                    document.querySelector('.offcanvas_driver_departure_time').innerHTML = moment(driver[0].updatedAt).utc().format('MMMM D YYYY  h:mm a');
-                    document.querySelector('.offcanvas_driver_target_location').innerHTML = driver[0].origin + '<a style=\"margin-left: 8px; font-size: 0.75rem;\" target=\"_blank\" href=\"https://maps.google.com?q=' + driver[0].lat + ',' + driver[0].lng + '&z=15\">View in Map</a>';
-
                     if(localStorage.getItem(DRIVER_TRIP_STATUS_KEY)) {
                         startTrip(driver[0]._id, driver[0].riders);
                     } else {
                         document.getElementById('start_driver_trip_button').disabled = false;
                         document.querySelector('.offcanvas_driver_trip_status').innerHTML = driver[0].seats == 0 ? 'Waiting for driver to start ride' : 'Waiting for passengers to join';
                     }
+
+                    document.getElementById('start_driver_trip_button').disabled = false;
+
+                    document.querySelector('.offcanvas_driver_seats_count').innerHTML = driver[0].seats + (driver[0].seats > 1 ? ' seats available' : ' seat available');
+                    document.querySelector('.offcanvas_driver_departure_time').innerHTML = moment(driver[0].updatedAt).utc().format('MMMM D YYYY  h:mm a');
+                    document.querySelector('.offcanvas_driver_target_location').innerHTML = driver[0].origin + '<a style=\"margin-left: 8px; font-size: 0.75rem;\" target=\"_blank\" href=\"https://maps.google.com?q=' + driver[0].lat + ',' + driver[0].lng + '&z=15\">View in Map</a>';
+
+                    document.querySelector('.on-trip-spinner').style.display = 'none';
+                    document.querySelector('.on-trip-spinner').innerHTML = '';
+                    document.querySelector('.on-trip-driver-body').style.display = 'block';
 
                     if (driver[0].riders.length > 0) {
                         var blocks = '';
@@ -637,12 +665,14 @@ function loadOngoingBooking(created_trip_key, email) {
                     document.getElementById('cancel_driver_trip_button').addEventListener('click', onCancelTrip(driver[0]._id, driver[0].riders));
                     document.getElementById('complete_driver_trip_button').addEventListener('click', onCompleteTrip(driver[0]._id, driver[0].riders));
                 } else {
-                    document.querySelector('.no-results').style.display = 'block';
-
+                    document.querySelector('.on-trip-spinner').style.display = 'none';
+                    document.querySelector('.on-trip-spinner').innerHTML = '';
+                    document.querySelector('.on-trip-driver-body').style.display = 'block';
                     document.querySelector('.offcanvas_driver_seats_count').innerHTML = '-';
                     document.querySelector('.offcanvas_driver_departure_time').innerHTML = '-';
                     document.querySelector('.offcanvas_driver_target_location').innerHTML = '-';
                     document.querySelector('.offcanvas_driver_trip_status').innerHTML = 'Waiting for passengers to join';
+                    document.getElementById('start_driver_trip_button').disabled = true;
                 }
             }
         })
@@ -897,6 +927,9 @@ function onStartTrip(_id, riders) {
             cancelButtonText: `No`,
         }).then((result) => {
             if (result.isConfirmed) {
+                document.querySelector('.on-trip-spinner').style.display = 'block';
+                document.querySelector('.on-trip-spinner').innerHTML = PAGE_LOAD_SPINNER;
+                document.querySelector('.on-trip-driver-body').style.display = 'none';
                 startTrip(_id, riders);
             }
         });
@@ -913,6 +946,9 @@ function onCancelTrip(_id, riders) {
             cancelButtonText: `No`,
         }).then((result) => {
             if (result.isConfirmed) {
+                document.querySelector('.on-trip-spinner').style.display = 'block';
+                document.querySelector('.on-trip-spinner').innerHTML = PAGE_LOAD_SPINNER;
+                document.querySelector('.on-trip-driver-body').style.display = 'none';
                 cancelTrip(_id, riders);
             }
         });
@@ -929,6 +965,9 @@ function onCompleteTrip(_id, riders) {
             cancelButtonText: `No`,
         }).then((result) => {
             if (result.isConfirmed) {
+                document.querySelector('.on-trip-spinner').style.display = 'block';
+                document.querySelector('.on-trip-spinner').innerHTML = PAGE_LOAD_SPINNER;
+                document.querySelector('.on-trip-driver-body').style.display = 'none';
                 completeTrip(_id, riders);
             }
         });
