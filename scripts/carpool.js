@@ -798,7 +798,7 @@ function reloadCarpoolPage () {
             .then(function (data) {
                 if (data) {
                     var currentTrip = data.filter(function (currentTrip) {
-                        return currentTrip.status === 0 || currentTrip.status === 1
+                        return (currentTrip.status === 0 || currentTrip.status === 1) && currentTrip.tripType === 0
                     });
                     var ongoingDriverSession = currentTrip && currentTrip.length > 0 ? true : false;
 
