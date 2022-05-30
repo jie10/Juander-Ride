@@ -47,14 +47,13 @@ var driver_contact_no = document.getElementById('driver_contact_no');
 var on_trip_driver_container = document.getElementById('on_trip_driver_container');
 
 var UPDATE_TRIP_STATUS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip/status';
-var VIEW_DRIVER_BOOKINGS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/driver';
+var VIEW_RIDER_BOOKINGS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/rider';
 var VIEW_DRIVER_TRIPS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip/driver';
 var COMPLETE_TRIP_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
 var MATCH_TRIP_DYNAMIC_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/match/trip';
 var BOOK_RIDE_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
 var CREATE_TRIP_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
 var USER_LOGIN_DATA_KEY = 'user_login_data';
-var CREATED_TRIP_KEY = 'created_trip';
 var CURRENT_BOOKED_TRIP_KEY = 'current_booked_trip';
 var DRIVER_TRIP_STATUS_KEY = 'driver_trip_status';
 var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
@@ -198,14 +197,15 @@ function createTrip() {
     var departure_datetime = moment(driver_departure_date.value + ' ' + driver_departure_time.value).format("YYYY-MM-DDTHH:mm") + ':00.000Z';
     var contact_no = driver_contact_no.value ? '63' + driver_contact_no.value.replace(/(\s)/gi, '') : '#';
     var payload = {
-        "email": user.email,
+        "email": user.email.toLowerCase(),
         "fullname": user.displayName,
         "department": user.jobTitle ? user.jobTitle : 'Cebu Pacifir Air, Inc.',
         "phone": contact_no,
         "origin": target_location,
-        "seats": available_seats,
+        "seats": parseInt(available_seats),
         "tripType": 0,
         "riders": [],
+        "status": 0,
         "departTime": departure_datetime
     };
     var options = {
@@ -215,24 +215,12 @@ function createTrip() {
         },
         body: JSON.stringify(payload)
     };
-    var given = moment(driver_departure_date.value + ' ' + driver_departure_time.value, "YYYY-MM-DD HH:mm");
-    var current = new Date();
-    var duration = moment.duration(given.diff(current)).asHours();
-    // console.log(duration)
-    // console.log('departure_datetime', departure_datetime)
-
-    // console.log(moment(driver_departure_date.value + ' ' + driver_departure_time.value).format("YYYY-MM-DDTHH:mm"))
-    // console.log(moment(driver_departure_date.value + ' ' + driver_departure_time.value).utc().fromNow())
-    // console.log('payload', JSON.stringify(payload))
-    // document.querySelector('.create-trip-container .container').style.display = 'none';
-    // document.querySelector('.create-trip-container').innerHTML = PAGE_LOAD_SPINNER;
 
     fetch(CREATE_TRIP_API_ENDPOINT, options)
         .then(function (result) {
             return result.json();
         })
         .then(function (data) {
-
             Swal.fire({
                 position: 'center',
                 icon: 'success',
@@ -243,13 +231,21 @@ function createTrip() {
                 allowOutsideClick: false
             });
 
-            localStorage.setItem(CREATED_TRIP_KEY, data['0']);
             window.location.href = '/';
         })
         .catch(function (err) {
             console.error(err);
             alert('ERROR: ' + err);
-            reloadCarpoolPage();
+            Swal.fire({
+                title: 'Error',
+                text: 'Internal server error',
+                confirmButtonText: 'Refresh',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    reloadCarpoolPage();
+                }
+            });
         });
 }
 function startTrip(_id, riders) {
@@ -285,8 +281,16 @@ function startTrip(_id, riders) {
         })
         .catch(function (err) {
             console.error(err);
-            alert('ERROR: ' + err);
-            window.location.href = '/';
+            Swal.fire({
+                title: 'Error',
+                text: 'Internal server error',
+                confirmButtonText: 'Refresh',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/';
+                }
+            });
         });
 }
 function cancelTrip(_id, riders) {
@@ -318,12 +322,19 @@ function cancelTrip(_id, riders) {
             document.querySelector('.offcanvas_driver_trip_status').innerHTML = 'Trip cancelled';
 
             localStorage.removeItem(DRIVER_TRIP_STATUS_KEY);
-            localStorage.removeItem(CREATED_TRIP_KEY);
         })
         .catch(function (err) {
             console.error(err);
-            alert('ERROR: ' + err);
-            window.location.href = '/';
+            Swal.fire({
+                title: 'Error',
+                text: 'Internal server error',
+                confirmButtonText: 'Refresh',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/';
+                }
+            });
         });
 }
 function completeTrip(_id, riders) {
@@ -359,14 +370,21 @@ function completeTrip(_id, riders) {
                 allowOutsideClick: false
             });
 
-            localStorage.removeItem(CREATED_TRIP_KEY);
             localStorage.removeItem(DRIVER_TRIP_STATUS_KEY);
             window.location.href = '/';
         })
         .catch(function (err) {
             console.error(err);
-            alert('ERROR: ' + err);
-            window.location.href = '/';
+            Swal.fire({
+                title: 'Error',
+                text: 'Internal server error',
+                confirmButtonText: 'Refresh',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/';
+                }
+            });
         });
 }
 
@@ -403,11 +421,14 @@ function loadCarpoolDriversList() {
                 }).map(function (driver, i) {
                     var rider_fullname = driver.fullname ? driver.fullname : 'Unknown';
                     var is_pool_available = driver.seats > 0 ? 'Available' : 'Unavailable';
+                    var is_pool_clickable = driver.seats > 0 ? 'data-bs-toggle="offcanvas" data-bs-target="#show_confirm_carpool_rider" aria-controls=\"show_confirm_carpool_rider\"' : '';
                     var is_pool_available_color = driver.seats > 0 ? 'bg-primary' : '.bg-secondary';
                     var rider_location = driver.origin.split(', ');
                     var location = rider_location[rider_location.length - 1];
-    
-                    return '<button type=\"button\" class=\"list-group-item list-group-item-action carpool-driver-to-choose-button\" id=\"' + i + '\" data-bs-toggle="offcanvas" data-bs-target="#show_confirm_carpool_rider" aria-controls=\"show_confirm_carpool_rider\">'
+                    var seat_total = driver.seats + driver.riders.length;
+                    var seat_count = seat_total - driver.riders.length;
+
+                    return '<button type=\"button\" class=\"list-group-item list-group-item-action carpool-driver-to-choose-button\" id=\"' + i + '\"' + is_pool_clickable + '>'
                                     + '<div class=\"row\">'
                                         + '<div class=\"col-4 col-sm-3 d-flex justify-content-center\" style=\"width: 75px; \">'
                                             + '<div class=\"avatar-container\">'
@@ -422,6 +443,7 @@ function loadCarpoolDriversList() {
                                                 + '</div>'
                                             + '</div>'
                                             + '<span class=\"text-muted\">' + location + '</span>'
+                                            + '<span class=\"text-muted\" style="font-size: 0.75rem;">' + seat_count + ' out of ' + seat_total + ' seats left</span>'
                                         + '</div>'
                                     + '</div>'
                                 + '</button>';
@@ -437,12 +459,12 @@ function loadCarpoolDriversList() {
                         var is_pool_available = data[id].seats > 0 ? 'Available' : 'Unavailable';
                         var rider_passengers = data[id].riders ? data[id].riders : null;
                         var rider_passengers_count = rider_passengers ? rider_passengers.length : 0;
-                        var seats_available = data[id].seats ? data[id].seats - rider_passengers_count : 0;
-                        var rider_phone_number = data[id].phone ? data[id].phone : '#';
+                        var seats_available = data[id].seats ? (data[id].seats + rider_passengers_count) - rider_passengers_count : 0;
+                        var rider_phone_number = data[id].phone ? '+' + data[id].phone : '#';
                         var rider_teams_email = data[id].email ? data[id].email : '#';
                         var rider_department = data[id].department ? data[id].department : 'Cebu Pacific Air Inc.';
                         var rider_fullname = data[id].fullname ? data[id].fullname : 'Unknown';
-                        var rider_depart_time = data[id].departTime ? moment(data[id].departTime).format('h:mm a') : 'Unknown';
+                        var rider_depart_time = data[id].departTime ? moment(data[id].departTime).utc().format('h:mm a') : 'Unknown';
                         var rider_passengers = data[id].riders ? data[id].riders : null;
                         var offcanvas_rider_is_available = document.querySelector('.offcanvas_rider_is_available')
                         var offcanvas_phone_number = document.querySelector('.offcanvas_phone_number');
@@ -467,21 +489,21 @@ function loadCarpoolDriversList() {
                             offcanvas_rider_is_available.classList.add('bg-primary');
                             offcanvas_rider_is_available.classList.remove('bg-secondary');
                         }
-
-                        if (rider_passengers_count > 1) {
+                        console.log(rider_passengers)
+                        if (rider_passengers_count > 0) {
                             var blocks = '';
 
                             for (var i = 0; i < seats_available; i++) {
-                                blocks += '<div class=\"col\">'
-                                                                                + '<div class=\"avatar-container\">'
-                                                                                +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
-                                                                                + '</div>'
-                                                                                + '<p class=\"text-muted avatar-name avatar-name-unavailable\">Empty Seat</p>'
-                                                                            + '</div>';
+                                blocks += '<div class=\"col-3\">'
+                                                + '<div class=\"avatar-container\">'
+                                                +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
+                                                + '</div>'
+                                                + '<p class=\"text-muted avatar-name avatar-name-unavailable\">Empty Seat</p>'
+                                            + '</div>';
                             }
 
                             offcanvas_rider_passengers_list.innerHTML = rider_passengers.map(function (passenger) {
-                                return '<div class=\"col\">'
+                                return '<div class=\"col-3\">'
                                                 + '<div class=\"avatar-container\">'
                                                 +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
                                                 + '</div>'
@@ -492,7 +514,7 @@ function loadCarpoolDriversList() {
                             var blocks = '';
 
                             for (var i = 0; i < seats_available; i++) {
-                                blocks += '<div class=\"col\">'
+                                blocks += '<div class=\"col-3\">'
                                                 + '<div class=\"avatar-container\">'
                                                 +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
                                                 + '</div>'
@@ -512,7 +534,16 @@ function loadCarpoolDriversList() {
         })
         .catch(function (err) {
             console.error(err);
-            alert('ERROR: ' + err);
+            Swal.fire({
+                title: 'Error',
+                text: 'Internal server error',
+                confirmButtonText: 'Refresh',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/';
+                }
+            });
         });
 
 
@@ -546,42 +577,28 @@ function loadCarpoolOnTripScreen(rider) {
             return result.json();
         })
         .then(function (data) {
-            carpool_on_trip_container.innerHTML = '<div style="height: 100%;">'
-                                                        + '<p class=\"display-6 absolute-center text-center\" style=\"top: 40%; width: 100%;\">Booking request sent</p>'
-                                                    + '</div>'
-                                                        + '<div class="on-trip-container container-fluid">'
-                                                            + '<div class=\"container d-flex flex-column\">'
-                                                                    + '<div class=\"row driver-info-header\">'
-                                                                        + '<div class=\"col-4 col-sm-3 d-flex justify-content-center\" style=\"width: 75px; \">'
-                                                                            + '<div class=\"avatar-container\">'
-                                                                                + '<img class=\"avatar\" src=\"../images/sample/no-avatar.png\" />'
-                                                                            + '</div>'
-                                                                        + '</div>'
-                                                                        + '<div class=\"col d-flex flex-column\">'
-                                                                            + '<div class=\"row\">'
-                                                                                + '<div class=\"col d-flex justify-content-between\">'
-                                                                                    + '<span class=\"h6 mb-0\">' + rider.fullname + '</span>'
-                                                                                + '</div>'
-                                                                            + '</div>'
-                                                                            + '<span class=\"text-muted\">' + origin[origin.length - 1] + '</span>'
-                                                                        + '</div>'
-                                                                    + '</div>'
-                                                                    + '<div class=\"row my-3 mx-auto option-buttons\">'
-                                                                        + '<div class=\"col-2 d-flex justify-content-center\">'
-                                                                                + '<a type=\"button\" target=\"_blank\" href=\"https://teams.microsoft.com/l/chat/0/0?users=' + rider.email + '\" class=\"btn btn-primary\" style=\"border-radius: 50%; background-color: transparent;\">'
-                                                                                    + '<i class=\"fa-solid fa-message\" style=\"color: #0D6EFD;\"></i>'
-                                                                                + '</a>'
-                                                                        + '</div>'
-                                                                        + '<div class=\"col d-flex justify-content-center\">'
-                                                                            + '<a type=\"button\" href=\"tel:+' + rider.phone + '\" class=\"btn btn-primary\" id=\"call_rider_button\" style=\"border-radius: 24px; width: 100%;\">Call Driver</a>'
-                                                                        + '</div>'
-                                                                + '</div>'
-                                                                + '</div>'
-                                                        + '</div>';
+            if (data) {
+                localStorage.setItem(CURRENT_BOOKED_TRIP_KEY, JSON.stringify({
+                    tripID: rider._id,
+                    driver: rider.email
+                }));
+                window.location.href = '/';
+            } else {
+
+            }
         })
         .catch(function (err) {
             console.error(err);
-            alert('ERROR: ' + err);
+            Swal.fire({
+                title: 'Error',
+                text: 'Internal server error',
+                confirmButtonText: 'Refresh',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/';
+                }
+            });
         });
 }
 function loadOngoingBooking(created_trip_key, email) {
@@ -609,6 +626,7 @@ function loadOngoingBooking(created_trip_key, email) {
                 });
                 
                 if (driver.length > 0) {
+                    
                     if(localStorage.getItem(DRIVER_TRIP_STATUS_KEY)) {
                         startTrip(driver[0]._id, driver[0].riders);
                     } else {
@@ -619,7 +637,7 @@ function loadOngoingBooking(created_trip_key, email) {
                     document.getElementById('start_driver_trip_button').disabled = false;
 
                     document.querySelector('.offcanvas_driver_seats_count').innerHTML = driver[0].seats + (driver[0].seats > 1 ? ' seats available' : ' seat available');
-                    document.querySelector('.offcanvas_driver_departure_time').innerHTML = moment(driver[0].updatedAt).utc().format('MMMM D YYYY  h:mm a');
+                    document.querySelector('.offcanvas_driver_departure_time').innerHTML = moment(driver[0].departTime).utc().format('MMMM D YYYY  h:mm a');
                     document.querySelector('.offcanvas_driver_target_location').innerHTML = driver[0].origin + '<a style=\"margin-left: 8px; font-size: 0.75rem;\" target=\"_blank\" href=\"https://maps.google.com?q=' + driver[0].lat + ',' + driver[0].lng + '&z=15\">View in Map</a>';
 
                     document.querySelector('.on-trip-spinner').style.display = 'none';
@@ -659,6 +677,7 @@ function loadOngoingBooking(created_trip_key, email) {
                         }
 
                         document.querySelector('.offcanvas_driver_passengers_list').innerHTML = blocks;
+                        document.getElementById('start_driver_trip_button').disabled = true;
                     }
     
                     document.getElementById('start_driver_trip_button').addEventListener('click', onStartTrip(driver[0]._id, driver[0].riders));
@@ -678,8 +697,16 @@ function loadOngoingBooking(created_trip_key, email) {
         })
         .catch(function (err) {
             console.error(err);
-            alert('ERROR: ' + err);
-            window.location.href = '';
+            Swal.fire({
+                title: 'Error',
+                text: 'Internal server error',
+                confirmButtonText: 'Refresh',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/';
+                }
+            });
         });
 }
 
@@ -699,14 +726,11 @@ function loadCarpoolMainPage() {
 
 function reloadCarpoolPage () {
     var email = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email;
-    var created_trip_key = localStorage.getItem(CREATED_TRIP_KEY);
     var current_booked_trip_key = localStorage.getItem(CURRENT_BOOKED_TRIP_KEY);
 
     loadCarpoolMainPage();
 
-    if (created_trip_key) {
-        loadOngoingBooking(created_trip_key, email);
-    } else if (current_booked_trip_key) {
+    if (current_booked_trip_key) {
         var tripID = JSON.parse(current_booked_trip_key).tripID;
         var driverEmail = JSON.parse(current_booked_trip_key).driver;
 
@@ -716,20 +740,72 @@ function reloadCarpoolPage () {
         showMainTopNavbar();
         find_carpool_navigate_container.style.display = 'none';
 
-        fetch(VIEW_DRIVER_BOOKINGS_API_ENDPOINT + '/' + driverEmail)
+        fetch(VIEW_DRIVER_TRIPS_API_ENDPOINT + '/' + driverEmail)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            if (data && data.length > 0) {
+                var driver = data.filter(function(trip) {
+                    return trip._id === tripID;
+                });
+
+                if (driver.length > 0) {
+                    if (driver[0].status === 0 || driver[0].status === 1) {
+                        carpool_on_trip_container.style.display = 'block';
+                        document.querySelector('.on_trip_rider_message').innerHTML = driver[0].status === 0 ? 'Waiting to start trip' : driver[0].status === 1 ? 'We\'re on our way' : '';
+                        document.querySelector('.on_trip_rider_fullname').innerHTML = driver[0].fullname;
+                        document.querySelector('.on_trip_rider_location').innerHTML = driver[0].origin;
+                        document.querySelector('.on_trip_rider_teams_email a').href = 'https://teams.microsoft.com/l/chat/0/0?users=' + driverEmail;
+                        document.querySelector('.on_trip_phone_number a').href = 'tel:+' + driver[0].phone;
+                    } else {
+                        loadTripCompletedScreen();
+                    }
+                } else {
+                    localStorage.removeItem(CURRENT_BOOKED_TRIP_KEY);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No Data Found',
+                        confirmButtonText: 'Refresh',
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/';
+                        }
+                    });
+                }
+            } else {
+
+            }
+        })
+        .catch(function (err) {
+            console.error(err);
+            Swal.fire({
+                title: 'Error',
+                text: 'Internal server error',
+                confirmButtonText: 'Refresh',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/';
+                }
+            });
+        });
+    } else {
+        fetch(VIEW_DRIVER_TRIPS_API_ENDPOINT + '/' + email.toLowerCase())
             .then(function (result) {
                 return result.json();
             })
             .then(function (data) {
-                if (data && data.length > 0) {
-                    var bookedDriver = data.filter(function(trip) {
-                        return trip.tripID === tripID;
+                if (data) {
+                    var currentTrip = data.filter(function (currentTrip) {
+                        return currentTrip.status === 0 || currentTrip.status === 1
                     });
-                    console.log('status', bookedDriver[0].status)
-                    if (bookedDriver[0].status !== 2 && bookedDriver[0].status !== 3) {
-                        carpool_on_trip_container.style.display = 'block';
+                    var ongoingDriverSession = currentTrip && currentTrip.length > 0 ? true : false;
 
-                        fetch(VIEW_DRIVER_TRIPS_API_ENDPOINT + '/' + driverEmail)
+                    if (ongoingDriverSession) {
+                        loadOngoingBooking(currentTrip[0]._id, email.toLowerCase());
+                    } else {
+                        fetch(VIEW_RIDER_BOOKINGS_API_ENDPOINT + '/' + email.toLowerCase())
                             .then(function (result) {
                                 return result.json();
                             })
@@ -740,57 +816,51 @@ function reloadCarpoolPage () {
                                     });
 
                                     if (driver.length > 0) {
-                                        document.querySelector('.on_trip_rider_message').innerHTML = bookedDriver[0].status === 0 ? 'Waiting to start trip' : 'We\'re on our way';
-                                        document.querySelector('.on_trip_rider_fullname').innerHTML = driver[0].fullname;
-                                        document.querySelector('.on_trip_rider_location').innerHTML = driver[0].origin;
-                                        document.querySelector('.on_trip_rider_teams_email a').href = 'https://teams.microsoft.com/l/chat/0/0?users=' + driverEmail;
-                                        document.querySelector('.on_trip_phone_number a').href = 'tel:+' + driver[0].phone;
+                                        if (driver[0].status === 0 || driver[0].status === 1) {
+                                            carpool_on_trip_container.style.display = 'block';
+                                            document.querySelector('.on_trip_rider_message').innerHTML = driver[0].status === 0 ? 'Waiting to start trip' : driver[0].status === 1 ? 'We\'re on our way' : '';
+                                            document.querySelector('.on_trip_rider_fullname').innerHTML = driver[0].fullname;
+                                            document.querySelector('.on_trip_rider_location').innerHTML = driver[0].origin;
+                                            document.querySelector('.on_trip_rider_teams_email a').href = 'https://teams.microsoft.com/l/chat/0/0?users=' + driverEmail;
+                                            document.querySelector('.on_trip_phone_number a').href = 'tel:+' + driver[0].phone;
+                                        } else {
+                                            loadTripCompletedScreen();
+                                        }
                                     } else {
 
                                     }
                                 } else {
-                                    alert('ERROR: No data found');
-                                     window.location.href = '/';
+
                                 }
                             })
                             .catch(function (err) {
                                 console.error(err);
-                                alert('ERROR: ' + err);
-                                window.location.href = '/';
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'Internal server error',
+                                    confirmButtonText: 'Refresh',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '/';
+                                    }
+                                });
                             });
-                    } else {
-                        loadTripCompletedScreen();
                     }
-                }  else {
-                    alert('ERROR: No data found');
-                    window.location.href = '/';
-                }
-        })
-        .catch(function (err) {
-            console.error(err);
-            alert('ERROR: ' + err);
-            window.location.href = '/';
-        });
-    } else {
-        fetch(VIEW_DRIVER_BOOKINGS_API_ENDPOINT + '/' + email)
-            .then(function (result) {
-                return result.json();
-            })
-            .then(function (data) {
-                var bookings = data.filter(function (booking) {
-                    return booking.status === 1
-                });
-                var hasOngoingBookings = bookings && bookings.length > 0 ? true : false;
+                } else {
 
-                if (hasOngoingBookings) {
-                    localStorage.setItem(CREATED_TRIP_KEY, bookings[0].tripID);
-                    window.location.href= '/';
                 }
             })
             .catch(function (err) {
                 console.error(err);
-                alert('ERROR: ' + err);
-                window.location.href = '';
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Internal server error',
+                    confirmButtonText: 'Refresh',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/';
+                    }
+                });
             });
     }
 }
@@ -836,13 +906,13 @@ function onJoinPoolRider (rider) {
         showMainTopNavbar();
     
         carpool_on_trip_container.innerHTML = PAGE_LOAD_SPINNER;
-    
-        delay(loadCarpoolOnTripScreen(rider), 1500);
+        loadCarpoolOnTripScreen(rider)
     }
 }
 function onTripCompleted () {
     hideTripCompleted();
-    delay(reloadCarpoolPage, 500);
+    localStorage.removeItem(CURRENT_BOOKED_TRIP_KEY);
+    window.location.href = '/';
 }
 
 
@@ -875,6 +945,7 @@ function onMoreShareRide() {
     hideMoreCarpoolButtonsContainer();
     hideMainBottomNavbar();
     showCreateTripContainer();
+    
     driver_target_location.value = '';
     driver_available_seats.value = '';
     driver_departure_date.value = '';
@@ -912,7 +983,91 @@ function onCreateTrip() {
         cancelButtonText: `No`,
     }).then((result) => {
         if (result.isConfirmed) {
-            createTrip();
+            var given = moment(driver_departure_date.value + ' ' + driver_departure_time.value, "YYYY-MM-DD HH:mm");
+            var current = new Date();
+            var numberPattern = /([0-9])/g;
+            var timePattern = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/g;
+            var datePattern = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
+            var phonePattern = /(9[0-9]{2}\s([0-9]{3}\s)[0-9]{4})/;
+            var isAllNumeric = numberPattern.test(driver_available_seats.value) && numberPattern.test(driver_contact_no.value.replace(/\s/g, ''));
+            var inTimeFormat = timePattern.test(driver_departure_time.value);
+            var inDateFormat = datePattern.test(driver_departure_date.value);
+            var inPhoneFormat = phonePattern.test(driver_contact_no.value);
+            var duration = moment.duration(given.diff(current)).asHours();
+            var isWithinScopeDuration = duration >= 0.5 && duration <= 5 ? true : false;
+            var isSeatMaxLength = parseInt(driver_available_seats.value) > 0 && parseInt(driver_available_seats.value) <= 30;
+            var requiredFields = driver_target_location.value.length > 0 &
+                                    driver_available_seats.value.length > 0 &
+                                    driver_departure_date.value.length > 0 &
+                                    driver_departure_time.value.length > 0 &
+                                    driver_contact_no.value.length > 0;
+
+            if (isWithinScopeDuration && requiredFields === 1 && isSeatMaxLength && isAllNumeric && inTimeFormat && inDateFormat && inPhoneFormat) {
+                createTrip();
+            } else if (!inDateFormat) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Departure date must be in this format: YYYY-MM-DD',
+                    showConfirmButton: true,
+                    allowOutsideClick: false
+                });
+            } else if (!inTimeFormat) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Departure time must be in 24-hour clock: hh:mm',
+                    showConfirmButton: true,
+                    allowOutsideClick: false
+                });
+            } else if (!isAllNumeric) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Seat Number should numbers (0 to 9)',
+                    showConfirmButton: true,
+                    allowOutsideClick: false
+                });
+            } else if (!inPhoneFormat) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Phone number should be in this format: 9xx xxx xxxx or 9xxxxxxxxx',
+                    showConfirmButton: true,
+                    allowOutsideClick: false
+                });
+            } else if (!isSeatMaxLength) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Seat numbers can be only up to 30',
+                    showConfirmButton: true,
+                    allowOutsideClick: false
+                });
+            } else if (!isWithinScopeDuration) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Departure must be set at least 30 minutes up to 5 hours from current date and time',
+                    showConfirmButton: true,
+                    allowOutsideClick: false
+                });
+            } else {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'All fields are required',
+                    showConfirmButton: true,
+                    allowOutsideClick: false
+                });
+            }
         }
     });
 }

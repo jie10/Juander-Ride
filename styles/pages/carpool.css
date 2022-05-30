@@ -178,6 +178,8 @@
     font-size: 0.75rem;
     text-align: center;
     font-weight: 700;
+    word-wrap: break-word;
+    -ms-word-wrap: break-word;
 }
 .show-confirm-carpool-driver-container .offcanvas-body .driver-info-passengers .avatar-name-unavailable {
     color: #cccccc !important;
@@ -267,7 +269,7 @@
     font-size: 1.25rem;
 }
 .create-trip-container .create-trip-button {
-    margin-top: 24px;
+    margin: 24px 0;
     width: 100%;
 }
 
