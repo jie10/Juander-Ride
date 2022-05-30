@@ -165,7 +165,7 @@ function loadRiderBookingsHistory() {
         }
     };
     
-    fetch(RIDER_BOOKING_HISTORY_API_ENDPONT + '/' + email, options)
+    fetch(RIDER_BOOKING_HISTORY_API_ENDPONT + '/' + email.toLowerCase(), options)
         .then(function (result) {
             return result.json();
         })
@@ -210,7 +210,7 @@ function loadDriverBookings() {
         }
     };
 
-    fetch(DRIVER_BOOKINGS_API_ENDPOINT + '/' + email, options)
+    fetch(DRIVER_BOOKINGS_API_ENDPOINT + '/' + email.toLowerCase(), options)
         .then(function (result) {
             return result.json();
         })
