@@ -498,7 +498,7 @@ function loadCarpoolDriversList() {
                             offcanvas_rider_is_available.classList.add('bg-primary');
                             offcanvas_rider_is_available.classList.remove('bg-secondary');
                         }
-                        console.log(rider_passengers)
+
                         if (rider_passengers_count > 0) {
                             var blocks = '';
 
@@ -643,6 +643,7 @@ function loadOngoingBooking(created_trip_key, email) {
                         startTrip(driver[0]._id, driver[0].riders);
                     } else {
                         document.getElementById('start_driver_trip_button').disabled = false;
+                        document.getElementById('cancel_driver_trip_button').disabled = false;
                         document.querySelector('.offcanvas_driver_trip_status').innerHTML = driver[0].seats == 0 ? 'Waiting for driver to start ride' : 'Waiting for passengers to join';
                     }
 
@@ -690,6 +691,7 @@ function loadOngoingBooking(created_trip_key, email) {
 
                         document.querySelector('.offcanvas_driver_passengers_list').innerHTML = blocks;
                         document.getElementById('start_driver_trip_button').disabled = true;
+                        document.getElementById('cancel_driver_trip_button').disabled = true;
                     }
     
                     document.getElementById('start_driver_trip_button').addEventListener('click', onStartTrip(driver[0]._id, driver[0].riders));
@@ -703,6 +705,7 @@ function loadOngoingBooking(created_trip_key, email) {
                     document.querySelector('.offcanvas_driver_departure_time').innerHTML = '-';
                     document.querySelector('.offcanvas_driver_target_location').innerHTML = '-';
                     document.querySelector('.offcanvas_driver_trip_status').innerHTML = 'Waiting for passengers to join';
+                    document.getElementById('cancel_driver_trip_button').disabled = true;
                     document.getElementById('start_driver_trip_button').disabled = true;
                 }
             }
@@ -851,7 +854,6 @@ function reloadCarpoolPage () {
                 return result.json();
             })
             .then(function (data) {
-                console.log(data)
                 if (data && data.length > 0) {
                     var currentTrip = data.filter(function (currentTrip) {
                         return (currentTrip.status === 0 || currentTrip.status === 1) && currentTrip.tripType === 0
@@ -1216,7 +1218,6 @@ search_pick_up_point.addEventListener('keyup', function(e) {
     if (e.target.value.length > 0) {
         find_pool_rider_button.disabled = false;
     } else {
-        console.log('yes')
         find_pool_rider_button.disabled = true;
     }
 });
@@ -1241,7 +1242,6 @@ search_pick_up_point_rider.addEventListener('keyup', function(e) {
     if (e.target.value.length > 0) {
         share_pool_ride_button_rider.disabled = false;
     } else {
-        console.log('yes')
         share_pool_ride_button_rider.disabled = true;
     }
 });
