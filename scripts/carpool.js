@@ -752,58 +752,99 @@ function reloadCarpoolPage () {
         showMainTopNavbar();
         find_carpool_navigate_container.style.display = 'none';
 
-        fetch(VIEW_DRIVER_TRIPS_API_ENDPOINT + '/' + driverEmail)
-        .then(function (result) {
-            return result.json();
-        })
-        .then(function (data) {
-            if (data && data.length > 0) {
-                var driver = data.filter(function(trip) {
-                    return trip._id === tripID;
-                });
-
-                if (driver.length > 0) {
-                    if (driver[0].status === 0 || driver[0].status === 1) {
-                        carpool_on_trip_container.style.display = 'block';
-                        document.querySelector('.on_trip_rider_message').innerHTML = driver[0].status === 0 ? 'Waiting to start trip' : driver[0].status === 1 ? 'We\'re on our way' : '';
-                        document.querySelector('.on_trip_rider_fullname').innerHTML = driver[0].fullname;
-                        document.querySelector('.on_trip_rider_location').innerHTML = driver[0].origin;
-                        document.querySelector('.on_trip_rider_teams_email a').href = 'https://teams.microsoft.com/l/chat/0/0?users=' + driverEmail;
-                        document.querySelector('.on_trip_phone_number a').href = 'tel:+' + driver[0].phone;
-                    } else if (driver[0].status === 3) {
-                        loadTripCancelledScreen();
+        fetch(VIEW_RIDER_BOOKINGS_API_ENDPOINT + '/' + email.toLowerCase())
+            .then(function (result) {
+                return result.json();
+            })
+            .then(function (data) {
+                if (data && data.length > 0) {
+                    var currentBooking = data.filter(function(booking) {
+                        return booking.tripID === tripID;
+                    })[0];
+                    if (currentBooking && currentBooking.status === 0) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Pending Confirmation',
+                            text: 'Waiting for driver to confirm your booking',
+                            confirmButtonText: 'Go to Account Page',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '../pages/account.html';
+                            }
+                        });
+                    } else if(currentBooking && currentBooking.status === 1) {
+                        fetch(VIEW_DRIVER_TRIPS_API_ENDPOINT + '/' + driverEmail)
+                            .then(function (result) {
+                                return result.json();
+                            })
+                            .then(function (data) {
+                                if (data && data.length > 0) {
+                                    var driver = data.filter(function(trip) {
+                                        return trip._id === tripID;
+                                    });
+                
+                                    if (driver.length > 0) {
+                                        if (driver[0].status === 0 || driver[0].status === 1) {
+                                            carpool_on_trip_container.style.display = 'block';
+                                            document.querySelector('.on_trip_rider_message').innerHTML = driver[0].status === 0 ? 'Waiting to start trip' : driver[0].status === 1 ? 'We\'re on our way' : '';
+                                            document.querySelector('.on_trip_rider_fullname').innerHTML = driver[0].fullname;
+                                            document.querySelector('.on_trip_rider_location').innerHTML = driver[0].origin;
+                                            document.querySelector('.on_trip_rider_teams_email a').href = 'https://teams.microsoft.com/l/chat/0/0?users=' + driverEmail;
+                                            document.querySelector('.on_trip_phone_number a').href = 'tel:+' + driver[0].phone;
+                                        } else if (driver[0].status === 3) {
+                                            loadTripCancelledScreen();
+                                        } else {
+                                            loadTripCompletedScreen();
+                                        }
+                                    } else {
+                                        localStorage.removeItem(CURRENT_BOOKED_TRIP_KEY);
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: 'No Data Found',
+                                            confirmButtonText: 'Refresh',
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location.href = '/';
+                                            }
+                                        });
+                                    }
+                                } else {
+                
+                                }
+                            })
+                            .catch(function (err) {
+                                console.error(err);
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'Internal server error',
+                                    confirmButtonText: 'Refresh',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '/';
+                                    }
+                                });
+                            });
                     } else {
-                        loadTripCompletedScreen();
-                    }
-                } else {
-                    localStorage.removeItem(CURRENT_BOOKED_TRIP_KEY);
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'No Data Found',
-                        confirmButtonText: 'Refresh',
-                        allowOutsideClick: false
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                        if (localStorage.getItem(CURRENT_BOOKED_TRIP_KEY)) {
+                            localStorage.removeItem(CURRENT_BOOKED_TRIP_KEY);
                             window.location.href = '/';
                         }
-                    });
+                    }
                 }
-            } else {
-
-            }
-        })
-        .catch(function (err) {
-            console.error(err);
-            Swal.fire({
-                title: 'Error',
-                text: 'Internal server error',
-                confirmButtonText: 'Refresh',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/';
-                }
+            })
+            .catch(function (err) {
+                console.error(err);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Internal server error',
+                    confirmButtonText: 'Refresh',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/';
+                    }
+                });
             });
-        });
     } else {
         fetch(VIEW_DRIVER_TRIPS_API_ENDPOINT + '/' + email.toLowerCase())
             .then(function (result) {
