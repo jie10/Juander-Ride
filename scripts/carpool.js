@@ -656,7 +656,7 @@ function loadOngoingBooking(created_trip_key, email) {
                     document.querySelector('.on-trip-spinner').style.display = 'none';
                     document.querySelector('.on-trip-spinner').innerHTML = '';
                     document.querySelector('.on-trip-driver-body').style.display = 'block';
-
+                    console.log(driver[0].riders, driver[0].riders.length, driver[0].seats)
                     if (driver[0].riders.length > 0) {
                         var blocks = '';
 
@@ -691,7 +691,7 @@ function loadOngoingBooking(created_trip_key, email) {
 
                         document.querySelector('.offcanvas_driver_passengers_list').innerHTML = blocks;
                         document.getElementById('start_driver_trip_button').disabled = true;
-                        document.getElementById('cancel_driver_trip_button').disabled = true;
+                        document.getElementById('cancel_driver_trip_button').disabled = false;
                     }
     
                     document.getElementById('start_driver_trip_button').addEventListener('click', onStartTrip(driver[0]._id, driver[0].riders));
@@ -705,7 +705,7 @@ function loadOngoingBooking(created_trip_key, email) {
                     document.querySelector('.offcanvas_driver_departure_time').innerHTML = '-';
                     document.querySelector('.offcanvas_driver_target_location').innerHTML = '-';
                     document.querySelector('.offcanvas_driver_trip_status').innerHTML = 'Waiting for passengers to join';
-                    document.getElementById('cancel_driver_trip_button').disabled = true;
+                    document.getElementById('cancel_driver_trip_button').disabled = false;
                     document.getElementById('start_driver_trip_button').disabled = true;
                 }
             }
@@ -764,6 +764,7 @@ function reloadCarpoolPage () {
                     var currentBooking = data.filter(function(booking) {
                         return booking.tripID === tripID;
                     })[0];
+
                     if (currentBooking && currentBooking.status === 0) {
                         Swal.fire({
                             icon: 'info',
@@ -834,6 +835,9 @@ function reloadCarpoolPage () {
                             window.location.href = '/';
                         }
                     }
+                } else {
+                    localStorage.removeItem(CURRENT_BOOKED_TRIP_KEY);
+                    window.location.href = '/';
                 }
             })
             .catch(function (err) {
