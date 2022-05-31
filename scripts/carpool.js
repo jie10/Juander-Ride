@@ -27,8 +27,10 @@ var carpool_ride_list_button = document.getElementById('carpool_ride_list_button
 var show_confirm_carpool_rider = document.getElementById('show_confirm_carpool_rider');
 var join_pool_rider_button = document.getElementById('join_pool_rider_button');
 var carpool_on_trip_container = document.getElementById('carpool_on_trip_container');
+var trip_cancelled_container = document.getElementById('trip_cancelled_container');
 var trip_completed_button = document.getElementById('trip_completed_button');
 var trip_completed_container = document.getElementById('trip_completed_container');
+var trip_cancelled_container = document.getElementById('trip_cancelled_container');
 
 
 /** SHARE-A-RIDE */
@@ -151,6 +153,10 @@ function showMoreCarpoolButtonsContainer () {
 function showCarpoolOnTripContainer () {
     carpool_on_trip_container.style.display = 'block';
     find_carpool_navigate_container.style.display = "none";
+}
+function showTripCancelled () {
+    carpool_on_trip_container.style.display = 'none';
+    trip_cancelled_container.style.display = 'block';
 }
 function showTripCompleted () {
     carpool_on_trip_container.style.display = 'none';
@@ -396,6 +402,9 @@ function hideMoreCarpoolButtonsContainer () {
 function hideDriverPoolResultsContainer () {
     driver_pool_results_container.style.display = 'none';
 }
+function hideTripCancelled () {
+    trip_cancelled_container.style.display = 'none';
+}
 function hideTripCompleted () {
     trip_completed_container.style.display = 'none';
 }
@@ -547,6 +556,9 @@ function loadCarpoolDriversList() {
         });
 
 
+}
+function loadTripCancelledScreen() {
+    showTripCancelled();
 }
 function loadTripCompletedScreen() {
     showTripCompleted();
@@ -758,6 +770,8 @@ function reloadCarpoolPage () {
                         document.querySelector('.on_trip_rider_location').innerHTML = driver[0].origin;
                         document.querySelector('.on_trip_rider_teams_email a').href = 'https://teams.microsoft.com/l/chat/0/0?users=' + driverEmail;
                         document.querySelector('.on_trip_phone_number a').href = 'tel:+' + driver[0].phone;
+                    } else if (driver[0].status === 3) {
+                        loadTripCancelledScreen();
                     } else {
                         loadTripCompletedScreen();
                     }
@@ -908,6 +922,11 @@ function onJoinPoolRider (rider) {
         carpool_on_trip_container.innerHTML = PAGE_LOAD_SPINNER;
         loadCarpoolOnTripScreen(rider)
     }
+}
+function onTripCancelled () {
+    hideTripCancelled();
+    localStorage.removeItem(CURRENT_BOOKED_TRIP_KEY);
+    window.location.href = '/';
 }
 function onTripCompleted () {
     hideTripCompleted();
@@ -1138,6 +1157,7 @@ carpool_ride_list_button.addEventListener('click', onCarpoolRidelist);
 is_to_drop_switch.addEventListener('change', onIsToDropSwitch);
 find_pool_rider_button.addEventListener('click', onFindCarpoolRide);
 trip_completed_button.addEventListener('click', onTripCompleted);
+trip_cancelled_container.addEventListener('click', onTripCompleted);
 
 
 /** SHARE-A-RIDE */
