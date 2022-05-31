@@ -1,6 +1,6 @@
 var my_trips_button = document.getElementById('my_trips_button');
 var my_bookings_button = document.getElementById('my_bookings_button');
-var settings_button = document.getElementById('settings_button');
+// var settings_button = document.getElementById('settings_button');
 var logout_button = document.getElementById('logout_button');
 var back_to_previous_page_button = document.getElementById('back_to_previous_page_button');
 var profile_navbar = document.getElementById('profile_navbar');
@@ -354,7 +354,7 @@ function onLogout() {
 back_to_previous_page_button.addEventListener('click', reloadAccountMainPage);
 my_trips_button.addEventListener('click', onMyTrips);
 my_bookings_button.addEventListener('click', onMyBookings);
-settings_button.addEventListener('click', onSettings);
+// settings_button.addEventListener('click', onSettings);
 logout_button.addEventListener('click', onLogout);
 
 document.addEventListener('DOMContentLoaded', function () {
