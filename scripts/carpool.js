@@ -810,7 +810,8 @@ function reloadCarpoolPage () {
                 return result.json();
             })
             .then(function (data) {
-                if (data) {
+                console.log(data)
+                if (data && data.length > 0) {
                     var currentTrip = data.filter(function (currentTrip) {
                         return (currentTrip.status === 0 || currentTrip.status === 1) && currentTrip.tripType === 0
                     });
