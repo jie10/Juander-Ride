@@ -886,6 +886,9 @@ function onCarpoolRidelist () {
         share_a_ride_button.classList.remove('active-tab-button');
     }
 
+    search_pick_up_point.value = '';
+    search_drop_off_point.value = '';
+    find_pool_rider_button.disabled = true;
     is_to_drop_switch_rider.checked = false;
     carpool_ride_list_button.classList.add('active-tab-button');
     showCarpoolRideListContainer();
@@ -898,9 +901,11 @@ function onIsToDropSwitch () {
     if (is_to_drop_switch.checked) {
         search_drop_off_point.style.display = 'block';
         search_pick_up_point.style.display = 'none';
+        find_pool_rider_button.disabled = true;
     } else {
         search_pick_up_point.style.display = 'block';
         search_drop_off_point.style.display = 'none';
+        find_pool_rider_button.disabled = true;
     }
 }
 function onFindCarpoolRide () {
@@ -943,9 +948,11 @@ function onIsToDropSwitchRider () {
     if (is_to_drop_switch_rider.checked) {
         search_drop_off_point_rider.style.display = 'block';
         search_pick_up_point_rider.style.display = 'none';
+        share_pool_ride_button_rider.disabled = true;
     } else {
         search_pick_up_point_rider.style.display = 'block';
         search_drop_off_point_rider.style.display = 'none';
+        share_pool_ride_button_rider.disabled = true;
     }
 }
 function onShareCarpoolRide () {
@@ -953,6 +960,9 @@ function onShareCarpoolRide () {
         carpool_ride_list_button.classList.remove('active-tab-button');
     }
 
+    search_pick_up_point_rider.value = '';
+    search_drop_off_point_rider.value = '';
+    share_pool_ride_button_rider.disbaled = true;
     share_a_ride_button.classList.add('active-tab-button');
     is_to_drop_switch.checked = false;
     showShareARideContainer();
@@ -1158,6 +1168,24 @@ is_to_drop_switch.addEventListener('change', onIsToDropSwitch);
 find_pool_rider_button.addEventListener('click', onFindCarpoolRide);
 trip_completed_button.addEventListener('click', onTripCompleted);
 trip_cancelled_container.addEventListener('click', onTripCompleted);
+search_pick_up_point.addEventListener('keyup', function(e) {
+    e.preventDefault();
+
+    if (e.target.value.length > 0) {
+        find_pool_rider_button.disabled = false;
+    } else {
+        console.log('yes')
+        find_pool_rider_button.disabled = true;
+    }
+});
+search_drop_off_point.addEventListener('keyup', function(e) {
+    e.preventDefault();
+    if (e.target.value.length > 0) {
+        find_pool_rider_button.disabled = false;
+    } else {
+        find_pool_rider_button.disabled = true;
+    }
+});
 
 
 /** SHARE-A-RIDE */
@@ -1165,6 +1193,24 @@ share_a_ride_button.addEventListener('click', onShareCarpoolRide);
 is_to_drop_switch_rider.addEventListener('click', onIsToDropSwitchRider);
 share_pool_ride_button_rider.addEventListener('click', onMoreShareRide);
 create_trip_button.addEventListener('click', onCreateTrip);
+search_pick_up_point_rider.addEventListener('keyup', function(e) {
+    e.preventDefault();
+
+    if (e.target.value.length > 0) {
+        share_pool_ride_button_rider.disabled = false;
+    } else {
+        console.log('yes')
+        share_pool_ride_button_rider.disabled = true;
+    }
+});
+search_drop_off_point_rider.addEventListener('keyup', function(e) {
+    e.preventDefault();
+    if (e.target.value.length > 0) {
+        share_pool_ride_button_rider.disabled = false;
+    } else {
+        share_pool_ride_button_rider.disabled = true;
+    }
+});
 
 
 document.addEventListener('DOMContentLoaded', function () {
