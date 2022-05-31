@@ -12,6 +12,8 @@ var my_bookings_container = document.getElementById('my_bookings_container');
 
 var USER_LOGIN_DATA_KEY = 'user_login_data';
 var RIDER_BOOKING_HISTORY_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/rider';
+var GET_TRIP_BY_ID_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
+var UPDATE_TRIP_BY_ID_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
 var DRIVER_BOOKINGS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/driver';
 var CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
 var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
@@ -136,16 +138,6 @@ function loadBookingButtons(status, _id, tripID) {
         default: return '';
     }
 }
-function loadTripButtons(status, _id) {
-    switch(status) {
-        case 0:
-            return '<div class="d-grid gap-2 d-sm-flex justify-content-sm-end mt-4">'
-                        + '<button type="button" onclick=\"onCancelBooking(this)\" class=\"btn btn-secondary order-1 \" id=\"' + _id + '_cancel\">Cancel</button>'
-                        + '<button type="button" onclick=\"onConfirmBooking(this)\" class=\"btn btn-primary order-sm-1\" id=\"' + _id + '_confirm\">Confirm</button>'
-                    + '</div>';
-        default: return '';
-    }
-}
 function loadUserDetails() {
     var user_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
 
@@ -232,7 +224,7 @@ function loadDriverBookings() {
                                                                     + '<p class=\"date\">' + timeFromNow + '</p>'
                                                                     + '<p class=\"whereTo\">' + '<span class=\"highlight\">' + bookingType + ' ' + bookingStatus.trip_status + '</span>' + '</p>'
                                                                     + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatus.color + '\">circle</span>' + bookingStatus.target_location + destination + '</p>'
-                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round\">circle</span>' + bookingStatus.action + ridername + '</p>'
+                                                                    + '<p class=\"whereTo\"><span class=\"material-icons-round\">circle</span>' + bookingStatus.action + '<span id=\"' + _id + '_rider\">' + ridername + '</span>' + '</p>'
                                                                     + loadBookingButtons(val.status, _id, val.tripID)
                                                                 + '</div>';
                                                     }).join('');
@@ -249,9 +241,8 @@ function loadDriverBookings() {
 }
 
 function confirmOrCancelBooking(_id, status, tripID) {
+    var email = document.getElementById(_id + '_rider').innerHTML + '@cebupacificair.com';
     var payload = {
-        "email": JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email.toLowerCase(),
-        "tripID": tripID,
         "status": status
     };
     var options = {
@@ -267,16 +258,71 @@ function confirmOrCancelBooking(_id, status, tripID) {
             return result.json();
         })
         .then(function (data) {
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: status === 1 ? 'Booking has been confirmed' : 'Booking has been cancelled',
-                showConfirmButton: false,
-                timer: 1500,
-                timerProgressBar: true
-            });
-
-            reloadAccountMainPage();
+            fetch(GET_TRIP_BY_ID_API_ENDPOINT + '/' + tripID)
+                .then(function (result) {
+                    return result.json();
+                })
+                .then(function (data) {
+                    console.log(data)
+                    if (data) {
+                        var riders = data.riders;
+                        var temp = data.temp;
+                        var seats = data.seats;
+                        var newPayload = {
+                            seats: seats + 1,
+                            temp: temp.filter(function (rider) {
+                                return rider !== email;
+                            }),
+                            riders: riders
+                        };
+        
+                        if (status === 1) {
+                            riders.push(email);
+                            newPayload  = {
+                                seats: seats,
+                                temp: temp.filter(function (rider) {
+                                    return rider !== email;
+                                }),
+                                riders: riders
+                            } 
+                        }
+                        var newOptions = {
+                            method: 'PUT',
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(newPayload)
+                        };
+                        console.log(newPayload, newOptions)
+                        fetch(UPDATE_TRIP_BY_ID_API_ENDPOINT + '/' + tripID, newOptions)
+                            .then(function (result) {
+                                return result.json();
+                            })
+                            .then(function (data) {
+                                console.log(data)
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: status === 1 ? 'Booking has been confirmed' : 'Booking has been cancelled',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                    timerProgressBar: true
+                                });
+                    
+                                reloadAccountMainPage();
+                            })
+                            .catch(function (err) {
+                                console.error(err);
+                                alert('ERROR: ' + err);
+                                reloadAccountMainPage();
+                            });
+                    }
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    alert('ERROR: ' + err);
+                    reloadAccountMainPage();
+                });
         })
         .catch(function (err) {
             console.error(err);
