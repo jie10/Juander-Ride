@@ -656,7 +656,7 @@ function loadOngoingBooking(created_trip_key, email) {
                     document.querySelector('.on-trip-spinner').style.display = 'none';
                     document.querySelector('.on-trip-spinner').innerHTML = '';
                     document.querySelector('.on-trip-driver-body').style.display = 'block';
-                    console.log(driver[0].riders, driver[0].riders.length, driver[0].seats)
+
                     if (driver[0].riders.length > 0) {
                         var blocks = '';
 
@@ -1260,5 +1260,5 @@ search_drop_off_point_rider.addEventListener('keyup', function(e) {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    checkCurrentSession();
+    checkAppVersion(checkCurrentSession);
 });
