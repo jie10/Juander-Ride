@@ -5,6 +5,9 @@
 .login-page-container .login-header {
     background-image: url('../images/sample/login-header.png');
     background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
