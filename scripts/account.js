@@ -126,12 +126,12 @@ function reloadAccountMainPage() {
     showMainAccountPageContainer();
 }
 
-function loadBookingButtons(status, _id) {
+function loadBookingButtons(status, _id, tripID) {
     switch(status) {
         case 0:
             return '<div class="d-grid gap-2 d-sm-flex justify-content-sm-end mt-4">'
-                        + '<button type="button" onclick=\"onCancelBooking(this)\" class=\"btn btn-secondary order-1 \" id=\"' + _id + '_cancel\">Cancel</button>'
-                        + '<button type="button" onclick=\"onConfirmBooking(this)\" class=\"btn btn-primary order-sm-1\" id=\"' + _id + '_confirm\">Confirm</button>'
+                        + '<button type="button" onclick=\"onCancelBooking(this)\" class=\"btn btn-secondary order-1 \" id=\"' + _id + '_' + tripID + '_cancel\">Cancel</button>'
+                        + '<button type="button" onclick=\"onConfirmBooking(this)\" class=\"btn btn-primary order-sm-1\" id=\"' + _id + '_' + tripID + '_confirm\">Confirm</button>'
                     + '</div>';
         default: return '';
     }
@@ -233,7 +233,7 @@ function loadDriverBookings() {
                                                                     + '<p class=\"whereTo\">' + '<span class=\"highlight\">' + bookingType + ' ' + bookingStatus.trip_status + '</span>' + '</p>'
                                                                     + '<p class=\"whereTo\"><span class=\"material-icons-round ' + bookingStatus.color + '\">circle</span>' + bookingStatus.target_location + destination + '</p>'
                                                                     + '<p class=\"whereTo\"><span class=\"material-icons-round\">circle</span>' + bookingStatus.action + ridername + '</p>'
-                                                                    + loadBookingButtons(val.status, _id)
+                                                                    + loadBookingButtons(val.status, _id, val.tripID)
                                                                 + '</div>';
                                                     }).join('');
                                                 + '</div>';
@@ -248,8 +248,10 @@ function loadDriverBookings() {
         });
 }
 
-function confirmOrCancelBooking(_id, status) {
+function confirmOrCancelBooking(_id, status, tripID) {
     var payload = {
+        "email": JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email.toLowerCase(),
+        "tripID": tripID,
         "status": status
     };
     var options = {
@@ -284,7 +286,8 @@ function confirmOrCancelBooking(_id, status) {
 }
 
 function onConfirmBooking(e) {
-    var _id = e.id.replace('_confirm', '');
+    var _id = e.id.split('_')[0];
+    var tripID = e.id.split('_')[1];
 
     Swal.fire({
         title: 'Confirm Booking',
@@ -295,12 +298,13 @@ function onConfirmBooking(e) {
         cancelButtonText: `No`,
     }).then((result) => {
         if (result.isConfirmed) {
-            confirmOrCancelBooking(_id, 1);
+            confirmOrCancelBooking(_id, 1, tripID);
         }
     });
 }
 function onCancelBooking(e) {
-    var _id = e.id.replace('_cancel', '');
+    var _id = e.id.split('_')[0];
+    var tripID = e.id.split('_')[1];
 
     Swal.fire({
         title: 'Cancel Booking',
@@ -311,7 +315,7 @@ function onCancelBooking(e) {
         cancelButtonText: `No`,
     }).then((result) => {
         if (result.isConfirmed) {
-            confirmOrCancelBooking(_id, 2);
+            confirmOrCancelBooking(_id, 2, tripID);
         }
     });
 }
