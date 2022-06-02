@@ -4,9 +4,15 @@
 
 The Juander app is CEB's very own application for employee carpool and shuttle programs. Juander aims to improve employees' transportation experience going to and from the office by offering an efficient and automated way of connecting and ride-sharing.
 
-## Current Features
+## Features
 
-- Under Development
+- Create booking trips.
+- Find carpool and shuttle trips.
+- Easy to communicate with drivers using teams application
+
+## Current Updates
+
+- See changelog [v0.0.1-alpha](https://github.com/rdramirez/Juander/blob/main/CHANGELOG.md) for further details
 
 ## Tools
 
@@ -20,7 +26,7 @@ The Juander app is CEB's very own application for employee carpool and shuttle p
 
 - [FONTAWESOME](https://fontawesome.com/) - for icons
 - [MATERIAL ICONS](https://mui.com/material-ui/material-icons/) - for icons
-- [BOOTSTRAP 5] - https://getbootstrap.com/docs/5.0/getting-started/introduction/)(CSS framework
+- [BOOTSTRAP 5](https://getbootstrap.com/docs/5.0/getting-started/introduction/) - CSS framework
 - [SWAL 2](https://sweetalert2.github.io/) - for pop-up alerts
 - [CLEAVE JS](https://nosir.github.io/cleave.js/) - for input masked text fields
 - [MOMENT JS](https://momentjs.com/) - for time format and conversion
