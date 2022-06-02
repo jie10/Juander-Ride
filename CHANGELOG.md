@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0-alpha] - 2022-05-31
+## [0.0.1-alpha] - 2022-05-31
 
 ### Added
 
@@ -55,3 +55,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Account Page
   - Changed: Hide settings menu (temporary)
   - Fixed issue: Confirm/Cancel booking request for passenger to driver
+
+### Known Issues
+
+- Account: Name is based from users email
+- Account: Point count is static
+- Account: No popup when you logout
+- Shuttle: You can ride multiple shuttle cars
+- Shuttle: Sometimes shuttle list don't load
+- Shuttle: You can scan any QR code to trigger booking
+- Carpool: Sometimes carpool list don't load
+- Carpool: Ride matching is based on AB location and may be inaccurate
+- Carpool: Sorting of matches nearest to passenger location
+- Carpool: Date and time picker not implemented. ex. 06-01-2022
+- Carpool: Time should be in 24h format. ex: 16:30
+- Carpool: Ad and messages are static
+- App: Loading speed is sometimes slow
+- App: Teams messaging intermittent
+- IOS: Black splash screen page
