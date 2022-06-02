@@ -982,6 +982,9 @@ driver_contact_no.addEventListener('keyup', onCreateTripRequiredFields);
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('.carpool-page-container').style.display = 'none';
+    showActivityIndicator();
+
     if (checkCurrentSession()) {
         checkAppVersion(function () {
             reloadCurrentPage();
