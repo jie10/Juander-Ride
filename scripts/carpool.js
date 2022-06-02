@@ -94,9 +94,9 @@ function getRiderBookingsStatusAPI(tripID) {
                 console.log(currentBooking.status)
                 if (currentBooking && currentBooking.status === 0) {
                     hideActivityIndicator();
-                    showInfoAlertWithConfirmButton(function () {
+                    showInfoAlertWithConfirmButtonHTML(function () {
                         window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
-                    }, 'Pending Confirmation', 'Waiting for driver to confirm your booking', 'Go to Account Page');
+                    }, 'Waiting for driver to confirm', 'Please go to <b>My Trips</b> to view status of your booking request', 'Go to Account Page');
                 } else if (currentBooking && currentBooking.status === 2) {
                     hideActivityIndicator();
                     loadMainPage();
@@ -168,6 +168,14 @@ function getDriverTripSessionAPI() {
                             document.getElementById('start_driver_trip_button').disabled = false;
                             document.getElementById('cancel_driver_trip_button').disabled = false;
                             document.querySelector('.offcanvas_driver_trip_status').innerHTML = driver[0].seats == 0 ? 'Waiting for driver to start ride' : 'Waiting for passengers to join';
+                        }
+
+                        if (driver[0].temp.length > 0) {
+                            showSuccessToastNotification('You got ' + driver[0].temp.length + ' pending booking request!');
+                        } else {
+                            showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
+                                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
+                            }, 'Waiting for potential passengers', 'Please go to <b>My Bookings</b> to confirm or cancel booking requests', 'Go to Account Page');
                         }
 
                         document.getElementById('start_driver_trip_button').disabled = false;

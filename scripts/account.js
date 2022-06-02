@@ -130,6 +130,8 @@ function hideMainBottomNavbar() {
 }
 
 function reloadCurrentPage() {
+    showActivityIndicator();
+
     delay(function () {
         showProfileNavbar();
         showMainBottomNavbar();
@@ -138,15 +140,19 @@ function reloadCurrentPage() {
     }, DELAY_TIME_IN_MILLISECONDS);
 }
 
-function loadBookingButtons(status, _id, tripID) {
-    switch(status) {
-        case 0:
-            return '<div class="d-grid gap-2 d-sm-flex justify-content-sm-end mt-4">'
-                        + '<button type="button" onclick=\"onCancelBooking(this)\" class=\"btn btn-secondary order-1 \" id=\"' + _id + '_' + tripID + '_cancel\">Cancel</button>'
-                        + '<button type="button" onclick=\"onConfirmBooking(this)\" class=\"btn btn-primary order-sm-1\" id=\"' + _id + '_' + tripID + '_confirm\">Confirm</button>'
-                    + '</div>';
-        default: return '';
-    }
+function loadBookingButtons(e) {
+    var element = e.id.split('_');
+    var _id = element[0];
+    var tripID = element[1];
+    var status = element[2];
+
+    if (parseInt(status) === 0) {
+        showQuestionAlertWithDenyAndCloseButton(function () {
+            onConfirmBooking(_id, tripID);
+        }, function () {
+            onCancelBooking(_id, tripID);
+        }, 'Booking Request', 'Would you like to confirm or cancel this request?', 'Confirm', 'Cancel');
+    } else {}
 }
 function loadUserDetails() {
     var user_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
@@ -170,37 +176,38 @@ function getRiderBookingsHistory() {
     fetch(RIDER_BOOKING_HISTORY_API_ENDPONT + '/' + email.toLowerCase(), options)
         .then(getResJSON)
         .then(function (data) {
-            hideActivityIndicator();
+            delay(function () {
+                hideActivityIndicator();
 
-            if (data && data.length > 0) {
-                sortDateTime(data, 'desc');
-                my_trips_container.innerHTML = '<div class=\"tripHistory-list container\">' +
-                                                    data.sort((a,b) => b.updatedAt - a.updatedAt).map(function (val) { 
-                                                        var _id = val._id;
-                                                        var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D, YYYY  h:mm a');
-                                                        var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
-                                                        var drivernameArr = val.drivername.split(' ');
-                                                        var destination = val.destination;
-                                                        var bookingStatus = getStatusIndicator(val.status);
-                                                        var bookingName = (val.booktype === 0 ? capitalize(drivernameArr[drivernameArr.length - 1]) : capitalize(destination.split(' ')[0])) + ' Ride';
+                if (data && data.length > 0) {
+                    sortDateTime(data, 'desc');
+                    my_trips_container.innerHTML = '<div class=\"tripHistory-list container\">' +
+                                                        data.sort((a,b) => b.updatedAt - a.updatedAt).map(function (val) { 
+                                                            var _id = val._id;
+                                                            var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D, YYYY  h:mm a');
+                                                            var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
+                                                            var drivernameArr = val.drivername.split(' ');
+                                                            var destination = val.destination;
+                                                            var bookingStatus = getStatusIndicator(val.status);
+                                                            var bookingName = (val.booktype === 0 ? capitalize(drivernameArr[drivernameArr.length - 1]) : capitalize(destination.split(' ')[0])) + ' Ride';
 
-                                                        return '<div class=\"list-item\" id=\"' + _id + '\">'
-                                                                    + '<div class=\"row d-flex align-items-center header\">'
-                                                                        + '<div class=\"col heading\">' + bookingName + '</div>'
-                                                                        + '<div class=\"col-2 status ' + bookingStatus.color + '\">' + bookingStatus.trip_status + '</div>'
-                                                                    + '</div>'
-                                                                    + '<div>'
-                                                                        + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
-                                                                    + '</div>'
-                                                                    + '<p class=\"destination\">' + destination + '</p>'
-                                                                    + '<p class=\"seat-number\">' + val.email + '</p>'
-                                                                    + (val.status === 0 ? loadBookingButtons() : '')
-                                                                + '</div>';
-                                                    }).join('');
-                                                + '</div>';
-            } else {
-                my_trips_container.innerHTML = NO_RESULTS_FOUND;
-            }
+                                                            return '<div class=\"list-item\" id=\"' + _id + '\">'
+                                                                        + '<div class=\"row d-flex align-items-center header\">'
+                                                                            + '<div class=\"col heading\">' + bookingName + '</div>'
+                                                                            + '<div class=\"col-2 status ' + bookingStatus.color + '\">' + bookingStatus.trip_status + '</div>'
+                                                                        + '</div>'
+                                                                        + '<div>'
+                                                                            + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
+                                                                        + '</div>'
+                                                                        + '<p class=\"destination\">' + destination + '</p>'
+                                                                        + '<p class=\"seat-number\">' + val.email + '</p>'
+                                                                    + '</div>';
+                                                        }).join('');
+                                                    + '</div>';
+                } else {
+                    my_trips_container.innerHTML = NO_RESULTS_FOUND;
+                }
+            }, DELAY_TIME_IN_MILLISECONDS);
         })
         .catch(function (err) {
             console.error(err);
@@ -222,36 +229,39 @@ function getDriverBookings() {
     fetch(DRIVER_BOOKINGS_API_ENDPOINT + '/' + email.toLowerCase(), options)
         .then(getResJSON)
         .then(function (data) {
-            hideActivityIndicator();
+            delay(function () {
+                hideActivityIndicator();
 
-            if (data && data.length > 0) {
-                sortDateTime(data, 'desc');
-                my_bookings_container.innerHTML = '<div class=\"tripHistory-list container\">' +
-                                                    data.map(function (val) { 
-                                                        var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D YYYY  h:mm a');
-                                                        var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
-                                                        var _id = val._id;
-                                                        var drivernameArr = val.drivername.split(' ');
-                                                        var destination = val.destination;
-                                                        var bookingStatus = getStatusIndicator(val.status);
-                                                        var bookingName = (val.booktype === 0 ? capitalize(drivernameArr[drivernameArr.length - 1]) : capitalize(destination.split(' ')[0])) + ' Ride';
-
-                                                        return '<div class=\"list-item\" id=\"' + _id + '\" style=\"' + (bookingStatus.withButtons ? 'cursor: pointer;' : 'cursor: default;') +'\">'
-                                                                    + '<div class=\"row d-flex align-items-center header\">'
-                                                                        + '<div class=\"col heading\">' + bookingName + '</div>'
-                                                                        + '<div class=\"col-2 status ' + bookingStatus.color + '\">' + bookingStatus.trip_status + '</div>'
-                                                                    + '</div>'
-                                                                    + '<div>'
-                                                                        + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
-                                                                    + '</div>'
-                                                                    + '<p class=\"destination\">' + destination + '</p>'
-                                                                    + '<p class=\"seat-number\">' + val.email + '</p>'
-                                                                + '</div>';
-                                                    }).join('');
-                                                + '</div>';
-            } else {
-                my_bookings_container.innerHTML = NO_RESULTS_FOUND;
-            }
+                if (data && data.length > 0) {
+                    sortDateTime(data, 'desc');
+                    my_bookings_container.innerHTML = '<div class=\"tripHistory-list container\">' +
+                                                        data.map(function (val) { 
+                                                            var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D YYYY  h:mm a');
+                                                            var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
+                                                            var _id = val._id;
+                                                            var drivernameArr = val.drivername.split(' ');
+                                                            var destination = val.destination;
+                                                            var bookingStatus = getStatusIndicator(val.status);
+                                                            var bookingName = (val.booktype === 0 ? capitalize(drivernameArr[drivernameArr.length - 1]) : capitalize(destination.split(' ')[0])) + ' Ride';
+                                                            var tripID = val.tripID;
+                                                            console.log(val)
+                                                            return '<div class=\"list-item\" style=\"' + (val.status === 0 ? 'cursor: pointer;' : 'cursor: default;') + '\" id=\"' + _id + '_' + tripID + '_' + val.status + '\" onclick=\"loadBookingButtons(this)\">'
+                                                                        + '<div class=\"row d-flex align-items-center header\">'
+                                                                            + '<div class=\"col heading\">' + bookingName + '</div>'
+                                                                            + '<div class=\"col-2 status ' + bookingStatus.color + '\">' + bookingStatus.trip_status + '</div>'
+                                                                        + '</div>'
+                                                                        + '<div>'
+                                                                            + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
+                                                                        + '</div>'
+                                                                        + '<p class=\"destination\">' + destination + '</p>'
+                                                                        + '<p class=\"seat-number\" id=\"' + _id + '_rider' +'\">' + val.email + '</p>'
+                                                                    + '</div>';
+                                                        }).join('');
+                                                    + '</div>';
+                } else {
+                    my_bookings_container.innerHTML = NO_RESULTS_FOUND;
+                }
+            }, DELAY_TIME_IN_MILLISECONDS);
         })
         .catch(function (err) {
             console.error(err);
@@ -263,7 +273,8 @@ function getDriverBookings() {
 }
 
 function confirmOrCancelBooking(_id, status, tripID) {
-    var email = document.getElementById(_id + '_rider').innerHTML + '@cebupacificair.com';
+    var email = document.getElementById(_id + '_rider').innerHTML;
+
     var payload = {
         "status": status
     };
@@ -274,6 +285,8 @@ function confirmOrCancelBooking(_id, status, tripID) {
         },
         body: JSON.stringify(payload)
     };
+
+    showActivityIndicator();
 
     fetch(CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT + '/' + _id, options)
         .then(getResJSON)
@@ -348,19 +361,13 @@ function confirmOrCancelBooking(_id, status, tripID) {
         });
 }
 
-function onConfirmBooking(e) {
-    var _id = e.id.split('_')[0];
-    var tripID = e.id.split('_')[1];
-
+function onConfirmBooking(_id, tripID) {
     showQuestionAlertWithButtons(function () {
         showActivityIndicator();
         confirmOrCancelBooking(_id, 1, tripID);
     }, 'Confirm Booking', 'Are you sure you want to continue?', 'Yes', 'No');
 }
-function onCancelBooking(e) {
-    var _id = e.id.split('_')[0];
-    var tripID = e.id.split('_')[1];
-
+function onCancelBooking(_id, tripID) {
     showQuestionAlertWithButtons(function () {
         showActivityIndicator();
         confirmOrCancelBooking(_id, 2, tripID);

@@ -84,6 +84,35 @@ function showInfoAlertWithConfirmButton(callback, title, text, confirmButtonText
     });
 }
 
+function showInfoAlertWithConfirmAndCloseButtonsHTML(callback, title, html, confirmButtonText) {
+    Swal.fire({
+        icon: 'info',
+        title: title,
+        html: html,
+        showCloseButton: true,
+        confirmButtonText: confirmButtonText,
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+    });
+}
+
+function showInfoAlertWithConfirmButtonHTML(callback, title, html, confirmButtonText) {
+    Swal.fire({
+        icon: 'info',
+        html: html,
+        title: title,
+        confirmButtonText: confirmButtonText,
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+    });
+}
+
 function showQuestionAlertWithButtons(callback, title, text, confirmButtonText, cancelButtonText) {
     Swal.fire({
         title: title,
@@ -97,5 +126,43 @@ function showQuestionAlertWithButtons(callback, title, text, confirmButtonText, 
         if (result.isConfirmed) {
             callback();
         }
+    });
+}
+
+function showQuestionAlertWithDenyAndCloseButton(confirmCallback, cancelCallback, title, text, confirmButtonText, denyButtonText) {
+    Swal.fire({
+        title: title,
+        text: text, 
+        showDenyButton: true,
+        showCloseButton: true,
+        confirmButtonText: confirmButtonText,
+        denyButtonText: denyButtonText,
+        allowOutsideClick: false
+      }).then((result) => {
+          console.log(result)
+        if (result.isConfirmed) {
+            confirmCallback();
+        } else if (result.isDenied) {
+            cancelCallback();
+        }
+      });
+}
+
+function showSuccessToastNotification(title,) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+      
+    Toast.fire({
+        icon: 'success',
+        title: title
     });
 }
