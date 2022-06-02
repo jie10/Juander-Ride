@@ -11,7 +11,7 @@ function highlightErrorInput(message) {
     document.querySelector('.invalid-feedback').style.display = hasError ? 'block' : 'none';
     document.querySelector('.invalid-feedback').innerHTML = hasError ? message : '';
 }
-function checkCurrentSession() {
+function checkExistingSession() {
     var user_login_data = localStorage.getItem(USER_LOGIN_DATA_KEY);
 
     if (user_login_data) {
@@ -94,5 +94,5 @@ user_email.addEventListener("keypress", function(event) {
 login_button.addEventListener('click', onLogin);
 
 document.addEventListener('DOMContentLoaded', function () {
-    checkCurrentSession(); 
+    checkExistingSession(); 
 });
