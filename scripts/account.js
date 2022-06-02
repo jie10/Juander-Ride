@@ -5,44 +5,47 @@ var CURRENT_APP_VERSION_KEY = 'current_app_version';
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
 
-var my_trips_button = document.getElementById('my_trips_button');
-var my_bookings_button = document.getElementById('my_bookings_button');
-var logout_button = document.getElementById('logout_button');
-var back_to_previous_page_button = document.getElementById('back_to_previous_page_button');
-var profile_navbar = document.getElementById('profile_navbar');
-var secondary_top_navbar = document.getElementById('secondary_top_navbar');
-var main_bottom_navbar = document.getElementById('main_bottom_navbar');
-var account_page_body_container = document.getElementById('account_page_body_container');
-var my_trips_container = document.getElementById('my_trips_container');
-var my_bookings_container = document.getElementById('my_bookings_container');
-var activity_indicator = document.getElementById('activity_indicator');
-
 var RIDER_BOOKING_HISTORY_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/rider';
 var GET_TRIP_BY_ID_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
 var UPDATE_TRIP_BY_ID_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
 var DRIVER_BOOKINGS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/driver';
 var CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
-var PAGE_LOAD_SPINNER = "<div class=\"absolute-center page-loader\">" +
-                            "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;\" role=\"status\">" +
-                                "<span class=\"visually-hidden\">Loading...</span>" +
-                            "</div>" +
-                        "</div>";
-var NO_RESULTS_FOUND = "<p class=\"text-muted absolute-center text-center\">No results found.</p>";
 
-function capitalize(word) {
-    return word.substring(0, 1).toUpperCase() + word.substring(1);
-}
-function delay(callback, TIMEOUT_IN_SECONDS) {
-    setTimeout(callback, TIMEOUT_IN_SECONDS);
-}
-function sortDateTime(arr, order) {
-    if (order === 'desc') {
-        return arr.sort((a,b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-    } else {
-        return arr.sort((a,b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
-    }
+/** SOURCE LOCATION */
+var HOMEPAGE_SOURCE_LOCATION = '/';
+var ACCOUNTPAGE_SOURCE_LOCATION = ACCOUNTPAGE_SOURCE_LOCATION;
+
+/** COMPONENTS */
+var NO_RESULTS_FOUND = "<p class=\"text-muted absolute-center text-center\" style=\"font-weight: 700; font-size: 1rem;\">No results found</p>";
+
+/** DOM ELEMENTS */
+var profile_navbar = document.getElementById('profile_navbar');
+var secondary_top_navbar = document.getElementById('secondary_top_navbar');
+var main_bottom_navbar = document.getElementById('main_bottom_navbar');
+
+var my_trips_button = document.getElementById('my_trips_button');
+var my_bookings_button = document.getElementById('my_bookings_button');
+var logout_button = document.getElementById('logout_button');
+var back_to_previous_page_button = document.getElementById('back_to_previous_page_button');
+
+var account_page_body_container = document.getElementById('account_page_body_container');
+var my_trips_container = document.getElementById('my_trips_container');
+var my_bookings_container = document.getElementById('my_bookings_container');
+
+var activity_indicator = document.getElementById('activity_indicator');
+
+
+function logoutCurrentSession() {
+    delay(function () {
+        localStorage.removeItem(USER_LOGIN_DATA_KEY);
+        localStorage.removeItem(CURRENT_APP_VERSION_KEY);
+        moveToLoginPage();
+    }, DELAY_TIME_IN_MILLISECONDS);
 }
 
+function getResJSON(result) {
+    return result.json();
+}
 function getStatusIndicator(status) {
     switch(status) {
         case 0:
@@ -88,26 +91,8 @@ function getStatusIndicator(status) {
         default: return null;
     }
 }
-function moveToLoginpage() {
-    window.location.href = '../index.html';
-}
-function checkCurrentSession() {
-    var user_login_data = localStorage.getItem(USER_LOGIN_DATA_KEY);
-
-    if (user_login_data) {
-        document.querySelector('.account-page-container').style.display = 'block';
-        loadUserDetails();
-        reloadCurrentPage();
-    } else {
-        moveToLoginPage();
-    }
-}
-function logoutCurrentSession() {
-    delay(function () {
-        localStorage.removeItem(USER_LOGIN_DATA_KEY);
-        localStorage.removeItem(CURRENT_APP_VERSION_KEY);
-        moveToLoginpage();
-    }, DELAY_TIME_IN_MILLISECONDS);
+function moveToLoginPage() {
+    window.location.href = HOMEPAGE_SOURCE_LOCATION;
 }
 
 function showProfileNavbar() {
@@ -117,9 +102,6 @@ function showProfileNavbar() {
 function showSecondaryTopNavbar() {
     profile_navbar.style.display = 'none';
     secondary_top_navbar.style.display = 'flex';
-}
-function showMainBottomNavbar() {
-    main_bottom_navbar.style.display = 'block';
 }
 function showMainAccountPageContainer() {
     account_page_body_container.style.display = 'block';
@@ -148,12 +130,10 @@ function hideMainBottomNavbar() {
 }
 
 function reloadCurrentPage() {
-    showProfileNavbar();
-    showMainBottomNavbar();
-    showMainAccountPageContainer();
-    showActivityIndicator();
-
     delay(function () {
+        showProfileNavbar();
+        showMainBottomNavbar();
+        showMainAccountPageContainer();
         hideActivityIndicator();
     }, DELAY_TIME_IN_MILLISECONDS);
 }
@@ -188,9 +168,7 @@ function getRiderBookingsHistory() {
     };
     
     fetch(RIDER_BOOKING_HISTORY_API_ENDPONT + '/' + email.toLowerCase(), options)
-        .then(function (result) {
-            return result.json();
-        })
+        .then(getResJSON)
         .then(function (data) {
             hideActivityIndicator();
 
@@ -198,9 +176,9 @@ function getRiderBookingsHistory() {
                 sortDateTime(data, 'desc');
                 my_trips_container.innerHTML = '<div class=\"tripHistory-list container\">' +
                                                     data.sort((a,b) => b.updatedAt - a.updatedAt).map(function (val) { 
+                                                        var _id = val._id;
                                                         var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D, YYYY  h:mm a');
                                                         var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
-                                                        var _id = val._id;
                                                         var drivernameArr = val.drivername.split(' ');
                                                         var destination = val.destination;
                                                         var bookingStatus = getStatusIndicator(val.status);
@@ -215,7 +193,8 @@ function getRiderBookingsHistory() {
                                                                         + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
                                                                     + '</div>'
                                                                     + '<p class=\"destination\">' + destination + '</p>'
-                                                                    + '<p class=\"seat-number\">' + '1/3 Seats' + '</p>'
+                                                                    + '<p class=\"seat-number\">' + val.email + '</p>'
+                                                                    + (val.status === 0 ? loadBookingButtons() : '')
                                                                 + '</div>';
                                                     }).join('');
                                                 + '</div>';
@@ -225,8 +204,10 @@ function getRiderBookingsHistory() {
         })
         .catch(function (err) {
             console.error(err);
-            alert('ERROR: ' + err);
-            reloadCurrentPage();
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
 function getDriverBookings() {
@@ -239,9 +220,7 @@ function getDriverBookings() {
     };
 
     fetch(DRIVER_BOOKINGS_API_ENDPOINT + '/' + email.toLowerCase(), options)
-        .then(function (result) {
-            return result.json();
-        })
+        .then(getResJSON)
         .then(function (data) {
             hideActivityIndicator();
 
@@ -266,7 +245,7 @@ function getDriverBookings() {
                                                                         + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
                                                                     + '</div>'
                                                                     + '<p class=\"destination\">' + destination + '</p>'
-                                                                    + '<p class=\"seat-number\">' + '1/3 Seats' + '</p>'
+                                                                    + '<p class=\"seat-number\">' + val.email + '</p>'
                                                                 + '</div>';
                                                     }).join('');
                                                 + '</div>';
@@ -275,10 +254,11 @@ function getDriverBookings() {
             }
         })
         .catch(function (err) {
-            hideActivityIndicator();
             console.error(err);
-            alert('ERROR: ' + err);
-            reloadCurrentPage();
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
 
@@ -296,14 +276,10 @@ function confirmOrCancelBooking(_id, status, tripID) {
     };
 
     fetch(CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT + '/' + _id, options)
-        .then(function (result) {
-            return result.json();
-        })
+        .then(getResJSON)
         .then(function (data) {
             fetch(GET_TRIP_BY_ID_API_ENDPOINT + '/' + tripID)
-                .then(function (result) {
-                    return result.json();
-                })
+                .then(getResJSON)
                 .then(function (data) {
                     hideActivityIndicator();
 
@@ -342,35 +318,33 @@ function confirmOrCancelBooking(_id, status, tripID) {
                                 return result.json();
                             })
                             .then(function (data) {
-                                console.log(data)
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: status === 1 ? 'Booking has been confirmed' : 'Booking has been cancelled',
-                                    showConfirmButton: false,
-                                    timer: 1500,
-                                    timerProgressBar: true
-                                });
-                    
-                                reloadCurrentPage();
+                                showSuccessAlertWithConfirmButton(function () {
+                                    reloadCurrentPage();
+                                }, (status === 1 ? 'Booking has been confirmed' : 'Booking has been cancelled'), '', 'Done');
                             })
                             .catch(function (err) {
                                 console.error(err);
-                                alert('ERROR: ' + err);
-                                reloadCurrentPage();
+                                hideActivityIndicator();
+                                showErrorAlertWithConfirmButton(function () {
+                                    window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
+                                }, 'Error 500', 'Internal server error', 'Refresh');
                             });
                     }
                 })
                 .catch(function (err) {
                     console.error(err);
-                    alert('ERROR: ' + err);
-                    reloadCurrentPage();
+                    hideActivityIndicator();
+                    showErrorAlertWithConfirmButton(function () {
+                        window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
+                    }, 'Error 500', 'Internal server error', 'Refresh');
                 });
         })
         .catch(function (err) {
             console.error(err);
-            alert('ERROR: ' + err);
-            reloadCurrentPage();
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
 
@@ -378,35 +352,19 @@ function onConfirmBooking(e) {
     var _id = e.id.split('_')[0];
     var tripID = e.id.split('_')[1];
 
-    Swal.fire({
-        title: 'Confirm Booking',
-        text: 'Are you sure you want to continue?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: `No`,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            confirmOrCancelBooking(_id, 1, tripID);
-        }
-    });
+    showQuestionAlertWithButtons(function () {
+        showActivityIndicator();
+        confirmOrCancelBooking(_id, 1, tripID);
+    }, 'Confirm Booking', 'Are you sure you want to continue?', 'Yes', 'No');
 }
 function onCancelBooking(e) {
     var _id = e.id.split('_')[0];
     var tripID = e.id.split('_')[1];
 
-    Swal.fire({
-        title: 'Cancel Booking',
-        text: 'Are you sure you want to continue?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: `No`,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            confirmOrCancelBooking(_id, 2, tripID);
-        }
-    });
+    showQuestionAlertWithButtons(function () {
+        showActivityIndicator();
+        confirmOrCancelBooking(_id, 2, tripID);
+    }, 'Cancel Booking', 'Are you sure you want to continue?', 'Yes', 'No');
 }
 function onMyTrips() {
     showSecondaryTopNavbar();
@@ -423,19 +381,10 @@ function onMyBookings() {
     getDriverBookings();
 }
 function onLogout() {
-    Swal.fire({
-        icon: 'question',
-        title: 'Log out',
-        text: 'Are you sure you want to continue?',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            showActivityIndicator();
-            logoutCurrentSession();
-        }
-    });
+    showQuestionAlertWithButtons(function () {
+        showActivityIndicator();
+        logoutCurrentSession();
+    }, 'Log out', 'Are you sure you want to continue?', 'Yes', 'No');
 }
 
 back_to_previous_page_button.addEventListener('click', reloadCurrentPage);
@@ -444,5 +393,18 @@ my_bookings_button.addEventListener('click', onMyBookings);
 logout_button.addEventListener('click', onLogout);
 
 document.addEventListener('DOMContentLoaded', function () {
-    checkCurrentSession();
+    document.querySelector('.account-page-container').style.display = 'none';
+
+    showActivityIndicator();
+
+    if (checkCurrentSession()) {
+        checkAppVersion(function () {
+            document.querySelector('.account-page-container').style.display = 'block';
+            loadUserDetails();
+            reloadCurrentPage();
+        }, moveToLoginPage);
+    } else {
+        moveToLoginPage();
+        localStorage.removeItem(CURRENT_APP_VERSION_KEY);
+    }
 });
