@@ -54,10 +54,11 @@ function getRiderTripStatusAPI(tripID) {
                 hideActivityIndicator();
                 hideMoreCarpoolButtonsContainer();
                 carpool_main_page.style.display = 'block';
-                carpool_on_trip_container.style.display = 'block';
                 find_carpool_navigate_container.style.display = 'none';
 
-                if (driver.status === 0 || driver.status === 1) {
+                if (driver.status === 0 || driver.status === 1) {                    
+                    carpool_on_trip_container.style.display = 'block';
+
                     document.querySelector('.on_trip_rider_message').innerHTML = driver.status === 0 ? 'Waiting to start trip' : driver.status === 1 ? 'We\'re on our way' : '';
                     document.querySelector('.on_trip_rider_fullname').innerHTML = driver.fullname;
                     document.querySelector('.on_trip_rider_location').innerHTML = driver.origin;
@@ -251,18 +252,20 @@ function loadMainPage() {
     showShareRideNavigateContainer();
 }
 function reloadCurrentPage() {
-    var current_booked_trip_key = localStorage.getItem(CURRENT_BOOKED_TRIP_KEY);
-
     showActivityIndicator();
 
-    showMainBottomNavbar();
-    showMainTopNavbar();
+    delay(function () {
+        var current_booked_trip_key = localStorage.getItem(CURRENT_BOOKED_TRIP_KEY);
 
-    if (current_booked_trip_key) {
-        getRiderBookingsStatusAPI(current_booked_trip_key);
-    } else {
-        getDriverTripSessionAPI();
-    }
+        showMainBottomNavbar();
+        showMainTopNavbar();
+    
+        if (current_booked_trip_key) {
+            getRiderBookingsStatusAPI(current_booked_trip_key);
+        } else {
+            getDriverTripSessionAPI();
+        }
+    }, DELAY_TIME_IN_MILLISECONDS);
 }
 function moveToLoginPage() {
     window.location.href = HOMEPAGE_SOURCE_LOCATION;
@@ -427,7 +430,6 @@ function getCarpoolRideList() {
         .catch(function (err) {
             console.error(err);
             hideActivityIndicator();
-
             showErrorAlertWithConfirmButton(function () {
                 window.location.href = HOMEPAGE_SOURCE_LOCATION;
             }, 'Error 500', 'Internal server error', 'Refresh');
@@ -505,6 +507,7 @@ function loadCarpoolOnTripScreen(rider) {
         .then(getResJSON)
         .then(function (data) {
             hideActivityIndicator();
+            join_pool_rider_button.disabled = false;
 
             if (data) {
                 localStorage.setItem(CURRENT_BOOKED_TRIP_KEY, rider._id);
@@ -515,6 +518,7 @@ function loadCarpoolOnTripScreen(rider) {
         .catch(function (err) {
             console.error(err);
 	        hideActivityIndicator();
+            join_pool_rider_button.disabled = false;
             showErrorAlertWithConfirmButton(function () {
                 window.location.href = HOMEPAGE_SOURCE_LOCATION;
             }, 'Error 500', 'Internal server error', 'Refresh');
@@ -578,6 +582,7 @@ function onJoinPoolRider (rider) {
         onIsToDropSwitch();
         showMainTopNavbar();
         showActivityIndicator();
+        join_pool_rider_button.disabled = true;
         loadCarpoolOnTripScreen(rider);
     }
 }
@@ -675,12 +680,14 @@ function createTrip() {
     fetch(CREATE_TRIP_API_ENDPOINT, options)
         .then(getResJSON)
         .then(function (data) {
+            hideActivityIndicator();
             showSuccessAlertWithConfirmButton(function () {
                 window.location.href = HOMEPAGE_SOURCE_LOCATION;
             }, 'Trip has been created', '', 'Done');
         })
         .catch(function (err) {
             console.error(err);
+            hideActivityIndicator();
             showErrorAlertWithConfirmButton(function () {
                 driver_target_location.disabled = false;
                 driver_available_seats.disabled = false;
@@ -889,6 +896,7 @@ function onCreateTrip() {
             driver_departure_time.disabled = true;
             driver_contact_no.disabled = true;
             create_trip_button.disabled = true;
+            showActivityIndicator();
             createTrip();
         } else if (!inDateFormat) {
             showErrorAlert('Invalid date format', 'Departure date must be in this format: YYYY-MM-DD');

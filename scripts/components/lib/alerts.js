@@ -91,7 +91,8 @@ function showQuestionAlertWithButtons(callback, title, text, confirmButtonText, 
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: confirmButtonText,
-        cancelButtonText: cancelButtonText
+        cancelButtonText: cancelButtonText,
+        allowOutsideClick: false
     }).then((result) => {
         if (result.isConfirmed) {
             callback();
