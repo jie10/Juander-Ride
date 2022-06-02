@@ -17,6 +17,8 @@
     <!-- SWAL 2-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.css" integrity="sha512-y4S4cBeErz9ykN3iwUC4kmP/Ca+zd8n8FDzlVbq5Nr73gn1VBXZhpriQ7avR+8fQLpyq4izWm0b8s6q4Vedb9w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js" integrity="sha512-7x7HoEikRZhV0FAORWP+hrUzl75JW/uLHBbg2kHnPdFmScpIeHY0ieUVSacjusrKrlA/RsA2tDOBvisFmKc3xw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <!-- LOTTIE -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <!-- CLEAVE JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js" integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- MOMENT JS -->
@@ -49,7 +51,7 @@
         </div>
         <div class="row" style="flex-grow: 1;">
             <div class="container carpool-container tab-page-active" id="carpool_container">
-                <div class="carpool-main-page" id="carpool_main_page">
+                <div class="carpool-main-page" id="carpool_main_page" style="display: none;">
                     <div class="more-carpool-buttons align-items-center justify-content-center" id="more_carpool_buttons">
                         <button type="button" class="btn btn-light carpool-ride-list-button active-tab-button" id="carpool_ride_list_button">Find Pool</button>
                         <button type="button" class="btn btn-light share-a-ride-button" id="share_a_ride_button">Share Ride</button>
@@ -62,22 +64,10 @@
                                         <input type="text" class="form-control" placeholder="Pick-up at?" aria-label="Search pick-up point" aria-describedby="search-pick-up-point" id="search_pick_up_point" autocomplete="off">
                                     </div>
                                     <div class="col-12">
-                                        <input type="text" class="form-control" placeholder="Drop-off to?" aria-label="Search drop-off point" aria-describedby="search-drop-off-point" id="search_drop_off_point" autocomplete="off">
+                                        <input type="text" class="form-control" placeholder="Drop-off to?" aria-label="Search drop-off point" aria-describedby="search-drop-off-point" id="search_drop_off_point" autocomplete="off" style="display: none;">
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <!-- <div class="col-8 col-md-4">
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control" placeholder="When to pick-up?" aria-label="Set Pick-up Datetime" aria-describedby="pick-up-datetime" id="pick_up_datetime" readonly>
-                                            <span class="input-group-text" id="basic-addon3" style="background-color: transparent;"><i class="fa-solid fa-calendar-days"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 col-md-2">
-                                        <div class="input-group mb-3">
-                                            <input type="number" min="0" max="30" class="form-control" placeholder="0" aria-label="Set Seats Count" aria-describedby="seats_count" id="seats_count">
-                                            <span class="input-group-text" id="basic-addon4" style="background-color: transparent;"><i class="fa-solid fa-car"></i></span>
-                                        </div>
-                                    </div> -->
                                     <div class="col-12">
                                         <div class="input-group mb-3 pt-2 pb-2 ps-2 d-flex justify-content-center">
                                             <div class="form-check form-switch">
@@ -92,7 +82,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="driver-pool-results" style="display: none;" id="driver_pool_results_container">
+                        <div class="driver-pool-results" style="display: none;" id="driver_pool_results_container" style="display: none;">
                             <div class="container">
                                 <div class="list-group">
                                   <button type="button" class="list-group-item list-group-item-action carpool-driver-to-choose-button" id="5610c8a7eb88429ba249cc27b2f9893a" data-bs-toggle="offcanvas" data-bs-target="#show_confirm_carpool_rider" aria-controls="show_confirm_carpool_rider">
@@ -195,15 +185,6 @@
                                         </div>
                                     </div>
                                     <div class="driver-info-others" style="margin: 0 12px; flex-grow: 1;">
-                                        <!-- <div class="mb-3">
-                                            <h6>Vehicle Info</h6>
-                                            <p class="text-muted">
-                                                <span class="highlight">Toyota VIOS</span>
-                                                <span class="other-highlight">Sedan</span>
-                                                <span class="other-highlight">LTO 1234</span>
-                                                <span class="other-highlight">Red</span>
-                                            </p>
-                                        </div> -->
                                         <div class="mb-3">
                                             <h6>Department</h6>
                                             <p class="text-muted offcanvas_rider_department">Admin</p>
@@ -218,11 +199,11 @@
                                         </div>
                                         <div class="mb-3">
                                             <h6>Pick-up Point</h6>
-                                            <a class="text-muted offcanvas_pick_up_point" target="_blank" href="#">Park Square</a>
+                                            <p class="text-muted offcanvas_pick_up_point">Park Square</p>
                                         </div>
                                         <div class="mb-3">
                                             <h6>Drop-off Point</h6>
-                                            <a class="text-muted offcanvas_drop_off_point" target="_blank" href="#">Cebu Pacific AOC</a>
+                                            <p class="text-muted offcanvas_drop_off_point">Cebu Pacific AOC</p>
                                         </div>
                                         <div class="mb-3">
                                             <h6>Contact No.</h6>
@@ -280,7 +261,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="driver_departure_date" class="form-label">Departure Date</label>
-                                            <input autocomplete="off" type="text" class="form-control" id="driver_departure_date" placeholder="YYYY-MM-DD" title="format: YYYY-MM-DD">
+                                            <input autocomplete="off" type="text" class="form-control" id="driver_departure_date" placeholder="MM-DD-YYYY"  title="format: MM-DD-YYYY">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="driver_departure_time" class="form-label">Departure Time</label>
@@ -295,7 +276,7 @@
                                             <input autocomplete="off" type="text" class="form-control" id="driver_contact_no" placeholder="9xx xxx xxxx" title="format: 9xx xxx xxxx">
                                         </div>
                                         <div class="col-12 d-flex justify-content-center align-items-center">
-                                            <button type="button" class="btn btn-primary rounded-pill mx-4 mx-sm-5 create-trip-button" id="create_trip_button">Create Trip</button>      
+                                            <button type="button" class="btn btn-primary rounded-pill mx-4 mx-sm-5 create-trip-button" id="create_trip_button" disabled>Create Trip</button>      
                                         </div>    
                                     </div>
                                 </form>
@@ -303,7 +284,6 @@
                         </div>
                     </div>
                     <div class="on-trip-driver-container" id="on_trip_driver_container" style="display: none;">
-                        <div class="on-trip-spinner"></div>
                         <div class="on-trip-driver-body">
                             <div class="container d-flex flex-column" style="height: 100%;">
                                 <div class="row driver-info-header">
@@ -345,7 +325,6 @@
                     </div>
                 </div>
             </div>
-            <div class="container p-3 error-container" id="error_page"></div>
         </div>
         <div class="main-bottom-navbar" id="main_bottom_navbar">
             <div class="container d-flex justify-content-center">
@@ -360,9 +339,17 @@
                 </a>
             </div>
         </div>
+        <div id="activity_indicator" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: collapse; opacity: 0.9;">
+            <div style="display: flex; align-content: center; justify-content: center; align-items: center; height: 100%;">
+                <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_o8zsifcp.json" background="transparent" speed="1" style="width: 160px; height: 160px;" loop autoplay></lottie-player>
+            </div>
+        </div>
     </div>
-    <script type="text/javascript" src="../scripts/data.js"></script>
+    <script type="text/javascript" src="../scripts/helpers.js"></script>
     <script type="text/javascript" src="../scripts/utils.js"></script>
+    <script type="text/javascript" src="../scripts/components/lib/alerts.js"></script>
+    <script type="text/javascript" src="../scripts/components/lib/activity_indicator.js"></script>
+    <script type="text/javascript" src="../scripts/components/navbars.js"></script>
     <script type="text/javascript" src="../scripts/carpool.js"></script>
 </body>
 </html>
