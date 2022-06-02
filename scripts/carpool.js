@@ -291,48 +291,7 @@ var find_pool_rider_button = document.getElementById('find_pool_rider_button');
 var trip_completed_button = document.getElementById('trip_completed_button');
 var join_pool_rider_button = document.getElementById('join_pool_rider_button');
 
-function showCarpoolRideListContainer() {
-    carpool_ride_list_container.style.display = 'block';
-    share_a_ride_container.style.display = 'none';
-}
-function showFindCarpoolNavigateContainer() {
-    find_carpool_navigate_container.style.display ='block';
-    driver_pool_results_container.style.display = "none";
-}
-function showDriverPoolListContainer() {
-    find_carpool_navigate_container.style.display = "none";
-    driver_pool_results_container.style.display ='block';
-}
-function showMoreCarpoolButtonsContainer () {
-    more_carpool_buttons.style.display = 'flex';
-}
-function showCarpoolOnTripContainer () {
-    carpool_on_trip_container.style.display = 'block';
-    find_carpool_navigate_container.style.display = "none";
-}
-function showTripCancelled () {
-    carpool_on_trip_container.style.display = 'none';
-    trip_cancelled_container.style.display = 'block';
-}
-function showTripCompleted () {
-    carpool_on_trip_container.style.display = 'none';
-    trip_completed_container.style.display = 'block';
-}
-
-function hideMoreCarpoolButtonsContainer () {
-    more_carpool_buttons.style.display = 'none';
-}
-function hideDriverPoolResultsContainer () {
-    driver_pool_results_container.style.display = 'none';
-}
-function hideTripCancelled () {
-    trip_cancelled_container.style.display = 'none';
-}
-function hideTripCompleted () {
-    trip_completed_container.style.display = 'none';
-}
-
-function loadCarpoolDriversList() {
+function getCarpoolRideList() {
     var email = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email;
     var pointA = is_to_drop_switch.checked ? search_drop_off_point.value : search_pick_up_point.value;
     var options = {
@@ -474,6 +433,48 @@ function loadCarpoolDriversList() {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
+
+function showCarpoolRideListContainer() {
+    carpool_ride_list_container.style.display = 'block';
+    share_a_ride_container.style.display = 'none';
+}
+function showFindCarpoolNavigateContainer() {
+    find_carpool_navigate_container.style.display ='block';
+    driver_pool_results_container.style.display = "none";
+}
+function showDriverPoolListContainer() {
+    find_carpool_navigate_container.style.display = "none";
+    driver_pool_results_container.style.display ='block';
+}
+function showMoreCarpoolButtonsContainer () {
+    more_carpool_buttons.style.display = 'flex';
+}
+function showCarpoolOnTripContainer () {
+    carpool_on_trip_container.style.display = 'block';
+    find_carpool_navigate_container.style.display = "none";
+}
+function showTripCancelled () {
+    carpool_on_trip_container.style.display = 'none';
+    trip_cancelled_container.style.display = 'block';
+}
+function showTripCompleted () {
+    carpool_on_trip_container.style.display = 'none';
+    trip_completed_container.style.display = 'block';
+}
+
+function hideMoreCarpoolButtonsContainer () {
+    more_carpool_buttons.style.display = 'none';
+}
+function hideDriverPoolResultsContainer () {
+    driver_pool_results_container.style.display = 'none';
+}
+function hideTripCancelled () {
+    trip_cancelled_container.style.display = 'none';
+}
+function hideTripCompleted () {
+    trip_completed_container.style.display = 'none';
+}
+
 function loadTripCancelledScreen() {
     showTripCancelled();
 }
@@ -567,7 +568,7 @@ function onFindCarpoolRide () {
     showSecondaryTopNavbar();
     hideMoreCarpoolButtonsContainer();
     hideMainBottomNavbar();
-    loadCarpoolDriversList();
+    getCarpoolRideList();
 }
 function onJoinPoolRider (rider) {
     return function () {
