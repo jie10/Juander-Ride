@@ -31,6 +31,20 @@ function showToastMessage (title, status, TIMEOUT_IN_SECONDS) {
     });
 }
 
+function showSuccessAlertWithConfirmButton(callback, title, text, confirmButtonText) {
+    Swal.fire({
+        icon: 'success',
+        title: title,
+        text: text,
+        confirmButtonText: confirmButtonText,
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+    });
+}
+
 function showErrorAlert(title, text) {
     Swal.fire({
         position: 'center',
@@ -63,6 +77,21 @@ function showInfoAlertWithConfirmButton(callback, title, text, confirmButtonText
         text: text,
         confirmButtonText: confirmButtonText,
         allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+    });
+}
+
+function showQuestionAlertWithButtons(callback, title, text, confirmButtonText, cancelButtonText) {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: confirmButtonText,
+        cancelButtonText: cancelButtonText
     }).then((result) => {
         if (result.isConfirmed) {
             callback();
