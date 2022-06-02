@@ -82,10 +82,9 @@
 }
 .my-trips-container .tripHistory-list>div {
     background: #fff;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 25px 20px;
     margin: 25px 20px;
-    box-shadow: 0 4px 24px rgb(0 0 0 / 18%);
 }
 .my-trips-container .tripHistory-list>div img {
     height: auto;
@@ -93,28 +92,40 @@
 }
 .my-trips-container .tripHistory-list>div {
     background: #fff;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 15px 20px;
     margin: 20px 20px;
-    box-shadow: 0 4px 24px rgb(0 0 0 / 18%);
 }
-.my-trips-container .time {
-    font-weight: bold;
-    font-size: 24px;
-    margin-bottom: 5px;
-    margin-top: 10px;
+.my-trips-container .heading {
+    line-height: normal;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0;
 }
-.my-trips-container .date {
-    font-size: 16px;
-    color: gray;
-    line-height: 1.25em;
-    padding-bottom: 15px;
+.my-trips-container .datetime {
+    line-height: normal;
+    font-size: 0.75rem;
 }
-.my-trips-container .whereTo {
-    font-size: 16px;
-    color: gray;
-    line-height: 1.25em;
-    margin-bottom: 15px;
+.my-trips-container .destination {
+    line-height: normal;
+    font-size: 0.875rem;
+    margin: 8px 0 0 0;
+}
+.my-trips-container .seat-number {
+    line-height: normal;
+    font-size: 0.75rem;
+    margin: 0;
+}
+.my-trips-container .status {
+    line-height: normal;
+    font-size: 0.625rem;
+    color: #ffffff;
+    width: 75px;
+    text-align: center;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 8px;
+    margin-right: 8px;
 }
 
 
@@ -134,10 +145,9 @@
 }
 .my-bookings-container .tripHistory-list>div {
     background: #fff;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 25px 20px;
     margin: 25px 20px;
-    box-shadow: 0 4px 24px rgb(0 0 0 / 18%);
 }
 .my-bookings-container .tripHistory-list>div img {
     height: auto;
@@ -145,26 +155,39 @@
 }
 .my-bookings-container .tripHistory-list>div {
     background: #fff;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 15px 20px;
     margin: 20px 20px;
-    box-shadow: 0 4px 24px rgb(0 0 0 / 18%);
 }
-.my-bookings-container .time {
-    font-weight: bold;
-    font-size: 24px;
-    margin-bottom: 5px;
-    margin-top: 10px;
+
+.my-bookings-container .heading {
+    line-height: normal;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0;
 }
-.my-bookings-container .date {
-    font-size: 16px;
-    color: gray;
-    line-height: 1.25em;
-    padding-bottom: 15px;
+.my-bookings-container .datetime {
+    line-height: normal;
+    font-size: 0.75rem;
 }
-.my-bookings-container .whereTo {
-    font-size: 16px;
-    color: gray;
-    line-height: 1.25em;
-    margin-bottom: 15px;
+.my-bookings-container .destination {
+    line-height: normal;
+    font-size: 0.875rem;
+    margin: 8px 0 0 0;
+}
+.my-bookings-container .seat-number {
+    line-height: normal;
+    font-size: 0.75rem;
+    margin: 0;
+}
+.my-bookings-container .status {
+    line-height: normal;
+    font-size: 0.625rem;
+    color: #ffffff;
+    width: 75px;
+    text-align: center;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 8px;
+    margin-right: 8px;
 }

@@ -45,15 +45,6 @@
     .my-trips-container .container {
         width: 100% !important;
     }
-    .my-trips-container .time {
-        font-size: 1.25rem;
-        margin-top: 5px;
-    }
-    .my-trips-container .date {
-        font-size: 0.875rem;
-        line-height: normal;
-        padding-bottom: 8px;
-    }
     .my-trips-container .whereTo {
         font-size: 0.875rem;
         line-height: normal;
@@ -87,23 +78,41 @@
         padding: 24px 0 36px 0;
     }
 
-    .my-trips-container .time {
-        font-size: 1rem;
+    .my-trips-container .header {
+        margin-bottom: 4px;
     }
-    .my-trips-container .date {
+    .my-trips-container .heading {
+        font-size: 0.875rem;
+    }
+    .my-trips-container .datetime {
+        font-size: 0.625rem;
+    }
+    .my-trips-container .destination {
         font-size: 0.75rem;
     }
-    .my-trips-container .whereTo {
-        font-size: 0.75rem;
+    .my-trips-container .seat-number {
+        font-size: 0.625rem;
+    }
+    .my-trips-container .status {
+        width: fit-content;
     }
 
-    .my-bookings-container .time {
-        font-size: 1rem;
+    .my-bookings-container .header {
+        margin-bottom: 4px;
     }
-    .my-bookings-container .date {
+    .my-bookings-container .heading {
+        font-size: 0.875rem;
+    }
+    .my-bookings-container .datetime {
+        font-size: 0.625rem;
+    }
+    .my-bookings-container .destination {
         font-size: 0.75rem;
     }
-    .my-bookings-container .whereTo {
-        font-size: 0.75rem;
+    .my-bookings-container .seat-number {
+        font-size: 0.625rem;
+    }
+    .my-bookings-container .status {
+        width: fit-content;
     }
 }

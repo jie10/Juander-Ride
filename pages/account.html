@@ -17,6 +17,8 @@
     <!-- MOMENT JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment-with-locales.min.js" integrity="sha512-vFABRuf5oGUaztndx4KoAEUVQnOvAIFs59y4tO0DILGWhQiFnFHiR+ZJfxLDyJlXgeut9Z07Svuvm+1Jv89w5g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- LOTTIE -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <!-- BOOTSTRAP 5 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
@@ -102,15 +104,6 @@
                                 <span class="description">View your driver bookings</span>
                             </div>
                         </button>
-                        <!-- <button type="button" class="menu-list-item d-flex" id="settings_button">
-                            <div class="setting-icon">
-                                <span class="material-icons-round icon">settings</span>
-                            </div>
-                            <div class="setting-desc">
-                                <span class="title">Settings</span>
-                                <span class="description">Update your account settings</span>
-                            </div>
-                        </button> -->
                         <button type="button" class="menu-list-item d-flex" id="logout_button">
                             <div class="setting-icon">
                                 <span class="material-icons-round icon">logout</span>
@@ -137,6 +130,11 @@
                 <a class="text-center d-flex flex-column user-account-tab-button tab-active" id="user_account_tab_button" href="../pages/account.html">
                     <i class="fa-solid fa-user"></i>Account
                 </a>
+            </div>
+        </div>
+        <div id="activity_indicator" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: collapse; opacity: 0.9;">
+            <div style="display: flex; align-content: center; justify-content: center; align-items: center; height: 100%;">
+                <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_o8zsifcp.json" background="transparent" speed="1" style="width: 160px; height: 160px;" loop autoplay></lottie-player>
             </div>
         </div>
     </div>
