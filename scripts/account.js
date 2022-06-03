@@ -39,6 +39,10 @@ function logoutCurrentSession() {
     delay(function () {
         localStorage.removeItem(USER_LOGIN_DATA_KEY);
         localStorage.removeItem(CURRENT_APP_VERSION_KEY);
+        
+        // Clear local storage
+        localStorage.clear();
+        
         moveToLoginPage();
     }, DELAY_TIME_IN_MILLISECONDS);
 }

@@ -2,6 +2,8 @@
 var USER_LOGIN_DATA_KEY = 'user_login_data';
 var CURRENT_BOOKED_TRIP_KEY = 'current_booked_trip';
 var DRIVER_TRIP_STATUS_KEY = 'driver_trip_status';
+var DRIVER_TRIP = 'driver_trip';
+var DRIVER_BOOKING = 'user_booking';
 
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
@@ -87,16 +89,21 @@ function getRiderBookingsStatusAPI(tripID) {
     fetch(VIEW_RIDER_BOOKINGS_URL)
         .then(getResJSON)
         .then(function (data) {
-            if (data && data.length > 0) {
+            if (data && data.length > 0) {   
                 var currentBooking = data.filter(function(booking) {
                     return booking.tripID === tripID;
                 })[0];
-                console.log(currentBooking.status)
+                
                 if (currentBooking && currentBooking.status === 0) {
                     hideActivityIndicator();
+                    // Show booking card - IMPORTANT!
+                    
+                    /*
                     showInfoAlertWithConfirmButtonHTML(function () {
                         window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
                     }, 'Waiting for driver to confirm', 'Please go to <b>My Trips</b> to view status of your booking request', 'Go to Account Page');
+                    */
+                    
                 } else if (currentBooking && currentBooking.status === 2) {
                     hideActivityIndicator();
                     loadMainPage();
@@ -255,6 +262,7 @@ function loadMainPage() {
     showShareRideNavigateContainer();
 }
 function reloadCurrentPage() {
+    console.log("reloadCurrentPage");
     showActivityIndicator();
 
     delay(function () {
@@ -262,15 +270,73 @@ function reloadCurrentPage() {
 
         showMainBottomNavbar();
         showMainTopNavbar();
-    
+        
         if (current_booked_trip_key) {
-            getRiderBookingsStatusAPI(current_booked_trip_key);
+            // Check if booking exists
+            if (localStorage.hasOwnProperty(DRIVER_BOOKING)) {
+                console.log("getRiderBookingsStatusAPI");
+                
+                var currentBooking = localStorage.getItem(DRIVER_BOOKING);
+                currentBooking = JSON.parse(currentBooking);
+                
+                var current = new Date();
+                var given = moment(currentBooking.departTime, "YYYY-MM-DDTHH:mm:ss.fZ");
+                var duration = moment.duration(given.diff(current)).asHours();
+                
+                // add this in dev due to server time
+                duration = duration - 8;
+                
+                if(duration <= 0.5){
+                    // Cancel the trip for departure time expired
+                    // IMPORTANT - Call cancel trip here
+                    localStorage.removeItem(DRIVER_BOOKING);
+                    hideActivityIndicator();
+                    loadMainPage();
+                }else{
+                    console.log(duration);
+                    getRiderBookingsStatusAPI(current_booked_trip_key);
+                }
+            }else{
+                hideActivityIndicator();
+                loadMainPage();
+            }
         } else {
-            getDriverTripSessionAPI();
+            // Check if trips exists
+            if (localStorage.hasOwnProperty(DRIVER_TRIP)) {
+                console.log("getDriverTripSessionAPI");
+                
+                // Check if trip is beyond departure time
+                var currentTrip = localStorage.getItem(DRIVER_TRIP);
+                currentTrip = JSON.parse(currentTrip);
+                
+                var current = new Date();
+                var given = moment(currentTrip.departTime, "YYYY-MM-DDTHH:mm:ss.fZ");
+                var duration = moment.duration(given.diff(current)).asHours();
+                
+                // add this in dev due to server time
+                duration = duration - 8;
+                
+                if(duration <= 0.5){
+                    // Cancel the trip for departure time expired
+                    // IMPORTANT - Call cancel trip here
+                    localStorage.removeItem(DRIVER_TRIP);
+                    hideActivityIndicator();
+                    loadMainPage();
+                }else{
+                    console.log(duration);
+                    getDriverTripSessionAPI();
+                }
+            }else{
+                hideActivityIndicator();
+                loadMainPage();
+            }
         }
     }, DELAY_TIME_IN_MILLISECONDS);
 }
 function moveToLoginPage() {
+    // Clear local storage
+    localStorage.clear();
+    
     window.location.href = HOMEPAGE_SOURCE_LOCATION;
 }
 function onBackToPreviousPage() {
@@ -513,6 +579,8 @@ function loadCarpoolOnTripScreen(rider) {
             join_pool_rider_button.disabled = false;
 
             if (data) {
+                console.log(data);
+                localStorage.setItem(DRIVER_BOOKING, JSON.stringify(data));
                 localStorage.setItem(CURRENT_BOOKED_TRIP_KEY, rider._id);
 
                 window.location.href = HOMEPAGE_SOURCE_LOCATION;
@@ -683,6 +751,9 @@ function createTrip() {
     fetch(CREATE_TRIP_API_ENDPOINT, options)
         .then(getResJSON)
         .then(function (data) {
+            console.log("trip created. put in local storage");
+            localStorage.setItem(DRIVER_TRIP, JSON.stringify(data));
+        
             hideActivityIndicator();
             showSuccessAlertWithConfirmButton(function () {
                 window.location.href = HOMEPAGE_SOURCE_LOCATION;
@@ -769,6 +840,7 @@ function cancelTrip(_id, riders) {
             hideActivityIndicator();
 
             localStorage.removeItem(DRIVER_TRIP_STATUS_KEY);
+            localStorage.removeItem(DRIVER_TRIP);
         })
         .catch(function (err) {
             console.error(err);
