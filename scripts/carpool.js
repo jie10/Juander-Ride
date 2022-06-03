@@ -152,48 +152,6 @@ function getStatusPopup(bookingID, status, driverEmail) {
         default: break;
     }
 }
-function getRiderTripStatusAPI(tripID) {
-    var VIEW_DRIVER_TRIPS_BY_ID_URL = VIEW_DRIVER_TRIPS_BY_ID_API_ENDPOINT + '/' + tripID;
-
-    fetch(VIEW_DRIVER_TRIPS_BY_ID_URL)
-        .then(getResJSON)
-        .then(function (driver) {
-            if (driver) {
-                hideActivityIndicator();
-                hideMoreCarpoolButtonsContainer();
-                carpool_main_page.style.display = 'block';
-                carpool_on_trip_container.style.display = 'none';
-                find_carpool_navigate_container.style.display = 'none';
-
-                if (driver.status === 0 || driver.status === 1) {                    
-                    carpool_on_trip_container.style.display = 'block';
-
-                    document.querySelector('.on_trip_rider_message').innerHTML = driver.status === 0 ? 'Waiting to start trip' : driver.status === 1 ? 'We\'re on our way' : '';
-                    document.querySelector('.on_trip_rider_fullname').innerHTML = driver.fullname;
-                    document.querySelector('.on_trip_rider_location').innerHTML = driver.origin;
-                    document.querySelector('.on_trip_rider_teams_email a').href = MS_TEAMS_SEND_MESSAGE_TO_USER_LINK_URL + driver.email;
-                    document.querySelector('.on_trip_phone_number a').href = PHONE_CALL_TO_USER_LINK_URL + driver.phone;
-                } else if (driver.status === 3) {
-                    loadTripCancelledScreen();
-                } else {
-                    loadTripCompletedScreen();
-                }
-            } else {
-                localStorage.removeItem(CURRENT_BOOKED_TRIP_KEY);
-                hideActivityIndicator();
-                showErrorAlertWithConfirmButton(function () {
-                    window.location.href = HOMEPAGE_SOURCE_LOCATION;
-                }, 'Error 404', 'No Data Found', 'Refresh');
-            }
-        })
-        .catch(function (err) {
-            console.error(err);
-	        hideActivityIndicator();
-            showErrorAlertWithConfirmButton(function () {
-                window.location.href = HOMEPAGE_SOURCE_LOCATION;
-            }, 'Error 500', 'Internal server error', 'Refresh');
-        });
-}
 function getRiderBookingsStatusAPI(tripID) {
     var userEmail = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email.toLowerCase();
     var userBooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING));
@@ -644,18 +602,6 @@ function showDriverPoolListContainer() {
 function showMoreCarpoolButtonsContainer () {
     more_carpool_buttons.style.display = 'flex';
 }
-function showCarpoolOnTripContainer () {
-    carpool_on_trip_container.style.display = 'block';
-    find_carpool_navigate_container.style.display = "none";
-}
-function showTripCancelled () {
-    carpool_on_trip_container.style.display = 'none';
-    trip_cancelled_container.style.display = 'block';
-}
-function showTripCompleted () {
-    carpool_on_trip_container.style.display = 'none';
-    trip_completed_container.style.display = 'block';
-}
 
 function hideMoreCarpoolButtonsContainer () {
     more_carpool_buttons.style.display = 'none';
@@ -670,12 +616,6 @@ function hideTripCompleted () {
     trip_completed_container.style.display = 'none';
 }
 
-function loadTripCancelledScreen() {
-    showTripCancelled();
-}
-function loadTripCompletedScreen() {
-    showTripCompleted();
-}
 function loadCarpoolOnTripScreen(rider) {
     var tripID = rider._id;
     var passenger = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
@@ -772,7 +712,6 @@ function onFindCarpoolRide () {
 function onJoinPoolRider (rider) {
     return function () {
         hideDriverPoolResultsContainer();
-        showCarpoolOnTripContainer();
         showMainBottomNavbar();
         onIsToDropSwitch();
         showMainTopNavbar();
