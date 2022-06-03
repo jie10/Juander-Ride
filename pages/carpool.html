@@ -52,12 +52,12 @@
         <div class="row" style="flex-grow: 1;">
             <div class="container carpool-container tab-page-active" id="carpool_container">
                 <div class="carpool-main-page" id="carpool_main_page" style="display: none;">
-                    <div class="more-carpool-buttons align-items-center justify-content-center" id="more_carpool_buttons">
+                    <div class="more-carpool-buttons align-items-center justify-content-center" id="more_carpool_buttons" style="display: none;">
                         <button type="button" class="btn btn-light carpool-ride-list-button active-tab-button" id="carpool_ride_list_button">Find Pool</button>
                         <button type="button" class="btn btn-light share-a-ride-button" id="share_a_ride_button">Share Ride</button>
                     </div>
                     <div class="carpool-ride-list-container" id="carpool_ride_list_container" style="display: block;">
-                        <div class="navigate-container container-fluid" id="find_carpool_navigate_container">
+                        <div class="navigate-container container-fluid" id="find_carpool_navigate_container" style="display: none;">
                             <div class="container">
                                 <div class="row mb-3">
                                     <div class="col-12">
@@ -138,6 +138,19 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="carpool-on-booking-container" id="carpool_on_booking_container" style="display: none;">
+                            <div class="current-booking-item">
+                                <div class="row d-flex align-items-center header">
+                                  <div class="col heading"></div>
+                                  <div class="col-2 status"></div>
+                                </div>
+                                <div>
+                                  <p class="datetime"></p>
+                                </div>
+                                <p class="destination"></p>
+                                <p class="seat-number"></p>
                             </div>
                         </div>
                         <div class="trip-completed-container" id="trip_completed_container" style="display: none;">

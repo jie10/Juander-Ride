@@ -112,6 +112,10 @@
     .scan-qr-to-ride-reader  {
         width: 350px;
     }
+
+    .carpool-on-booking-container .current-booking-item {
+        width: 300px;
+    }
 }
 @media only screen and (max-width: 320px) {
     /** BOTTOM NAVBAR */
@@ -144,5 +148,11 @@
     }
     .on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar-name {
         font-size: 0.625rem;
+    }
+    .carpool-on-booking-container .current-booking-item {
+        width: 250px;
+    }
+    .carpool-on-booking-container .current-booking-item .header {
+        margin-bottom: 4px;
     }
 }

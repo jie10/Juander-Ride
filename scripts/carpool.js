@@ -31,6 +31,7 @@ var NO_RESULTS_FOUND = "<p class=\"text-muted absolute-center text-center\" styl
 var carpool_ride_list_container = document.getElementById('carpool_ride_list_container');
 var share_a_ride_container = document.getElementById('share_a_ride_container');
 var carpool_main_page = document.getElementById('carpool_main_page');
+var carpool_on_booking_container = document.getElementById('carpool_on_booking_container');
 
 var carpool_ride_list_button = document.getElementById('carpool_ride_list_button');
 var share_a_ride_button = document.getElementById('share_a_ride_button');
@@ -40,6 +41,55 @@ var back_to_previous_page_button = document.getElementById('back_to_previous_pag
 /** CARPOOL MAIN PAGE */
 function getResJSON(result) {
     return result.json();
+}
+function getStatusIndicator(status) {
+    switch(status) {
+        case 0:
+            return {
+                trip_status: 'pending',
+                withButtons: true,
+                color: 'status-pending',
+                bgColor: 'bg-pending',
+                origin: 'Coming from ',
+                destination: 'Going to ',
+                target_location: 'Target location is ',
+                action: 'On trip with '
+            }
+        case 1:
+            return {
+                trip_status: 'confirmed',
+                withButtons: false,
+                color: 'status-confirmed',
+                bgColor: 'bg-confirmed',
+                origin: 'Coming from ',
+                destination: 'Going to ',
+                target_location: 'Target location is ',
+                action: 'On trip with '
+            }
+        case 2:
+            return {
+                trip_status: 'cancelled',
+                withButtons: false,
+                color: 'status-cancelled',
+                bgColor: 'bg-cancelled',
+                origin: 'Came from ',
+                destination: 'Went to ',
+                target_location: 'Target location was ',
+                action: 'Shared ride with '
+            }
+        case 3:
+            return {
+                trip_status: 'completed',
+                withButtons: false,
+                color: 'status-completed',
+                bgColor: 'bg-completed',
+                origin: 'Came from ',
+                destination: 'Went to ',
+                target_location: 'Target location was ',
+                action: 'Shared ride with '
+            }
+        default: return null;
+    }
 }
 function getRiderTripStatusAPI(tripID) {
     var VIEW_DRIVER_TRIPS_BY_ID_URL = VIEW_DRIVER_TRIPS_BY_ID_API_ENDPOINT + '/' + tripID;
@@ -51,6 +101,7 @@ function getRiderTripStatusAPI(tripID) {
                 hideActivityIndicator();
                 hideMoreCarpoolButtonsContainer();
                 carpool_main_page.style.display = 'block';
+                carpool_on_trip_container.style.display = 'none';
                 find_carpool_navigate_container.style.display = 'none';
 
                 if (driver.status === 0 || driver.status === 1) {                    
@@ -91,19 +142,30 @@ function getRiderBookingsStatusAPI(tripID) {
         .then(function (data) {
             if (data && data.length > 0) {   
                 var currentBooking = data.filter(function(booking) {
-                    return booking.tripID === tripID;
+                    return booking.tripID === tripID && booking.status === 0;
                 })[0];
-                
+
                 if (currentBooking && currentBooking.status === 0) {
+                    var timeFromNowFormat = moment(currentBooking.updatedAt).utc().format('MMMM D YYYY  h:mm a');
+                    var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
+                    var drivernameArr = currentBooking.drivername.split(' ');
+                    var destination = currentBooking.destination;
+                    var bookingStatus = getStatusIndicator(currentBooking.status);
+                    var bookingName = (currentBooking.booktype === 0 ? capitalize(drivernameArr[drivernameArr.length - 1]) : capitalize(destination.split(' ')[0])) + ' Ride';
+
                     hideActivityIndicator();
+                    carpool_main_page.style.display = 'block';
+                    find_carpool_navigate_container.style.display = 'none';
+                    carpool_on_booking_container.style.display = 'block';
+
                     // Show booking card - IMPORTANT!
-                    
-                    /*
-                    showInfoAlertWithConfirmButtonHTML(function () {
-                        window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
-                    }, 'Waiting for driver to confirm', 'Please go to <b>My Trips</b> to view status of your booking request', 'Go to Account Page');
-                    */
-                    
+                    document.querySelector('.current-booking-item').classList.add = bookingStatus.bgColor;
+                    document.querySelector('.current-booking-item .heading').innerHTML = bookingName;
+                    document.querySelector('.current-booking-item .status').classList.add = bookingStatus.color;
+                    document.querySelector('.current-booking-item .status').innerHTML = bookingStatus.trip_status;
+                    document.querySelector('.current-booking-item .datetime').innerHTML = capitalize(timeFromNow) + ' ' + timeFromNowFormat;
+                    document.querySelector('.current-booking-item .destination').innerHTML = currentBooking.destination;
+                    document.querySelector('.current-booking-item .seat-number').innerHTML = currentBooking.email;
                 } else if (currentBooking && currentBooking.status === 2) {
                     hideActivityIndicator();
                     loadMainPage();
@@ -270,9 +332,10 @@ function reloadCurrentPage() {
 
         showMainBottomNavbar();
         showMainTopNavbar();
-        
+
         if (current_booked_trip_key) {
             // Check if booking exists
+            console.log(current_booked_trip_key)
             if (localStorage.hasOwnProperty(DRIVER_BOOKING)) {
                 console.log("getRiderBookingsStatusAPI");
                 
@@ -285,7 +348,7 @@ function reloadCurrentPage() {
                 
                 // add this in dev due to server time
                 duration = duration - 8;
-                
+
                 if(duration <= 0.5){
                     // Cancel the trip for departure time expired
                     // IMPORTANT - Call cancel trip here
