@@ -287,58 +287,35 @@
                             <div id="driver_trip_container" style="display: flex-grow; margin: 48px 12px 24px 12px; align-content: center; justify-content: center;">
                                 <div id="driver_trip" style='display: flex; height: 120px; border-radius: 8px; border: 1px solid #fee014; background-color: #fee014;'>
                                     <div style='flex-grow: 4;'>
-                                        <p style='padding: 16px 0 0 16px; margin: 0; line-height: 1em; font-size: 1.2rem; font-weight: bold;'>Ramirez Ride</p>
-                                        <p style='padding: 0 0 0 16px; margin: 0; line-height: 1.1em; font-size: 0.8rem;'>1 hour ago, August 30, 2022</p>
-                                        <p style='padding: 16px 0 0 16px; margin: 0; line-height: 1em; font-size: 1rem;'>Bacoor, Cavite</p>
-                                        <p style='padding: 2px 0 0 16px; margin: 0; line-height: 1em; font-size: 0.8rem;'><span style='font-weight: bold;'>Departure:</span> 6:30pm</p>
+                                        <p id="on_driver_trip_booking_name" style='padding: 16px 0 0 16px; margin: 0; line-height: 1em; font-size: 1.2rem; font-weight: bold;'>Ramirez Ride</p>
+                                        <p id="on_driver_trip_departure_datetime" style='padding: 0 0 0 16px; margin: 0; line-height: 1.1em; font-size: 0.8rem;'>1 hour ago, August 30, 2022</p>
+                                        <p id="on_driver_trip_location" style='padding: 16px 0 0 16px; margin: 0; line-height: 1em; font-size: 1rem;'>Bacoor, Cavite</p>
+                                        <p id="on_driver_trip_departure_time" style='padding: 2px 0 0 16px; margin: 0; line-height: 1em; font-size: 0.8rem;'><span style='font-weight: bold;'>Departure:</span> 6:30pm</p>
                                     </div>
                                     <div style='flex-grow: 2; text-align: end'>
-                                        <p style='margin: 18px 24px 0 0; padding: 0; line-height: 1em; font-size: 1.8rem; font-weight: bold;'>3/3</p>
+                                        <p id="on_driver_trip_seat_number" style='margin: 18px 24px 0 0; padding: 0; line-height: 1em; font-size: 1.8rem; font-weight: bold;'>3/3</p>
                                         <p style='padding: 0; margin: 0; line-height: 1em; font-size: 0.8rem; margin-right: 24px;'>seats</p>
                                     </div>
                                 </div>
                             </div>
-                            <div id="driver_trip_booking_list" class="driver-trip-booking-list">
-                                <div style='display: flex; height: 60px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #dfdfdf; background-color: #dfdfdf;'>
-                                    <div style='flex-grow: 4;'>
-                                        <p style='padding: 10px 0 0 16px; margin: 0; line-height: 1em; font-size: 1.2rem; font-weight: bold;'>Jemimah Sai</p>
-                                        <p style='padding: 0 0 0 16px; margin: 0; line-height: 1.1em; font-size: 0.8rem;'>Salawag, Dasmariñas</p>
+                            <div id="driver_trip_booking_list" class="driver-trip-booking-list" style="display: none;">
+                                <div class="list-item">
+                                    <div class="on-driver-trip-rider">
+                                        <p class="on-driver-trip-rider-name">Jemimah Sai</p>
+                                        <p class="on-driver-trip-rider-location">Salawag, Dasmariñas</p>
                                     </div>
-                                    <div style='flex: 1; margin: 10px 10px 0 0'>
-                                        <p style="background-color: #c6c6c6; padding: 0; border-radius: 10px; width: 100px; height: 18px; text-align: center; font-size: 0.7em;">
-                                            pending
-                                        </p>
-                                    </div>
-                                </div>
-                                <div style='display: flex; height: 60px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #05a5df; background-color: #05a5df;'>
-                                    <div style='flex-grow: 4;'>
-                                        <p style='padding: 10px 0 0 16px; margin: 0; line-height: 1em; font-size: 1.2rem; font-weight: bold; color: #fff;'>Michelle Gan</p>
-                                        <p style='padding: 0 0 0 16px; margin: 0; line-height: 1.1em; font-size: 0.8rem; color: #fff;'>Salawag, Dasmariñas</p>
-                                    </div>
-                                    <div style='flex: 1; margin: 10px 10px 0 0'>
-                                        <p style="background-color: #2ab9ff; padding: 0; border-radius: 10px; width: 100px; height: 18px; text-align: center; font-size: 0.7em; color: #fff;">
-                                            confirmed
-                                        </p>
-                                    </div>
-                                </div>
-                                <div style='display: flex; height: 60px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #EAECEE; background-color: #EAECEE;'>
-                                    <div style='flex-grow: 4;'>
-                                        <p style='padding: 10px 0 0 16px; margin: 0; line-height: 1em; font-size: 1.2rem; font-weight: bold; color: #c6c6c6;'>Seat</p>
-                                        <p style='padding: 0 0 0 16px; margin: 0; line-height: 1.1em; font-size: 0.8rem; color: #c6c6c6;'>vacant</p>
-                                    </div>
-                                    <div style='flex: 1; margin: 10px 10px 0 0'>
-                                        <p style="background-color: #dadada; padding: 0; border-radius: 10px; width: 100px; height: 18px; text-align: center; font-size: 0.7em;">
-                                            vacant
-                                        </p>
+                                    <div class="on-driver-trip-booking-status">
+                                        <p>pending</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="driver-trip-buttons-container" style="position: fixed; width: 100%; bottom: 0; left: 0; right: 0; margin-bottom: 55px;">
                                 <div class="container">
                                     <div class="row driver-trip-buttons">
-                                        <button id="driver_trip_predeparture_btn" type="button" class="col-12 btn btn-primary" style="background-color: #05a5df; border-color: #05a5df; border-radius: 24px;">Pre-Departure</button>
-                                        <button id="driver_trip_start_btn" type="button" class="col-12 btn btn-primary" style="background-color: #05a5df; border-color: #05a5df; border-radius: 24px;">Start</button>
-                                        <button id="driver_trip_cancel_btn" type="button" class="col-12 btn btn-outlined" style="color: #9d9d9d; border-radius: 24px;">Cancel</button>
+                                        <button id="driver_trip_predeparture_btn" type="button" class="col-12 btn btn-primary" style="background-color: #05a5df; border-color: #05a5df; border-radius: 24px; display: none;">Pre-Departure</button>
+                                        <button id="driver_trip_start_btn" type="button" class="col-12 btn btn-primary" style="background-color: #05a5df; border-color: #05a5df; border-radius: 24px; display: none;">Start</button>
+                                        <button id="driver_trip_complete_btn" type="button" class="col-12 btn btn-primary" style="background-color: #05a5df; border-color: #05a5df; border-radius: 24px; display: none;">Complete</button>
+                                        <button id="driver_trip_cancel_btn" type="button" class="col-12 btn btn-outlined" style="color: #9d9d9d; border-radius: 24px; display: none;">Cancel</button>
                                     </div>
                                 </div>
                             </div>
