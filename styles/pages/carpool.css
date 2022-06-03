@@ -255,8 +255,8 @@
     margin: auto;
     border: 1px solid transparent;
     border-radius: 8px;
-    background-color: #FFE014;
     padding: 15px 20px;
+    cursor: pointer;
 }
 .carpool-on-booking-container .current-booking-item .heading {
     line-height: normal;
@@ -281,41 +281,12 @@
 .carpool-on-booking-container .current-booking-item .status {
     line-height: normal;
     font-size: 0.625rem;
-    color: #ffffff;
     width: 75px;
     text-align: center;
     font-weight: 700;
     padding: 3px 8px;
     border-radius: 8px;
     margin-right: 8px;
-}
-.carpool-on-booking-container .current-booking-item .status-pending {
-    background-color: #706209;
-    color: #FFE014;
-}
-.carpool-on-booking-container .current-booking-item .status-confirmed {
-    background-color: #075A70;
-    color: #10CCFF;
-}
-.carpool-on-booking-container .current-booking-item .status-cancelled {
-    background-color: #626262;
-    color: #E0E0E0;
-}
-.carpool-on-booking-container .current-booking-item .status-completed {
-    background-color: #075A70;
-    color: #10CCFF;
-}
-.carpool-on-booking-container .current-booking-item .bg-pending {
-    background-color: #FFE014;
-}
-.carpool-on-booking-container .current-booking-item .bg-confirmed {
-    background-color: #10CCFF;
-}
-.carpool-on-booking-container .current-booking-item .bg-cancelled {
-    background-color: #E0E0E0;
-}
-.carpool-on-booking-container .current-booking-item .bg-completed {
-    background-color: #10CCFF;
 }
 
 /** CARPOOL - SHARE A RIDE */
