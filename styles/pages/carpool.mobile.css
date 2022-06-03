@@ -27,7 +27,7 @@
     .on-trip-container .container {
         width: 80% !important;
     }
-    .on-trip-driver-container .on-trip-driver-body .container {
+    .on-trip-driver-container .container {
         width: 80% !important;
     }
     .share-a-ride-container .navigate-container {
@@ -93,9 +93,16 @@
     .share-a-ride-container .navigate-container .container {
         width: 100% !important;
     }
-    .on-trip-driver-container .on-trip-driver-body .container {
+    .on-trip-driver-container .driver-trip-buttons-container .container {
         width: 100% !important;
         padding: 0;
+    }
+    .on-trip-driver-container .container {
+        width: 100% !important;
+        padding: 0;
+    }
+    .on-trip-driver-container .driver-trip-buttons-container .container {
+        width: 240px !important;
     }
     .carpool-container .more-carpool-buttons button {
         font-size: 0.75rem;
@@ -146,13 +153,13 @@
     .carpool-ride-list-container .driver-pool-results .carpool-driver-to-choose-button .h6{
         font-size: 0.875rem;
     }
-    .on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar-name {
-        font-size: 0.625rem;
-    }
     .carpool-on-booking-container .current-booking-item {
         width: 250px;
     }
     .carpool-on-booking-container .current-booking-item .header {
         margin-bottom: 4px;
+    }
+    .on-trip-driver-container .driver-trip-buttons-container .container {
+        width: 200px !important;
     }
 }

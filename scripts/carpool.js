@@ -212,122 +212,114 @@ function getDriverTripSessionAPI() {
                                 + '</div>'
                                 + '<p class=\"text-muted avatar-name avatar-name-unavailable\">Empty Seat</p>'
                             + '</div>';
+    hideActivityIndicator();
+    // fetch(VIEW_DRIVER_TRIPS_URL)
+    //     .then(getResJSON)
+    //     .then(function (data) {
+    //         hideActivityIndicator();
+    //         carpool_main_page.style.display = 'block';
 
-    fetch(VIEW_DRIVER_TRIPS_URL)
-        .then(getResJSON)
-        .then(function (data) {
-            hideActivityIndicator();
-            carpool_main_page.style.display = 'block';
+    //         if (data && data.length > 0) {
+    //             var currentTrip = data.filter(function (currentTrip) {
+    //                 return (currentTrip.status === 0 || currentTrip.status === 1) && currentTrip.tripType === 0
+    //             });
+    //             var ongoingDriverSession = currentTrip && currentTrip.length > 0 ? true : false;
 
-            if (data && data.length > 0) {
-                var currentTrip = data.filter(function (currentTrip) {
-                    return (currentTrip.status === 0 || currentTrip.status === 1) && currentTrip.tripType === 0
-                });
-                var ongoingDriverSession = currentTrip && currentTrip.length > 0 ? true : false;
+    //             if (ongoingDriverSession) {
+    //                 var driver = data.filter(function(trip) {
+    //                     return trip._id === currentTrip[0]._id;
+    //                 });
 
-                if (ongoingDriverSession) {
-                    var driver = data.filter(function(trip) {
-                        return trip._id === currentTrip[0]._id;
-                    });
+    //                 carpool_ride_list_container.style.display = 'none';
+    //                 hideMoreCarpoolButtonsContainer();
+    //                 showOnTripDriverContainer();
 
-                    carpool_ride_list_container.style.display = 'none';
-                    hideMoreCarpoolButtonsContainer();
-                    showOnTripDriverContainer();
+    //                 document.querySelector('.on-trip-driver-body').style.display = 'none';
+    //                 document.getElementById('cancel_driver_trip_button').disabled = true;
+    //                 document.getElementById('start_driver_trip_button').disabled = true;
+    //                 document.getElementById('complete_driver_trip_button').disabled = true;
 
-                    document.querySelector('.on-trip-driver-body').style.display = 'none';
-                    document.getElementById('cancel_driver_trip_button').disabled = true;
-                    document.getElementById('start_driver_trip_button').disabled = true;
-                    document.getElementById('complete_driver_trip_button').disabled = true;
-
-                    if (driver.length > 0) {
-                        if(localStorage.getItem(DRIVER_TRIP_STATUS_KEY)) {
-                            document.querySelector('.on-trip-driver-body').style.display = 'block';
-                            document.getElementById('refresh_driver_page_button').style.display = 'none';
-                            document.getElementById('cancel_driver_trip_button').disabled = false;
-                            document.getElementById('cancel_driver_trip_button').style.display = 'block';
-                            document.getElementById('start_driver_trip_button').style.display = 'none';
-                            document.getElementById('complete_driver_trip_button').style.display = 'block';
-                            document.getElementById('complete_driver_trip_button').disabled = false;
-                            document.querySelector('.offcanvas_driver_trip_status').innerHTML = 'Trip ongoing';
+    //                 if (driver.length > 0) {
+    //                     if(localStorage.getItem(DRIVER_TRIP_STATUS_KEY)) {
+    //                         document.querySelector('.on-trip-driver-body').style.display = 'block';
+    //                         document.getElementById('refresh_driver_page_button').style.display = 'none';
+    //                         document.getElementById('cancel_driver_trip_button').disabled = false;
+    //                         document.getElementById('cancel_driver_trip_button').style.display = 'block';
+    //                         document.getElementById('start_driver_trip_button').style.display = 'none';
+    //                         document.getElementById('complete_driver_trip_button').style.display = 'block';
+    //                         document.getElementById('complete_driver_trip_button').disabled = false;
+    //                         document.querySelector('.offcanvas_driver_trip_status').innerHTML = 'Trip ongoing';
                 
-                            hideActivityIndicator();
-                        } else {
-                            document.getElementById('start_driver_trip_button').disabled = false;
-                            document.getElementById('cancel_driver_trip_button').disabled = false;
-                            document.querySelector('.offcanvas_driver_trip_status').innerHTML = driver[0].seats == 0 ? 'Waiting for driver to start ride' : 'Waiting for passengers to join';
-                        }
+    //                         hideActivityIndicator();
+    //                     } else {
+    //                         document.getElementById('start_driver_trip_button').disabled = false;
+    //                         document.getElementById('cancel_driver_trip_button').disabled = false;
+    //                         document.querySelector('.offcanvas_driver_trip_status').innerHTML = driver[0].seats == 0 ? 'Waiting for driver to start ride' : 'Waiting for passengers to join';
+    //                     }
 
-                        if (driver[0].temp.length > 0) {
-                            showSuccessToastNotification('You got ' + driver[0].temp.length + ' pending booking request!');
-                        } else {
-                            showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
-                                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
-                            }, 'Waiting for potential passengers', 'Please go to <b>My Bookings</b> to confirm or cancel booking requests', 'Go to Account Page');
-                        }
+    //                     document.getElementById('start_driver_trip_button').disabled = false;
 
-                        document.getElementById('start_driver_trip_button').disabled = false;
+    //                     document.querySelector('.offcanvas_driver_departure_time').innerHTML = moment(driver[0].departTime).utc().format('MMMM D YYYY  h:mm a');
+    //                     document.querySelector('.offcanvas_driver_target_location').innerHTML = driver[0].origin + '<a style=\"margin-left: 8px; font-size: 0.75rem;\" target=\"_blank\" href=\"https://maps.google.com?q=' + driver[0].lat + ',' + driver[0].lng + '&z=15\">View in Map</a>';
 
-                        document.querySelector('.offcanvas_driver_departure_time').innerHTML = moment(driver[0].departTime).utc().format('MMMM D YYYY  h:mm a');
-                        document.querySelector('.offcanvas_driver_target_location').innerHTML = driver[0].origin + '<a style=\"margin-left: 8px; font-size: 0.75rem;\" target=\"_blank\" href=\"https://maps.google.com?q=' + driver[0].lat + ',' + driver[0].lng + '&z=15\">View in Map</a>';
+    //                     document.querySelector('.on-trip-driver-body').style.display = 'block';
 
-                        document.querySelector('.on-trip-driver-body').style.display = 'block';
+    //                     if (driver[0].riders.length > 0) {
+    //                         var blocks = '';
 
-                        if (driver[0].riders.length > 0) {
-                            var blocks = '';
+    //                         for (var i = 0; i < driver[0].seats; i++) {
+    //                             blocks += emptySeatBlock;
+    //                         }
 
-                            for (var i = 0; i < driver[0].seats; i++) {
-                                blocks += emptySeatBlock;
-                            }
+    //                         document.querySelector('.offcanvas_driver_seats_count').innerHTML = driver[0].seats + (driver[0].seats === 1 ? ' seat available' : ' seats available');
+    //                         document.querySelector('.offcanvas_driver_passengers_list').innerHTML = driver[0].riders.map(function (passenger) {
+    //                             return '<div class=\"col-4 col-md-3\">'
+    //                                             + '<div class=\"avatar-container\">'
+    //                                             +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
+    //                                             + '</div>'
+    //                                             + '<p class=\"text-muted avatar-name\">' + passenger.replace('@cebupacificair.com', '') + '</p>'
+    //                                         + '</div>';
+    //                             }).join('') + blocks;
+    //                     } else {
+    //                         var blocks = '';
+    //                         var totalEmptySeats = driver[0].temp.length + driver[0].seats;
 
-                            document.querySelector('.offcanvas_driver_seats_count').innerHTML = driver[0].seats + (driver[0].seats === 1 ? ' seat available' : ' seats available');
-                            document.querySelector('.offcanvas_driver_passengers_list').innerHTML = driver[0].riders.map(function (passenger) {
-                                return '<div class=\"col-4 col-md-3\">'
-                                                + '<div class=\"avatar-container\">'
-                                                +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
-                                                + '</div>'
-                                                + '<p class=\"text-muted avatar-name\">' + passenger.replace('@cebupacificair.com', '') + '</p>'
-                                            + '</div>';
-                                }).join('') + blocks;
-                        } else {
-                            var blocks = '';
-                            var totalEmptySeats = driver[0].temp.length + driver[0].seats;
+    //                         for (var i = 0; i < totalEmptySeats; i++) {
+    //                             blocks += emptySeatBlock;
+    //                         }
 
-                            for (var i = 0; i < totalEmptySeats; i++) {
-                                blocks += emptySeatBlock;
-                            }
+    //                         document.querySelector('.offcanvas_driver_passengers_list').innerHTML = blocks;
+    //                         document.getElementById('start_driver_trip_button').disabled = true;
+    //                         document.getElementById('cancel_driver_trip_button').disabled = false;
+    //                         document.querySelector('.offcanvas_driver_seats_count').innerHTML = totalEmptySeats + ' seats available';
+    //                     }
 
-                            document.querySelector('.offcanvas_driver_passengers_list').innerHTML = blocks;
-                            document.getElementById('start_driver_trip_button').disabled = true;
-                            document.getElementById('cancel_driver_trip_button').disabled = false;
-                            document.querySelector('.offcanvas_driver_seats_count').innerHTML = totalEmptySeats + ' seats available';
-                        }
-
-                        document.getElementById('start_driver_trip_button').addEventListener('click', onStartTrip(driver[0]._id, driver[0].riders));
-                        document.getElementById('cancel_driver_trip_button').addEventListener('click', onCancelTrip(driver[0]._id, driver[0].riders));
-                        document.getElementById('complete_driver_trip_button').addEventListener('click', onCompleteTrip(driver[0]._id, driver[0].riders));
-                    } else {
-                        document.querySelector('.on-trip-driver-body').style.display = 'block';
-                        document.querySelector('.offcanvas_driver_seats_count').innerHTML = '-';
-                        document.querySelector('.offcanvas_driver_departure_time').innerHTML = '-';
-                        document.querySelector('.offcanvas_driver_target_location').innerHTML = '-';
-                        document.querySelector('.offcanvas_driver_trip_status').innerHTML = 'Waiting for passengers to join';
-                        document.getElementById('cancel_driver_trip_button').disabled = false;
-                        document.getElementById('start_driver_trip_button').disabled = true;
-                    }
-                } else {
-                    loadMainPage();
-                }
-            } else {
-                loadMainPage();
-            }
-        })
-        .catch(function (err) {
-            console.error(err);
-            hideActivityIndicator();
-            showErrorAlertWithConfirmButton(function () {
-                window.location.href = HOMEPAGE_SOURCE_LOCATION;
-            }, 'Error 500', 'Internal server error', 'Refresh');
-        });
+    //                     document.getElementById('start_driver_trip_button').addEventListener('click', onStartTrip(driver[0]._id, driver[0].riders));
+    //                     document.getElementById('cancel_driver_trip_button').addEventListener('click', onCancelTrip(driver[0]._id, driver[0].riders));
+    //                     document.getElementById('complete_driver_trip_button').addEventListener('click', onCompleteTrip(driver[0]._id, driver[0].riders));
+    //                 } else {
+    //                     document.querySelector('.on-trip-driver-body').style.display = 'block';
+    //                     document.querySelector('.offcanvas_driver_seats_count').innerHTML = '-';
+    //                     document.querySelector('.offcanvas_driver_departure_time').innerHTML = '-';
+    //                     document.querySelector('.offcanvas_driver_target_location').innerHTML = '-';
+    //                     document.querySelector('.offcanvas_driver_trip_status').innerHTML = 'Waiting for passengers to join';
+    //                     document.getElementById('cancel_driver_trip_button').disabled = false;
+    //                     document.getElementById('start_driver_trip_button').disabled = true;
+    //                 }
+    //             } else {
+    //                 loadMainPage();
+    //             }
+    //         } else {
+    //             loadMainPage();
+    //         }
+    //     })
+    //     .catch(function (err) {
+    //         console.error(err);
+    //         hideActivityIndicator();
+    //         showErrorAlertWithConfirmButton(function () {
+    //             window.location.href = HOMEPAGE_SOURCE_LOCATION;
+    //         }, 'Error 500', 'Internal server error', 'Refresh');
+    //     });
 }
 function loadMainPage() {
     carpool_main_page.style.display = 'block';
@@ -404,8 +396,11 @@ function reloadCurrentPage() {
                     localStorage.removeItem(DRIVER_TRIP);
                     hideActivityIndicator();
                     loadMainPage();
-                }else{
-                    console.log(duration);
+                } else{
+                    carpool_main_page.style.display = 'block';
+                    carpool_ride_list_container.style.display = 'none';
+                    on_trip_driver_container.style.display = 'block';
+
                     getDriverTripSessionAPI();
                 }
             }else{
@@ -432,8 +427,6 @@ back_to_previous_page_button.addEventListener('click', onBackToPreviousPage);
 var find_carpool_navigate_container = document.getElementById('find_carpool_navigate_container');
 var driver_pool_results_container = document.getElementById('driver_pool_results_container');
 var carpool_on_trip_container = document.getElementById('carpool_on_trip_container');
-var trip_completed_container = document.getElementById('trip_completed_container');
-var trip_cancelled_container = document.getElementById('trip_cancelled_container');
 
 var show_confirm_carpool_rider = document.getElementById('show_confirm_carpool_rider');
 var search_pick_up_point = document.getElementById('search_pick_up_point');
@@ -609,12 +602,6 @@ function hideMoreCarpoolButtonsContainer () {
 function hideDriverPoolResultsContainer () {
     driver_pool_results_container.style.display = 'none';
 }
-function hideTripCancelled () {
-    trip_cancelled_container.style.display = 'none';
-}
-function hideTripCompleted () {
-    trip_completed_container.style.display = 'none';
-}
 
 function loadCarpoolOnTripScreen(rider) {
     var tripID = rider._id;
@@ -720,16 +707,6 @@ function onJoinPoolRider (rider) {
         loadCarpoolOnTripScreen(rider);
     }
 }
-function onTripCancelled () {
-    hideTripCancelled();
-    localStorage.removeItem(CURRENT_BOOKED_TRIP_KEY);
-    window.location.href = HOMEPAGE_SOURCE_LOCATION;
-}
-function onTripCompleted () {
-    hideTripCompleted();
-    localStorage.removeItem(CURRENT_BOOKED_TRIP_KEY);
-    window.location.href = HOMEPAGE_SOURCE_LOCATION;
-}
 function onFindPoolRiderButtonState(e) {
     e.preventDefault();
 
@@ -743,8 +720,6 @@ function onFindPoolRiderButtonState(e) {
 carpool_ride_list_button.addEventListener('click', onCarpoolRidelist);
 is_to_drop_switch.addEventListener('change', onIsToDropSwitch);
 find_pool_rider_button.addEventListener('click', onFindCarpoolRide);
-trip_completed_button.addEventListener('click', onTripCompleted);
-trip_cancelled_container.addEventListener('click', onTripCompleted);
 search_pick_up_point.addEventListener('keyup', onFindPoolRiderButtonState);
 search_drop_off_point.addEventListener('keyup', onFindPoolRiderButtonState);
 

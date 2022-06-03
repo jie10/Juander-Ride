@@ -317,66 +317,19 @@
     width: 100%;
 }
 
-.on-trip-driver-container .on-trip-driver-body {
-    padding: 45px 0 30px 0;
-    height: calc(100% - 35px);
-}
-
-.on-trip-driver-container .on-trip-driver-body .container {
+.on-trip-driver-container .container {
     width: 480px !important;
 }
-.on-trip-driver-container .on-trip-driver-body .driver-info-header .avatar-container {
-    height: 50px;
-    overflow: hidden;
-    border-radius: 8px;
+.on-trip-driver-container .driver-trip-booking-list {
+    padding-bottom: 200px;
 }
-.on-trip-driver-container .on-trip-driver-body .driver-info-header .avatar {
-    height: 100%;
+.on-trip-driver-container .driver-trip-buttons-container {
+    padding: 20px 20px 10px 20px;
+    background-color: #F7F7F7;
 }
-.on-trip-driver-container .on-trip-driver-body .driver-info-header .carpool-driver-to-choose-button {
-    border-radius: 8px;
-    padding: 16px 8px;
+.on-trip-driver-container .driver-trip-buttons-container .container {
+    width: 320px !important;
 }
-.on-trip-driver-container .on-trip-driver-body .driver-info-header .h6 {
-    font-size: 1rem;
-    font-weight: 700;
-    word-wrap: break-word;
-    -ms-word-wrap: break-word;
-}
-.on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar-container {
-    height: 50px;
-    width: 50px;
-    overflow: hidden;
-    border-radius: 50%;
-    margin: auto;
-    margin-bottom: 6px;
-}
-.on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar {
-    height: 100%;
-}
-.on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar-name {
-    font-size: 0.75rem;
-    text-align: center;
-    font-weight: 700;
-    word-wrap: break-word;
-    -ms-word-wrap: break-word;
-}
-.on-trip-driver-container .on-trip-driver-body .driver-info-passengers .avatar-name-unavailable {
-    color: #cccccc !important;
-}
-.on-trip-driver-container .on-trip-driver-body .driver-info-others h6 {
-    font-size: 0.75rem;
-    margin-bottom: 3px;
-    color: #cccccc;
-}
-.on-trip-driver-container .on-trip-driver-body .driver-info-others p {
-    font-size: 0.875rem;
-    margin: 0;
-}
-.on-trip-driver-container .on-trip-driver-body .driver-info-others a {
-    font-size: 0.875rem;
-    text-decoration: none;
-}
-.on-trip-driver-container .on-trip-driver-body .driver-info-others a:hover {
-    text-decoration: underline;
+.on-trip-driver-container .driver-trip-buttons button {
+    margin: 0 0 8px 0;
 }
