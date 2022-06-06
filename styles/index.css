@@ -1,8 +1,11 @@
-/** LOGIN PAGE */
-.login-page-container .container {
+.index-page-container .container {
     width: 480px !important;
+    min-height: 100vh;
+    background-color: #FFFFFF;
 }
-.login-page-container .login-header {
+
+/** LOGIN PAGE */
+.index-page-container .login-header {
     background-image: url('../images/sample/login-header.png');
     background-size: cover;
     -o-background-size: cover;
@@ -13,27 +16,65 @@
     width: 100%;
     height: 250px;
 }
-.login-page-container .login-form-container {
-    flex-grow: 1;
+.index-page-container .login-form-container {
     background-color: #ffffff;
     padding: 24px 36px;
 }
-.login-page-container .login-form {
+.index-page-container .login-form {
     width: 80%;
     margin: auto;
 }
-.login-page-container .login-form .login-email-input-label {
+.index-page-container .login-form .login-email-input-label {
     font-weight: 700;
     margin: 0 0 8px 0;
 }
-.login-page-container .login-form .login-email-input {
+.index-page-container .login-form .login-email-input {
     width: 100%;
 }
-.login-page-container .login-form .login-button {
+.index-page-container .login-form .login-button {
     width: 80%;
     margin: auto;
     border-radius: 24px;
 }
+
+/** REGISTER PAGE */
+.index-page-container .sign-up-header {
+    position: relative;
+    background-color: #fee014;
+    width: 100%;
+    height: 250px;
+    padding: 16px 8px;
+}
+.index-page-container .sign-up-header .back-to-login-view-button i {
+    color: #373737 !important;
+}
+.index-page-container .sign-up-header .page-title {
+    color: #373737 !important;
+    font-weight: 700;
+    width: 100%;
+    text-align: center;
+}
+.index-page-container .sign-up-form-container {
+    background-color: #ffffff;
+    padding: 24px 36px;
+}
+.index-page-container .sign-up-form {
+    width: 80%;
+    margin: auto;
+}
+.index-page-container .sign-up-form label {
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+.index-page-container .sign-up-form input[type=text]{
+    width: 100%;
+}
+.index-page-container .sign-up-form .sign-up-button {
+    width: 80%;
+    margin: auto;
+    border-radius: 24px;
+}
+
 
 .welcome-rems {
     padding-bottom: 24px;
