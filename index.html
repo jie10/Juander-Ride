@@ -10,6 +10,8 @@
     <!-- BOOTSTRAP 5 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <!-- LOTTIE -->
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <!-- CUSTOM CSS -->
     <link href="../styles/default.css" rel="stylesheet" type="text/css"/>
     <link href="./styles/index.css" rel="stylesheet" type="text/css" />
@@ -33,8 +35,52 @@
                     <div class="col-12 d-flex justify-content-center">
                       <button type="button" class="btn btn-primary login-button" id="login_button">Login</button>
                     </div>
+                    <div class="col-12 d-flex justify-content-center">
+                      <button type="button" class="btn btn-link" id="register_button" style="text-decoration: none;"><span style="color: grey;">No account yet? </span>Register</button>
+                    </div>
                 </form>
             </section>
+        </div>
+        <div id="register_viewcontroller" style="position: absolute; width: 100%; height: 100%; z-index: 100; top: 0; left: 0; background-color: #fff; visibility: collapse; opacity: 1;">
+            <div style="display: flex; align-items: center; margin: 0; padding: 0; height: 50px; background-color: transparent;">
+                <div id="scanner_close_btn" style="flex-grow: 1;">
+                    <img src="../images/icons/round_close.png" style="width: 32px; padding-left: 12px"/>
+                </div>
+                <p class="h5 nav-brand" style="flex-grow: 4; font-weight: bold; padding: 0; margin: 0; text-align: center; color: #2472ba;"></p>
+                <div style="flex-grow: 1; width: 36px;">
+
+                </div>
+            </div>
+            <div style="display: flex; align-content: center; justify-content: center;">
+                <p style="font-size: 2.2em; padding: 0; margin: 0; font-weight: bold; margin-top: 60px;">Juander</p>
+            </div>
+            <div style="display: flex; align-content: center;">
+                <p style="font-size: 1.2em; padding: 0; margin: 0; font-weight: bold; margin-top: 24px; margin-left: 36px; color: darkgrey;">Create your account</p>
+            </div>
+            <form>
+                <div style="display: flex; align-content: center;">
+                    <input type="email" class="form-control login-email-input" id="user_email" name="user_email" placeholder="Email" autocomplete="off" style="margin: 12px 36px 0 36px; height: 50px;">
+                    <div class="invalid-feedback">Please choose a valid email</div>
+                </div>
+                <div style="display: flex; align-content: center;">
+                    <input type="tel" class="form-control login-email-input" id="user_mobile" name="user_mobile" placeholder="917-XXX-XXXX" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" autocomplete="off" style="margin: 12px 36px 0 36px; height: 50px;">
+                    <div class="invalid-feedback">Please choose a valid mobile number</div>
+                </div>
+                <div style="display: flex; align-content: center;">
+                    <input type="" class="form-control login-email-input" id="user_address" name="user_address" placeholder="Address" autocomplete="off" style="margin: 12px 36px 0 36px; height: 50px;">
+                    <div class="invalid-feedback">Please choose a valid address</div>
+                </div>
+                <div style="display: flex; align-content: center;">
+                    <div id="scanner_confirm_btn" style="flex-grow: 1; border-radius: 8px; height: 50px; background-color: #05a5df; margin: 24px 36px;">
+                        <p style="font-size: 1rem; color: #fff; padding-top: 10px; margin: 0; padding: 0; text-align: center; line-height: 50px;">Sign up</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="activity_indicator" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: collapse; opacity: 1;">
+            <div style="display: flex; align-content: center; justify-content: center; align-items: center; height: 100%;">
+                <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_o8zsifcp.json" background="transparent" speed="1" style="width: 160px; height: 160px;" loop autoplay></lottie-player>
+            </div>
         </div>
     </div>
     <script type="text/javascript" src="./scripts/index.js"></script>

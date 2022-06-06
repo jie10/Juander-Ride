@@ -292,13 +292,14 @@
                                         <p id="on_driver_trip_location" style='padding: 16px 0 0 16px; margin: 0; line-height: 1em; font-size: 1rem;'>Bacoor, Cavite</p>
                                         <p id="on_driver_trip_departure_time" style='padding: 2px 0 0 16px; margin: 0; line-height: 1em; font-size: 0.8rem;'><span style='font-weight: bold;'>Departure:</span> 6:30pm</p>
                                     </div>
-                                    <div style='flex-grow: 2; text-align: end'>
-                                        <p id="on_driver_trip_seat_number" style='margin: 18px 24px 0 0; padding: 0; line-height: 1em; font-size: 1.8rem; font-weight: bold;'>3/3</p>
-                                        <p style='padding: 0; margin: 0; line-height: 1em; font-size: 0.8rem; margin-right: 24px;'>seats</p>
+                                    <div style='flex-grow: 2; justify-content: center; align-items: center; text-align: center;'>
+                                        <p id="on_driver_trip_seat_number" style='margin: 12px 0 0 0; padding: 0; line-height: 1em; font-size: 1.8rem; font-weight: bold;'>3/3</p>
+                                        <p style='padding: 0; margin: 0; line-height: 1em; font-size: 0.8rem;'>seats</p>
                                     </div>
                                 </div>
                             </div>
                             <div id="driver_trip_booking_list" class="driver-trip-booking-list" style="display: none;">
+                                <!--
                                 <div class="list-item">
                                     <div class="on-driver-trip-rider">
                                         <p class="on-driver-trip-rider-name">Jemimah Sai</p>
@@ -308,12 +309,21 @@
                                         <p>pending</p>
                                     </div>
                                 </div>
+                                <div class="list-item">
+                                    <div class="on-driver-trip-rider">
+                                        <p class="on-driver-trip-rider-name">Jemimah Sai</p>
+                                        <p class="on-driver-trip-rider-location">Salawag, Dasmariñas</p>
+                                    </div>
+                                    <div class="on-driver-trip-booking-status">
+                                        <p>pending</p>
+                                    </div>
+                                </div>-->
                             </div>
                             <div class="driver-trip-buttons-container" style="position: fixed; width: 100%; bottom: 0; left: 0; right: 0; margin-bottom: 55px;">
                                 <div class="container">
                                     <div class="row driver-trip-buttons">
-                                        <button id="driver_trip_predeparture_btn" type="button" class="col-12 btn btn-primary" style="background-color: #05a5df; border-color: #05a5df; border-radius: 24px; display: none;">Pre-Departure</button>
-                                        <button id="driver_trip_start_btn" type="button" class="col-12 btn btn-primary" style="background-color: #05a5df; border-color: #05a5df; border-radius: 24px; display: none;">Start</button>
+                                        <button id="driver_trip_predeparture_btn" type="button" class="col-12 btn btn-primary" style="background-color: #eaeaea; border-color: #eaeaea; border-radius: 24px; display: none; color: #929292;">Pre-Departure</button>
+                                        <button id="driver_trip_start_btn" type="button" class="col-12 btn btn-primary" style="background-color: #eaeaea; border-color: #eaeaea; border-radius: 24px; display: none; color: #929292;">Start</button>
                                         <button id="driver_trip_complete_btn" type="button" class="col-12 btn btn-primary" style="background-color: #05a5df; border-color: #05a5df; border-radius: 24px; display: none;">Complete</button>
                                         <button id="driver_trip_cancel_btn" type="button" class="col-12 btn btn-outlined" style="color: #9d9d9d; border-radius: 24px; display: none;">Cancel</button>
                                     </div>
@@ -337,7 +347,7 @@
                 </a>
             </div>
         </div>
-        <div id="activity_indicator" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: collapse; opacity: 0.9;">
+        <div id="activity_indicator" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: collapse; opacity: 1.0;">
             <div style="display: flex; align-content: center; justify-content: center; align-items: center; height: 100%;">
                 <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_o8zsifcp.json" background="transparent" speed="1" style="width: 160px; height: 160px;" loop autoplay></lottie-player>
             </div>
@@ -345,6 +355,8 @@
     </div>
     <script type="text/javascript" src="../scripts/helpers.js"></script>
     <script type="text/javascript" src="../scripts/utils.js"></script>
+    <script type="text/javascript" src="../scripts/juander-service.js"></script>
+    <script type="text/javascript" src="../scripts/datetime-service.js"></script>
     <script type="text/javascript" src="../scripts/components/lib/alerts.js"></script>
     <script type="text/javascript" src="../scripts/components/lib/activity_indicator.js"></script>
     <script type="text/javascript" src="../scripts/components/navbars.js"></script>
