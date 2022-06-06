@@ -169,6 +169,8 @@ function loadUserDetails() {
     document.querySelector('.user-name').innerHTML = user_data.displayName ? user_data.displayName : user_data.email;
     document.querySelector('.user-role').innerHTML = user_data.jobTitle ? user_data.jobTitle : 'CEB employee';
     document.querySelector('.user-position').innerHTML = user_data.jobTitle ? user_data.jobTitle : 'Cebu Pacifir Air, Inc.';
+
+    document.querySelector('.dtp-count').innerHTML = user_data.dtp ? user_data.points : 0;
     document.querySelector('.points-count').innerHTML = user_data.points ? user_data.points : 0;
     document.querySelector('.badges-count').innerHTML = user_data.badges ? user_data.badges : 0;
     document.querySelector('.items-count').innerHTML = user_data.items ? user_data : 0;
