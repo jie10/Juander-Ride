@@ -13,7 +13,7 @@ var CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.
 
 /** SOURCE LOCATION */
 var HOMEPAGE_SOURCE_LOCATION = '/';
-var ACCOUNTPAGE_SOURCE_LOCATION = ACCOUNTPAGE_SOURCE_LOCATION;
+var ACCOUNTPAGE_SOURCE_LOCATION = '../pages/account.html';
 
 /** COMPONENTS */
 var NO_RESULTS_FOUND = "<p class=\"text-muted absolute-center text-center\" style=\"font-weight: 700; font-size: 1rem;\">No results found</p>";
@@ -125,6 +125,10 @@ function showMyBookingsPageContainer() {
 function showActivityIndicator() {
     activity_indicator.style.visibility = "visible";
 }
+function hideAllPageContainers() {
+    account_page_body_container.style.display = 'none';
+    my_bookings_container.style.display = 'none';
+}
 function hideActivityIndicator() {
     activity_indicator.style.visibility = "collapse";
 }
@@ -135,10 +139,11 @@ function hideMainBottomNavbar() {
 
 function reloadCurrentPage() {
     showActivityIndicator();
+    showProfileNavbar();
+    showMainBottomNavbar();
+    hideAllPageContainers();
 
     delay(function () {
-        showProfileNavbar();
-        showMainBottomNavbar();
         showMainAccountPageContainer();
         hideActivityIndicator();
     }, DELAY_TIME_IN_MILLISECONDS);
@@ -182,13 +187,14 @@ function getRiderBookingsHistory() {
         .then(function (data) {
             delay(function () {
                 hideActivityIndicator();
+                showMyTripsPageContainer();
 
                 if (data && data.length > 0) {
-                    sortDateTime(data, 'desc');
+                    sortDateTime(data, 'desc', 'departTime');
                     my_trips_container.innerHTML = '<div class=\"tripHistory-list container\">' +
-                                                        data.sort((a,b) => b.updatedAt - a.updatedAt).map(function (val) { 
+                                                        data.map(function (val) { 
                                                             var _id = val._id;
-                                                            var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D, YYYY  h:mm a');
+                                                            var timeFromNowFormat = moment(val.departTime).utc().format('MMMM D, YYYY  h:mm a');
                                                             var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
                                                             var drivernameArr = val.drivername.split(' ');
                                                             var destination = val.destination;
@@ -204,7 +210,7 @@ function getRiderBookingsHistory() {
                                                                             + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
                                                                         + '</div>'
                                                                         + '<p class=\"destination\">' + destination + '</p>'
-                                                                        + '<p class=\"seat-number\">' + val.email + '</p>'
+                                                                        + '<p class=\"seat-number\">' + val.seatCount + '/' + val.seats + (val.seatCount === 1 ? ' seat' : ' seats') + '</p>'
                                                                     + '</div>';
                                                         }).join('');
                                                     + '</div>';
@@ -235,12 +241,13 @@ function getDriverBookings() {
         .then(function (data) {
             delay(function () {
                 hideActivityIndicator();
+                showMyBookingsPageContainer();
 
                 if (data && data.length > 0) {
-                    sortDateTime(data, 'desc');
+                    sortDateTime(data, 'desc', 'departTime');
                     my_bookings_container.innerHTML = '<div class=\"tripHistory-list container\">' +
                                                         data.map(function (val) { 
-                                                            var timeFromNowFormat = moment(val.updatedAt).utc().format('MMMM D YYYY  h:mm a');
+                                                            var timeFromNowFormat = moment(val.departTime).utc().format('MMMM D YYYY  h:mm a');
                                                             var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
                                                             var _id = val._id;
                                                             var drivernameArr = val.drivername.split(' ');
@@ -248,7 +255,7 @@ function getDriverBookings() {
                                                             var bookingStatus = getStatusIndicator(val.status);
                                                             var bookingName = (val.booktype === 0 ? capitalize(drivernameArr[drivernameArr.length - 1]) : capitalize(destination.split(' ')[0])) + ' Ride';
                                                             var tripID = val.tripID;
-                                                            console.log(val)
+
                                                             return '<div class=\"list-item\" style=\"' + (val.status === 0 ? 'cursor: pointer;' : 'cursor: default;') + '\" id=\"' + _id + '_' + tripID + '_' + val.status + '\" onclick=\"loadBookingButtons(this)\">'
                                                                         + '<div class=\"row d-flex align-items-center header\">'
                                                                             + '<div class=\"col heading\">' + bookingName + '</div>'
@@ -258,7 +265,8 @@ function getDriverBookings() {
                                                                             + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
                                                                         + '</div>'
                                                                         + '<p class=\"destination\">' + destination + '</p>'
-                                                                        + '<p class=\"seat-number\" id=\"' + _id + '_rider' +'\">' + val.email + '</p>'
+                                                                        + '<p class=\"seat-number\" id=\"' + _id + '_rider' +'\">' + val.seatCount + '/' + val.seats + (val.seatCount === 1 ? ' seat' : ' seats') + '</p>'
+                                                                        + '<p class=\"booked-by\">' + 'Booked by ' + val.ridername + '</p>'
                                                                     + '</div>';
                                                         }).join('');
                                                     + '</div>';
@@ -291,6 +299,7 @@ function confirmOrCancelBooking(_id, status, tripID) {
     };
 
     showActivityIndicator();
+    hideAllPageContainers();
 
     fetch(CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT + '/' + _id, options)
         .then(getResJSON)
@@ -336,7 +345,7 @@ function confirmOrCancelBooking(_id, status, tripID) {
                             })
                             .then(function (data) {
                                 showSuccessAlertWithConfirmButton(function () {
-                                    reloadCurrentPage();
+                                    onMyBookings();
                                 }, (status === 1 ? 'Booking has been confirmed' : 'Booking has been cancelled'), '', 'Done');
                             })
                             .catch(function (err) {
@@ -366,28 +375,24 @@ function confirmOrCancelBooking(_id, status, tripID) {
 }
 
 function onConfirmBooking(_id, tripID) {
-    showQuestionAlertWithButtons(function () {
-        showActivityIndicator();
-        confirmOrCancelBooking(_id, 1, tripID);
-    }, 'Confirm Booking', 'Are you sure you want to continue?', 'Yes', 'No');
+    showActivityIndicator();
+    confirmOrCancelBooking(_id, 1, tripID);
 }
 function onCancelBooking(_id, tripID) {
-    showQuestionAlertWithButtons(function () {
-        showActivityIndicator();
-        confirmOrCancelBooking(_id, 2, tripID);
-    }, 'Cancel Booking', 'Are you sure you want to continue?', 'Yes', 'No');
+    showActivityIndicator();
+    confirmOrCancelBooking(_id, 2, tripID);
 }
 function onMyTrips() {
     showSecondaryTopNavbar();
     hideMainBottomNavbar();
-    showMyTripsPageContainer();
+    hideAllPageContainers();
     showActivityIndicator();
     getRiderBookingsHistory();
 }
 function onMyBookings() {
     showSecondaryTopNavbar();
     hideMainBottomNavbar();
-    showMyBookingsPageContainer();
+    hideAllPageContainers();
     showActivityIndicator();
     getDriverBookings();
 }

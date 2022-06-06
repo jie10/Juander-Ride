@@ -112,6 +112,9 @@
     .my-bookings-container .seat-number {
         font-size: 0.625rem;
     }
+    .my-bookings-container .booked-by {
+        font-size: 0.625rem;
+    }
     .my-bookings-container .status {
         width: fit-content;
     }

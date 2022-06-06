@@ -6,10 +6,10 @@ function capitalize(word) {
     return word.substring(0, 1).toUpperCase() + word.substring(1);
 }
 
-function sortDateTime(arr, order) {
+function sortDateTime(arr, order, key) {
     if (order === 'desc') {
-        return arr.sort((a,b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+        return arr.sort((a,b) => new Date(b[key]).getTime() - new Date(a[key]).getTime());
     } else {
-        return arr.sort((a,b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
+        return arr.sort((a,b) => new Date(a[key]).getTime() - new Date(b[key]).getTime());
     }
 }

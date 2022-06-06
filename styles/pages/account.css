@@ -180,6 +180,11 @@
     font-size: 0.75rem;
     margin: 0;
 }
+.my-bookings-container .booked-by {
+    line-height: normal;
+    font-size: 0.75rem;
+    margin: 8px 0 0 0;
+}
 .my-bookings-container .status {
     line-height: normal;
     font-size: 0.625rem;
