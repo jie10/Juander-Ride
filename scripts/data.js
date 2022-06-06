@@ -9,7 +9,7 @@ var users = [
         "is_carpool_driver": false,
         "carpool": {
             "location": "Makati City",
-            "pick_up_point": "",
+            "target_location": "",
             "drop_off_point": "",
             "onsite_schedule": "a",
             "contact_no": "0927 456 9988",
@@ -31,7 +31,7 @@ var users = [
         "is_carpool_driver": false,
         "carpool": {
             "location": "Bacoor, Cavite",
-            "pick_up_point": "",
+            "target_location": "",
             "drop_off_point": "",
             "onsite_schedule": "c",
             "contact_no": "0917 123 5432",
@@ -53,7 +53,7 @@ var users = [
         "is_carpool_driver": true,
         "carpool": {
             "location": "Pasay City",
-            "pick_up_point": "",
+            "target_location": "",
             "drop_off_point": "",
             "contact_no": "0969 637 1234",
             "onsite_schedule": "d",
@@ -78,7 +78,7 @@ var carpools = [
         "vehicle_model": "VIOS 1.5 G CVT",
         "vehicle_color": "white",
         "plate_number": "LTO 1234",
-        "pick_up_point": "SM Bacoor Parking Area",
+        "target_location": "SM Bacoor Parking Area",
         "location": "Cavite",
         "pick_up_location": "14.444506521713812,120.94977917866827",
         "employee_id": "00208245",

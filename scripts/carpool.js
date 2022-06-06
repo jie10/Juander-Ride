@@ -444,16 +444,17 @@ function getDriverTripSessionAPI(trip) {
 }
 
 function loadMainPage() {
+    var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
     carpool_main_page.style.display = 'block';
-    is_to_drop_switch.checked = false;
-    is_to_drop_switch_rider.checked = false;
 
-    onIsToDropSwitch();
-    onIsToDropSwitchRider();
     showFindCarpoolNavigateContainer();
     showShareRideNavigateContainer();
     showMoreCarpoolButtonsContainer();
     showShareRideNavigateContainer();
+    search_target_location.value = user_login_data && user_login_data.address ? user_login_data.address : '';
+    search_target_location_driver.value = user_login_data && user_login_data.address ? user_login_data.address : '';
+    find_pool_rider_button.disabled = user_login_data && user_login_data.address ? false : true;
+    share_pool_ride_button_rider.disabled = user_login_data && user_login_data.address ? false : true;
     carpool_on_booking_container.style.display = 'none';
 }
 function reloadCurrentPage() {
@@ -525,9 +526,7 @@ var driver_pool_results_container = document.getElementById('driver_pool_results
 var carpool_on_trip_container = document.getElementById('carpool_on_trip_container');
 
 var show_confirm_carpool_rider = document.getElementById('show_confirm_carpool_rider');
-var search_pick_up_point = document.getElementById('search_pick_up_point');
-var search_drop_off_point = document.getElementById('search_drop_off_point');
-var is_to_drop_switch = document.getElementById('is_to_drop_switch');
+var search_target_location = document.getElementById('search_target_location');
 
 var more_carpool_buttons = document.getElementById('more_carpool_buttons');
 var find_pool_rider_button = document.getElementById('find_pool_rider_button');
@@ -536,7 +535,7 @@ var join_pool_rider_button = document.getElementById('join_pool_rider_button');
 
 function getCarpoolRideList() {
     var email = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email;
-    var pointA = is_to_drop_switch.checked ? search_drop_off_point.value : search_pick_up_point.value;
+    var pointA = search_target_location.value;
     var options = {
         method: 'POST',
         headers: {
@@ -600,8 +599,7 @@ function getCarpoolRideList() {
                         var id = btn.id;
                         var rider_location = data[id].origin.split(', ');
                         var location = rider_location[rider_location.length - 1];
-                        var pick_up_point = is_to_drop_switch.checked ? 'Cebu Pacific AOC' : data[id].origin;
-                        var drop_off_point = is_to_drop_switch.checked ? data[id].origin : 'Cebu Pacific AOC';
+                        var target_location = data[id].origin;
                         var is_pool_available = data[id].seats > 0 ? 'Available' : 'Unavailable';
                         var rider_passengers = data[id].riders ? data[id].riders : null;
                         var rider_passengers_count = rider_passengers ? rider_passengers.length : 0;
@@ -621,8 +619,7 @@ function getCarpoolRideList() {
                         document.querySelector('.offcanvas_rider_department').innerHTML = rider_department;
                         document.querySelector('.offcanvas_seats_count').innerHTML = data[id].seats === 1 ? ' seat available' : ' seats available';
                         document.querySelector('.offcanvas_departure_time').innerHTML = rider_depart_time;
-                        document.querySelector('.offcanvas_pick_up_point').innerHTML = pick_up_point;
-                        document.querySelector('.offcanvas_drop_off_point').innerHTML = drop_off_point;
+                        document.querySelector('.offcanvas_target_location').innerHTML = target_location;
                         document.querySelector('.offcanvas_teams_email a').href = MS_TEAMS_SEND_MESSAGE_TO_USER_LINK_URL + rider_teams_email;
 
                         offcanvas_rider_is_available.innerHTML = is_pool_available;
@@ -748,45 +745,18 @@ function loadCarpoolOnTripScreen(rider) {
 
 
 function onCarpoolRidelist () {
+    var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
+
     if (share_a_ride_button.classList.contains('active-tab-button')) {
         share_a_ride_button.classList.remove('active-tab-button');
     }
 
-    search_pick_up_point.value = '';
-    search_drop_off_point.value = '';
-    find_pool_rider_button.disabled = true;
-    is_to_drop_switch_rider.checked = false;
+    search_target_location.value = user_login_data && user_login_data.address ? user_login_data.address : '';
+    find_pool_rider_button.disabled = user_login_data && user_login_data.address ? false : true;
+
     carpool_ride_list_button.classList.add('active-tab-button');
     showCarpoolRideListContainer();
     showFindCarpoolNavigateContainer();
-}
-function onIsToDropSwitch () {
-    search_drop_off_point.value = '';
-    search_pick_up_point.value = '';
-
-    if (is_to_drop_switch.checked) {
-        search_drop_off_point.style.display = 'block';
-        search_pick_up_point.style.display = 'none';
-        find_pool_rider_button.disabled = true;
-    } else {
-        search_pick_up_point.style.display = 'block';
-        search_drop_off_point.style.display = 'none';
-        find_pool_rider_button.disabled = true;
-    }
-}
-function onIsToDropSwitchRider () {
-    search_pick_up_point_rider.value = '';
-    search_drop_off_point_rider.value = '';
-
-    if (is_to_drop_switch_rider.checked) {
-        search_drop_off_point_rider.style.display = 'block';
-        search_pick_up_point_rider.style.display = 'none';
-        share_pool_ride_button_rider.disabled = true;
-    } else {
-        search_pick_up_point_rider.style.display = 'block';
-        search_drop_off_point_rider.style.display = 'none';
-        share_pool_ride_button_rider.disabled = true;
-    }
 }
 function onFindCarpoolRide () {
     showActivityIndicator();
@@ -799,7 +769,6 @@ function onJoinPoolRider (rider) {
     return function () {
         hideDriverPoolResultsContainer();
         showMainBottomNavbar();
-        onIsToDropSwitch();
         showMainTopNavbar();
         showActivityIndicator();
         join_pool_rider_button.disabled = true;
@@ -817,10 +786,8 @@ function onFindPoolRiderButtonState(e) {
 }
 
 carpool_ride_list_button.addEventListener('click', onCarpoolRidelist);
-is_to_drop_switch.addEventListener('change', onIsToDropSwitch);
 find_pool_rider_button.addEventListener('click', onFindCarpoolRide);
-search_pick_up_point.addEventListener('keyup', onFindPoolRiderButtonState);
-search_drop_off_point.addEventListener('keyup', onFindPoolRiderButtonState);
+search_target_location.addEventListener('keyup', onFindPoolRiderButtonState);
 
 
 /** SHARE-A-RIDE */
@@ -830,9 +797,7 @@ var create_trip_container = document.getElementById('create_trip_container');
 var on_trip_driver_container = document.getElementById('on_trip_driver_container');
 
 var share_pool_ride_button_rider = document.getElementById('share_pool_ride_button_rider');
-var search_pick_up_point_rider = document.getElementById('search_pick_up_point_rider');
-var search_drop_off_point_rider = document.getElementById('search_drop_off_point_rider');
-var is_to_drop_switch_rider = document.getElementById('is_to_drop_switch_rider');
+var search_target_location_driver = document.getElementById('search_target_location_driver');
 var driver_target_location = document.getElementById('driver_target_location');
 var driver_available_seats = document.getElementById('driver_available_seats');
 var driver_contact_no = document.getElementById('driver_contact_no');
@@ -1014,33 +979,19 @@ function completeTrip(_id, riders) {
         });
 }
 
-function onIsToDropSwitchRider () {
-    search_drop_off_point_rider.value = '';
-    search_pick_up_point_rider.value = '';
-
-    if (is_to_drop_switch_rider.checked) {
-        search_drop_off_point_rider.style.display = 'block';
-        search_pick_up_point_rider.style.display = 'none';
-        share_pool_ride_button_rider.disabled = true;
-    } else {
-        search_pick_up_point_rider.style.display = 'block';
-        search_drop_off_point_rider.style.display = 'none';
-        share_pool_ride_button_rider.disabled = true;
-    }
-}
 function onShareCarpoolRide () {
+    var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
+
     if (carpool_ride_list_button.classList.contains('active-tab-button')) {
         carpool_ride_list_button.classList.remove('active-tab-button');
     }
 
-    search_pick_up_point_rider.value = '';
-    search_drop_off_point_rider.value = '';
-    share_pool_ride_button_rider.disbaled = true;
+    search_target_location_driver.value = user_login_data && user_login_data.address ? user_login_data.address : '';
+    share_pool_ride_button_rider.disabled = user_login_data && user_login_data.address ? false : true;
+
     share_a_ride_button.classList.add('active-tab-button');
-    is_to_drop_switch.checked = false;
     showShareARideContainer();
     showShareRideNavigateContainer();
-    onIsToDropSwitchRider();
 }
 function onMoreShareRide() {
     var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
@@ -1050,12 +1001,12 @@ function onMoreShareRide() {
     hideMainBottomNavbar();
     showCreateTripContainer();
 
-    driver_target_location.value = '';
+    var target_location = search_target_location_driver.value;
+
+    driver_target_location.value = target_location;
     driver_available_seats.value = '';
     driver_depature_datetime.value = '';
     driver_contact_no.value = user_login_data && user_login_data.mobileNumber ? user_login_data.mobileNumber : '';
-
-    var target_location = search_pick_up_point_rider.value ? search_pick_up_point_rider.value : search_drop_off_point_rider.value;
 
     new Cleave(driver_contact_no, {
         numericOnly: true,
@@ -1077,8 +1028,6 @@ function onMoreShareRide() {
             }
         }
     });
-
-    driver_target_location.value = target_location;
 }
 function onCreateTrip() {
     var givenDate = moment(new Date(driver_depature_datetime.value)).format("YYYY-MM-DD HH:mm");
@@ -1178,11 +1127,9 @@ function onCreateTripRequiredFields(e) {
 }
 
 share_a_ride_button.addEventListener('click', onShareCarpoolRide);
-is_to_drop_switch_rider.addEventListener('click', onIsToDropSwitchRider);
 share_pool_ride_button_rider.addEventListener('click', onMoreShareRide);
 create_trip_button.addEventListener('click', onCreateTrip);
-search_pick_up_point_rider.addEventListener('keyup', onSharePoolRideButtonState);
-search_drop_off_point_rider.addEventListener('keyup', onSharePoolRideButtonState);
+search_target_location_driver.addEventListener('keyup', onSharePoolRideButtonState);
 driver_target_location.addEventListener('keyup', onCreateTripRequiredFields);
 driver_available_seats.addEventListener('keyup', onCreateTripRequiredFields);
 driver_depature_datetime.addEventListener('change', onCreateTripRequiredFields);
