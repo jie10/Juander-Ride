@@ -835,9 +835,8 @@ var search_drop_off_point_rider = document.getElementById('search_drop_off_point
 var is_to_drop_switch_rider = document.getElementById('is_to_drop_switch_rider');
 var driver_target_location = document.getElementById('driver_target_location');
 var driver_available_seats = document.getElementById('driver_available_seats');
-var driver_departure_date = document.getElementById('driver_departure_date');
-var driver_departure_time = document.getElementById('driver_departure_time');
 var driver_contact_no = document.getElementById('driver_contact_no');
+var driver_depature_datetime = document.getElementById('depature_datetime');
 
 function showShareARideContainer() {
     carpool_ride_list_container.style.display = 'none';
@@ -863,7 +862,7 @@ function createTrip() {
     var user = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
     var target_location = driver_target_location.value ? driver_target_location.value : '';
     var available_seats = driver_available_seats.value ? driver_available_seats.value : 0;
-    var departure_datetime = moment(driver_departure_date.value + ' ' + driver_departure_time.value).format("YYYY-MM-DDTHH:mm") + ':00.000Z';
+    var departure_datetime = moment(new Date(driver_depature_datetime.value)).format("YYYY-MM-DDTHH:mm") + ':00.000Z';
     var contact_no = driver_contact_no.value ? '63' + driver_contact_no.value.replace(/(\s)/gi, '') : '#';
     var payload = {
         "email": user.email.toLowerCase(),
@@ -902,8 +901,7 @@ function createTrip() {
             showErrorAlertWithConfirmButton(function () {
                 driver_target_location.disabled = false;
                 driver_available_seats.disabled = false;
-                driver_departure_date.disabled = false;
-                driver_departure_time.disabled = false;
+                driver_depature_datetime.disabled = false;
                 driver_contact_no.disabled = false;
                 create_trip_button.disabled = true;
             }, 'Error 500', 'Internal server error', 'Refresh');
@@ -1052,8 +1050,7 @@ function onMoreShareRide() {
     
     driver_target_location.value = '';
     driver_available_seats.value = '';
-    driver_departure_date.value = '';
-    driver_departure_time.value = '';
+    driver_depature_datetime.value = '';
     driver_contact_no.value = '';
 
     var target_location = search_pick_up_point_rider.value ? search_pick_up_point_rider.value : search_drop_off_point_rider.value;
@@ -1064,39 +1061,40 @@ function onMoreShareRide() {
         delimiters: ['9', ' ', ' ']
     });
 
-    new Cleave(driver_departure_date, {
-        date: true,
-        delimiter: '-',
-        datePattern: ['Y', 'm', 'd']
-    });
-
-    new Cleave(driver_departure_time, {
-        time: true,
-        timePattern: ['h', 'm']
+    new tempusDominus.TempusDominus(driver_depature_datetime, {
+        useCurrent: true,
+        allowInputToggle: true,
+        display: {
+            buttons: {
+                today: true,
+                clear: true,
+                close: true,
+            },
+            components: {
+                useTwentyfourHour: true
+            }
+        }
     });
 
     driver_target_location.value = target_location;
 }
 function onCreateTrip() {
-    var given = moment(driver_departure_date.value + ' ' + driver_departure_time.value, "YYYY-MM-DD HH:mm");
+    var givenDate = moment(new Date(driver_depature_datetime.value)).format("YYYY-MM-DD HH:mm");
+    var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
     var current = new Date();
+
     var numberPattern = /([0-9])/g;
-    var timePattern = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/g;
-    var datePattern = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
     var phonePattern = /(9[0-9]{2}\s([0-9]{3}\s)[0-9]{4})/;
+
     var isAllNumeric = numberPattern.test(driver_available_seats.value) && numberPattern.test(driver_contact_no.value.replace(/\s/g, ''));
-    var inTimeFormat = timePattern.test(driver_departure_time.value);
-    var inDateFormat = datePattern.test(driver_departure_date.value);
     var inPhoneFormat = phonePattern.test(driver_contact_no.value);
+
     var duration = moment.duration(given.diff(current)).asHours();
     var isWithinScopeDuration = duration >= 0.5 && duration <= 5 ? true : false;
+
     var isSeatMaxLength = parseInt(driver_available_seats.value) > 0 && parseInt(driver_available_seats.value) <= 30;
 
-    if (!inDateFormat) {
-        showErrorAlert('Invalid date format', 'Departure date must be in this format: YYYY-MM-DD');
-    } else if (!inTimeFormat) {
-        showErrorAlert('Invalid time format', 'Departure time must be in 24-hour clock: hh:mm');
-    } else if (!isAllNumeric) {
+    if (!isAllNumeric) {
         showErrorAlert('Invalid number format', 'Seat Number should numbers (0 to 9)');
     } else if (!inPhoneFormat) {
         showErrorAlert('Invalid phone number format', 'Phone number should be in this format: 9xx xxx xxxx or 9xxxxxxxxx');
@@ -1108,8 +1106,7 @@ function onCreateTrip() {
         showQuestionAlertWithButtons(function () {
             driver_target_location.disabled = true;
             driver_available_seats.disabled = true;
-            driver_departure_date.disabled = true;
-            driver_departure_time.disabled = true;
+            driver_depature_datetime.disabled = true;
             driver_contact_no.disabled = true;
             create_trip_button.disabled = true;
             showActivityIndicator();
@@ -1168,8 +1165,7 @@ function onCreateTripRequiredFields(e) {
 
     var requiredFields = driver_target_location.value.length > 0 &
                             driver_available_seats.value.length > 0 &
-                            driver_departure_date.value.length > 0 &
-                            driver_departure_time.value.length > 0 &
+                            driver_depature_datetime.value.length > 0 &
                             driver_contact_no.value.length > 0;
 
     if (requiredFields === 1) {
@@ -1187,8 +1183,7 @@ search_pick_up_point_rider.addEventListener('keyup', onSharePoolRideButtonState)
 search_drop_off_point_rider.addEventListener('keyup', onSharePoolRideButtonState);
 driver_target_location.addEventListener('keyup', onCreateTripRequiredFields);
 driver_available_seats.addEventListener('keyup', onCreateTripRequiredFields);
-driver_departure_date.addEventListener('keyup', onCreateTripRequiredFields);
-driver_departure_time.addEventListener('keyup', onCreateTripRequiredFields);
+driver_depature_datetime.addEventListener('change', onCreateTripRequiredFields);
 driver_contact_no.addEventListener('keyup', onCreateTripRequiredFields);
 
 

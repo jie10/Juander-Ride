@@ -23,6 +23,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js" integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- MOMENT JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Popperjs -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <!-- Tempus Dominus JavaScript -->
+    <script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js" crossorigin="anonymous"></script>
+    <!-- Tempus Dominus Styles -->
+    <link href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css" rel="stylesheet" crossorigin="anonymous">
     <!-- CUSTOM CSS -->
     <link href="../styles/default.css" rel="stylesheet" type="text/css"/>
     <link href="../styles/utils/helpers.css" rel="stylesheet" type="text/css"/>
@@ -258,13 +264,9 @@
                                             <label for="driver_target_location" class="form-label">Target Location</label>
                                             <input autocomplete="off" type="text" class="form-control" id="driver_target_location" readonly>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="driver_departure_date" class="form-label">Departure Date</label>
-                                            <input autocomplete="off" type="text" class="form-control" id="driver_departure_date" placeholder="YYYY-MM-DD"  title="format: YYYY-MM-DD">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="driver_departure_time" class="form-label">Departure Time</label>
-                                            <input autocomplete="off" type="text" class="form-control" id="driver_departure_time" placeholder="hh:mm" title="format: hh:mm">
+                                        <div class="col-12">
+                                            <label for="depature_datetime" class="form-label">Departure Date & Time</label>
+                                            <input autocomplete="off" type="text" class="form-control clickable-input" id="depature_datetime" placeholder="mm/dd/yyyy hh:mm" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="driver_available_seats" class="form-label">No. of Seats</label>

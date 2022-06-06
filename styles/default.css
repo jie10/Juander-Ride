@@ -10,3 +10,16 @@ body {
     background-color: #F7F7F7;
     font-family: 'Source Sans Pro', sans-serif;
 }
+
+/** BOOTSTRAP */
+.form-control[readonly] {
+    background-color: #ffffff;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.form-control[disabled] {
+    cursor: pointer;
+}
