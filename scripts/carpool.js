@@ -1043,15 +1043,17 @@ function onShareCarpoolRide () {
     onIsToDropSwitchRider();
 }
 function onMoreShareRide() {
+    var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
+
     showSecondaryTopNavbar();
     hideMoreCarpoolButtonsContainer();
     hideMainBottomNavbar();
     showCreateTripContainer();
-    
+
     driver_target_location.value = '';
     driver_available_seats.value = '';
     driver_depature_datetime.value = '';
-    driver_contact_no.value = '';
+    driver_contact_no.value = user_login_data && user_login_data.mobileNumber ? user_login_data.mobileNumber : '';
 
     var target_location = search_pick_up_point_rider.value ? search_pick_up_point_rider.value : search_drop_off_point_rider.value;
 
