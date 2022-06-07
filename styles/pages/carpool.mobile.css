@@ -16,7 +16,7 @@
         bottom: 56px;
     }
     .carpool-ride-list-container .navigate-container .container {
-        width: 80% !important;
+        width: 350px !important;
     }
     .carpool-ride-list-container .driver-pool-results .container {
         width: 80% !important;
@@ -32,6 +32,9 @@
     }
     .share-a-ride-container .navigate-container {
         bottom: 56px;
+    }
+    .share-a-ride-container .navigate-container .container {
+        width: 350px !important;
     }
 }
 @media only screen and (max-width: 480px) {
@@ -53,7 +56,7 @@
         font-size: 0.75rem;
     }
     .carpool-ride-list-container .navigate-container .container {
-        width: 100% !important;
+        width: 300px !important;
     }
     .carpool-ride-list-container .driver-pool-results .container {
         width: 100% !important;
@@ -91,7 +94,7 @@
         font-size: 0.75rem;
     }
     .share-a-ride-container .navigate-container .container {
-        width: 100% !important;
+        width: 300px !important;
     }
     .on-trip-driver-container .driver-trip-buttons-container .container {
         width: 100% !important;
@@ -108,7 +111,7 @@
         font-size: 0.75rem;
     }
     .create-trip-container .container {
-        width: 100% !important;
+        width: 300px !important;
         padding: 0;
     }
     .scan-qr-carpool-button,
@@ -141,6 +144,10 @@
         width: 95%;
         margin: auto;
     }
+    .carpool-ride-list-container .navigate-container .container {
+        width: 100% !important;
+        padding: 0;
+    }
     .carpool-ride-list-container .driver-pool-results {
         padding: 50px 0;
     }
@@ -158,6 +165,14 @@
     }
     .carpool-on-booking-container .current-booking-item .header {
         margin-bottom: 4px;
+    }
+    .share-a-ride-container .navigate-container .container {
+        width: 100% !important;
+        padding: 0;
+    }
+    .create-trip-container .container {
+        width: 100% !important;
+        padding: 0;
     }
     .on-trip-driver-container .driver-trip-buttons-container .container {
         width: 200px !important;

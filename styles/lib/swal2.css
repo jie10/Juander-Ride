@@ -1,0 +1,50 @@
+.swal2-popup {
+    width: 340px;
+}
+.swal2-icon {
+    /* width: 4rem;
+    height: 4rem; */
+    margin: 2em auto 0.6em;
+}
+.swal2-title {
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem 0 1rem;
+}
+.swal2-icon .swal2-icon-content {
+    font-size: 3rem;
+}
+.swal2-actions {
+    margin: 0.875rem auto 0;
+}
+.swal2-html-container {
+    font-size: 1rem;
+}
+
+@media only screen and (max-width: 480px) {
+    .swal2-popup {
+        width: 280px;
+    }
+    .swal2-title {
+        font-size: 1.25rem;
+    }
+    .swal2-html-container {
+        font-size: 0.875rem;
+    }
+}
+@media only screen and (max-width: 320px) {
+    .swal2-popup {
+        width: 240px;
+    }
+    .swal2-title {
+        font-size: 1rem;
+    }
+    .swal2-html-container {
+        font-size: 0.75rem;
+    }
+    .swal2-icon .swal2-icon-content {
+        font-size: 2.25rem;
+    }
+    .swal2-actions {
+        font-size: 0.875rem;
+    }
+}

@@ -10,6 +10,7 @@ var GET_TRIP_BY_ID_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc
 var UPDATE_TRIP_BY_ID_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
 var DRIVER_BOOKINGS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/driver';
 var CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
+var PLAY_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/play';
 
 /** SOURCE LOCATION */
 var HOMEPAGE_SOURCE_LOCATION = '/';
@@ -169,7 +170,7 @@ function loadUserDetails() {
     document.querySelector('.user-name').innerHTML = user_data.displayName ? user_data.displayName : user_data.email;
     document.querySelector('.user-role').innerHTML = user_data.jobTitle ? user_data.jobTitle : 'CEB employee';
     document.querySelector('.user-position').innerHTML = user_data.jobTitle ? user_data.jobTitle : 'Cebu Pacifir Air, Inc.';
-    console.log(user_data.scoreboard)
+
     document.querySelector('.points-count').innerHTML = user_data.scoreboard && user_data.scoreboard.points ? user_data.scoreboard.points : 0;
     document.querySelector('.dtp-count').innerHTML = user_data.scoreboard && user_data.scoreboard.dtp ? user_data.scoreboard.dtp : 0;
     document.querySelector('.badges-count').innerHTML = user_data.scoreboard && user_data.scoreboard.badges ? user_data.scoreboard.badges : 0;
@@ -267,7 +268,8 @@ function getDriverBookings() {
                                                                             + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
                                                                         + '</div>'
                                                                         + '<p class=\"destination\">' + destination + '</p>'
-                                                                        + '<p class=\"seat-number\" id=\"' + _id + '_rider' +'\">' + val.seatCount + '/' + val.seats + (val.seatCount === 1 ? ' seat' : ' seats') + '</p>'
+                                                                        + '<input type=\"hidden\" class=\"rider-email\" id=\"' + _id + '_rider' +'\" value=\"' + val.email + '\"/>'
+                                                                        + '<p class=\"seat-number\">' + val.seatCount + '/' + val.seats + (val.seatCount === 1 ? ' seat' : ' seats') + '</p>'
                                                                         + '<p class=\"booked-by\">' + 'Booked by ' + val.ridername + '</p>'
                                                                     + '</div>';
                                                         }).join('');
@@ -376,13 +378,48 @@ function confirmOrCancelBooking(_id, status, tripID) {
         });
 }
 
-function onConfirmBooking(_id, tripID) {
+function confirmOrCancelTripBooking(bookingID, tripID, userEmail, bookingStatus){
+    var payload = {
+        "email": userEmail,
+        "bookID": bookingID,
+        "tripID": tripID,
+        "status": bookingStatus
+    };
+    var options = {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+    };
+
     showActivityIndicator();
-    confirmOrCancelBooking(_id, 1, tripID);
+
+    fetch(PLAY_BOOKING_API_ENDPOINT, options)
+        .then(getResJSON)
+        .then(function (data) {
+            delay(function () {
+                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
+            }, DELAY_TIME_IN_MILLISECONDS);
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
+}
+
+function onConfirmBooking(_id, tripID) {
+    var riderEmail = document.getElementById(_id + '_rider').value;
+
+    showActivityIndicator();
+    confirmOrCancelTripBooking(_id, tripID, riderEmail, 1);
 }
 function onCancelBooking(_id, tripID) {
+    var riderEmail = document.getElementById(_id + '_rider').value;
+
     showActivityIndicator();
-    confirmOrCancelBooking(_id, 2, tripID);
+    confirmOrCancelTripBooking(_id, tripID, riderEmail, 2);
 }
 function onMyTrips() {
     showSecondaryTopNavbar();
