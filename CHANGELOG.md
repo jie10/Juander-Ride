@@ -55,7 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Color of disabled buttons - background is gray color
   - Adjust styling for carpool pages (mobile-friendly)
 
-### Known Issues
+### Possible Features - To be added on future releases
 
 - Google Maps (exact pin location to match on trip keyword)
 - Update Messaging to include deeplink to app
