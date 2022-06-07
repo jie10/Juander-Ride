@@ -24,11 +24,11 @@
     width: 80%;
     margin: auto;
 }
-.index-page-container .login-form .login-email-input-label {
+.index-page-container .login-form .login-pin-code-input-label {
     font-weight: 700;
     margin: 0 0 8px 0;
 }
-.index-page-container .login-form .login-email-input {
+.index-page-container .login-form .login-pin-code-input {
     width: 100%;
 }
 .index-page-container .login-form .login-button {

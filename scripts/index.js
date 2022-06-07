@@ -16,7 +16,7 @@ var CARPOOLPAGE_SOURCE_LOCATION = '../pages/carpool.html';
 var login_viewcontroller = document.getElementById('login_viewcontroller');
 var sign_up_viewcontroller = document.getElementById('sign_up_viewcontroller');
 
-var user_email = document.getElementById('user_email');
+var user_pin_code = document.getElementById('user_pin_code');
 var user_sign_up_email = document.getElementById('user_sign_up_email');
 var user_sign_up_mobile_number = document.getElementById('user_sign_up_mobile_number');
 var user_sign_up_location = document.getElementById('user_sign_up_location');
@@ -28,10 +28,10 @@ var sign_up_button = document.getElementById('sign_up_button');
 
 
 function highlightLoginErrorInput(errEmail) {
-    user_email.style.borderColor = errEmail ? 'red' : '#ced4da';
+    user_pin_code.style.borderColor = errEmail ? 'red' : '#ced4da';
 
-    user_email.parentElement.querySelector('.invalid-feedback').style.display = errEmail ? 'block' : 'none';
-    user_email.parentElement.querySelector('.invalid-feedback').innerHTML = errEmail ? 'Plase enter a valid email' : '';
+    user_pin_code.parentElement.querySelector('.invalid-feedback').style.display = errEmail ? 'block' : 'none';
+    user_pin_code.parentElement.querySelector('.invalid-feedback').innerHTML = errEmail ? 'Plase enter a valid pin code' : '';
 }
 function highlightRegisterErrorInput(errEmail, errMobileNumber, errLocation) {
     user_sign_up_email.style.borderColor = errEmail ? 'red' : '#ced4da';
@@ -68,13 +68,13 @@ function loadPageInDefault() {
     sign_up_button.disabled = true;
 }
 
-function login(email) {
+function login(pin_code) {
     var options = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email: email })
+        body: JSON.stringify({ code: pin_code })
     };
 
     fetch(LOGIN_API_ENDPOINT, options)
@@ -84,10 +84,9 @@ function login(email) {
         .then(function (data) {
             delay(function () {
                 if (data.code === 400) {
+                    hideActivityIndicator();
                     showErrorAlertWithConfirmButton(function () {
-                        hideActivityIndicator();
-
-                        user_email.disabled = false;
+                        user_pin_code.disabled = false;
                         login_button.disabled = false;
                     }, 'Error ' + data.code, data.message, 'Close');
                 } else {
@@ -135,7 +134,9 @@ function register(email, mobileNumber, location) {
                         user_sign_up_location.disabled = false;
                     }, 'Error ' + data.code, data.message, 'Close');
                 } else {
-                    loadPageInDefault();
+                    showSuccessAlertWithConfirmButton(function () {
+                        loadPageInDefault();
+                    }, 'Sign Up Successful', 'Please check your Teams for your Pin Code to login', 'Back to Login');
                 }
             }, DELAY_TIME_IN_MILLISECONDS);
         })
@@ -159,7 +160,7 @@ function onLoginView() {
 function onRegisterView() {
     login_viewcontroller.style.display = 'none';
     sign_up_viewcontroller.style.display = 'block';
-    user_email.value = '';
+    user_pin_code.value = '';
     login_button.disabled = true;
 
     new Cleave(user_sign_up_mobile_number, {
@@ -204,15 +205,15 @@ function onRegisterTyping() {
 }
 
 function onLogin() {
-    var emailPattern = /(@cebupacificair.com)/gi;
-    var email = user_email.value;
+    var pincodePattern = /(^([A-z]|[0-9]){0,6})$/;
+    var pincode = user_pin_code.value;
 
-    if (emailPattern.test(email) === true) {
-        user_email.disabled = true;
+    if (pincodePattern.test(pincode) === true) {
+        user_pin_code.disabled = true;
         login_button.disabled = true;
         showActivityIndicator();
 
-        login(email);
+        login(pincode);
     } else {
         highlightLoginErrorInput(true);
     }
@@ -252,12 +253,12 @@ function onRegister() {
 sign_up_view_button.addEventListener('click', onRegisterView);
 back_to_login_view_button.addEventListener('click', onLoginView);
 
-user_email.addEventListener("keypress", onLoginKeyPress);
+user_pin_code.addEventListener("keypress", onLoginKeyPress);
 user_sign_up_email.addEventListener('keypress', onRegisterKeyPress);
 user_sign_up_mobile_number.addEventListener('keypress', onRegisterKeyPress);
 user_sign_up_location.addEventListener('keypress', onRegisterKeyPress);
 
-user_email.addEventListener('keyup', onLoginTyping);
+user_pin_code.addEventListener('keyup', onLoginTyping);
 user_sign_up_email.addEventListener('keyup', onRegisterTyping);
 user_sign_up_mobile_number.addEventListener('keyup', onRegisterTyping);
 user_sign_up_location.addEventListener('keyup', onRegisterTyping);
