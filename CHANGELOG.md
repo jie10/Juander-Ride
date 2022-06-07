@@ -7,6 +7,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.2-alpha] - 2022-06-07
+
+### Added
+
+- Login Page (index)
+  - Register or Sign Up Page (UI, connection to API, form validation)
+
+- Carpool Page
+  - New Trip Status UI for passengers - with color coding (Pending, Ongoing, Cancelled, Complete)
+  - New Trip Status UI for drivers
+  - Additional button for My Bookings for driver (No need to go to Account page)
+  - Notify passengers button - 30 minutes before departure
+  - Expiration of Trip session as per departure time
+  - Passenger can cancel current book request sent to driver
+  - Apply datetime picker on Create Trip Screen
+
+- Account Page
+  - Passenger can view bookings history via clicking My Trips menu
+  - Driver can view bookings history via clicking My Bookings menu
+  - Driver can confirm or cancel pending booking request from potential passengers
+  - Users can logout from app and goes back to login page
+
+- Other Features
+  - Session or local storage manager to be applied to app
+
+### Changed
+
+- Login Page (index)
+  - Login using Pin Code instead of work email (to be received from Teams)
+
+- Carpool Page
+  - Fix issue: Glitch after passenger has sent booking request to driver
+  - Fix issue: Removing additional alert pop-ups when driver is trying to confirm or cancel a booking request
+  - Change for switch slider on Carpool main page (removed - pick-up and drop-off points become target location instead)
+  - No cancel trip when ride is ongoing - driver cannot cancel trip anymore once trip has started
+  - Background image on Carpool Main page for switching to Find pool and Share a ride screens
+  - Fix issue: Complete Trip UX error
+
+- Account Page
+  - Changed: Hide settings menu (temporary)
+  - Fixed issue: Confirm/Cancel booking request for passenger to driver
+
+- Components on Pages
+  - Change CSS styling for modal alerts (mobile-friendly)
+  - Color of enabled buttons is blue except cancel button (should be outlined but background is transparent
+  - Color of disabled buttons - background is gray color
+  - Adjust styling for carpool pages (mobile-friendly)
+
+### Known Issues
+
+- Google Maps (exact pin location to match on trip keyword)
+- Update Messaging to include deeplink to app
+- Rebook button when trip was cancelled (passenger) - automatic match trip for nearest carpool ride available
+
 ## [0.0.1-alpha] - 2022-05-31
 
 ### Added

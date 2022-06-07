@@ -12,7 +12,7 @@ The Juander app is CEB's very own application for employee carpool and shuttle p
 
 ## Current Updates
 
-- See changelog [v0.0.1-alpha](https://github.com/rdramirez/Juander/blob/main/CHANGELOG.md) for further details
+- See changelog [v0.0.2-alpha](https://github.com/rdramirez/Juander/blob/main/CHANGELOG.md) for further details
 
 ## Tools
 
@@ -32,6 +32,7 @@ The Juander app is CEB's very own application for employee carpool and shuttle p
 - [MOMENT JS](https://momentjs.com/) - for time format and conversion
 - [Lottie](https://lottiefiles.com/web-player) - for activity indicator
 - [HTML5 QR code](https://github.com/mebjas/html5-qrcode) - for QR code scanning
+- [Tempus Dominus](https://getdatepicker.com/) - for datetime picker
 
 ## Related Links
 
