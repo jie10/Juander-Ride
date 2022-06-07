@@ -169,11 +169,11 @@ function loadUserDetails() {
     document.querySelector('.user-name').innerHTML = user_data.displayName ? user_data.displayName : user_data.email;
     document.querySelector('.user-role').innerHTML = user_data.jobTitle ? user_data.jobTitle : 'CEB employee';
     document.querySelector('.user-position').innerHTML = user_data.jobTitle ? user_data.jobTitle : 'Cebu Pacifir Air, Inc.';
-
-    document.querySelector('.points-count').innerHTML = user_data.scoreboard.points ? user_data.scoreboard.points : 0;
-    document.querySelector('.dtp-count').innerHTML = user_data.scoreboard.dtp ? user_data.scoreboard.dtp : 0;
-    document.querySelector('.badges-count').innerHTML = user_data.scoreboard.badges ? user_data.scoreboard.badges : 0;
-    document.querySelector('.items-count').innerHTML = user_data.scoreboard.items ? user_data.scoreboard.items : 0;
+    console.log(user_data.scoreboard)
+    document.querySelector('.points-count').innerHTML = user_data.scoreboard && user_data.scoreboard.points ? user_data.scoreboard.points : 0;
+    document.querySelector('.dtp-count').innerHTML = user_data.scoreboard && user_data.scoreboard.dtp ? user_data.scoreboard.dtp : 0;
+    document.querySelector('.badges-count').innerHTML = user_data.scoreboard && user_data.scoreboard.badges ? user_data.scoreboard.badges : 0;
+    document.querySelector('.items-count').innerHTML = user_data.scoreboard && user_data.scoreboard.items ? user_data.scoreboard.items : 0;
 }
 function getRiderBookingsHistory() {
     var email = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email;
