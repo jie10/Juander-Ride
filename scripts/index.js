@@ -165,8 +165,8 @@ function onRegisterView() {
 
     new Cleave(user_sign_up_mobile_number, {
         numericOnly: true,
-        blocks: [0, 2, 3, 4],
-        delimiters: ['9', ' ', ' ']
+        blocks: [0, 3, 3, 4],
+        delimiters: ['', ' ', ' ']
     });
 }
 

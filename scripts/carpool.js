@@ -1045,8 +1045,8 @@ function onMoreShareRide() {
 
     new Cleave(driver_contact_no, {
         numericOnly: true,
-        blocks: [0, 2, 3, 4],
-        delimiters: ['9', ' ', ' ']
+        blocks: [0, 3, 3, 4],
+        delimiters: ['', ' ', ' ']
     });
 
     new Cleave(driver_depature_datetime, {
