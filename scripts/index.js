@@ -51,7 +51,7 @@ function checkExistingSession() {
     var user_login_data = localStorage.getItem(USER_LOGIN_DATA_KEY);
 
     if (user_login_data) {
-        // moveToHomepage();
+        moveToHomepage();
     } else {
         loadPageInDefault();
     }

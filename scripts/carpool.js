@@ -826,6 +826,21 @@ var driver_available_seats = document.getElementById('driver_available_seats');
 var driver_contact_no = document.getElementById('driver_contact_no');
 var driver_depature_datetime = document.getElementById('depature_datetime');
 
+// var datetimepicker = new tempusDominus.TempusDominus(driver_depature_datetime, {
+//     useCurrent: true,
+//     allowInputToggle: true,
+//     display: {
+//         buttons: {
+//             today: true,
+//             clear: true,
+//             close: true,
+//         },
+//         components: {
+//             useTwentyfourHour: true
+//         }
+//     }
+// });
+
 function showShareARideContainer() {
     carpool_ride_list_container.style.display = 'none';
     share_a_ride_container.style.display = 'block';
@@ -1034,24 +1049,14 @@ function onMoreShareRide() {
         delimiters: ['9', ' ', ' ']
     });
 
-    new tempusDominus.TempusDominus(driver_depature_datetime, {
-        useCurrent: true,
-        allowInputToggle: true,
-        display: {
-            buttons: {
-                today: true,
-                clear: true,
-                close: true,
-            },
-            components: {
-                useTwentyfourHour: true
-            }
-        }
+    new Cleave(driver_depature_datetime, {
+        delimiters: ['/', '/', ' ', ':'],
+        blocks: [2, 2, 4, 2, 2]
     });
 }
 function onCreateTrip() {
-    var givenDate = moment(new Date(driver_depature_datetime.value)).format("YYYY-MM-DD HH:mm");
-    var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
+    var givenDate = moment(new Date(driver_depature_datetime.value), "YYYY-MM-DD HH:mm");
+
     var current = new Date();
 
     var numberPattern = /([0-9])/g;
@@ -1060,7 +1065,9 @@ function onCreateTrip() {
     var isAllNumeric = numberPattern.test(driver_available_seats.value) && numberPattern.test(driver_contact_no.value.replace(/\s/g, ''));
     var inPhoneFormat = phonePattern.test(driver_contact_no.value);
 
-    var duration = moment.duration(given.diff(current)).asHours();
+    var duration = moment.duration(givenDate.diff(current)).asHours();
+
+    var isValidDepartureDateTime = givenDate.isValid();
     var isWithinScopeDuration = duration >= 0.5 && duration <= 5 ? true : false;
 
     var isSeatMaxLength = parseInt(driver_available_seats.value) > 0 && parseInt(driver_available_seats.value) <= 30;
@@ -1071,7 +1078,7 @@ function onCreateTrip() {
         showErrorAlert('Invalid phone number format', 'Phone number should be in this format: 9xx xxx xxxx or 9xxxxxxxxx');
     } else if (!isSeatMaxLength) {
         showErrorAlert('Invalid seat number', 'Seat numbers can be only up to 30');
-    } else if (!isWithinScopeDuration) {
+    } else if (!isWithinScopeDuration || !isValidDepartureDateTime) {
         showErrorAlert('Invalid departure time', 'Departure must be set at least 30 minutes up to 5 hours from current date and time');
     } else {
         showQuestionAlertWithButtons(function () {
@@ -1084,7 +1091,6 @@ function onCreateTrip() {
             createTrip();
         }, 'Create Trip', 'Are you sure you want to continue?', 'Yes', 'No');
     }
-
 }
 function onStartTrip(_id, riders) {
     return function() {
