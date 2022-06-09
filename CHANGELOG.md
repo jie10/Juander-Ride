@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.3-alpha] - 2022-06-09
+
+### Changed
+
+- Login Page (index)
+  - Fix issue: Uncomment code line 54 (moveToHomepage) from function checkExistingSession - glitch error during logout
+
+- Carpool Page
+  - Change datetime picker to input masked text field (issue with date format on other mobile devices - temporary fix)
+
+- Favicon
+  - Change favicon from ico to png (compatible for all browsers)
+
+- Components
+  - Fix issue: Mobile Number input error - Cannot type number 9
+
 ## [0.0.2-alpha] - 2022-06-07
 
 ### Added
