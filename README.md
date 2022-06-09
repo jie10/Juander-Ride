@@ -12,7 +12,7 @@ The Juander app is CEB's very own application for employee carpool and shuttle p
 
 ## Current Updates
 
-- See changelog [v0.0.2-alpha](https://github.com/rdramirez/Juander/blob/main/CHANGELOG.md) for further details
+- See changelog [v0.0.3-alpha](https://github.com/rdramirez/Juander/blob/main/CHANGELOG.md) for further details
 
 ## Tools
 
