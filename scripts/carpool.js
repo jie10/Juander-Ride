@@ -124,7 +124,6 @@ function getStatusIndicator(status) {
 }
 
 function getStatusPopup(bookingID, status, driverEmail, tripID, userEmail) {
-    console.log(bookingID)
     switch(status) {
         case 0:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
@@ -246,7 +245,11 @@ function getRiderBookingsStatusAPI(booking) {
                 // rider cant cancel booking
                 getStatusPopup(booking._id == undefined ? booking['bookingID'] : booking._id, booking.status, booking.driver, booking.tripID, booking.email);
             }else{
-                getStatusPopup(booking._id == undefined ? booking['bookingID'] : booking._id, 4, booking.driver, booking.tripID, booking.email);
+                if (booking.status === 4) {
+                    showSuccessAlertWithConfirmButton(function () {}, 'Ongoing Trip with Driver', 'Enjoy your carpool ride experience', 'Okay') 
+                } else {
+                    getStatusPopup(booking._id == undefined ? booking['bookingID'] : booking._id, 4, booking.driver, booking.tripID, booking.email);
+                }
             }
         });
 
@@ -309,7 +312,7 @@ function cancelTripBooking(bookingID, tripID, userEmail){
     fetch(PLAY_BOOKING_API_ENDPOINT, options)
         .then(getResJSON)
         .then(function (data) {
-        console.log(data)
+
             delay(function () {
                 localStorage.setItem(DRIVER_BOOKING, null)
                 hideActivityIndicator();
@@ -577,7 +580,6 @@ function reloadCurrentPage(fromApi) {
             JUANDERSERVICE.userStatusCheck(email)
             .then(getResJSON)
             .then(function (data) {
-                console.log(data)
                 var currect_app_version_from_server = data.version;
                 var current_app_version = localStorage.getItem(CURRENT_APP_VERSION_KEY) ;
 
@@ -1369,8 +1371,8 @@ document.addEventListener('DOMContentLoaded', function () {
     showActivityIndicator();
 
     if (checkCurrentSession()) {
-        console.log('booking', bookingFromCache())
-        console.log('trip', tripFromCache())
+        // console.log('booking', bookingFromCache())
+        // console.log('trip', tripFromCache())
         reloadCurrentPage(true);
         
     } else {
