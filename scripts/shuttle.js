@@ -399,7 +399,8 @@ function addTrip(payload) {
 function showCard(localbooking){
     var timeFromNowFormat = moment(localbooking.departTime).utc().format('MMMM D YYYY  h:mm a');
     var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
-    
+
+    document.querySelector('.shuttle-page-bg').style.display = 'block';
     // set card UI design
     
     switch(localbooking.status){
