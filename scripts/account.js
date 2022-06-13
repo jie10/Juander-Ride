@@ -208,7 +208,7 @@ function getRiderBookingsHistory() {
                 showMyTripsPageContainer();
 
                 if (data && data.length > 0) {
-                    sortDateTime(data, 'desc', 'departTime');
+                    sortDateTime(data, 'desc', 'updatedAt');
                     my_trips_container.innerHTML = '<div class=\"tripHistory-list container\">' +
                                                         data.map(function (val) { 
                                                             var _id = val._id;
@@ -262,7 +262,7 @@ function getDriverBookings() {
                 showMyBookingsPageContainer();
 
                 if (data && data.length > 0) {
-                    sortDateTime(data, 'desc', 'departTime');
+                    sortDateTime(data, 'desc', 'updatedAt');
                     my_bookings_container.innerHTML = '<div class=\"tripHistory-list container\">' +
                                                         data.map(function (val) { 
                                                             var timeFromNowFormat = moment(val.departTime).utc().format('MMMM D YYYY  h:mm a');
