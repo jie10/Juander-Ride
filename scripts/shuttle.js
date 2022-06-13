@@ -76,11 +76,9 @@ function onScannerContinue (e) {
     // fetch user booking to update booking card
     var userObj = localStorage.getItem('user_login_data');
     userObj = JSON.parse(userObj);
-    JUANDERSERVICE.userStatusCheck(userObj['email'])
+    JUANDERSERVICE.userShuttleCheck(userObj['email'])
     .then(getResJSON)
     .then(function (data) {
-        console.log(data)
-
         if(data['trip'] == null && data['booking'] == null){
             reloadTripList();
         }
@@ -101,7 +99,6 @@ function onScannerContinue (e) {
                     if(data['booking']['booktype'] == 1){
                        showCard(data['booking']);
                     }
-                    
                     
                     hideActivityIndicator();
                 }, 1000);
@@ -178,7 +175,7 @@ function onScannerClose (e) {
         scanner_viewcontroller.style.visibility = "collapse";
     }).catch((err) => {
       // Stop failed, handle it.
-        console.log("fail");
+        console.error(err);
     });
 }
 
@@ -202,7 +199,7 @@ function onScanQrCode (e) {
         if(_payload){
            var lastResult = "";
             var countResults = 0;
-            console.log(lastResult);
+            // console.log(lastResult);
             e.preventDefault();
 
             scanner_viewcontroller.style.visibility = "visible";
@@ -240,12 +237,12 @@ function onScanQrCode (e) {
                         function (decodedText, decodedResult) {
                             if(decodedText != lastResult){
                                 lastResult = decodedText;
-                                console.log(decodedText);
+                                // console.log(decodedText);
                                 // html5QrCode.clear();
 
                                 _scanner.stop().then((ignore) => {
                                   // QR Code scanning is stopped.
-                                    console.log("stop");
+                                    // console.log("stop");
                                     _scanner.clear();
                                     scanner_viewcontroller.style.visibility = "collapse";
 
@@ -258,7 +255,7 @@ function onScanQrCode (e) {
 
                                 }).catch((err) => {
                                   // Stop failed, handle it.
-                                    console.log("fail");
+                                    console.error(err);
                                 });
                             }
 
@@ -297,11 +294,9 @@ function reloadTripList() {
     shuttle_trip_list.innerHTML = ''
     
     var localShuttle = JSON.parse(localStorage.getItem(SHUTTLE_TRIPS))
-    console.log(localShuttle)
     
     if(localShuttle != null){
         // get data from local storage
-        console.log('trip from local storage');
         var givenDate = moment(new Date(localShuttle['createdAt'])).format("YYYY-MM-DD HH:mm");
         var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
         var duration = moment.duration(given.diff(new Date())).asHours();
@@ -309,7 +304,6 @@ function reloadTripList() {
 
         // one minute local storage life
         if(duration < _cacheExpiry){
-            console.log('local storage is not fresh');
             cacheExpired = true;
             activity_indicator.style.visibility = "collapse";
         }else{
@@ -345,7 +339,6 @@ function reloadTripList() {
         .then(function (data) {
             if(data != undefined){
                 if(data.length > 0){
-                    console.log('has trips')
                     // add to local storage
                     var storagedata = {data: data, createdAt: DATETIMESERVICE.getDateTime()}
                     localStorage.setItem(SHUTTLE_TRIPS, JSON.stringify(storagedata))
@@ -451,7 +444,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if(localStorage.hasOwnProperty(DRIVER_TRIP)){
         var localtrip = JSON.parse(localStorage.getItem(DRIVER_TRIP))
         if(localtrip != null){
-            console.log('has trip on load')
             _hasCarpoolTrip = true;
             scan_qr_message_text.innerHTML = "You have created a carpool ride. Please cancel trip to use shuttle services.";
             scan_qr_message.style.visibility = "visible";
@@ -462,95 +454,93 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     
-    
     if(localStorage.hasOwnProperty(DRIVER_BOOKING)){
         try {
             var localbooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING))
-        
-            var givenDate = moment(new Date(localbooking['createdAt'])).format("YYYY-MM-DD HH:mm");
-            var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
-            var duration = moment.duration(given.diff(new Date())).asHours();
-            duration = duration - 8;
+            
+            if(localbooking != null){
+                var givenDate = moment(new Date(localbooking['createdAt'])).format("YYYY-MM-DD HH:mm");
+                var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
+                var duration = moment.duration(given.diff(new Date())).asHours();
+                duration = duration - 8;
 
-            // one minute local storage life
-            console.log(duration)
-            if(duration < _cacheExpiry){
-                console.log('local storage is not fresh');
-                localStorage.setItem(DRIVER_BOOKING, null)
-            }else{
-                localbooking = localbooking.data
-
-                if(localbooking != null){
-                    if(localbooking['booktype'] == 1){
-                        activity_indicator.style.visibility = "visible";
-
-                        setTimeout(() => {
-                            activity_indicator.style.visibility = "collapse";
-                        }, 1000);
-
-                        _hasShuttleBooking = true;
-
-                        console.log(localbooking['booktype'])
-                        if(localbooking['booktype'] == 1){
-                            showCard(localbooking);
-                        }
-                    
-                        shuttle_trip_list.style.visibility = 'collapse';
-
-                    }else if(localbooking['booktype'] == 0){
-                        scan_qr_message.style.visibility = "visible";
-                        _hasCarpoolBooking = true;
-                        console.log('has carpool booking')    
-                    }
+                // one minute local storage life
+                if(duration < _cacheExpiry){
+                    localStorage.setItem(DRIVER_BOOKING, null)
                 }else{
-                    console.log('no shuttle booking')
+                    localbooking = localbooking.data
+
+                    if(localbooking != null){
+                        if(localbooking['booktype'] == 1){
+                            activity_indicator.style.visibility = "visible";
+
+                            setTimeout(() => {
+                                activity_indicator.style.visibility = "collapse";
+                            }, 1000);
+
+                            _hasShuttleBooking = true;
+                            if(localbooking['booktype'] == 1){
+                                showCard(localbooking);
+                            }
+
+                            shuttle_trip_list.style.visibility = 'collapse';
+
+                        }else if(localbooking['booktype'] == 0){
+                            scan_qr_message.style.visibility = "visible";
+                            _hasCarpoolBooking = true;  
+                        }
+                    }
                 }
             }
         }catch(e){
-            console.log('no local booking')
             setTimeout(() => {
                 hideActivityIndicator();    
             }, 1000);  
         }
     }
     
+
     if(!_hasShuttleBooking && !_hasCarpoolTrip){
         activity_indicator.style.visibility = "visible";
         
         // fetch user booking to update booking card
         var userObj = localStorage.getItem('user_login_data');
         userObj = JSON.parse(userObj);
-        JUANDERSERVICE.userStatusCheck(userObj['email'])
+        
+        JUANDERSERVICE.userShuttleCheck(userObj['email'])
         .then(getResJSON)
         .then(function (data) {
-            console.log(data)
-
             if(data['trip'] == null && data['booking'] == null){
                 // check if there is a recent booking
                 reloadTripList();
             }
 
             if(data['booking'] != null){
-                if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 4) {
-                    setTimeout(() => {
-                        
-                        var localBooking = {
-                            data: data['booking'],
-                            createdAt: DATETIMESERVICE.getDateTime()
-                        }
-                    
-                        localStorage.setItem(DRIVER_BOOKING, JSON.stringify(localBooking));
-                        shuttle_trip_list.style.visibility = 'collapse';
-                        scan_qr_btn.style.visibility = "collapse";
-                        
-                        if(data['booking']['booktype'] == 1){
-                            showCard(data['booking']);
-                        }
-                        
-                        hideActivityIndicator();    
-                    }, 1000);
+                if(data['booking']['tripStatus'] == 3){
+                    localStorage.setItem(DRIVER_BOOKING, null);
+                    reloadTripList();
+                }else{
+                    if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 4) {
+                        setTimeout(() => {
+
+                            var localBooking = {
+                                data: data['booking'],
+                                createdAt: DATETIMESERVICE.getDateTime()
+                            }
+
+                            localStorage.setItem(DRIVER_BOOKING, JSON.stringify(localBooking));
+                            shuttle_trip_list.style.visibility = 'collapse';
+                            scan_qr_btn.style.visibility = "collapse";
+
+                            if(data['booking']['booktype'] == 1){
+                                showCard(data['booking']);
+                            }
+
+                            hideActivityIndicator();    
+                        }, 1000);
+                    }
                 }
-            }
+            } 
         })
         .catch(function (err) {
             console.error(err);
@@ -560,6 +550,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
     }
-    
+
 
 });

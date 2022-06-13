@@ -21,6 +21,18 @@ const JUANDERSERVICE = {
         var response = await fetch(baseUrl, options)
         return response
     },
+    userShuttleCheck: async (email) => {
+        var baseUrl = "https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/shuttle/" + email;
+        
+        var options = {
+            method: 'GET',
+            headers: {"Content-Type": "application/json"},
+            body: null
+        };
+        
+        var response = await fetch(baseUrl, options)
+        return response
+    },
     bookRide: async (payload) => {
         var baseUrl = "https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/check/" + email;
         
