@@ -399,10 +399,14 @@ function addTrip(payload) {
 function showCard(localbooking){
     var timeFromNowFormat = moment(localbooking.departTime).utc().format('MMMM D YYYY  h:mm a');
     var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
+    var shuttleData = JSON.parse(localStorage.getItem('shuttle_trips')).data.filter(function (shuttle) {
+        return shuttle.email === localbooking.driver
+    })[0];
+    var driverPhoneNumber = shuttleData ? '+' + shuttleData.phone : null;
 
     document.querySelector('.shuttle-page-bg').style.display = 'block';
+
     // set card UI design
-    
     switch(localbooking.status){
         case 1:
             shuttle_ride_card_container.style.backgroundColor = '#ecf5e4';
@@ -436,6 +440,37 @@ function showCard(localbooking){
     shuttle_ride_card_seats.innerHTML = localbooking['seats'] +"/"+ localbooking['seatCount'] + " seats"
 
     shuttle_ride_card.style.visibility = 'visible';
+
+    shuttle_ride_card.addEventListener('click', function (e) {
+        getStatusPopup(localbooking.status, driverPhoneNumber);
+    });
+}
+
+function getStatusPopup(bookingStatus, driverPhoneNumber) {
+    switch(bookingStatus) {
+        case 1:
+            showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
+                if (driverPhoneNumber) {
+                    window.open('tel:' + driverPhoneNumber);
+                }
+            }, 'Booking confirmed', 'Driver has confirmed your booking request', 'Message Driver');
+            break;
+        case 2:
+            showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
+                localStorage.removeItem(DRIVER_BOOKING);
+
+                window.location.href = SHUTTLE_PAGE_SOURCE_LOCATION;
+            }, 'Booking cancelled', 'Driver has cancelled your booking request', 'Done');
+            break;
+        case 3:
+            showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
+                localStorage.removeItem(DRIVER_BOOKING);
+
+                window.location.href = SHUTTLE_PAGE_SOURCE_LOCATION;
+            }, 'Booking finished', 'Hope you had a great shuttle trip experience', 'Done');
+            break;
+        default: break;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
