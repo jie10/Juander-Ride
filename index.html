@@ -19,6 +19,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js" integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- LOTTIE -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <!-- CRYPTO JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <!-- CUSTOM CSS -->
     <link href="./styles/utils/helpers.css" rel="stylesheet" type="text/css"/>
     <link href="./styles/default.css" rel="stylesheet" type="text/css"/>
@@ -68,13 +70,13 @@
                         </div>
                         <div class="col-12">
                             <label for="user_sign_up_mobile_number" class="form-label sign-up-mobile-number-input-label">Mobile Number</label>
-                            <input type="text" class="form-control sign-up-mobile-number-input" id="user_sign_up_mobile_number" name="user_sign_up_mobile_number" placeholder="917-XXX-XXXX" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" autocomplete="off" maxlength="30" />
+                            <input type="text" class="form-control sign-up-mobile-number-input" id="user_sign_up_mobile_number" name="user_sign_up_mobile_number" placeholder="999-999-9999" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" autocomplete="off" maxlength="30" />
                             <div class="invalid-feedback">Please choose a valid mobile number</div>
                         </div>
                         <div class="col-12">
-                            <label for="user_sign_up_location" class="form-label sign-up-location-input-label">Location</label>
+                            <label for="user_sign_up_location" class="form-label sign-up-location-input-label">Pick-Up/Drop Off</label>
                             <input type="text" class="form-control sign-up-location-input" id="user_sign_up_location" name="user_sign_up_location" placeholder="Location" autocomplete="off" maxlength="150" />
-                            <div class="invalid-feedback">Please indicate your current location</div>
+                            <div class="invalid-feedback">Please indicate your pick-up/drop off location</div>
                         </div>
                         <div class="col-12 d-flex justify-content-center mt-4">
                           <button type="button" class="btn btn-primary sign-up-button" id="sign_up_button" disabled>Sign Up</button>

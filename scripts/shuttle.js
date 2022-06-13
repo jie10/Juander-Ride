@@ -1,10 +1,14 @@
 /** GET COMPONENTS */
+const SHUTTLE_PAGE_SOURCE_LOCATION = '../pages/shuttle.html';
 var DRIVER_TRIP = 'driver_trip';
 var DRIVER_BOOKING = 'user_booking';
+var SHUTTLE_TRIPS = 'shuttle_trips';
+var SHUTTLE_BOOKING = 'shuttle_booking';
 
 var scan_qr_btn = document.getElementById('scan_qr_btn');
 var scan_qr_btn_container = document.getElementById('scan_qr_btn_container');
 var scan_qr_message = document.getElementById('scan_qr_message');
+var scan_qr_message_text = document.getElementById('scan_qr_message_text');
 var shuttle_trip_list = document.getElementById('shuttle_trip_list');
 var shuttle_trip_container = document.getElementById('shuttle_trip_container');
 
@@ -27,6 +31,7 @@ var scanner_success_viewcontroller_title = document.getElementById('scanner_succ
 var scanner_success_viewcontroller_message = document.getElementById('scanner_success_viewcontroller_message');
 
 var shuttle_ride_card = document.getElementById('shuttle_ride_card');
+var shuttle_ride_card_container = document.getElementById('shuttle_ride_card_container');
 var shuttle_ride_card_title = document.getElementById('shuttle_ride_card_title');
 var shuttle_ride_card_datetime = document.getElementById('shuttle_ride_card_datetime');
 var shuttle_ride_card_destination = document.getElementById('shuttle_ride_card_destination');
@@ -46,8 +51,15 @@ var _payload;
 var _isLocal = true;
 var _hasCarpoolBooking = false;
 var _hasShuttleBooking = false;
+var _hasCarpoolTrip = false;
+var _cacheExpiry = -(2/60); // 1 minute
 
 /** FUNCTIONS */
+
+function getResJSON(result) {
+    return result.json();
+}
+
 function hideActivityIndicator() {
     activity_indicator.style.visibility = "collapse";
 }
@@ -60,7 +72,49 @@ function onScannerContinue (e) {
     e.preventDefault();
     activity_indicator.style.visibility = "visible";
     scanner_success_viewcontroller.style.visibility = "collapse";
-    reloadTripList();
+    
+    // fetch user booking to update booking card
+    var userObj = localStorage.getItem('user_login_data');
+    userObj = JSON.parse(userObj);
+    JUANDERSERVICE.userStatusCheck(userObj['email'])
+    .then(getResJSON)
+    .then(function (data) {
+        console.log(data)
+
+        if(data['trip'] == null && data['booking'] == null){
+            reloadTripList();
+        }
+
+        if(data['booking'] != null){
+            if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 4) {
+                setTimeout(() => {
+                    
+                    var localBooking = {
+                        data: data['booking'],
+                        createdAt: DATETIMESERVICE.getDateTime()
+                    }
+                    
+                    localStorage.setItem(DRIVER_BOOKING, JSON.stringify(localBooking));
+                    shuttle_trip_list.style.visibility = 'collapse';
+                    scan_qr_btn.style.visibility = "collapse";
+                    
+                    if(data['booking']['booktype'] == 1){
+                       showCard(data['booking']);
+                    }
+                    
+                    
+                    hideActivityIndicator();
+                }, 1000);
+            }
+        }
+    })
+    .catch(function (err) {
+        console.error(err);
+        hideActivityIndicator();
+        showErrorAlertWithConfirmButton(function () {
+            window.location.href = SHUTTLE_PAGE_SOURCE_LOCATION;
+        }, 'Error 500', 'Internal server error', 'Refresh');
+    });
 }
 
 function onScannerConfirm (e) {
@@ -68,8 +122,7 @@ function onScannerConfirm (e) {
     activity_indicator.style.visibility = "visible";
     var userObj = localStorage.getItem('user_login_data');
     userObj = JSON.parse(userObj);
-    
-    
+        
     var options = {
         method: 'POST',
         headers: {
@@ -106,7 +159,12 @@ function onScannerConfirm (e) {
         })
         .catch(function (err) {
             console.error(err);
-            alert('ERROR: ' + err);
+            setTimeout(() => {
+                hideActivityIndicator();
+                showErrorAlertWithConfirmButton(function () {
+                    // window.location.href = SHUTTLE_PAGE_SOURCE_LOCATION;
+                }, 'Error 500', 'Internal server error. Please check your internet.', 'Ok');
+            }, 1000);
         });
 }
 
@@ -125,82 +183,97 @@ function onScannerClose (e) {
 }
 
 function onScanQrCode (e) {
-    activity_indicator.style.visibility = "visible";
+    if(_hasCarpoolTrip || _hasCarpoolBooking || _hasShuttleBooking){
+        var errorMessage = ''
+        if(_hasCarpoolTrip){
+            errorMessage = 'carpool trip'
+        }else if(_hasCarpoolBooking){
+            errorMessage = 'carpool booking'   
+        }else if(_hasShuttleBooking){
+            errorMessage = 'shuttle booking'        
+        }
+        
+        showErrorAlertWithConfirmButton(function () {
+            // window.location.href = SHUTTLE_PAGE_SOURCE_LOCATION;
+        }, 'Error', 'You currently has a ' + errorMessage + '. Please cancel trip to use shuttle services.', 'Ok');
+    }else{
+        activity_indicator.style.visibility = "visible";
     
-    if(_payload){
-       var lastResult = "";
-        var countResults = 0;
-        console.log(lastResult);
-        e.preventDefault();
+        if(_payload){
+           var lastResult = "";
+            var countResults = 0;
+            console.log(lastResult);
+            e.preventDefault();
 
-        scanner_viewcontroller.style.visibility = "visible";
+            scanner_viewcontroller.style.visibility = "visible";
 
-        Html5Qrcode.getCameras().then(devices => {
-            if (devices && devices.length) {
-                var cameraId;             
-                _scanner = new Html5Qrcode("scan_ticket_reader");
-                
-                if(_isLocal){
-                    cameraId = devices[0].id;
-                }else{
-                    if (devices.length === 1) {
+            Html5Qrcode.getCameras().then(devices => {
+                if (devices && devices.length) {
+                    var cameraId;             
+                    _scanner = new Html5Qrcode("scan_ticket_reader");
+
+                    if(_isLocal){
                         cameraId = devices[0].id;
-                    }else if(devices.length === 2){
-                        cameraId = devices[1].id;  
-                    }else if(devices.length > 2){
-                        cameraId = devices[2].id;  
-                    }
-                }
-                
-                var config = {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 },
-                    aspectRatio: 1.7777778
-                };
-
-                setTimeout(() => {
-                    activity_indicator.style.visibility = "collapse";
-                }, 1500);
-                
-                _scanner.start(
-                    cameraId, 
-                    config,
-                    function (decodedText, decodedResult) {
-                        if(decodedText != lastResult){
-                            lastResult = decodedText;
-                            console.log(decodedText);
-                            // html5QrCode.clear();
-
-                            _scanner.stop().then((ignore) => {
-                              // QR Code scanning is stopped.
-                                console.log("stop");
-                                _scanner.clear();
-                                scanner_viewcontroller.style.visibility = "collapse";
-                                
-                                scanner_confirm_viewcontroller_title.innerHTML = _payload['fullname']
-                                scanner_confirm_viewcontroller_shuttle.innerHTML = _payload['fullname']
-                                scanner_confirm_viewcontroller_origin.innerHTML = "AOC Pasay"
-                                scanner_confirm_viewcontroller_destination.innerHTML = _payload['origin']
-                                
-                                scanner_confirm_viewcontroller.style.visibility = "visible";
-                                
-                            }).catch((err) => {
-                              // Stop failed, handle it.
-                                console.log("fail");
-                            });
+                    }else{
+                        if (devices.length === 1) {
+                            cameraId = devices[0].id;
+                        }else if(devices.length === 2){
+                            cameraId = devices[1].id;  
+                        }else if(devices.length > 2){
+                            cameraId = devices[2].id;  
                         }
+                    }
 
-                    },
-                    function (err) {
-                        // Swal.hideLoading();
-                    })
-                .catch((err) => {
+                    var config = {
+                        fps: 10,
+                        qrbox: { width: 250, height: 250 },
+                        aspectRatio: 1.7777778
+                    };
 
-                });
-            } else {
-                console.log("no cameras found!");
-            }
-        })
+                    setTimeout(() => {
+                        activity_indicator.style.visibility = "collapse";
+                    }, 1500);
+
+                    _scanner.start(
+                        cameraId, 
+                        config,
+                        function (decodedText, decodedResult) {
+                            if(decodedText != lastResult){
+                                lastResult = decodedText;
+                                console.log(decodedText);
+                                // html5QrCode.clear();
+
+                                _scanner.stop().then((ignore) => {
+                                  // QR Code scanning is stopped.
+                                    console.log("stop");
+                                    _scanner.clear();
+                                    scanner_viewcontroller.style.visibility = "collapse";
+
+                                    scanner_confirm_viewcontroller_title.innerHTML = _payload['fullname']
+                                    scanner_confirm_viewcontroller_shuttle.innerHTML = _payload['fullname']
+                                    scanner_confirm_viewcontroller_origin.innerHTML = "AOC Pasay"
+                                    scanner_confirm_viewcontroller_destination.innerHTML = _payload['origin']
+
+                                    scanner_confirm_viewcontroller.style.visibility = "visible";
+
+                                }).catch((err) => {
+                                  // Stop failed, handle it.
+                                    console.log("fail");
+                                });
+                            }
+
+                        },
+                        function (err) {
+                            // Swal.hideLoading();
+                        })
+                    .catch((err) => {
+
+                    });
+                } else {
+                    console.log("no cameras found!");
+                }
+            })
+        }
     }
 }
 
@@ -217,64 +290,109 @@ var onTripSelect = function(event, payload){
 }
 
 function reloadTripList() {
+    var cacheExpired = false;
     _payload = undefined;
     scan_qr_btn.style.visibility = "collapse";
     scan_qr_btn.style.backgroundColor = "#cccccc";
     shuttle_trip_list.innerHTML = ''
     
-    var options = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            "pointA": "luneta, manila",
-            "tripType": 1
-        })
-    };
+    var localShuttle = JSON.parse(localStorage.getItem(SHUTTLE_TRIPS))
+    console.log(localShuttle)
+    
+    if(localShuttle != null){
+        // get data from local storage
+        console.log('trip from local storage');
+        var givenDate = moment(new Date(localShuttle['createdAt'])).format("YYYY-MM-DD HH:mm");
+        var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
+        var duration = moment.duration(given.diff(new Date())).asHours();
+        duration = duration - 8;
 
-    fetch('https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/match/trip', options)
-    .then(function (result) {
-        return result.json();
-    })
-    .then(function (data) {
-        if(data != undefined){
-            if(data.length > 0){
-                // populate shuttle list
-                data.map(trip => {
+        // one minute local storage life
+        if(duration < _cacheExpiry){
+            console.log('local storage is not fresh');
+            cacheExpired = true;
+            activity_indicator.style.visibility = "collapse";
+        }else{
+            setTimeout(() => {
+                localShuttle.data.map(trip => {
                     addTrip(trip)
                 })
 
                 scan_qr_btn.style.visibility = "visible"
                 activity_indicator.style.visibility = "collapse";
-            }else{
-                shuttle_trip_container.innerHTML = "<p style='text-align: center; margin-top: 32px;'>No shuttle trips found.</p>"
-                activity_indicator.style.visibility = "collapse";
-            }  
+            }, 1000);
         }
-    })
-    .catch(function (err) {
-        console.error(err);
-        alert('ERROR: ' + err);
-    });
+    }else{
+        cacheExpired = true;
+    }
+    
+    if(cacheExpired){
+        var options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "pointA": "luneta, manila",
+                "tripType": 1
+            })
+        };
+
+        fetch('https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/match/trip', options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            if(data != undefined){
+                if(data.length > 0){
+                    console.log('has trips')
+                    // add to local storage
+                    var storagedata = {data: data, createdAt: DATETIMESERVICE.getDateTime()}
+                    localStorage.setItem(SHUTTLE_TRIPS, JSON.stringify(storagedata))
+
+                    // populate shuttle list
+                    data.map(trip => {
+                        addTrip(trip)
+                    })
+
+                    scan_qr_btn.style.visibility = "visible"
+                    activity_indicator.style.visibility = "collapse";
+                }else{
+                    shuttle_trip_container.innerHTML = "<p style='text-align: center; margin-top: 32px;'>No shuttle trips found.</p>"
+                    activity_indicator.style.visibility = "collapse";
+                    localStorage.setItem(SHUTTLE_TRIPS, null);
+                }  
+            }
+        })
+        .catch(function (err) {
+            console.error(err);
+            setTimeout(() => {
+                hideActivityIndicator();
+                shuttle_trip_container.innerHTML = "<p style='text-align: center; margin-top: 32px;'>Please check your internet connection.</p>"
+                showErrorAlertWithConfirmButton(function () {
+                    // window.location.href = SHUTTLE_PAGE_SOURCE_LOCATION;
+                }, 'Error 500', 'Internal server error. Please check your internet.', 'Ok');
+            }, 1000);
+        });
+    }
 }
 
 function addTrip(payload) {
     var trip = document.createElement("li");
     trip.style = "padding-top: 6px; padding-bottom: 6px;"
+    trip.addEventListener("click", onTripSelect.bind(event, payload), false);
     
-    if(!_hasCarpoolBooking){
-        trip.addEventListener("click", onTripSelect.bind(event, payload), false);
-    }
+    var timeFromNowFormat = moment(payload.departTime).utc().format('h:mm a');
     
-    trip.innerHTML = "<div style='display: flex; height: 100px;  border-radius: 12px; border: 1px solid #dfdfdf;'>"
+    trip.innerHTML = "<div style='display: flex; height: 110px;  border-radius: 12px; border: 1px solid #dfdfdf;'>"
     + "<div style='flex-grow: 1;'>"
     + "<img style='border-radius: 8px; width: 40px; margin-top: 16px; margin-left: 24px;' src='../images/sample/no-avatar.png'/>"
     + "</div>"
     + "<div style='flex-grow: 4;'>"
     + "<p style='padding: 16px 0 0 0; margin: 0; line-height: 1em; font-size: 1.2rem; font-weight: bold;'>" + payload['fullname'] + "</p>"
     + "<p style='padding: 0; margin: 0; line-height: 1.1em; font-size: 0.8rem;'>" + payload['origin'] + "</p>"
-    + "<p style='padding: 8px 0 0 0; margin: 0; line-height: 1em; font-size: 0.8rem;'><span style='font-weight: bold;'>Departure:</span> 6:30pm</p>"
+    + "<p style='padding: 12px 0 0 0; margin: 0; line-height: 1em; font-size: 0.8rem;'><span style='font-weight: bold;'>Mobile:</span> +"+payload['phone']+"</p>"
+    + "<p style='padding: 2px 0 0 0; margin: 0; line-height: 1em; font-size: 0.8rem;'><span style='font-weight: bold;'>Departure:</span> "+timeFromNowFormat+"</p>"
     + "</div>"
     + "<div style='flex-grow: 2; text-align: end'>"
     + "<p style='margin: 18px 24px 0 0; padding: 0; line-height: 1em; font-size: 1.8rem; font-weight: bold;'>" + payload['seats'] + "</p>"
@@ -285,55 +403,163 @@ function addTrip(payload) {
     shuttle_trip_list.appendChild(trip);
 }
 
+function showCard(localbooking){
+    var timeFromNowFormat = moment(localbooking.departTime).utc().format('MMMM D YYYY  h:mm a');
+    var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
+    
+    // set card UI design
+    
+    switch(localbooking.status){
+        case 1:
+            shuttle_ride_card_container.style.backgroundColor = '#ecf5e4';
+            shuttle_ride_card_status.style.color = '#ecf5e4';
+            shuttle_ride_card_status.style.backgroundColor = '#5aa949';
+            shuttle_ride_card_status.innerHTML = "Confirmed";
+            break;
+        case 2:
+            shuttle_ride_card_container.style.backgroundColor = '#e2e3e2';
+            shuttle_ride_card_status.style.color = '#e2e3e2';
+            shuttle_ride_card_status.style.backgroundColor = '#858586';
+            shuttle_ride_card_status.innerHTML = "Cancelled";
+            break;
+        case 3:
+            shuttle_ride_card_container.style.backgroundColor = '#bafff6';
+            shuttle_ride_card_status.style.color = '#bafff6';
+            shuttle_ride_card_status.style.backgroundColor = '#009883';
+            shuttle_ride_card_status.innerHTML = "Completed";
+            break;
+        case 4:
+            shuttle_ride_card_container.style.backgroundColor = '#eaf6f8';
+            shuttle_ride_card_status.style.color = '#eaf6f8';
+            shuttle_ride_card_status.style.backgroundColor = '#0061a8';
+            shuttle_ride_card_status.innerHTML = "Ongoing";
+            break;
+    }
+    
+    shuttle_ride_card_title.innerHTML = localbooking['drivername']
+    shuttle_ride_card_datetime.innerHTML = (timeFromNow) + ' ' + timeFromNowFormat;
+    shuttle_ride_card_destination.innerHTML = localbooking['destination']
+    shuttle_ride_card_seats.innerHTML = localbooking['seats'] +"/"+ localbooking['seatCount'] + " seats"
+
+    shuttle_ride_card.style.visibility = 'visible';
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var _payload = {}
     shuttle_ride_card.addEventListener("click", onShuttleCardTap.bind(event, _payload), false);
     
     if(localStorage.hasOwnProperty(DRIVER_TRIP)){
-        var localtrip = localStorage.getItem(DRIVER_TRIP)
-        if(localtrip != 'null'){
-            console.log('has trip')
+        var localtrip = JSON.parse(localStorage.getItem(DRIVER_TRIP))
+        if(localtrip != null){
+            console.log('has trip on load')
+            _hasCarpoolTrip = true;
+            scan_qr_message_text.innerHTML = "You have created a carpool ride. Please cancel trip to use shuttle services.";
+            scan_qr_message.style.visibility = "visible";
+            
+            setTimeout(() => {
+                hideActivityIndicator();    
+            }, 1000);   
         }
     }
+    
     
     if(localStorage.hasOwnProperty(DRIVER_BOOKING)){
-        var localbooking = localStorage.getItem(DRIVER_BOOKING)
-        if(localbooking != 'null'){
+        try {
             var localbooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING))
-            if(localbooking['booktype'] == 1){
-                console.log(localbooking)
-                activity_indicator.style.visibility = "visible";
-                
-                setTimeout(() => {
-                    activity_indicator.style.visibility = "collapse";
-                }, 1000);
-                
-                
-                _hasShuttleBooking = true;
-                
-                shuttle_ride_card_title.innerHTML = localbooking['drivername']
-                
-                var timeFromNowFormat = moment(localbooking.departTime).utc().format('MMMM D YYYY  h:mm a');
-                var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
-                
-                shuttle_ride_card_datetime.innerHTML = (timeFromNow) + ' ' + timeFromNowFormat;
-                shuttle_ride_card_destination.innerHTML = localbooking['destination']
-                shuttle_ride_card_seats.innerHTML = localbooking['seats'] +"/"+ localbooking['seatCount'] + " seats"
-                shuttle_ride_card_status.innerHTML = "confirmed"
-                
-                shuttle_ride_card.style.visibility = 'visible';
-                shuttle_trip_list.style.visibility = 'collapse';
-                
-            }else if(localbooking['booktype'] == 0){
-                scan_qr_message.style.visibility = "visible";
-                _hasCarpoolBooking = true;
-                console.log('has carpool booking')    
+        
+            var givenDate = moment(new Date(localbooking['createdAt'])).format("YYYY-MM-DD HH:mm");
+            var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
+            var duration = moment.duration(given.diff(new Date())).asHours();
+            duration = duration - 8;
+
+            // one minute local storage life
+            console.log(duration)
+            if(duration < _cacheExpiry){
+                console.log('local storage is not fresh');
+                localStorage.setItem(DRIVER_BOOKING, null)
+            }else{
+                localbooking = localbooking.data
+
+                if(localbooking != null){
+                    if(localbooking['booktype'] == 1){
+                        activity_indicator.style.visibility = "visible";
+
+                        setTimeout(() => {
+                            activity_indicator.style.visibility = "collapse";
+                        }, 1000);
+
+                        _hasShuttleBooking = true;
+
+                        console.log(localbooking['booktype'])
+                        if(localbooking['booktype'] == 1){
+                            showCard(localbooking);
+                        }
+                    
+                        shuttle_trip_list.style.visibility = 'collapse';
+
+                    }else if(localbooking['booktype'] == 0){
+                        scan_qr_message.style.visibility = "visible";
+                        _hasCarpoolBooking = true;
+                        console.log('has carpool booking')    
+                    }
+                }else{
+                    console.log('no shuttle booking')
+                }
             }
+        }catch(e){
+            console.log('no local booking')
+            setTimeout(() => {
+                hideActivityIndicator();    
+            }, 1000);  
         }
     }
     
-    if(!_hasShuttleBooking){
+    if(!_hasShuttleBooking && !_hasCarpoolTrip){
         activity_indicator.style.visibility = "visible";
-        reloadTripList();
+        
+        // fetch user booking to update booking card
+        var userObj = localStorage.getItem('user_login_data');
+        userObj = JSON.parse(userObj);
+        JUANDERSERVICE.userStatusCheck(userObj['email'])
+        .then(getResJSON)
+        .then(function (data) {
+            console.log(data)
+
+            if(data['trip'] == null && data['booking'] == null){
+                // check if there is a recent booking
+                reloadTripList();
+            }
+
+            if(data['booking'] != null){
+                if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 4) {
+                    setTimeout(() => {
+                        
+                        var localBooking = {
+                            data: data['booking'],
+                            createdAt: DATETIMESERVICE.getDateTime()
+                        }
+                    
+                        localStorage.setItem(DRIVER_BOOKING, JSON.stringify(localBooking));
+                        shuttle_trip_list.style.visibility = 'collapse';
+                        scan_qr_btn.style.visibility = "collapse";
+                        
+                        if(data['booking']['booktype'] == 1){
+                            showCard(data['booking']);
+                        }
+                        
+                        hideActivityIndicator();    
+                    }, 1000);
+                }
+            }
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = SHUTTLE_PAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
     }
+    
+
 });
