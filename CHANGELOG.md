@@ -5,7 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.0.4-alpha] - 2022-06-13
+
+### Changed
+
+- Index page
+  - Fix issue: able to receive juander pin code but upon login error message says "Error 400, not a juander tester"
+
+- Carpool Page
+  - Should have filter based on the location selected
+  - Color coding (booking and trip status)
+  - Cancel option should be available even if the status is confirmed. 30mins before the ride starts
+  - My bookings show confirmed status even the ride is already completed
+  - Notification received via teams do not have link to go to the juanapp
+  - When the driver start the trip, message to all riders that the trip has been started
+  - Status in My Trip did not change from Confirmed to Complete
+  - Location label should be change to Pick-Up/Drop Off
+  - Apply departure date and departure time pickers (rolldate type)
+  - Change Alert Pop-up for Passenger during ongoing trip session
+
+- Shuttle Page
+  - Departure time is confusing as it does not say if the time is for the AM or PM trip
+  - Corrections for the route naming
+  - Instead of Departure Time, we can instead put the numbers of the drivers to check van location while the geo location is not yet enabled
+  - Add background image (map) to Passenger Trip screen
+  - Add Alert Pop-up for Passenger during ongoing trip session
+
+- Account Page
+  - Change rider's booking request name from My Trips
+  - Sort by latest booking trip
+
+- Favicon
+  - Missing Favicon png (wrong pathname) - all pages except index page
+
+- Components
+  - Changed library for date and time picker (Rolldate.js)
+  - Fix issue on contact number fields (Index and Carpool) - Not able to input mobile number if 919 or 995.
 
 ## [0.0.3-alpha] - 2022-06-09
 
