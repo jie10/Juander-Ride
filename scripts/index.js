@@ -7,6 +7,7 @@ var DELAY_TIME_IN_MILLISECONDS = 1000;
 /** API ENDPOINTS */
 var LOGIN_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/login';
 var SIGN_UP_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/register';
+var ENCRYPT_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/encrypt'
 
 /** SOURCE LOCATION */
 var HOMEPAGE_SOURCE_LOCATION = '/';
@@ -33,6 +34,7 @@ function highlightLoginErrorInput(errEmail) {
     user_pin_code.parentElement.querySelector('.invalid-feedback').style.display = errEmail ? 'block' : 'none';
     user_pin_code.parentElement.querySelector('.invalid-feedback').innerHTML = errEmail ? 'Plase enter a valid pin code' : '';
 }
+
 function highlightRegisterErrorInput(errEmail, errMobileNumber, errLocation) {
     user_sign_up_email.style.borderColor = errEmail ? 'red' : '#ced4da';
     user_sign_up_email.parentElement.querySelector('.invalid-feedback').style.display = errEmail ? 'block' : 'none';
@@ -90,6 +92,7 @@ function login(pin_code) {
                         login_button.disabled = false;
                     }, 'Error ' + data.code, data.message, 'Close');
                 } else {
+                    // Encrypt data
                     localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(data));
                     moveToHomepage();
                 }
@@ -268,5 +271,12 @@ sign_up_button.addEventListener('click', onRegister);
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    var encrypted = CryptoJS.AES.encrypt('hello', 'secret').toString()
+    console.log(encrypted)
+    
+    var bytes = CryptoJS.AES.decrypt(encrypted, 'secret');
+    var data = bytes.toString(CryptoJS.enc.Utf8);
+    
+    console.log(data)
     checkExistingSession(); 
 });

@@ -55,9 +55,10 @@ function getStatusIndicator(status) {
     switch(status) {
         case 0:
             return {
-                trip_status: 'pending',
+                trip_status: 'Pending',
                 withButtons: true,
-                color: 'bg-warning',
+                backgroundColor: '#fff6ee',
+                color: '#f78e33',
                 origin: 'Coming from ',
                 destination: 'Going to ',
                 target_location: 'Target location is ',
@@ -65,9 +66,10 @@ function getStatusIndicator(status) {
             }
         case 1:
             return {
-                trip_status: 'confirmed',
+                trip_status: 'Confirmed',
                 withButtons: false,
-                color: 'bg-primary',
+                backgroundColor: '#ecf5e4',
+                color: '#5aa949',
                 origin: 'Coming from ',
                 destination: 'Going to ',
                 target_location: 'Target location is ',
@@ -75,9 +77,10 @@ function getStatusIndicator(status) {
             }
         case 2:
             return {
-                trip_status: 'cancelled',
+                trip_status: 'Cancelled',
                 withButtons: false,
-                color: 'bg-secondary',
+                backgroundColor: '#e2e3e2',
+                color: '#858586',
                 origin: 'Came from ',
                 destination: 'Went to ',
                 target_location: 'Target location was ',
@@ -85,9 +88,21 @@ function getStatusIndicator(status) {
             }
         case 3:
             return {
-                trip_status: 'completed',
+                trip_status: 'Completed',
                 withButtons: false,
-                color: 'bg-success',
+                backgroundColor: '#bafff6',
+                color: '#009883',
+                origin: 'Came from ',
+                destination: 'Went to ',
+                target_location: 'Target location was ',
+                action: 'Shared ride with '
+            }
+        case 4:
+            return {
+                trip_status: 'Ongoing',
+                withButtons: false,
+                backgroundColor: '#eaf6f8',
+                color: '#0061a8',
                 origin: 'Came from ',
                 destination: 'Went to ',
                 target_location: 'Target location was ',
@@ -207,13 +222,13 @@ function getRiderBookingsHistory() {
                                                             return '<div class=\"list-item\" id=\"' + _id + '\">'
                                                                         + '<div class=\"row d-flex align-items-center header\">'
                                                                             + '<div class=\"col heading\">' + bookingName + '</div>'
-                                                                            + '<div class=\"col-2 status ' + bookingStatus.color + '\">' + bookingStatus.trip_status + '</div>'
+                                                                            + "<div class='col-2 status' style='background-color: "+bookingStatus.backgroundColor+"; color: "+bookingStatus.color+"'>" + bookingStatus.trip_status + '</div>'
                                                                         + '</div>'
                                                                         + '<div>'
                                                                             + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
                                                                         + '</div>'
                                                                         + '<p class=\"destination\">' + destination + '</p>'
-                                                                        + '<p class=\"seat-number\">' + val.seatCount + '/' + val.seats + (val.seatCount === 1 ? ' seat' : ' seats') + '</p>'
+                                                                        //+ '<p class=\"seat-number\">' + val.seatCount + '/' + val.seats + (val.seatCount === 1 ? ' seat' : ' seats') + '</p>'
                                                                     + '</div>';
                                                         }).join('');
                                                     + '</div>';
@@ -262,14 +277,14 @@ function getDriverBookings() {
                                                             return '<div class=\"list-item\" style=\"' + (val.status === 0 ? 'cursor: pointer;' : 'cursor: default;') + '\" id=\"' + _id + '_' + tripID + '_' + val.status + '\" onclick=\"loadBookingButtons(this)\">'
                                                                         + '<div class=\"row d-flex align-items-center header\">'
                                                                             + '<div class=\"col heading\">' + bookingName + '</div>'
-                                                                            + '<div class=\"col-2 status ' + bookingStatus.color + '\">' + bookingStatus.trip_status + '</div>'
+                                                                            + "<div class='col-2 status' style='background-color: "+bookingStatus.backgroundColor+"; color: "+bookingStatus.color+"'>" + bookingStatus.trip_status + '</div>'
                                                                         + '</div>'
                                                                         + '<div>'
                                                                             + '<p class=\"datetime\">'  + capitalize(timeFromNow) + ' ' + timeFromNowFormat + '</p>'
                                                                         + '</div>'
                                                                         + '<p class=\"destination\">' + destination + '</p>'
                                                                         + '<input type=\"hidden\" class=\"rider-email\" id=\"' + _id + '_rider' +'\" value=\"' + val.email + '\"/>'
-                                                                        + '<p class=\"seat-number\">' + val.seatCount + '/' + val.seats + (val.seatCount === 1 ? ' seat' : ' seats') + '</p>'
+                                                                        //+ '<p class=\"seat-number\">' + val.seatCount + '/' + val.seats + (val.seatCount === 1 ? ' seat' : ' seats') + '</p>'
                                                                         + '<p class=\"booked-by\">' + 'Booked by ' + val.ridername + '</p>'
                                                                     + '</div>';
                                                         }).join('');
@@ -450,6 +465,7 @@ logout_button.addEventListener('click', onLogout);
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.account-page-container').style.display = 'none';
 
+    console.log('reload account')
     showActivityIndicator();
 
     if (checkCurrentSession()) {
