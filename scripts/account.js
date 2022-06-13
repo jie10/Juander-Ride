@@ -269,14 +269,16 @@ function getDriverBookings() {
                                                             var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
                                                             var _id = val._id;
                                                             var drivernameArr = val.drivername.split(' ');
+                                                            var ridernameArr = val.ridername.split(' ');
                                                             var destination = val.destination;
                                                             var bookingStatus = getStatusIndicator(val.status);
+                                                            var bookingRiderAction = capitalize(ridernameArr[ridernameArr.length - 1]) + '\'s trip ' + bookingStatus.trip_status;
                                                             var bookingName = (val.booktype === 0 ? capitalize(drivernameArr[drivernameArr.length - 1]) : capitalize(destination.split(' ')[0])) + ' Ride';
                                                             var tripID = val.tripID;
 
                                                             return '<div class=\"list-item\" style=\"' + (val.status === 0 ? 'cursor: pointer;' : 'cursor: default;') + '\" id=\"' + _id + '_' + tripID + '_' + val.status + '\" onclick=\"loadBookingButtons(this)\">'
                                                                         + '<div class=\"row d-flex align-items-center header\">'
-                                                                            + '<div class=\"col heading\">' + bookingName + '</div>'
+                                                                            + '<div class=\"col heading\">' + bookingRiderAction + '</div>'
                                                                             + "<div class='col-2 status' style='background-color: "+bookingStatus.backgroundColor+"; color: "+bookingStatus.color+"'>" + bookingStatus.trip_status + '</div>'
                                                                         + '</div>'
                                                                         + '<div>'
