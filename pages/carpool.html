@@ -25,12 +25,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js" integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- MOMENT JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- Popperjs -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-    <!-- Tempus Dominus JavaScript -->
-    <script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js" crossorigin="anonymous"></script>
-    <!-- Tempus Dominus Styles -->
-    <link href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- ROLLDATE-->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/rolldate@3.1.2/dist/rolldate.min.js"></script>
     <!-- CUSTOM CSS -->
     <link href="../styles/default.css" rel="stylesheet" type="text/css"/>
     <link href="../styles/utils/helpers.css" rel="stylesheet" type="text/css"/>
@@ -243,17 +239,15 @@
                                             <label for="driver_target_location" class="form-label">Target Location</label>
                                             <input autocomplete="off" type="text" class="form-control" id="driver_target_location" readonly>
                                         </div>
-                                        <div class="col-12">
-                                            <label for="depature_datetime" class="form-label">Departure Date & Time</label>
-                                            <input autocomplete="off" type="text" class="form-control clickable-input" id="depature_datetime" placeholder="mm/dd/yyyy hh:mm">
+                                        <div class="col-md-6">
+                                            <label for="departure_date_picker" class="form-label">Departure Date</label>
+                                            <input autocomplete="off" type="text" class="form-control clickable-input" id="departure_date_picker" placeholder="mm/dd/yyyy" readonly>
+                                            <input type="hidden" id="departure_date" readonly />
                                         </div>
-                                        <div class="col-12">
-                                            <label for="depature_date" class="form-label">Departure Date</label>
-                                            <input autocomplete="off" type="text" class="form-control clickable-input" id="depature_date" placeholder="mm/dd/yyyy">
-                                        </div>
-                                        <div class="col-12">
-                                            <label for="depature_time" class="form-label">Departure Time</label>
-                                            <input autocomplete="off" type="text" class="form-control clickable-input" id="depature_time" placeholder="hh:mm">
+                                        <div class="col-md-6">
+                                            <label for="departure_time_picker" class="form-label">Departure Time</label>
+                                            <input autocomplete="off" type="text" class="form-control clickable-input" id="departure_time_picker" placeholder="hh:mm" readonly>
+                                            <input type="hidden" id="departure_time" readonly />
                                         </div>
                                         <div class="col-md-6">
                                             <label for="driver_available_seats" class="form-label">No. of Seats</label>
@@ -323,7 +317,7 @@
                 </a>
             </div>
         </div>
-        <div id="activity_indicator" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: visible; opacity: 1.0;">
+        <div id="activity_indicator" style="position: absolute; width: 100%; height: 100%; z-index: 9999; top: 0; left: 0; background-color: #fff; visibility: collapse; opacity: 1;">
             <div style="display: flex; align-content: center; justify-content: center; align-items: center; height: 100%;">
                 <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_o8zsifcp.json" background="transparent" speed="1" style="width: 160px; height: 160px;" loop autoplay></lottie-player>
             </div>

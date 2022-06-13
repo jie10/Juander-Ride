@@ -975,22 +975,10 @@ var search_target_location_driver = document.getElementById('search_target_locat
 var driver_target_location = document.getElementById('driver_target_location');
 var driver_available_seats = document.getElementById('driver_available_seats');
 var driver_contact_no = document.getElementById('driver_contact_no');
-var driver_depature_datetime = document.getElementById('depature_datetime');
-
-// var datetimepicker = new tempusDominus.TempusDominus(driver_depature_datetime, {
-//     useCurrent: true,
-//     allowInputToggle: true,
-//     display: {
-//         buttons: {
-//             today: true,
-//             clear: true,
-//             close: true,
-//         },
-//         components: {
-//             useTwentyfourHour: true
-//         }
-//     }
-// });
+var departure_date_picker = document.getElementById('departure_date_picker');
+var departure_date = document.getElementById('departure_date');
+var departure_time_picker = document.getElementById('departure_time_picker');
+var departure_time = document.getElementById('departure_time');
 
 function showShareARideContainer() {
     carpool_ride_list_container.style.display = 'none';
@@ -1016,7 +1004,7 @@ function createTrip() {
     var user = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
     var target_location = driver_target_location.value ? driver_target_location.value : '';
     var available_seats = driver_available_seats.value ? driver_available_seats.value : 0;
-    var departure_datetime = moment(new Date(driver_depature_datetime.value)).format("YYYY-MM-DDTHH:mm") + ':00.000Z';
+    var departure_datetime = moment(new Date(departure_date.value + ' ' + departure_time.value)).format("YYYY-MM-DDTHH:mm") + ':00.000Z';
     var contact_no = driver_contact_no.value ? '63' + driver_contact_no.value.replace(/(\s)/gi, '') : '#';
     var payload = {
         "email": user.email.toLowerCase(),
@@ -1060,7 +1048,8 @@ function createTrip() {
             showErrorAlertWithConfirmButton(function () {
                 driver_target_location.disabled = false;
                 driver_available_seats.disabled = false;
-                driver_depature_datetime.disabled = false;
+                departure_date_picker.disabled = false;
+                departure_time_picker.disabled = false;
                 driver_contact_no.disabled = false;
                 create_trip_button.disabled = true;
             }, 'Error 500', 'Internal server error', 'Refresh');
@@ -1210,35 +1199,62 @@ function onMoreShareRide() {
             delimiters: ['', ' ', ' ']
         });
 
-        new Cleave(driver_depature_datetime, {
-            delimiters: ['/', '/', ' ', ':'],
-            blocks: [2, 2, 4, 2, 2]
-        });
-
         create_trip_button.disabled = true;
         driver_target_location.value = target_location;
         driver_available_seats.value = '';
-        driver_depature_datetime.value = '';
         driver_contact_no.value = user_login_data && user_login_data.mobileNumber ? user_login_data.mobileNumber : '';
 
-        // new tempusDominus.TempusDominus(driver_depature_datetime, {
-        //     useCurrent: true,
-        //     allowInputToggle: true,
-        //     display: {
-        //         buttons: {
-        //             today: true,
-        //             clear: true,
-        //             close: true,
-        //         },
-        //         components: {
-        //             useTwentyfourHour: true
-        //         }
-        //     }
-        // });
+        let defaultDate = moment(new Date());
+        departure_date.value = defaultDate.format("YYYY-MM-DD");
+
+        new Rolldate({
+            el: '#departure_date_picker',
+            format: 'MM/DD/YYYY',
+            beginYear: new Date().getFullYear(),
+            lang: {
+                title: 'Select date',
+                cancel: 'cancel',
+                confirm: 'confirm',
+                year: '',
+                month: '',
+                day: '',
+                hour: '',
+                min: '',
+                sec: ''
+            },
+            value: defaultDate.format("MM/DD/YYYY"),
+            confirm: function(date) {
+                departure_date.value = moment(new Date(date)).format("YYYY-MM-DD");
+            }
+        });
+
+        let defaultTime = defaultDate.format("H:mm");
+        departure_time.value = defaultTime;
+        new Rolldate({
+            el: '#departure_time_picker',
+            format: 'hh:mm',
+            minStep: 5,
+            lang: {
+                title: 'Select time',
+                cancel: 'cancel',
+                confirm: 'confirm',
+                year: '',
+                month: '',
+                day: '',
+                hour: '',
+                min: '',
+                sec: ''
+            },
+            value: defaultTime,
+            confirm: function(date) {
+                departure_time.value = date;
+            }
+        });
+
     }
 }
 function onCreateTrip() {
-    var givenDate = moment(new Date(driver_depature_datetime.value), "YYYY-MM-DD HH:mm");
+    var givenDate = moment(new Date(departure_date.value + ' ' + departure_time.value), "YYYY-MM-DD HH:mm");
 
     var current = new Date();
 
@@ -1267,7 +1283,8 @@ function onCreateTrip() {
         showQuestionAlertWithButtons(function () {
             driver_target_location.disabled = true;
             driver_available_seats.disabled = true;
-            driver_depature_datetime.disabled = true;
+            departure_date_picker.disabled = true;
+            departure_time_picker.disabled = true;
             driver_contact_no.disabled = true;
             create_trip_button.disabled = true;
             showActivityIndicator();
@@ -1322,10 +1339,11 @@ function onSharePoolRideButtonState(e) {
 }
 function onCreateTripRequiredFields(e) {
     e.preventDefault();
-    console.log(driver_available_seats.value !== "")
+
     var requiredFields = driver_target_location.value.length > 0 &
                             driver_available_seats.value !== "" &
-                            driver_depature_datetime.value.length > 0 &
+                            departure_date.value.length > 0 &
+                            departure_time.value.length > 0 &
                             driver_contact_no.value.length > 0;
 
     if (requiredFields === 1) {
@@ -1341,7 +1359,8 @@ create_trip_button.addEventListener('click', onCreateTrip);
 search_target_location_driver.addEventListener('keyup', onSharePoolRideButtonState);
 driver_target_location.addEventListener('keyup', onCreateTripRequiredFields);
 driver_available_seats.addEventListener('change', onCreateTripRequiredFields);
-driver_depature_datetime.addEventListener('change', onCreateTripRequiredFields);
+departure_date_picker.addEventListener('change', onCreateTripRequiredFields);
+departure_time_picker.addEventListener('change', onCreateTripRequiredFields);
 driver_contact_no.addEventListener('keyup', onCreateTripRequiredFields);
 
 
