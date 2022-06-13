@@ -1,4 +1,4 @@
-# Juander Ride | Carpool & Shuttle Service Application
+# Juander | Carpool & Shuttle Service Application
 
 ## Overview
 
@@ -32,7 +32,7 @@ The Juander app is CEB's very own application for employee carpool and shuttle p
 - [MOMENT JS](https://momentjs.com/) - for time format and conversion
 - [Lottie](https://lottiefiles.com/web-player) - for activity indicator
 - [HTML5 QR code](https://github.com/mebjas/html5-qrcode) - for QR code scanning
-- [Tempus Dominus](https://getdatepicker.com/) - for datetime picker
+- [Rolldate.js](https://github.com/AlexZubov/rolldate) - for date picker and time picker
 
 ## Related Links
 
