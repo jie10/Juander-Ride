@@ -39,6 +39,7 @@ var shuttle_ride_card_seats = document.getElementById('shuttle_ride_card_seats')
 var shuttle_ride_card_status = document.getElementById('shuttle_ride_card_status');
 
 var activity_indicator = document.getElementById('activity_indicator');
+var map_bg = document.getElementById('map_bg');
 
 /** ADD EVENTS */
 scan_qr_btn.addEventListener('click', onScanQrCode);
@@ -404,8 +405,6 @@ function showCard(localbooking){
     })[0];
     var driverPhoneNumber = shuttleData ? '+' + shuttleData.phone : null;
 
-    document.querySelector('.shuttle-page-bg').style.display = 'block';
-
     // set card UI design
     switch(localbooking.status){
         case 1:
@@ -471,10 +470,12 @@ function getStatusPopup(bookingStatus, driverPhoneNumber) {
             break;
         default: break;
     }
+    map_bg.style.visibility = 'visible';
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     var _payload = {}
+    map_bg.style.visibility = 'collapsed';
     shuttle_ride_card.addEventListener("click", onShuttleCardTap.bind(event, _payload), false);
     
     if(localStorage.hasOwnProperty(DRIVER_TRIP)){
