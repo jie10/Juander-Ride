@@ -249,7 +249,14 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="driver_available_seats" class="form-label">No. of Seats</label>
-                                            <input autocomplete="off" type="number" min="0" max="30" class="form-control" id="driver_available_seats">
+                                            <select class="form-select" aria-label="Number of seats" id="driver_available_seats">
+                                                <option value="" selected disabled hidden>Choose option</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="driver_contact_no" class="form-label">Contact No.</label>

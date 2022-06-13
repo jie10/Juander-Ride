@@ -1204,16 +1204,18 @@ function onMoreShareRide() {
 
         var target_location = search_target_location_driver.value;
 
-    new Cleave(driver_contact_no, {
-        numericOnly: true,
-        blocks: [0, 3, 3, 4],
-        delimiters: ['', ' ', ' ']
-    });
+        new Cleave(driver_contact_no, {
+            numericOnly: true,
+            blocks: [0, 3, 3, 4],
+            delimiters: ['', ' ', ' ']
+        });
 
-    new Cleave(driver_depature_datetime, {
-        delimiters: ['/', '/', ' ', ':'],
-        blocks: [2, 2, 4, 2, 2]
-    });
+        new Cleave(driver_depature_datetime, {
+            delimiters: ['/', '/', ' ', ':'],
+            blocks: [2, 2, 4, 2, 2]
+        });
+
+        create_trip_button.disabled = true;
         driver_target_location.value = target_location;
         driver_available_seats.value = '';
         driver_depature_datetime.value = '';
@@ -1320,9 +1322,9 @@ function onSharePoolRideButtonState(e) {
 }
 function onCreateTripRequiredFields(e) {
     e.preventDefault();
-
+    console.log(driver_available_seats.value !== "")
     var requiredFields = driver_target_location.value.length > 0 &
-                            driver_available_seats.value.length > 0 &
+                            driver_available_seats.value !== "" &
                             driver_depature_datetime.value.length > 0 &
                             driver_contact_no.value.length > 0;
 
@@ -1338,7 +1340,7 @@ share_pool_ride_button_rider.addEventListener('click', onMoreShareRide);
 create_trip_button.addEventListener('click', onCreateTrip);
 search_target_location_driver.addEventListener('keyup', onSharePoolRideButtonState);
 driver_target_location.addEventListener('keyup', onCreateTripRequiredFields);
-driver_available_seats.addEventListener('keyup', onCreateTripRequiredFields);
+driver_available_seats.addEventListener('change', onCreateTripRequiredFields);
 driver_depature_datetime.addEventListener('change', onCreateTripRequiredFields);
 driver_contact_no.addEventListener('keyup', onCreateTripRequiredFields);
 
