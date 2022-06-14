@@ -1006,7 +1006,7 @@ function createTrip() {
     var user = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
     var target_location = driver_target_location.value ? driver_target_location.value : '';
     var available_seats = driver_available_seats.value ? driver_available_seats.value : 0;
-    var departure_datetime = moment(new Date(departure_date.value + ' ' + departure_time.value)).format("YYYY-MM-DDTHH:mm") + ':00.000Z';
+    var departure_datetime = moment(departure_date.value + ' ' + departure_time.value).format("YYYY-MM-DDTHH:mm") + ':00.000Z';
     var contact_no = driver_contact_no.value ? '63' + driver_contact_no.value.replace(/(\s)/gi, '') : '#';
     var payload = {
         "email": user.email.toLowerCase(),
@@ -1256,7 +1256,7 @@ function onMoreShareRide() {
     }
 }
 function onCreateTrip() {
-    var givenDate = moment(new Date(departure_date.value + ' ' + departure_time.value), "YYYY-MM-DD HH:mm");
+    var givenDate = moment(departure_date.value + ' ' + departure_time.value, "YYYY-MM-DD HH:mm");
 
     var current = new Date();
 
