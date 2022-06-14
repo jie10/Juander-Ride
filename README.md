@@ -34,6 +34,10 @@ The Juander app is CEB's very own application for employee carpool and shuttle p
 - [HTML5 QR code](https://github.com/mebjas/html5-qrcode) - for QR code scanning
 - [Rolldate.js](https://github.com/AlexZubov/rolldate) - for date picker and time picker
 
+### Dev Tool used
+
+- [Javascript Obfuscator](https://www.npmjs.com/package/javascript-obfuscator) - for obfuscating all project script files
+
 ## Related Links
 
 - [Juander Web App](https://cebupacificair-dev.apigee.net/ceb-poc-juander/app)

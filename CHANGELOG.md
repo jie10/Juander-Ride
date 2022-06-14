@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.4-alpha] - 2022-06-13
+## [0.0.4-alpha] - 2022-06-14
 
 ### Changed
 
@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fix issue: able to receive juander pin code but upon login error message says "Error 400, not a juander tester"
 
 - Carpool Page
+  - Fix issue in iOS: Invalid date for departure date and departure time
   - Should have filter based on the location selected
   - Color coding (booking and trip status)
   - Cancel option should be available even if the status is confirmed. 30mins before the ride starts
@@ -25,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Change Alert Pop-up for Passenger during ongoing trip session
 
 - Shuttle Page
+  - Fix issue: Background map - shuttle page - buttons not clickable (UI)
   - Departure time is confusing as it does not say if the time is for the AM or PM trip
   - Corrections for the route naming
   - Instead of Departure Time, we can instead put the numbers of the drivers to check van location while the geo location is not yet enabled
@@ -41,6 +43,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Components
   - Changed library for date and time picker (Rolldate.js)
   - Fix issue on contact number fields (Index and Carpool) - Not able to input mobile number if 919 or 995.
+
+### Added
+
+- Dev Tool
+  - Create obfuscator dev tool for obfuscating script files within project
 
 ## [0.0.3-alpha] - 2022-06-09
 
