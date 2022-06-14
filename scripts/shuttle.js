@@ -405,6 +405,8 @@ function showCard(localbooking){
     })[0];
     var driverPhoneNumber = shuttleData ? '+' + shuttleData.phone : null;
 
+    map_bg.style.display = 'block';
+
     // set card UI design
     switch(localbooking.status){
         case 1:
@@ -470,12 +472,11 @@ function getStatusPopup(bookingStatus, driverPhoneNumber) {
             break;
         default: break;
     }
-    map_bg.style.visibility = 'visible';
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     var _payload = {}
-    map_bg.style.visibility = 'collapsed';
+
     shuttle_ride_card.addEventListener("click", onShuttleCardTap.bind(event, _payload), false);
     
     if(localStorage.hasOwnProperty(DRIVER_TRIP)){
