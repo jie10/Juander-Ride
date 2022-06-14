@@ -1,0 +1,25 @@
+{
+  "name": "juander-alternate-universe",
+  "version": "1.0.0",
+  "description": "## Overview",
+  "main": "sample.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "obfuscate": "node ./dev-tools/obfuscate.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rdramirez/Juander.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rdramirez/Juander/issues"
+  },
+  "homepage": "https://github.com/rdramirez/Juander#readme",
+  "devDependencies": {
+    "javascript-obfuscator": "^4.0.0"
+  }
+}
