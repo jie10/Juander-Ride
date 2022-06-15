@@ -453,17 +453,17 @@ function showCard(localbooking){
             shuttle_ride_card_status.innerHTML = "Cancelled";
             break;
         case 3:
-            shuttle_ride_card_container.style.backgroundColor = '#bafff6';
-            shuttle_ride_card_status.style.color = '#bafff6';
-            shuttle_ride_card_status.style.backgroundColor = '#009883';
-            shuttle_ride_card_status.innerHTML = "Completed";
-            break;
-        case 4:
             shuttle_ride_card_container.style.backgroundColor = '#eaf6f8';
             shuttle_ride_card_status.style.color = '#eaf6f8';
             shuttle_ride_card_status.style.cursor = 'default';
             shuttle_ride_card_status.style.backgroundColor = '#0061a8';
             shuttle_ride_card_status.innerHTML = "Ongoing";
+            break;
+        case 4:
+            shuttle_ride_card_container.style.backgroundColor = '#bafff6';
+            shuttle_ride_card_status.style.color = '#bafff6';
+            shuttle_ride_card_status.style.backgroundColor = '#009883';
+            shuttle_ride_card_status.innerHTML = "Completed";
             break;
     }
     
@@ -502,7 +502,7 @@ function getStatusPopup(bookingStatus, driverPhoneNumber, bookingID) {
                 updateBookingStatus(function () {
                     localStorage.setItem(DRIVER_BOOKING, null);
                     reloadTripList();
-                }, bookingID, 3);
+                }, bookingID, 4);
             }, 'Booking finished', 'Hope you had a great shuttle trip experience', 'Done');
             break;
         default: break;
