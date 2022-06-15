@@ -5,6 +5,9 @@ var DRIVER_BOOKING = 'user_booking';
 var SHUTTLE_TRIPS = 'shuttle_trips';
 var SHUTTLE_BOOKING = 'shuttle_booking';
 
+/** API ENDPOINTS */
+var UPDATE_BOOKING_STATUS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
+
 var scan_qr_btn = document.getElementById('scan_qr_btn');
 var scan_qr_btn_container = document.getElementById('scan_qr_btn_container');
 var scan_qr_message = document.getElementById('scan_qr_message');
@@ -59,6 +62,34 @@ var _cacheExpiry = -(2/60); // 1 minute
 
 function getResJSON(result) {
     return result.json();
+}
+
+function updateBookingStatus(callback, bookingID, bookingSttaus) {
+    var payload = {
+        "status": bookingSttaus
+    }
+    
+    var options = {
+        method: 'PUT',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+    };
+
+    fetch(UPDATE_BOOKING_STATUS_API_ENDPOINT + '/' + bookingID, options)
+        .then(getResJSON)
+        .then(function (data) {
+            console.log(data)
+            delay(function () {
+                callback();
+            }, DELAY_TIME_IN_MILLISECONDS);
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
 }
 
 function hideActivityIndicator() {
@@ -430,6 +461,7 @@ function showCard(localbooking){
         case 4:
             shuttle_ride_card_container.style.backgroundColor = '#eaf6f8';
             shuttle_ride_card_status.style.color = '#eaf6f8';
+            shuttle_ride_card_status.style.cursor = 'default';
             shuttle_ride_card_status.style.backgroundColor = '#0061a8';
             shuttle_ride_card_status.innerHTML = "Ongoing";
             break;
@@ -443,11 +475,12 @@ function showCard(localbooking){
     shuttle_ride_card.style.visibility = 'visible';
 
     shuttle_ride_card.addEventListener('click', function (e) {
-        getStatusPopup(localbooking.status, driverPhoneNumber);
+        getStatusPopup(localbooking.status, driverPhoneNumber, localbooking._id);
     });
 }
 
-function getStatusPopup(bookingStatus, driverPhoneNumber) {
+function getStatusPopup(bookingStatus, driverPhoneNumber, bookingID) {
+    console.log('localbooking', localbooking)
     switch(bookingStatus) {
         case 1:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
@@ -458,16 +491,18 @@ function getStatusPopup(bookingStatus, driverPhoneNumber) {
             break;
         case 2:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
-                localStorage.removeItem(DRIVER_BOOKING);
-
-                window.location.href = SHUTTLE_PAGE_SOURCE_LOCATION;
+                updateBookingStatus(function () {
+                    localStorage.setItem(DRIVER_BOOKING, null);
+                    reloadTripList();
+                }, bookingID, 2);
             }, 'Booking cancelled', 'Driver has cancelled your booking request', 'Done');
             break;
         case 3:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
-                localStorage.removeItem(DRIVER_BOOKING);
-
-                window.location.href = SHUTTLE_PAGE_SOURCE_LOCATION;
+                updateBookingStatus(function () {
+                    localStorage.setItem(DRIVER_BOOKING, null);
+                    reloadTripList();
+                }, bookingID, 3);
             }, 'Booking finished', 'Hope you had a great shuttle trip experience', 'Done');
             break;
         default: break;
@@ -555,8 +590,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if(data['booking'] != null){
                 if(data['booking']['tripStatus'] == 3){
-                    localStorage.setItem(DRIVER_BOOKING, null);
-                    reloadTripList();
+                    showCard(data['booking']);
                 }else{
                     if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 4) {
                         setTimeout(() => {
