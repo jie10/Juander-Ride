@@ -339,7 +339,7 @@ function getDriverBookings() {
                                                             var drivernameArr = val.drivername.split(' ');
                                                             var ridernameArr = val.ridername.split(' ');
                                                             var destination = val.destination;
-                                                            var bookingStatus = getStatusIndicator(val.status);
+                                                            var bookingStatus = getBookingStatusIndicator(val.status);
                                                             var bookingRiderAction = capitalize(ridernameArr[ridernameArr.length - 1]) + '\'s trip ' + bookingStatus.trip_status;
                                                             var bookingName = (val.booktype === 0 ? capitalize(drivernameArr[drivernameArr.length - 1]) : capitalize(destination.split(' ')[0])) + ' Ride';
                                                             var tripID = val.tripID;
