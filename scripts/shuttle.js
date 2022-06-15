@@ -80,8 +80,9 @@ function updateBookingStatus(callback, bookingID, bookingSttaus) {
         .then(function (data) {
             console.log(data)
             delay(function () {
+                hideActivityIndicator();
                 callback();
-            }, DELAY_TIME_IN_MILLISECONDS);
+            }, 1000);
         })
         .catch(function (err) {
             console.error(err);
@@ -116,7 +117,7 @@ function onScannerContinue (e) {
         }
 
         if(data['booking'] != null){
-            if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 4) {
+            if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 3) {
                 setTimeout(() => {
                     
                     var localBooking = {
@@ -327,6 +328,7 @@ function reloadTripList() {
     
     var localShuttle = JSON.parse(localStorage.getItem(SHUTTLE_TRIPS))
     
+
     if(localShuttle != null){
         // get data from local storage
         var givenDate = moment(new Date(localShuttle['createdAt'])).format("YYYY-MM-DD HH:mm");
@@ -337,14 +339,16 @@ function reloadTripList() {
         // one minute local storage life
         if(duration < _cacheExpiry){
             cacheExpired = true;
+            hideActivityIndicator();
             activity_indicator.style.visibility = "collapse";
         }else{
             setTimeout(() => {
                 localShuttle.data.map(trip => {
                     addTrip(trip)
                 })
-
+                shuttle_trip_list.style.visibility = 'visible';
                 scan_qr_btn.style.visibility = "visible"
+                hideActivityIndicator();
                 activity_indicator.style.visibility = "collapse";
             }, 1000);
         }
@@ -370,6 +374,7 @@ function reloadTripList() {
         })
         .then(function (data) {
             if(data != undefined){
+                hideActivityIndicator();
                 if(data.length > 0){
                     // add to local storage
                     var storagedata = {data: data, createdAt: DATETIMESERVICE.getDateTime()}
@@ -379,7 +384,7 @@ function reloadTripList() {
                     data.map(trip => {
                         addTrip(trip)
                     })
-
+                    shuttle_trip_list.style.visibility = 'visible';
                     scan_qr_btn.style.visibility = "visible"
                     activity_indicator.style.visibility = "collapse";
                 }else{
@@ -431,13 +436,18 @@ function addTrip(payload) {
 function showCard(localbooking){
     var timeFromNowFormat = moment(localbooking.departTime).utc().format('MMMM D YYYY  h:mm a');
     var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
-    var shuttleData = JSON.parse(localStorage.getItem('shuttle_trips')).data.filter(function (shuttle) {
+    try {
+        var shuttleData = JSON.parse(localStorage.getItem('shuttle_trips')).data.filter(function (shuttle) {
         return shuttle.email === localbooking.driver
-    })[0];
-    var driverPhoneNumber = shuttleData ? '+' + shuttleData.phone : null;
+        })[0];
+
+        driverPhoneNumber = shuttleData ? '+' + shuttleData.phone : null;
+    } catch(e) {
+        driverPhoneNumber = '';
+    }
 
     map_bg.style.display = 'block';
-
+    console.log(localbooking)
     // set card UI design
     switch(localbooking.status){
         case 1:
@@ -473,37 +483,62 @@ function showCard(localbooking){
     shuttle_ride_card_seats.innerHTML = localbooking['seats'] +"/"+ localbooking['seatCount'] + " seats"
 
     shuttle_ride_card.style.visibility = 'visible';
+    shuttle_ride_card.style.display = 'block';
 
     shuttle_ride_card.addEventListener('click', function (e) {
         getStatusPopup(localbooking.status, driverPhoneNumber, localbooking._id);
     });
 }
 
+function hideCard() {
+    map_bg.style.display = 'none';
+    shuttle_ride_card.style.visibility = 'collapse';
+    shuttle_ride_card.style.display = 'none';
+}
+
 function getStatusPopup(bookingStatus, driverPhoneNumber, bookingID) {
-    console.log('localbooking', localbooking)
     switch(bookingStatus) {
         case 1:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
                 if (driverPhoneNumber) {
                     window.open('tel:' + driverPhoneNumber);
                 }
-            }, 'Booking confirmed', 'Driver has confirmed your booking request', 'Message Driver');
+            }, 'Booking confirmed', 'You are all set for your trip', 'Message Driver');
             break;
         case 2:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
+                showActivityIndicator();
                 updateBookingStatus(function () {
                     localStorage.setItem(DRIVER_BOOKING, null);
+                    hideCard();
+                    showActivityIndicator();
                     reloadTripList();
                 }, bookingID, 2);
-            }, 'Booking cancelled', 'Driver has cancelled your booking request', 'Done');
+            }, 'Booking cancelled', 'See you again on your next booking', 'Done');
             break;
         case 3:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
+                showActivityIndicator();
                 updateBookingStatus(function () {
                     localStorage.setItem(DRIVER_BOOKING, null);
+                    hideCard();
+                    showActivityIndicator();
                     reloadTripList();
                 }, bookingID, 4);
-            }, 'Booking finished', 'Hope you had a great shuttle trip experience', 'Done');
+            }, 'Booking Ongoing', 'You are on your way to your destination', 'Complete Booking');
+            break;
+        case 4:
+            showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
+                showActivityIndicator();
+
+                delay(function() {
+                    localStorage.setItem(DRIVER_BOOKING, null);
+                    hideCard();
+                    showActivityIndicator();
+                    reloadTripList();
+                }, 1500);
+
+            }, 'Booking finished', 'Hope you had a great ride experience', 'Done');
             break;
         default: break;
     }
@@ -583,16 +618,19 @@ document.addEventListener('DOMContentLoaded', function () {
         JUANDERSERVICE.userShuttleCheck(userObj['email'])
         .then(getResJSON)
         .then(function (data) {
+            console.log(data)
             if(data['trip'] == null && data['booking'] == null){
                 // check if there is a recent booking
                 reloadTripList();
             }
 
             if(data['booking'] != null){
-                if(data['booking']['tripStatus'] == 3){
-                    showCard(data['booking']);
+
+                if(data['booking']['tripStatus'] === 4){
+                    localStorage.setItem(DRIVER_BOOKING, null);
+                    reloadTripList();
                 }else{
-                    if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 4) {
+                    if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 3) {
                         setTimeout(() => {
 
                             var localBooking = {
