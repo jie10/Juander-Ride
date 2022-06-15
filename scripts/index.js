@@ -26,6 +26,7 @@ var sign_up_view_button = document.getElementById('sign_up_view_button');
 var back_to_login_view_button = document.getElementById('back_to_login_view_button');
 var login_button = document.getElementById('login_button');
 var sign_up_button = document.getElementById('sign_up_button');
+var forgot_pin_code_button = document.getElementById('forgot_pin_code_button');
 
 
 function highlightLoginErrorInput(errEmail) {
@@ -251,6 +252,12 @@ function onRegister() {
         highlightRegisterErrorInput(true, true, true);
     }
 }
+function onForgotPinCode() {
+    showInputTextFieldAlertWithConfirmAndCancelButton(function() {
+        /** TODO - Add email verification to check if account exists or not */
+        showSuccessAlertWithConfirmButton(function () {}, 'New PIN Code sent', 'Please wait for a message via MS Teams', 'Done');
+    },  /(@cebupacificair.com)/gi, 'Forgot PIN Code', 'Email', 150, 'Send', 'Please choose a valid email');
+}
 
 
 sign_up_view_button.addEventListener('click', onRegisterView);
@@ -268,6 +275,7 @@ user_sign_up_location.addEventListener('keyup', onRegisterTyping);
 
 login_button.addEventListener('click', onLogin);
 sign_up_button.addEventListener('click', onRegister);
+forgot_pin_code_button.addEventListener('click', onForgotPinCode);
 
 
 document.addEventListener('DOMContentLoaded', function () {

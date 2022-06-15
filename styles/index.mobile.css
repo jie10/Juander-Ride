@@ -12,7 +12,8 @@
         width: 95%;
         margin: auto;
     }
-    .index-page-container .login-form .login-button {
+    .index-page-container .login-form .login-button,
+    .index-page-container .login-form .sign-up-view-button  {
         width: 95%;
     }
     .index-page-container .login-form-container {
@@ -22,7 +23,7 @@
         width: 95%;
         margin: auto;
     }
-    .index-page-container .sign-up-form .login-button {
+    .index-page-container .sign-up-form .sign-up-button {
         width: 95%;
     }
     .index-page-container .sign-up-form-container {

@@ -14,6 +14,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js" integrity="sha512-7x7HoEikRZhV0FAORWP+hrUzl75JW/uLHBbg2kHnPdFmScpIeHY0ieUVSacjusrKrlA/RsA2tDOBvisFmKc3xw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
     <!-- FONTAWESOME-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- CLEAVE JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js" integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- MOMENT JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment-with-locales.min.js" integrity="sha512-vFABRuf5oGUaztndx4KoAEUVQnOvAIFs59y4tO0DILGWhQiFnFHiR+ZJfxLDyJlXgeut9Z07Svuvm+1Jv89w5g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -114,6 +116,15 @@
                                 <span class="description">View your share carpool rides</span>
                             </div>
                         </button>
+                        <button type="button" class="menu-list-item d-flex" id="settings_button">
+                            <div class="setting-icon">
+                                <span class="material-icons-round icon">settings</span>
+                            </div>
+                            <div class="setting-desc">
+                                <span class="title">Settings</span>
+                                <span class="description">Update your account info</span>
+                            </div>
+                        </button>
                         <button type="button" class="menu-list-item d-flex" id="logout_button">
                             <div class="setting-icon">
                                 <span class="material-icons-round icon">logout</span>
@@ -128,6 +139,29 @@
             </div>
             <div class="my-trips-container" id="my_trips_container" style="display: none;"></div>
             <div class="my-bookings-container" id="my_bookings_container" style="display: none;"></div>
+            <div class="settings-container" id="settings_container" style="display: none;">
+                <div class="container">
+                    <form class="row g-3 settings-form">
+                        <h4  class="float-none w-auto">Account Info</h4>
+                        <div class="row py-3" style="margin: 0;">
+                            <div class="col-12 input-field">
+                                <label for="driver_target_location" class="form-label">Target Location</label>
+                                <input autocomplete="off" type="text" class="form-control" id="driver_target_location" placeholder="Where to go?" />
+                            </div>
+                            <div class="col-12 input-field">
+                                <label for="driver_contact_no" class="form-label">Contact No.</label>
+                                <input autocomplete="off" type="text" class="form-control" id="driver_contact_no" placeholder="999 999 9999" title="format: 999 999 9999" />
+                            </div>
+                            <div class="col-12 form-button d-flex justify-content-center" style="margin: 24px auto 8px auto;">
+                                <button type="button" class="btn btn-primary rounded-pill update-account-button" id="update_account_button" disabled>Update Account</button>      
+                            </div>
+                            <div class="col-12 form-button d-flex justify-content-center">
+                                <button type="button" class="btn btn-outlined rounded-pill reset-pin-code-button" id="reset_pin_code_button">Reset PIN Code</button>      
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
         <div class="main-bottom-navbar" id="main_bottom_navbar">
             <div class="container d-flex justify-content-center">
