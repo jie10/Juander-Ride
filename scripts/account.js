@@ -38,6 +38,7 @@ var settings_container = document.getElementById('settings_container');
 var driver_target_location = document.getElementById('driver_target_location');
 var driver_contact_no = document.getElementById('driver_contact_no');
 var update_account_button = document.getElementById('update_account_button');
+var reset_pin_code_button = document.getElementById('reset_pin_code_button');
 
 var activity_indicator = document.getElementById('activity_indicator');
 
@@ -475,6 +476,16 @@ function onUpdateAccount() {
     }
 }
 
+function onResetPinCode() {
+    showInputTextFieldAlertWithConfirmAndCancelButton(function() {
+        /** TODO - Add PIN code verification to check if correct or not */
+        showSuccessAlertWithConfirmButton(function () {
+            showActivityIndicator();
+            logoutCurrentSession();
+        }, 'New PIN Code sent', 'Please wait for a message via MS Teams', 'Done');
+    },  /(^([A-z]|[0-9]){0,6})$/, 'Reset PIN Code', 'Current PIN Code', 'Reset', 'Please choose a valid pin code');
+}
+
 function onUpdateAccountRequiredFields(e) {
     e.preventDefault();
 
@@ -542,6 +553,7 @@ logout_button.addEventListener('click', onLogout);
 driver_target_location.addEventListener('keyup', onUpdateAccountRequiredFields);
 driver_contact_no.addEventListener('keyup', onUpdateAccountRequiredFields);
 update_account_button.addEventListener('click', onUpdateAccount);
+reset_pin_code_button.addEventListener('click', onResetPinCode);
 
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.account-page-container').style.display = 'none';

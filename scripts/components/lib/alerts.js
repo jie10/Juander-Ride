@@ -148,6 +148,33 @@ function showQuestionAlertWithDenyAndCloseButton(confirmCallback, cancelCallback
       });
 }
 
+function showInputTextFieldAlertWithConfirmAndCancelButton (callback, inputPattern, title, inputPlaceholder, confirmButtonText, errorPatternMessageText) {
+    Swal.fire({
+        title: title,
+        input: 'text',
+        inputPlaceholder: inputPlaceholder,
+        confirmButtonText: confirmButtonText,
+        showCancelButton: true,
+        allowOutsideClick: false,
+        inputAttributes: {
+            maxlength: 6,
+            autocapitalize: 'off',
+            autocorrect: 'off'
+        },
+        inputValidator: (value) => {
+            if (inputPattern && inputPattern.test(value) === false) {
+                return errorPatternMessageText;
+            } else if (!value) {
+                return 'Field cannot be empty';
+            }
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+      });
+}
+
 function showSuccessToastNotification(title,) {
     const Toast = Swal.mixin({
         toast: true,
