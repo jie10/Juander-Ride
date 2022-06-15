@@ -97,11 +97,11 @@ function getStatusIndicator(status) {
             }
         case 3:
             return {
-                trip_status: 'Completed',
+                trip_status: 'Ongoing',
                 withButtons: false,
-                statusColor: '#009883',
-                color: '#bafff6',
-                bgColor: '#bafff6',
+                statusColor: '#0061a8',
+                color: '#eaf6f8',
+                bgColor: '#eaf6f8',
                 origin: 'Came from ',
                 destination: 'Went to ',
                 target_location: 'Target location was ',
@@ -109,11 +109,11 @@ function getStatusIndicator(status) {
             }
         case 4:
             return {
-                trip_status: 'Ongoing',
+                trip_status: 'Completed',
                 withButtons: false,
-                statusColor: '#0061a8',
-                color: '#eaf6f8',
-                bgColor: '#eaf6f8',
+                statusColor: '#009883',
+                color: '#bafff6',
+                bgColor: '#bafff6',
                 origin: 'Came from ',
                 destination: 'Went to ',
                 target_location: 'Target location was ',
@@ -132,8 +132,8 @@ function getStatusPopup(bookingID, status, driverEmail, tripID, userEmail) {
             break;
         case 1:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
-                window.open(MS_TEAMS_SEND_MESSAGE_TO_USER_LINK_URL + driverEmail);
-            }, 'Booking confirmed', 'Driver has confirmed your booking request', 'Message Driver');
+                cancelTripBooking(bookingID, tripID, userEmail);
+            }, 'Booking confirmed', 'Driver has confirmed your booking request', 'Cancel Booking');
             break;
         case 2:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
@@ -143,16 +143,17 @@ function getStatusPopup(bookingID, status, driverEmail, tripID, userEmail) {
             }, 'Booking cancelled', 'Driver has cancelled your booking request', 'Done');
             break;
         case 3:
+            showQuestionAlertWithButtons(function () {
+                completeTripBooking(bookingID, tripID, userEmail);
+            }, 'Booking Ongoing', "Do you want to complete the trip now?", 'Yes', 'No')
+
+            break;
+        case 4:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
                 localStorage.removeItem(DRIVER_BOOKING);
                 console.log('Hope you had a great car pooling experience');
                 window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
             }, 'Booking finished', 'Hope you had a great car pooling experience', 'Done');
-            break;
-        case 4:
-            showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
-                cancelTripBooking(bookingID, tripID, userEmail);
-            }, 'Booking confirmed', "Waiting for driver to start trip. You can't cancel 30 minutes before depart time.", 'Cancel Booking');
             break;
         default: break;
     }
@@ -206,7 +207,7 @@ function getTripStatusPopup(tripID, status, riders, payload = null) {
 }
 
 function getRiderBookingsStatusAPI(booking) {
-    
+    // console.log('shall pass too', booking)
     if(booking['booktype'] == 0){
         var timeFromNowFormat = moment(booking.departTime).utc().format('MMMM D YYYY  h:mm a');
         var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
@@ -248,7 +249,7 @@ function getRiderBookingsStatusAPI(booking) {
                 if (booking.status === 4) {
                     showSuccessAlertWithConfirmButton(function () {}, 'Ongoing Trip with Driver', 'Enjoy your carpool ride experience', 'Okay') 
                 } else {
-                    getStatusPopup(booking._id == undefined ? booking['bookingID'] : booking._id, 4, booking.driver, booking.tripID, booking.email);
+                    getStatusPopup(booking._id == undefined ? booking['bookingID'] : booking._id, booking.status, booking.driver, booking.tripID, booking.email);
                 }
             }
         });
@@ -301,6 +302,42 @@ function cancelTripBooking(bookingID, tripID, userEmail){
         "bookID": bookingID,
         "tripID": tripID,
         "status": 2
+    };
+
+    var options = {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+    };
+
+    fetch(PLAY_BOOKING_API_ENDPOINT, options)
+        .then(getResJSON)
+        .then(function (data) {
+
+            delay(function () {
+                localStorage.setItem(DRIVER_BOOKING, null)
+                hideActivityIndicator();
+                loadMainPage(); 
+                //window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+            }, DELAY_TIME_IN_MILLISECONDS);
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
+}
+
+function completeTripBooking(bookingID, tripID, userEmail){
+    showActivityIndicator();
+
+    var payload = {
+        "email": userEmail,
+        "bookID": bookingID,
+        "tripID": tripID,
+        "status": 4
     };
 
     var options = {
@@ -582,7 +619,7 @@ function reloadCurrentPage(fromApi) {
             .then(function (data) {
                 var currect_app_version_from_server = data.version;
                 var current_app_version = localStorage.getItem(CURRENT_APP_VERSION_KEY) ;
-
+    
                 if (currect_app_version_from_server && !current_app_version) {
                     localStorage.setItem(CURRENT_APP_VERSION_KEY, currect_app_version_from_server);
                 } else if (currect_app_version_from_server && (currect_app_version_from_server === parseInt(current_app_version))) {
@@ -592,12 +629,14 @@ function reloadCurrentPage(fromApi) {
                     localStorage.removeItem(USER_LOGIN_DATA_KEY);
                     moveToLoginPage()
                 }
-
+                // console.log('begin', data)
                 if(data['trip'] == null && data['booking'] == null){
+                    hideActivityIndicator();
+                        loadMainPage();  
                     // Check if there is data in the localstorage and if time elapse is less than 3 minutes
                     var localTrip = JSON.parse(localStorage.getItem(DRIVER_TRIP))
                     var localBooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING))
-
+    
                     if(localTrip == null && localBooking == null){
                         localStorage.setItem(DRIVER_TRIP, null)
                         localStorage.setItem(DRIVER_BOOKING, null)
@@ -609,14 +648,14 @@ function reloadCurrentPage(fromApi) {
                             getDriverTripSessionAPI(localTrip.data);
                         }else if(localBooking != null){
                             console.log('check duration booking')
-
-                            if (localBooking.data.status === 0 || localBooking.data.status === 1 || localBooking.data.status === 4) {
-
+                            // console.log(localBooking.data.status)
+                            if (localBooking.data.status === 0 || localBooking.data.status === 1 || localBooking.data.status === 3) {
+                                
                                 var localBookingObj = {
                                     data: localBooking.data,
                                     createdAt: DATETIMESERVICE.getDateTime()
                                 }
-
+                                console.log('shall pass')
                                 localStorage.setItem(DRIVER_BOOKING, JSON.stringify(localBookingObj))
                                 getRiderBookingsStatusAPI(localBooking)
                             }
@@ -629,24 +668,24 @@ function reloadCurrentPage(fromApi) {
                         window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
                     }, 'Error 500', 'User can only either have 1 trip or 1 booking', 'Refresh');
                 }
-
+    
                 if(data['trip'] != null){
                     var localTripObj = {
                         data: data['trip'],
                         createdAt: DATETIMESERVICE.getDateTime()
                     }
-
+    
                     localStorage.setItem(DRIVER_TRIP, JSON.stringify(localTripObj))
                     getDriverTripSessionAPI(data['trip']);
                 }
-
+    
                 if(data['booking'] != null){
-                    if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 4) {
+                    if (data['booking'].status === 0 || data['booking'].status === 1 || data['booking'].status === 3) {
                         var localBookingObj = {
                             data: data['booking'],
                             createdAt: DATETIMESERVICE.getDateTime()
                         }
-
+    
                         localStorage.setItem(DRIVER_BOOKING, JSON.stringify(localBookingObj))
                         getRiderBookingsStatusAPI(data['booking'])
                     } else {
@@ -655,7 +694,7 @@ function reloadCurrentPage(fromApi) {
                         loadMainPage();
                     }
                 }
-
+    
             })
             .catch(function (err) {
                 console.error(err);

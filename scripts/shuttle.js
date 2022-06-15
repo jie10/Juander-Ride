@@ -78,7 +78,7 @@ function updateBookingStatus(callback, bookingID, bookingSttaus) {
     fetch(UPDATE_BOOKING_STATUS_API_ENDPOINT + '/' + bookingID, options)
         .then(getResJSON)
         .then(function (data) {
-            console.log(data)
+            // console.log(data)
             delay(function () {
                 hideActivityIndicator();
                 callback();
@@ -447,7 +447,7 @@ function showCard(localbooking){
     }
 
     map_bg.style.display = 'block';
-    console.log(localbooking)
+    // console.log(localbooking)
     // set card UI design
     switch(localbooking.status){
         case 1:
@@ -618,7 +618,7 @@ document.addEventListener('DOMContentLoaded', function () {
         JUANDERSERVICE.userShuttleCheck(userObj['email'])
         .then(getResJSON)
         .then(function (data) {
-            console.log(data)
+            // console.log(data)
             if(data['trip'] == null && data['booking'] == null){
                 // check if there is a recent booking
                 reloadTripList();
