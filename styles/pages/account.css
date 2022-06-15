@@ -196,3 +196,28 @@
     border-radius: 8px;
     margin-right: 8px;
 }
+
+.settings-container .container {
+    width: 380px !important;
+    margin: auto;
+    margin-top: 30px;
+}
+.settings-container .settings-form {
+    padding-top: 60px;
+}
+.settings-container .settings-form h4 {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-left: 8px;
+}
+.settings-container .settings-form .input-field {
+    width: 100%;
+    margin: 8px auto;
+}
+.settings-container .settings-form .form-button {
+    width: 320px !important;
+    margin: 8px auto;
+}
+.settings-container .settings-form .form-button button {
+    width: 80%;
+}

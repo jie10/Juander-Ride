@@ -26,12 +26,18 @@ var main_bottom_navbar = document.getElementById('main_bottom_navbar');
 
 var my_trips_button = document.getElementById('my_trips_button');
 var my_bookings_button = document.getElementById('my_bookings_button');
+var settings_button = document.getElementById('settings_button');
 var logout_button = document.getElementById('logout_button');
 var back_to_previous_page_button = document.getElementById('back_to_previous_page_button');
 
 var account_page_body_container = document.getElementById('account_page_body_container');
 var my_trips_container = document.getElementById('my_trips_container');
 var my_bookings_container = document.getElementById('my_bookings_container');
+var settings_container = document.getElementById('settings_container');
+
+var driver_target_location = document.getElementById('driver_target_location');
+var driver_contact_no = document.getElementById('driver_contact_no');
+var update_account_button = document.getElementById('update_account_button');
 
 var activity_indicator = document.getElementById('activity_indicator');
 
@@ -127,6 +133,7 @@ function showMainAccountPageContainer() {
     account_page_body_container.style.display = 'block';
     my_trips_container.style.display = 'none';
     my_bookings_container.style.display = 'none';
+    settings_container.style.display = 'none';
 }
 function showMyTripsPageContainer() {
     account_page_body_container.style.display = 'none';
@@ -438,6 +445,49 @@ function onCancelBooking(_id, tripID) {
     showActivityIndicator();
     confirmOrCancelTripBooking(_id, tripID, riderEmail, 2);
 }
+
+function onUpdateAccount() {
+    var phonePattern = /(9[0-9]{2}\s([0-9]{3}\s)[0-9]{4})/;
+
+    var inPhoneFormat = phonePattern.test(driver_contact_no.value);
+
+    if (!inPhoneFormat) {
+        showErrorAlert('Invalid phone number format', 'Phone number should be in this format: 9xx xxx xxxx or 9xxxxxxxxx');
+    } else {
+        showQuestionAlertWithButtons(function () {
+            driver_target_location.disabled = true;
+            driver_contact_no.disabled = true;
+            update_account_button.disabled = true;
+            showActivityIndicator();
+
+            delay(function () {
+                hideActivityIndicator();
+
+                driver_target_location.disabled = false;
+                driver_contact_no.disabled = false;
+                update_account_button.disabled = false;
+
+                showSuccessAlertWithConfirmButton(function () {
+                    reloadCurrentPage();
+                }, 'Account Updated Successfully', '', 'Done');
+            }, DELAY_TIME_IN_MILLISECONDS)
+        }, 'Update Account', 'Are you sure you want to continue?', 'Yes', 'No');
+    }
+}
+
+function onUpdateAccountRequiredFields(e) {
+    e.preventDefault();
+
+    var requiredFields = driver_target_location.value.length > 0 &
+                            driver_contact_no.value.length > 0;
+
+    if (requiredFields === 1) {
+        update_account_button.disabled = false;
+    } else {
+        update_account_button.disabled = true;
+    }
+}
+
 function onMyTrips() {
     showSecondaryTopNavbar();
     hideMainBottomNavbar();
@@ -452,6 +502,30 @@ function onMyBookings() {
     showActivityIndicator();
     getDriverBookings();
 }
+function onSettings() {
+    showSecondaryTopNavbar();
+    hideMainBottomNavbar();
+    hideAllPageContainers();
+    showActivityIndicator();
+
+    delay(function () {
+        hideActivityIndicator();
+        settings_container.style.display = 'block';
+
+        var user_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
+
+        new Cleave(driver_contact_no, {
+            numericOnly: true,
+            blocks: [0, 3, 3, 4],
+            delimiters: ['', ' ', ' ']
+        });
+
+        driver_target_location.value = user_data.address ? user_data.address : '';
+        driver_contact_no.value = user_data.mobileNumber ? user_data.mobileNumber : '';
+        update_account_button.disabled = user_data.mobileNumber && user_data.address ? false : true;
+
+    }, DELAY_TIME_IN_MILLISECONDS)
+}
 function onLogout() {
     showQuestionAlertWithButtons(function () {
         showActivityIndicator();
@@ -462,12 +536,16 @@ function onLogout() {
 back_to_previous_page_button.addEventListener('click', reloadCurrentPage);
 my_trips_button.addEventListener('click', onMyTrips);
 my_bookings_button.addEventListener('click', onMyBookings);
+settings_button.addEventListener('click', onSettings);
 logout_button.addEventListener('click', onLogout);
+
+driver_target_location.addEventListener('keyup', onUpdateAccountRequiredFields);
+driver_contact_no.addEventListener('keyup', onUpdateAccountRequiredFields);
+update_account_button.addEventListener('click', onUpdateAccount);
 
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.account-page-container').style.display = 'none';
 
-    console.log('reload account')
     showActivityIndicator();
 
     if (checkCurrentSession()) {

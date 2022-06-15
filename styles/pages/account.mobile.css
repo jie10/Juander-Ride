@@ -68,6 +68,11 @@
         line-height: normal;
         margin-bottom: 8px;
     }
+
+    .settings-container .container {
+        width: 300px !important;
+        padding: 0;
+    }
 }
 @media only screen and (max-width: 320px) {
     .account-page-body-container {
@@ -117,5 +122,10 @@
     }
     .my-bookings-container .status {
         width: fit-content;
+    }
+
+    .settings-container .container {
+        width: 100% !important;
+        padding: 0;
     }
 }
