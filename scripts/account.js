@@ -118,6 +118,66 @@ function getStatusIndicator(status) {
         default: return null;
     }
 }
+function getBookingStatusIndicator(status) {
+    switch(status) {
+        case 0:
+            return {
+                trip_status: 'Pending',
+                withButtons: true,
+                backgroundColor: '#fff6ee',
+                color: '#f78e33',
+                origin: 'Coming from ',
+                destination: 'Going to ',
+                target_location: 'Target location is ',
+                action: 'On trip with '
+            }
+        case 1:
+            return {
+                trip_status: 'Confirmed',
+                withButtons: false,
+                backgroundColor: '#ecf5e4',
+                color: '#5aa949',
+                origin: 'Coming from ',
+                destination: 'Going to ',
+                target_location: 'Target location is ',
+                action: 'On trip with '
+            }
+        case 2:
+            return {
+                trip_status: 'Cancelled',
+                withButtons: false,
+                backgroundColor: '#e2e3e2',
+                color: '#858586',
+                origin: 'Came from ',
+                destination: 'Went to ',
+                target_location: 'Target location was ',
+                action: 'Shared ride with '
+            }
+        case 3:
+            return {
+                trip_status: 'Ongoing',
+                withButtons: false,
+                backgroundColor: '#eaf6f8',
+                color: '#0061a8',
+                origin: 'Came from ',
+                destination: 'Went to ',
+                target_location: 'Target location was ',
+                action: 'Shared ride with '
+            }
+        case 4:
+            return {
+                trip_status: 'Completed',
+                withButtons: false,
+                backgroundColor: '#bafff6',
+                color: '#009883',
+                origin: 'Came from ',
+                destination: 'Went to ',
+                target_location: 'Target location was ',
+                action: 'Shared ride with '
+            }
+        default: return null;
+    }
+}
 function moveToLoginPage() {
     window.location.href = HOMEPAGE_SOURCE_LOCATION;
 }
@@ -216,7 +276,7 @@ function getRiderBookingsHistory() {
                 showMyTripsPageContainer();
 
                 if (data && data.length > 0) {
-                    sortDateTime(data, 'desc', 'updatedAt');
+                    sortDateTime(data, 'asc', 'updatedAt');
                     my_trips_container.innerHTML = '<div class=\"tripHistory-list container\">' +
                                                         data.map(function (val) { 
                                                             var _id = val._id;
@@ -224,7 +284,7 @@ function getRiderBookingsHistory() {
                                                             var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
                                                             var drivernameArr = val.drivername.split(' ');
                                                             var destination = val.destination;
-                                                            var bookingStatus = getStatusIndicator(val.status);
+                                                            var bookingStatus = getBookingStatusIndicator(val.status);
                                                             var bookingName = (val.booktype === 0 ? capitalize(drivernameArr[drivernameArr.length - 1]) : capitalize(destination.split(' ')[0])) + ' Ride';
 
                                                             return '<div class=\"list-item\" id=\"' + _id + '\">'
@@ -270,7 +330,7 @@ function getDriverBookings() {
                 showMyBookingsPageContainer();
 
                 if (data && data.length > 0) {
-                    sortDateTime(data, 'desc', 'updatedAt');
+                    sortDateTime(data, 'asc', 'updatedAt');
                     my_bookings_container.innerHTML = '<div class=\"tripHistory-list container\">' +
                                                         data.map(function (val) { 
                                                             var timeFromNowFormat = moment(val.departTime).utc().format('MMMM D YYYY  h:mm a');
@@ -483,7 +543,7 @@ function onResetPinCode() {
             showActivityIndicator();
             logoutCurrentSession();
         }, 'New PIN Code sent', 'Please wait for a message via MS Teams', 'Done');
-    },  /(^([A-z]|[0-9]){0,6})$/, 'Reset PIN Code', 'Current PIN Code', 'Reset', 'Please choose a valid pin code');
+    },  /(^([A-z]|[0-9]){0,6})$/, 'Reset PIN Code', 'Current PIN Code', 6, 'Reset', 'Please choose a valid pin code');
 }
 
 function onUpdateAccountRequiredFields(e) {

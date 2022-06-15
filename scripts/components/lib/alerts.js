@@ -148,7 +148,7 @@ function showQuestionAlertWithDenyAndCloseButton(confirmCallback, cancelCallback
       });
 }
 
-function showInputTextFieldAlertWithConfirmAndCancelButton (callback, inputPattern, title, inputPlaceholder, confirmButtonText, errorPatternMessageText) {
+function showInputTextFieldAlertWithConfirmAndCancelButton (callback, inputPattern, title, inputPlaceholder, inputMaxLength, confirmButtonText, errorPatternMessageText) {
     Swal.fire({
         title: title,
         input: 'text',
@@ -157,7 +157,7 @@ function showInputTextFieldAlertWithConfirmAndCancelButton (callback, inputPatte
         showCancelButton: true,
         allowOutsideClick: false,
         inputAttributes: {
-            maxlength: 6,
+            maxlength: inputMaxLength,
             autocapitalize: 'off',
             autocorrect: 'off'
         },

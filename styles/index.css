@@ -31,7 +31,8 @@
 .index-page-container .login-form .login-pin-code-input {
     width: 100%;
 }
-.index-page-container .login-form .login-button {
+.index-page-container .login-form .login-button,
+.index-page-container .login-form .sign-up-view-button {
     width: 80%;
     margin: auto;
     border-radius: 24px;
