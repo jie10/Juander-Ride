@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Carpool/Shuttle Pages
   - Passengers will be the one to complete their booking
 
+- Shuttle Page
+  - QRcode validation for shuttle rides
+
 - Index Page
   - Create Forgot PIN Code UI and form validation
 
