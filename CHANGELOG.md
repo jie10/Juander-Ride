@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5-alpha] - 2022-06-15
+
+### Changed
+
+- Account Page
+  - Fix issue: wrong account status label - 4 should now be Completed instead of Ongoing
+
+### Added
+
+- Carpool/Shuttle Pages
+  - Passengers will be the one to complete their booking
+
+- Index Page
+  - Create Forgot PIN Code UI and form validation
+
+- Account Page
+  - Create Settings Page UI
+  - Create Reset PIN Code UI and form validation
+
 ## [0.0.4-alpha] - 2022-06-14
 
 ### Changed
