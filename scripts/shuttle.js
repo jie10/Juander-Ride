@@ -273,19 +273,30 @@ function onScanQrCode (e) {
                                 // console.log(decodedText);
                                 // html5QrCode.clear();
 
+                                var bytes = CryptoJS.AES.decrypt(lastResult, 'technologyandinnovation');
+                                var qrcode = bytes.toString(CryptoJS.enc.Utf8);
+
                                 _scanner.stop().then((ignore) => {
                                   // QR Code scanning is stopped.
                                     // console.log("stop");
-                                    _scanner.clear();
-                                    scanner_viewcontroller.style.visibility = "collapse";
 
-                                    scanner_confirm_viewcontroller_title.innerHTML = _payload['fullname']
-                                    scanner_confirm_viewcontroller_shuttle.innerHTML = _payload['fullname']
-                                    scanner_confirm_viewcontroller_origin.innerHTML = "AOC Pasay"
-                                    scanner_confirm_viewcontroller_destination.innerHTML = _payload['origin']
+                                    if (_payload.email === JSON.parse(qrcode).email) {
+                                        _scanner.clear();
+                                        scanner_viewcontroller.style.visibility = "collapse";
 
-                                    scanner_confirm_viewcontroller.style.visibility = "visible";
-
+                                        scanner_confirm_viewcontroller_title.innerHTML = _payload['fullname']
+                                        scanner_confirm_viewcontroller_shuttle.innerHTML = _payload['fullname']
+                                        scanner_confirm_viewcontroller_origin.innerHTML = "AOC Pasay"
+                                        scanner_confirm_viewcontroller_destination.innerHTML = _payload['origin']
+    
+                                        scanner_confirm_viewcontroller.style.visibility = "visible";
+                                    } else {
+                                        _scanner.clear();
+                                        _payload = undefined;
+                                        scan_qr_btn.style.backgroundColor = "#cccccc";
+                                        scanner_viewcontroller.style.visibility = "collapse";
+                                        showErrorAlert('Error', 'It seems you are in a wrong shuttle. Please try another ride');
+                                    }
                                 }).catch((err) => {
                                   // Stop failed, handle it.
                                     console.error(err);
