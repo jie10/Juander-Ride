@@ -56,9 +56,45 @@ var _isLocal = true;
 var _hasCarpoolBooking = false;
 var _hasShuttleBooking = false;
 var _hasCarpoolTrip = false;
-var _cacheExpiry = -(2/60); // 1 minute
+var _cacheExpiry = 1; // 1 minute
 
 /** FUNCTIONS */
+
+/** FUNCTIONS */
+function getTimeDifference(start, end) {
+    var startTime = new Date(start); 
+    var endTime = new Date(end);
+    var difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
+    var resultInMinutes = Math.round(difference / 60000);
+    return resultInMinutes
+}
+
+function getDateTime(isLocal) {
+    var today = new Date()
+    
+    if(isLocal){
+        today.setHours( today.getHours())
+    }else{
+        today.setHours( today.getHours() + 8 )
+    }
+    
+    var dd = String(today.getDate())
+    if(dd.length == 1){dd = '0' + dd}
+    var mm = String(today.getMonth() + 1)
+    if(mm.length == 1){mm = '0' + mm}
+    var yyyy = today.getFullYear()
+
+    var hour = String(today.getHours())
+    if(hour.length == 1){hour = '0' + hour}
+    var min = String(today.getMinutes())
+    if(min.length == 1){min = '0' + min}
+    var sec = String(today.getSeconds())
+    if(sec.length == 1){sec = '0' + sec}
+    var millisec = String(today.getMilliseconds())
+
+    today = yyyy + '-' + mm + '-' + dd +'T'+ hour + ':' + min + ':' + sec + '.' + millisec + 'Z';
+    return today
+}
 
 function getResJSON(result) {
     return result.json();
@@ -339,27 +375,29 @@ function reloadTripList() {
     
     var localShuttle = JSON.parse(localStorage.getItem(SHUTTLE_TRIPS))
     
-
     if(localShuttle != null){
         // get data from local storage
-        var givenDate = moment(new Date(localShuttle['createdAt'])).format("YYYY-MM-DD HH:mm");
-        var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
-        var duration = moment.duration(given.diff(new Date())).asHours();
-        duration = duration - 8;
+        var todayTime = getDateTime(true)
+        var duration = getTimeDifference(localShuttle['createdAt'], todayTime)
+        
+        // var givenDate = moment(new Date(localShuttle['createdAt'])).format("YYYY-MM-DD HH:mm");
+        // var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
+        // var duration = moment.duration(given.diff(new Date())).asHours();
+        // duration = duration - 8;
 
+        console.log('duration reload trip list', duration + ' > ' + _cacheExpiry);
         // one minute local storage life
-        if(duration < _cacheExpiry){
+        if(duration > _cacheExpiry){
+            console.log('local cache expired');
             cacheExpired = true;
-            hideActivityIndicator();
             activity_indicator.style.visibility = "collapse";
         }else{
             setTimeout(() => {
                 localShuttle.data.map(trip => {
                     addTrip(trip)
                 })
-                shuttle_trip_list.style.visibility = 'visible';
+
                 scan_qr_btn.style.visibility = "visible"
-                hideActivityIndicator();
                 activity_indicator.style.visibility = "collapse";
             }, 1000);
         }
@@ -384,8 +422,9 @@ function reloadTripList() {
             return result.json();
         })
         .then(function (data) {
+            console.log('trip list', data);
+            
             if(data != undefined){
-                hideActivityIndicator();
                 if(data.length > 0){
                     // add to local storage
                     var storagedata = {data: data, createdAt: DATETIMESERVICE.getDateTime()}
@@ -395,7 +434,7 @@ function reloadTripList() {
                     data.map(trip => {
                         addTrip(trip)
                     })
-                    shuttle_trip_list.style.visibility = 'visible';
+
                     scan_qr_btn.style.visibility = "visible"
                     activity_indicator.style.visibility = "collapse";
                 }else{
@@ -578,10 +617,16 @@ document.addEventListener('DOMContentLoaded', function () {
             var localbooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING))
             
             if(localbooking != null){
-                var givenDate = moment(new Date(localbooking['createdAt'])).format("YYYY-MM-DD HH:mm");
-                var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
-                var duration = moment.duration(given.diff(new Date())).asHours();
-                duration = duration - 8;
+                // var givenDate = moment(new Date(localbooking['createdAt'])).format("YYYY-MM-DD HH:mm");
+                // var given =  moment(new Date(givenDate), "YYYY-MM-DD HH:mm");
+                // var duration = moment.duration(given.diff(new Date())).asHours();
+                // duration = duration - 8;
+                
+                var todayTime = getDateTime(true)
+                var duration = getTimeDifference(localbooking['createdAt'], todayTime)
+                
+                console.log('local storage has a booking')
+                console.log('has local storage duration', duration + ' > ' + _cacheExpiry);
 
                 // one minute local storage life
                 if(duration < _cacheExpiry){
