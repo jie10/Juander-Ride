@@ -50,6 +50,7 @@ var driver_trip_cancel_btn = document.getElementById('driver_trip_cancel_btn');
 var driver_trip_complete_btn = document.getElementById('driver_trip_complete_btn');
 var driver_trip_booking_list = document.getElementById('driver_trip_booking_list');
 
+var driver_landmark = document.getElementById('driver_landmark');
 var target_location_region = document.getElementById('target_location_region');
 var target_location_province = document.getElementById('target_location_province');
 var target_location_municipality = document.getElementById('target_location_municipality');
@@ -1063,6 +1064,7 @@ function showOnTripDriverContainer() {
 function createTrip() {
     var user = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
     var target_location = target_location_region.value + ', ' + target_location_province.value + ', ' + target_location_municipality.value + ', ' + target_location_barangay.value;
+    var landmark = driver_landmark.value ? driver_landmark.value : '';
     var available_seats = driver_available_seats.value ? driver_available_seats.value : 0;
     var departure_datetime = moment(departure_date.value + ' ' + departure_time.value).format("YYYY-MM-DDTHH:mm") + ':00.000Z';
     var contact_no = driver_contact_no.value ? '63' + driver_contact_no.value.replace(/(\s)/gi, '') : '#';
@@ -1076,7 +1078,8 @@ function createTrip() {
         "tripType": 0,
         "riders": [],
         "status": 0,
-        "departTime": departure_datetime
+        "departTime": departure_datetime,
+        "landmark": landmark
     };
     var options = {
         method: 'POST',
@@ -1095,8 +1098,8 @@ function createTrip() {
             //    createdAt: DATETIMESERVICE.getDateTime()
             //}
             //localStorage.setItem(DRIVER_TRIP, JSON.stringify(localTripObj));
-        
             hideActivityIndicator();
+            create_trip_container.querySelector('form').style.display = 'block';
             showSuccessAlertWithConfirmButton(function () {
                 console.log('create trip');
                 window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
@@ -1105,7 +1108,9 @@ function createTrip() {
         .catch(function (err) {
             console.error(err);
             hideActivityIndicator();
+            create_trip_container.querySelector('form').style.display = 'block';
             showErrorAlertWithConfirmButton(function () {
+                driver_landmark.disabled = false;
                 target_location_region.disabled = false;
                 target_location_province.disabled = false;
                 target_location_municipality.disabled = false;
@@ -1361,6 +1366,7 @@ function onCreateTrip() {
         showErrorAlert('Invalid departure time', 'Departure must be set at least 30 minutes up to 5 hours from current date and time');
     } else {
         showQuestionAlertWithButtons(function () {
+            driver_landmark.disabled = true;
             target_location_region.disabled = true;
             target_location_province.disabled = true;
             target_location_municipality.disabled = true;
@@ -1370,6 +1376,7 @@ function onCreateTrip() {
             departure_time_picker.disabled = true;
             driver_contact_no.disabled = true;
             create_trip_button.disabled = true;
+            create_trip_container.querySelector('form').style.display = 'none';
             showActivityIndicator();
             createTrip();
         }, 'Create Trip', 'Are you sure you want to continue?', 'Yes', 'No');
