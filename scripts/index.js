@@ -3,6 +3,7 @@ var USER_LOGIN_DATA_KEY = 'user_login_data';
 
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
+var regions = Object.keys(location_list);
 
 /** API ENDPOINTS */
 var LOGIN_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/login';
@@ -20,7 +21,6 @@ var sign_up_viewcontroller = document.getElementById('sign_up_viewcontroller');
 var user_pin_code = document.getElementById('user_pin_code');
 var user_sign_up_email = document.getElementById('user_sign_up_email');
 var user_sign_up_mobile_number = document.getElementById('user_sign_up_mobile_number');
-var user_sign_up_location = document.getElementById('user_sign_up_location');
 
 var sign_up_view_button = document.getElementById('sign_up_view_button');
 var back_to_login_view_button = document.getElementById('back_to_login_view_button');
@@ -28,6 +28,10 @@ var login_button = document.getElementById('login_button');
 var sign_up_button = document.getElementById('sign_up_button');
 var forgot_pin_code_button = document.getElementById('forgot_pin_code_button');
 
+var target_location_region = document.getElementById('target_location_region');
+var target_location_province = document.getElementById('target_location_province');
+var target_location_municipality = document.getElementById('target_location_municipality');
+var target_location_barangay = document.getElementById('target_location_barangay');
 
 function highlightLoginErrorInput(errEmail) {
     user_pin_code.style.borderColor = errEmail ? 'red' : '#ced4da';
@@ -44,10 +48,6 @@ function highlightRegisterErrorInput(errEmail, errMobileNumber, errLocation) {
     user_sign_up_mobile_number.style.borderColor = errMobileNumber ? 'red' : '#ced4da';
     user_sign_up_mobile_number.parentElement.querySelector('.invalid-feedback').style.display = errMobileNumber ? 'block' : 'none';
     user_sign_up_mobile_number.parentElement.querySelector('.invalid-feedback').innerHTML = errMobileNumber ? 'Please choose a valid mobile number' : '';
-
-    user_sign_up_location.style.borderColor = errLocation ? 'red' : '#ced4da';
-    user_sign_up_location.parentElement.querySelector('.invalid-feedback').style.display = errLocation ? 'block' : 'none';
-    user_sign_up_location.parentElement.querySelector('.invalid-feedback').innerHTML = errLocation ? 'Please indicate your current location' : '';
 }
 
 function checkExistingSession() {
@@ -64,6 +64,19 @@ function moveToHomepage() {
     window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
 }
 
+function loadDefaultSelectedLocationFields() {
+    target_location_region.innerHTML = regions.map(function (region, i) {
+        if (i === 0) {
+            return '<option value=\"' + region + '\" selected>' + location_list[region].region_name + '</option>';
+        } else {
+            return '<option value=\"' + region + '\">' + location_list[region].region_name + '</option>';
+        }
+    }).join('');
+
+    onSelectRegion(target_location_region.value);
+    onSelectProvince(target_location_region.value, target_location_province.value);
+    onSelectMunicipality (target_location_region.value, target_location_province.value, target_location_municipality.value);
+}
 function loadPageInDefault() {
     login_viewcontroller.style.display = 'block';
     sign_up_viewcontroller.style.display = 'none';
@@ -135,7 +148,10 @@ function register(email, mobileNumber, location) {
                         back_to_login_view_button.disabled = false;
                         user_sign_up_email.disabled = false;
                         user_sign_up_mobile_number.disabled = false;
-                        user_sign_up_location.disabled = false;
+                        target_location_region.disabled = false;
+                        target_location_province.disabled = false;
+                        target_location_municipality.disabled = false;
+                        target_location_barangay.disabled = false;
                     }, 'Error ' + data.code, data.message, 'Close');
                 } else {
                     showSuccessAlertWithConfirmButton(function () {
@@ -158,7 +174,6 @@ function onLoginView() {
     sign_up_viewcontroller.style.display = 'none';
     user_sign_up_email.value = '';
     user_sign_up_mobile_number.value = '';
-    user_sign_up_location.value = '';
     sign_up_button.disabled = true;
 }
 function onRegisterView() {
@@ -172,6 +187,8 @@ function onRegisterView() {
         blocks: [0, 3, 3, 4],
         delimiters: ['', ' ', ' ']
     });
+
+    loadDefaultSelectedLocationFields();
 }
 
 function onLoginKeyPress(event) {
@@ -198,7 +215,7 @@ function onLoginTyping(e) {
     }
 }
 function onRegisterTyping() {
-    var requiredFields = user_sign_up_email.value.length > 0 && user_sign_up_mobile_number.value.length > 0 && user_sign_up_location.value.length > 0;
+    var requiredFields = user_sign_up_email.value.length > 0 && user_sign_up_mobile_number.value.length > 0;
 
     if (requiredFields && event.key !== "Enter") {
         sign_up_button.disabled = false;
@@ -206,6 +223,30 @@ function onRegisterTyping() {
     } else {
         sign_up_button.disabled = true;
     }
+}
+
+function onSelectRegion (selectedRegion) {
+    var provinces = Object.keys(location_list[selectedRegion].province_list);
+
+    target_location_province.innerHTML = provinces.map(function (province) {
+        return '<option value=\"' + capitalizeWords(province) + '\">' + capitalizeWords(province) + '</option>';
+    }).join('');
+}
+
+function onSelectProvince (selectedRegion, selectedProvince) {
+    var municipalities = Object.keys(location_list[selectedRegion].province_list[selectedProvince.toUpperCase()].municipality_list);
+
+    target_location_municipality.innerHTML = municipalities.map(function (municipality) {
+        return '<option value=\"' + capitalizeWords(municipality) + '\">' + capitalizeWords(municipality) + '</option>';
+    }).join('');
+}
+
+function onSelectMunicipality (selectedRegion, selectedProvince, selectedMunicipality) {
+    var barangay =location_list[selectedRegion].province_list[selectedProvince.toUpperCase()].municipality_list[selectedMunicipality.toUpperCase()].barangay_list;
+
+    target_location_barangay.innerHTML = barangay.map(function (barangay) {
+        return '<option value=\"' + capitalizeWords(barangay) + '\">' + capitalizeWords(barangay) + '</option>';
+    }).join('');
 }
 
 function onLogin() {
@@ -228,26 +269,26 @@ function onRegister() {
     var numberPattern = /(9[0-9]{9})/g;
     var email = user_sign_up_email.value;
     var mobile_number = user_sign_up_mobile_number.value;
-    var location = user_sign_up_location.value;
+    var location = target_location_region.value + ', ' + target_location_province.value + ', ' + target_location_municipality.value + ', ' + target_location_barangay.value;
     var isValidEmail = emailPattern.test(email) === true;
     var isValidMobileNumber = phonePattern.test(mobile_number) === true || numberPattern.test(mobile_number);
-    var isValidLocation = location && location.length > 0;
 
-    if (isValidEmail & isValidMobileNumber & isValidLocation ) {
+    if (isValidEmail & isValidMobileNumber) {
         showActivityIndicator();
         sign_up_button.disabled = true;
         back_to_login_view_button.disabled = true;
         user_sign_up_email.disabled = true;
         user_sign_up_mobile_number.disabled = true;
-        user_sign_up_location.disabled = true;
+        target_location_region.disabled = true;
+        target_location_province.disabled = true;
+        target_location_municipality.disabled = true;
+        target_location_barangay.disabled = true;
 
         register(email, mobile_number, location);
     } else if (!isValidEmail) {
         highlightRegisterErrorInput(true, false, false);
     } else if (!isValidMobileNumber) {
         highlightRegisterErrorInput(false, true, false);
-    } else if (!isValidLocation) {
-        highlightRegisterErrorInput(false, false, true);
     } else {
         highlightRegisterErrorInput(true, true, true);
     }
@@ -259,32 +300,36 @@ function onForgotPinCode() {
     },  /(@cebupacificair.com)/gi, 'Forgot PIN Code', 'Email', 150, 'Send', 'Please choose a valid email');
 }
 
-
 sign_up_view_button.addEventListener('click', onRegisterView);
 back_to_login_view_button.addEventListener('click', onLoginView);
 
 user_pin_code.addEventListener("keypress", onLoginKeyPress);
 user_sign_up_email.addEventListener('keypress', onRegisterKeyPress);
 user_sign_up_mobile_number.addEventListener('keypress', onRegisterKeyPress);
-user_sign_up_location.addEventListener('keypress', onRegisterKeyPress);
 
 user_pin_code.addEventListener('keyup', onLoginTyping);
 user_sign_up_email.addEventListener('keyup', onRegisterTyping);
 user_sign_up_mobile_number.addEventListener('keyup', onRegisterTyping);
-user_sign_up_location.addEventListener('keyup', onRegisterTyping);
 
 login_button.addEventListener('click', onLogin);
 sign_up_button.addEventListener('click', onRegister);
 forgot_pin_code_button.addEventListener('click', onForgotPinCode);
 
+target_location_region.addEventListener('change', function (e) {
+    onSelectRegion (e.target.value);
+    onSelectProvince(e.target.value, target_location_province.value);
+    onSelectMunicipality(e.target.value, target_location_province.value, target_location_municipality.value);
+});
+
+target_location_province.addEventListener('change', function (e) {
+    onSelectProvince(target_location_region.value, e.target.value);
+    onSelectMunicipality(target_location_region.value, e.target.value, target_location_municipality.value);
+});
+
+target_location_municipality.addEventListener('change', function (e) {
+    onSelectMunicipality (target_location_region.value, target_location_province.value, e.target.value);
+})
 
 document.addEventListener('DOMContentLoaded', function () {
-    var encrypted = CryptoJS.AES.encrypt('hello', 'secret').toString()
-    console.log(encrypted)
-    
-    var bytes = CryptoJS.AES.decrypt(encrypted, 'secret');
-    var data = bytes.toString(CryptoJS.enc.Utf8);
-    
-    console.log(data)
     checkExistingSession(); 
 });

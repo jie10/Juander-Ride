@@ -3,7 +3,17 @@ function delay(callback, TIMEOUT_IN_SECONDS) {
 }
 
 function capitalize(word) {
-    return word.substring(0, 1).toUpperCase() + word.substring(1);
+    return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
+}
+
+function capitalizeWords(word) {
+    return word.split(' ').map(function (w) {
+        if (w.toLowerCase() === 'of') {
+            return w.toLowerCase();
+        } else {
+            return w.substring(0, 1).toUpperCase() + w.substring(1).toLowerCase();
+        }
+    }).join(' ');
 }
 
 function sortDateTime(arr, order, key) {

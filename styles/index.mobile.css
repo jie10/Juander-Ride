@@ -27,7 +27,7 @@
         width: 95%;
     }
     .index-page-container .sign-up-form-container {
-        padding: 12px 18px;
+        padding: 12px 18px 48px 18px;
     }
     .welcome-rems {
         padding-bottom: 12px;
@@ -44,7 +44,7 @@
         padding: 6px 9px;
     }
     .index-page-container .sign-up-form-container {
-        padding: 6px 9px;
+        padding: 8px 9px 48px 9px;
     }
     .welcome-rems {
         padding-bottom: 12px;

@@ -10,6 +10,7 @@ var USER_LOGIN_DATA_KEY = 'user_login_data';
 
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
+var regions = Object.keys(location_list);
 var MS_TEAMS_SEND_MESSAGE_TO_USER_LINK_URL = 'https://teams.microsoft.com/l/chat/0/0?users=';
 var PHONE_CALL_TO_USER_LINK_URL = 'tel:+';
 
@@ -48,6 +49,11 @@ var driver_trip_start_btn = document.getElementById('driver_trip_start_btn');
 var driver_trip_cancel_btn = document.getElementById('driver_trip_cancel_btn');
 var driver_trip_complete_btn = document.getElementById('driver_trip_complete_btn');
 var driver_trip_booking_list = document.getElementById('driver_trip_booking_list');
+
+var target_location_region = document.getElementById('target_location_region');
+var target_location_province = document.getElementById('target_location_province');
+var target_location_municipality = document.getElementById('target_location_municipality');
+var target_location_barangay = document.getElementById('target_location_barangay');
 
 var _cacheExpiry = -(1/60); // 1 minute
 
@@ -545,6 +551,20 @@ function loadMainPage() {
     carpool_on_booking_container.style.display = 'none';
 }
 
+function loadDefaultSelectedLocationFields() {
+    target_location_region.innerHTML = regions.map(function (region, i) {
+        if (i === 0) {
+            return '<option value=\"' + region + '\" selected>' + location_list[region].region_name + '</option>';
+        } else {
+            return '<option value=\"' + region + '\">' + location_list[region].region_name + '</option>';
+        }
+    }).join('');
+
+    onSelectRegion(target_location_region.value, target_location_province.value);
+    onSelectProvince(target_location_region.value, target_location_province.value, target_location_municipality.value);
+    onSelectMunicipality (target_location_region.value, target_location_province.value, target_location_municipality.value, target_location_barangay.value);
+}
+
 function bookingFromCache(){
     var success = false;
     
@@ -1013,7 +1033,6 @@ var on_trip_driver_container = document.getElementById('on_trip_driver_container
 
 var share_pool_ride_button_rider = document.getElementById('share_pool_ride_button_rider');
 var search_target_location_driver = document.getElementById('search_target_location_driver');
-var driver_target_location = document.getElementById('driver_target_location');
 var driver_available_seats = document.getElementById('driver_available_seats');
 var driver_contact_no = document.getElementById('driver_contact_no');
 var departure_date_picker = document.getElementById('departure_date_picker');
@@ -1043,7 +1062,7 @@ function showOnTripDriverContainer() {
 
 function createTrip() {
     var user = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
-    var target_location = driver_target_location.value ? driver_target_location.value : '';
+    var target_location = target_location_region.value + ', ' + target_location_province.value + ', ' + target_location_municipality.value + ', ' + target_location_barangay.value;
     var available_seats = driver_available_seats.value ? driver_available_seats.value : 0;
     var departure_datetime = moment(departure_date.value + ' ' + departure_time.value).format("YYYY-MM-DDTHH:mm") + ':00.000Z';
     var contact_no = driver_contact_no.value ? '63' + driver_contact_no.value.replace(/(\s)/gi, '') : '#';
@@ -1087,7 +1106,10 @@ function createTrip() {
             console.error(err);
             hideActivityIndicator();
             showErrorAlertWithConfirmButton(function () {
-                driver_target_location.disabled = false;
+                target_location_region.disabled = false;
+                target_location_province.disabled = false;
+                target_location_municipality.disabled = false;
+                target_location_barangay.disabled = false;
                 driver_available_seats.disabled = false;
                 departure_date_picker.disabled = false;
                 departure_time_picker.disabled = false;
@@ -1240,8 +1262,25 @@ function onMoreShareRide() {
             delimiters: ['', ' ', ' ']
         });
 
+        var location = target_location ? target_location.split(', ') : '';
+
+        if (location) {
+            target_location_region.innerHTML = regions.map(function (region, i) {
+                if (location[0] === region) {
+                    return '<option value=\"' + region + '\" selected>' + location_list[region].region_name + '</option>';
+                } else {
+                    return '<option value=\"' + region + '\">' + location_list[region].region_name + '</option>';
+                }
+            }).join('');
+
+            onSelectRegion(location[0], location[1]);
+            onSelectProvince(location[0], location[1], location[2]);
+            onSelectMunicipality (location[0], location[1], location[2], location[3]);
+        } else {
+            loadDefaultSelectedLocationFields();
+        }
+
         create_trip_button.disabled = true;
-        driver_target_location.value = target_location;
         driver_available_seats.value = '';
         driver_contact_no.value = user_login_data && user_login_data.mobileNumber ? user_login_data.mobileNumber : '';
 
@@ -1322,7 +1361,10 @@ function onCreateTrip() {
         showErrorAlert('Invalid departure time', 'Departure must be set at least 30 minutes up to 5 hours from current date and time');
     } else {
         showQuestionAlertWithButtons(function () {
-            driver_target_location.disabled = true;
+            target_location_region.disabled = true;
+            target_location_province.disabled = true;
+            target_location_municipality.disabled = true;
+            target_location_barangay.disabled = true;
             driver_available_seats.disabled = true;
             departure_date_picker.disabled = true;
             departure_time_picker.disabled = true;
@@ -1381,8 +1423,7 @@ function onSharePoolRideButtonState(e) {
 function onCreateTripRequiredFields(e) {
     e.preventDefault();
 
-    var requiredFields = driver_target_location.value.length > 0 &
-                            driver_available_seats.value !== "" &
+    var requiredFields = driver_available_seats.value !== "" &
                             departure_date.value.length > 0 &
                             departure_time.value.length > 0 &
                             driver_contact_no.value.length > 0;
@@ -1394,16 +1435,66 @@ function onCreateTripRequiredFields(e) {
     }
 }
 
+function onSelectRegion (selectedRegion, selectedProvince) {
+    var provinces = Object.keys(location_list[selectedRegion].province_list);
+
+    target_location_province.innerHTML = provinces.map(function (province) {
+        if (selectedProvince.toUpperCase() === province) {
+            return '<option value=\"' + capitalizeWords(province) + '\" selected>' + capitalizeWords(province) + '</option>';
+        } else {
+            return '<option value=\"' + capitalizeWords(province) + '\">' + capitalizeWords(province) + '</option>';
+        }
+    }).join('');
+}
+
+function onSelectProvince (selectedRegion, selectedProvince, selectedMunicipality) {
+    var municipalities = Object.keys(location_list[selectedRegion].province_list[selectedProvince.toUpperCase()].municipality_list);
+
+    target_location_municipality.innerHTML = municipalities.map(function (municipality) {
+        if (selectedMunicipality.toUpperCase() === municipality) {
+            return '<option value=\"' + capitalizeWords(municipality) + '\" selected>' + capitalizeWords(municipality) + '</option>';
+        } else {
+            return '<option value=\"' + capitalizeWords(municipality) + '\">' + capitalizeWords(municipality) + '</option>';
+        }
+    }).join('');
+}
+
+function onSelectMunicipality (selectedRegion, selectedProvince, selectedMunicipality, selectedBarangay) {
+    var barangay =location_list[selectedRegion].province_list[selectedProvince.toUpperCase()].municipality_list[selectedMunicipality.toUpperCase()].barangay_list;
+
+    target_location_barangay.innerHTML = barangay.map(function (barangay) {
+        if (selectedBarangay.toUpperCase() === barangay) {
+            return '<option value=\"' + capitalizeWords(barangay) + '\" selected>' + capitalizeWords(barangay) + '</option>';
+        } else {
+            return '<option value=\"' + capitalizeWords(barangay) + '\">' + capitalizeWords(barangay) + '</option>';
+        }
+
+    }).join('');
+}
+
 share_a_ride_button.addEventListener('click', onShareCarpoolRide);
 share_pool_ride_button_rider.addEventListener('click', onMoreShareRide);
 create_trip_button.addEventListener('click', onCreateTrip);
 search_target_location_driver.addEventListener('keyup', onSharePoolRideButtonState);
-driver_target_location.addEventListener('keyup', onCreateTripRequiredFields);
 driver_available_seats.addEventListener('change', onCreateTripRequiredFields);
 departure_date_picker.addEventListener('change', onCreateTripRequiredFields);
 departure_time_picker.addEventListener('change', onCreateTripRequiredFields);
 driver_contact_no.addEventListener('keyup', onCreateTripRequiredFields);
 
+target_location_region.addEventListener('change', function (e) {
+    onSelectRegion (e.target.value, target_location_province.value);
+    onSelectProvince(e.target.value, target_location_province.value, target_location_municipality.value);
+    onSelectMunicipality(e.target.value, target_location_province.value, target_location_municipality.value, target_location_barangay.value);
+});
+
+target_location_province.addEventListener('change', function (e) {
+    onSelectProvince(target_location_region.value, e.target.value, target_location_municipality.value);
+    onSelectMunicipality(target_location_region.value, e.target.value, target_location_municipality.value, target_location_barangay.value);
+});
+
+target_location_municipality.addEventListener('change', function (e) {
+    onSelectMunicipality (target_location_region.value, target_location_province.value, e.target.value);
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.carpool-page-container').style.display = 'none';

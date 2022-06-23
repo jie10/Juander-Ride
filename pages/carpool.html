@@ -235,22 +235,48 @@
                                 <form class="row g-3">
                                     <h4  class="float-none w-auto">Trip Info</h4>
                                     <div class="row g-3">
-                                        <div class="col-12">
-                                            <label for="driver_target_location" class="form-label">Target Location</label>
-                                            <input autocomplete="off" type="text" class="form-control" id="driver_target_location" readonly>
+                                        <div class="col-12" style="margin: 0 0 8px 0;">
+                                            <label class="form-label highlight">Target Location</label>
+                                            <p class="text-muted" style="font-size: 0.75rem; margin: 0 0 8px 0;">Your preferred pickup or drop off used in carpool matching</p>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label for="target_location_region" class="form-label sign-up-region-select-label highlight" style="font-size: 0.875rem; margin: 6px 0 4px 0;">Region</label>
+                                                    <select class="form-select" id="target_location_region" aria-label="Region">
+                                                        <option selected disabled>Region</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12">
+                                                    <label for="target_location_province" class="form-label sign-up-province-select-label highlight" style="font-size: 0.875rem; margin: 6px 0 4px 0;">Province</label>
+                                                    <select class="form-select" id="target_location_province" aria-label="Province">
+                                                        <option selected disabled>Province</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12">
+                                                    <label for="target_location_municipality" class="form-label sign-up-municipality-select-label highlight" style="font-size: 0.875rem; margin: 6px 0 4px 0;">Municipality</label>
+                                                    <select class="form-select" id="target_location_municipality" aria-label="Municipality">
+                                                        <option selected disabled>Municipality</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12">
+                                                    <label for="target_location_barangay" class="form-label sign-up-barangay-select-label highlight" style="font-size: 0.875rem; margin: 6px 0 4px 0;">Barangay</label>
+                                                    <select class="form-select" id="target_location_barangay" aria-label="Barangay">
+                                                        <option selected disabled>Barangay</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="departure_date_picker" class="form-label">Departure Date</label>
+                                            <label for="departure_date_picker" class="form-label highlight">Departure Date</label>
                                             <input autocomplete="off" type="text" class="form-control clickable-input" id="departure_date_picker" placeholder="mm/dd/yyyy" readonly>
                                             <input type="hidden" id="departure_date" readonly />
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="departure_time_picker" class="form-label">Departure Time</label>
+                                            <label for="departure_time_picker" class="form-label highlight">Departure Time</label>
                                             <input autocomplete="off" type="text" class="form-control clickable-input" id="departure_time_picker" placeholder="hh:mm" readonly>
                                             <input type="hidden" id="departure_time" readonly />
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="driver_available_seats" class="form-label">No. of Seats</label>
+                                            <label for="driver_available_seats" class="form-label highlight">No. of Seats</label>
                                             <select class="form-select" aria-label="Number of seats" id="driver_available_seats">
                                                 <option value="" selected disabled hidden>Choose option</option>
                                                 <option value="1">1</option>
@@ -261,7 +287,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="driver_contact_no" class="form-label">Contact No.</label>
+                                            <label for="driver_contact_no" class="form-label highlight">Contact No.</label>
                                             <input autocomplete="off" type="text" class="form-control" id="driver_contact_no" placeholder="9xx xxx xxxx" title="format: 9xx xxx xxxx">
                                         </div>
                                         <div class="col-12 d-flex justify-content-center align-items-center">
@@ -323,6 +349,7 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="../scripts/data/location.js"></script>
     <script type="text/javascript" src="../scripts/helpers.js"></script>
     <script type="text/javascript" src="../scripts/utils.js"></script>
     <script type="text/javascript" src="../scripts/juander-service.js"></script>
