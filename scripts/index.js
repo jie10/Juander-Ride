@@ -28,10 +28,17 @@ var login_button = document.getElementById('login_button');
 var sign_up_button = document.getElementById('sign_up_button');
 var forgot_pin_code_button = document.getElementById('forgot_pin_code_button');
 
+var target_location_landmark = document.getElementById('target_location_landmark');
 var target_location_region = document.getElementById('target_location_region');
 var target_location_province = document.getElementById('target_location_province');
 var target_location_municipality = document.getElementById('target_location_municipality');
 var target_location_barangay = document.getElementById('target_location_barangay');
+var address_confirm_button = document.getElementById('address_confirm_button');
+var address_close_button = document.getElementById('address_close_button');
+var landmark_label = document.getElementById('landmark_label');
+var address_label = document.getElementById('address_label');
+var landmark_field = document.getElementById('landmark_field');
+var address_field = document.getElementById('address_field');
 
 function highlightLoginErrorInput(errEmail) {
     user_pin_code.style.borderColor = errEmail ? 'red' : '#ced4da';
@@ -65,17 +72,22 @@ function moveToHomepage() {
 }
 
 function loadDefaultSelectedLocationFields() {
-    target_location_region.innerHTML = regions.map(function (region, i) {
+    target_location_region.innerHTML = '<option value="" selected disabled>Select a Region</div>';
+    target_location_region.innerHTML += regions.map(function (region, i) {
         if (i === 0) {
-            return '<option value=\"' + region + '\" selected>' + location_list[region].region_name + '</option>';
+            return '<option value=\"' + region + '\">' + location_list[region].region_name + '</option>';
         } else {
             return '<option value=\"' + region + '\">' + location_list[region].region_name + '</option>';
         }
     }).join('');
-
-    onSelectRegion(target_location_region.value);
-    onSelectProvince(target_location_region.value, target_location_province.value);
-    onSelectMunicipality (target_location_region.value, target_location_province.value, target_location_municipality.value);
+    target_location_landmark.value = '';
+    target_location_province.innerHTML = '';
+    target_location_province.innerHTML = '<option value="" selected disabled>Select a Province</div>';
+    target_location_barangay.innerHTML = '';
+    target_location_barangay.innerHTML = '<option value="" selected disabled>Select a Barangay</div>';
+    target_location_municipality.innerHTML = '';
+    target_location_municipality.innerHTML = '<option value="" selected disabled>Select a Municipality</div>';
+    address_confirm_button.disabled = true;
 }
 function loadPageInDefault() {
     login_viewcontroller.style.display = 'block';
@@ -120,11 +132,12 @@ function login(pin_code) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
-function register(email, mobileNumber, location) {
+function register(email, mobileNumber, location, landmark) {
     var payload = {
         email: email,
         mobileNumber: mobileNumber,
-        address: location
+        address: location,
+        landmark: landmark
     }
     var options = {
         method: 'POST',
@@ -148,10 +161,6 @@ function register(email, mobileNumber, location) {
                         back_to_login_view_button.disabled = false;
                         user_sign_up_email.disabled = false;
                         user_sign_up_mobile_number.disabled = false;
-                        target_location_region.disabled = false;
-                        target_location_province.disabled = false;
-                        target_location_municipality.disabled = false;
-                        target_location_barangay.disabled = false;
                     }, 'Error ' + data.code, data.message, 'Close');
                 } else {
                     showSuccessAlertWithConfirmButton(function () {
@@ -175,6 +184,10 @@ function onLoginView() {
     user_sign_up_email.value = '';
     user_sign_up_mobile_number.value = '';
     sign_up_button.disabled = true;
+    landmark_field.value = "";
+    address_field.value = "";
+    landmark_label.innerHTML = 'Landmark';
+    address_label.innerHTML = 'Region, province, municipality, barangay';
 }
 function onRegisterView() {
     login_viewcontroller.style.display = 'none';
@@ -215,7 +228,7 @@ function onLoginTyping(e) {
     }
 }
 function onRegisterTyping() {
-    var requiredFields = user_sign_up_email.value.length > 0 && user_sign_up_mobile_number.value.length > 0;
+    var requiredFields = user_sign_up_email.value.length > 0 && user_sign_up_mobile_number.value.length > 0 && landmark_field.value.length > 0 && address_field.value.length > 0;
 
     if (requiredFields && event.key !== "Enter") {
         sign_up_button.disabled = false;
@@ -228,7 +241,13 @@ function onRegisterTyping() {
 function onSelectRegion (selectedRegion) {
     var provinces = Object.keys(location_list[selectedRegion].province_list);
 
-    target_location_province.innerHTML = provinces.map(function (province) {
+    target_location_province.innerHTML = '';
+    target_location_province.innerHTML = '<option value="" selected disabled>Select a Province</div>';
+    target_location_barangay.innerHTML = '';
+    target_location_barangay.innerHTML = '<option value="" selected disabled>Select a Barangay</div>';
+    target_location_municipality.innerHTML = '';
+    target_location_municipality.innerHTML = '<option value="" selected disabled>Select a Municipality</div>';
+    target_location_province.innerHTML += provinces.map(function (province) {
         return '<option value=\"' + capitalizeWords(province) + '\">' + capitalizeWords(province) + '</option>';
     }).join('');
 }
@@ -236,7 +255,11 @@ function onSelectRegion (selectedRegion) {
 function onSelectProvince (selectedRegion, selectedProvince) {
     var municipalities = Object.keys(location_list[selectedRegion].province_list[selectedProvince.toUpperCase()].municipality_list);
 
-    target_location_municipality.innerHTML = municipalities.map(function (municipality) {
+    target_location_municipality.innerHTML = '';
+    target_location_municipality.innerHTML = '<option value="" selected disabled>Select a Municipality</div>';
+    target_location_barangay.innerHTML = '';
+    target_location_barangay.innerHTML = '<option value="" selected disabled>Select a Barangay</div>';
+    target_location_municipality.innerHTML += municipalities.map(function (municipality) {
         return '<option value=\"' + capitalizeWords(municipality) + '\">' + capitalizeWords(municipality) + '</option>';
     }).join('');
 }
@@ -244,7 +267,9 @@ function onSelectProvince (selectedRegion, selectedProvince) {
 function onSelectMunicipality (selectedRegion, selectedProvince, selectedMunicipality) {
     var barangay =location_list[selectedRegion].province_list[selectedProvince.toUpperCase()].municipality_list[selectedMunicipality.toUpperCase()].barangay_list;
 
-    target_location_barangay.innerHTML = barangay.map(function (barangay) {
+    target_location_barangay.innerHTML = '';
+    target_location_barangay.innerHTML = '<option value="" selected disabled>Select a Barangay</div>';
+    target_location_barangay.innerHTML += barangay.map(function (barangay) {
         return '<option value=\"' + capitalizeWords(barangay) + '\">' + capitalizeWords(barangay) + '</option>';
     }).join('');
 }
@@ -269,7 +294,8 @@ function onRegister() {
     var numberPattern = /(9[0-9]{9})/g;
     var email = user_sign_up_email.value;
     var mobile_number = user_sign_up_mobile_number.value;
-    var location = target_location_region.value + ', ' + target_location_province.value + ', ' + target_location_municipality.value + ', ' + target_location_barangay.value;
+    var landmark = landmark_field.innerHTML;
+    var location = address_field.innerHTML;
     var isValidEmail = emailPattern.test(email) === true;
     var isValidMobileNumber = phonePattern.test(mobile_number) === true || numberPattern.test(mobile_number);
 
@@ -279,12 +305,8 @@ function onRegister() {
         back_to_login_view_button.disabled = true;
         user_sign_up_email.disabled = true;
         user_sign_up_mobile_number.disabled = true;
-        target_location_region.disabled = true;
-        target_location_province.disabled = true;
-        target_location_municipality.disabled = true;
-        target_location_barangay.disabled = true;
 
-        register(email, mobile_number, location);
+        register(email, mobile_number, location, landmark);
     } else if (!isValidEmail) {
         highlightRegisterErrorInput(true, false, false);
     } else if (!isValidMobileNumber) {
@@ -298,6 +320,10 @@ function onForgotPinCode() {
         /** TODO - Add email verification to check if account exists or not */
         showSuccessAlertWithConfirmButton(function () {}, 'New PIN Code sent', 'Please wait for a message via MS Teams', 'Done');
     },  /(@cebupacificair.com)/gi, 'Forgot PIN Code', 'Email', 150, 'Send', 'Please choose a valid email');
+}
+
+function enableAddressConfirmButton () {
+    address_confirm_button.disabled = target_location_landmark.value.length && target_location_region.value && target_location_province.value && target_location_municipality.value && target_location_barangay.value ? false : true;
 }
 
 sign_up_view_button.addEventListener('click', onRegisterView);
@@ -317,18 +343,55 @@ forgot_pin_code_button.addEventListener('click', onForgotPinCode);
 
 target_location_region.addEventListener('change', function (e) {
     onSelectRegion (e.target.value);
-    onSelectProvince(e.target.value, target_location_province.value);
-    onSelectMunicipality(e.target.value, target_location_province.value, target_location_municipality.value);
+
+    if (target_location_province.value) {
+        onSelectProvince(e.target.value, target_location_province.value);
+    }
+
+    if (target_location_province.value && target_location_municipality.value) {
+        onSelectMunicipality(e.target.value, target_location_province.value, target_location_municipality.value);
+    }
+
+    enableAddressConfirmButton();
 });
 
 target_location_province.addEventListener('change', function (e) {
     onSelectProvince(target_location_region.value, e.target.value);
-    onSelectMunicipality(target_location_region.value, e.target.value, target_location_municipality.value);
+
+    if (target_location_region.value && target_location_municipality.value) {
+        onSelectMunicipality(target_location_region.value, e.target.value, target_location_municipality.value);
+    }
+
+    enableAddressConfirmButton();
 });
 
 target_location_municipality.addEventListener('change', function (e) {
-    onSelectMunicipality (target_location_region.value, target_location_province.value, e.target.value);
-})
+    if (target_location_region.value && target_location_province.value) {
+        onSelectMunicipality(target_location_region.value, target_location_province.value, e.target.value);
+    }
+
+    enableAddressConfirmButton();
+});
+
+target_location_barangay.addEventListener('change', function () {
+    enableAddressConfirmButton();
+});
+
+target_location_landmark.addEventListener('keyup', function () {
+    enableAddressConfirmButton();
+});
+
+address_close_button.addEventListener('click', function () {
+    loadDefaultSelectedLocationFields();
+});
+
+address_confirm_button.addEventListener('click', function () {
+    landmark_field.value = target_location_landmark.value;
+    address_field.value = target_location_region.value + ', ' + target_location_province.value + ', ' + target_location_municipality.value + ', ' + target_location_barangay.value;
+    landmark_label.innerHTML = target_location_landmark.value;
+    address_label.innerHTML = target_location_region.value + ', ' + target_location_province.value + ', ' + target_location_municipality.value + ', ' + target_location_barangay.value;
+    onRegisterTyping();
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     checkExistingSession(); 

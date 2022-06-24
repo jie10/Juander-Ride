@@ -78,36 +78,60 @@
                             <div class="invalid-feedback">Please choose a valid mobile number</div>
                         </div>
                         <div class="col-12" style="margin: 16px 0 8px 0;">
-                            <label class="form-label highlight">Target Location</label>
-                            <p class="text-muted" style="font-size: 0.75rem; margin: 0 0 4px 0;">Your preferred pickup or drop off used in carpool matching</p>
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="target_location_region" class="form-label sign-up-region-select-label highlight" style="font-size: 0.875rem; margin: 6px 0 4px 0;">Region</label>
-                                    <select class="form-select" id="target_location_region" aria-label="Region">
-                                        <option selected disabled>Region</option>
-                                    </select>
+                            <label class="form-label highlight" style="margin: 0;">Target Location</label>
+                            <p class="text-muted" style="font-size: 0.75rem; margin: 8px 0 12px 0;">Your preferred pickup or drop off used in carpool matching</p>
+                            <button type="button" class="btn btn-outline address-field-change-button d-flex flex-row align-items-center" id="address_field_change_button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                <span class="icon"><i class="fa-solid fa-location-dot"></i></span>
+                                <span class="details">
+                                    <span class="landmark-label" id="landmark_label">Landmark</span>
+                                    <span class="address-label" id="address_label">Region, province, municipality, barangay</span>
+                                </span>
+                                <span class="icon"><i class="fa-solid fa-arrow-right"></i></span>
+                            </button>
+                            <input type="hidden" id="landmark_field" />
+                            <input type="hidden" id="address_field" />
+                            <div class="modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-fullscreen-md-down">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title highlight">Target Location</h5>
+                                    <button type="button" class="btn-close" id="address_close_button" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="col-12">
-                                    <label for="target_location_province" class="form-label sign-up-province-select-label highlight" style="font-size: 0.875rem; margin: 6px 0 4px 0;">Province</label>
-                                    <select class="form-select" id="target_location_province" aria-label="Province">
-                                        <option selected disabled>Province</option>
-                                    </select>
+                                <div class="modal-body" style="padding: 2rem 1.5rem;">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input autocomplete="off" type="text" class="form-control mb-3" id="target_location_landmark" placeholder="Enter a Landmark" maxlength="250" />
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <select class="form-select mb-3" id="target_location_region" aria-label="Region">
+                                                <option value="" selected disabled>Select a Region</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <select class="form-select mb-3" id="target_location_province" aria-label="Province">
+                                                <option value="" selected disabled>Select a Province</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <select class="form-select mb-3" id="target_location_municipality" aria-label="Municipality">
+                                                <option value="" selected disabled>Select a Municipality</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <select class="form-select mb-3" id="target_location_barangay" aria-label="Barangay">
+                                                <option value="" selected disabled>Select a Barangay</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-center mt-5">
+                                            <button type="button" class="btn btn-primary address-confirm-button" id="address_confirm_button" data-bs-dismiss="modal" disabled>Confirm</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-12">
-                                    <label for="target_location_municipality" class="form-label sign-up-municipality-select-label highlight" style="font-size: 0.875rem; margin: 6px 0 4px 0;">Municipality</label>
-                                    <select class="form-select" id="target_location_municipality" aria-label="Municipality">
-                                        <option selected disabled>Municipality</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label for="target_location_barangay" class="form-label sign-up-barangay-select-label highlight" style="font-size: 0.875rem; margin: 6px 0 4px 0;">Barangay</label>
-                                    <select class="form-select" id="target_location_barangay" aria-label="Barangay">
-                                        <option selected disabled>Barangay</option>
-                                    </select>
                                 </div>
                             </div>
+                            </div>
                         </div>
-                        <div class="col-12 d-flex justify-content-center mt-4">
+                        <div class="col-12 d-flex justify-content-center mt-5">
                           <button type="button" class="btn btn-primary sign-up-button" id="sign_up_button" disabled>Sign Up</button>
                         </div>
                     </form>

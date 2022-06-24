@@ -43,7 +43,7 @@
     position: relative;
     background-color: #fee014;
     width: 100%;
-    height: 250px;
+    height: 120px;
     padding: 16px 8px;
 }
 .index-page-container .sign-up-header .back-to-login-view-button i {
@@ -74,6 +74,34 @@
     width: 80%;
     margin: auto;
     border-radius: 24px;
+}
+.index-page-container .sign-up-form .address-confirm-button {
+    width: 60%;
+    margin: auto;
+    border-radius: 24px;
+}
+.index-page-container .sign-up-form .address-field-change-button {
+    padding: 16px 0;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgb(206, 212, 218);
+}
+.index-page-container .sign-up-form .address-field-change-button span {
+    display: block;
+    text-align: left;
+}
+.index-page-container .sign-up-form .address-field-change-button span.details {
+    flex-grow: 1;
+}
+.index-page-container .sign-up-form .address-field-change-button span.icon {
+    font-size: 1.25rem;
+    padding: 0 18px;
+}
+.index-page-container .sign-up-form .address-field-change-button span.landmark-label {
+    font-size: 1.25rem;
+}
+.index-page-container .sign-up-form .address-field-change-button span.address-label {
+    font-size: 0.875rem;
 }
 
 

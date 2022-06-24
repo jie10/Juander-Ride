@@ -26,6 +26,9 @@
     .index-page-container .sign-up-form .sign-up-button {
         width: 95%;
     }
+    .index-page-container .sign-up-form .address-confirm-button {
+        width: 80%;
+    }
     .index-page-container .sign-up-form-container {
         padding: 12px 18px 48px 18px;
     }
@@ -54,5 +57,15 @@
     }
     .welcome-rems .pagedescription {
         font-size: 0.75rem;
+    }
+    .index-page-container .sign-up-form .address-field-change-button span.landmark-label {
+        font-size: 1rem;
+    }
+    .index-page-container .sign-up-form .address-field-change-button span.address-label {
+        font-size: 0.75rem;
+    }
+    .index-page-container .sign-up-form .address-field-change-button span.icon {
+        font-size: 1rem;
+        padding: 0 18px;
     }
 }
