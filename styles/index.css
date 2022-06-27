@@ -92,6 +92,7 @@
 }
 .index-page-container .sign-up-form .address-field-change-button span.details {
     flex-grow: 1;
+    overflow: hidden;
 }
 .index-page-container .sign-up-form .address-field-change-button span.icon {
     font-size: 1.25rem;
@@ -99,6 +100,7 @@
 }
 .index-page-container .sign-up-form .address-field-change-button span.landmark-label {
     font-size: 1.25rem;
+    word-wrap: break-word;
 }
 .index-page-container .sign-up-form .address-field-change-button span.address-label {
     font-size: 0.875rem;
