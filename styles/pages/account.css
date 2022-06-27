@@ -221,3 +221,32 @@
 .settings-container .settings-form .form-button button {
     width: 80%;
 }
+
+.settings-container .settings-form .address-confirm-button {
+    width: 60%;
+    margin: auto;
+    border-radius: 24px;
+}
+.settings-container .settings-form .address-field-change-button {
+    padding: 16px 0;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgb(206, 212, 218);
+}
+.settings-container .settings-form .address-field-change-button span {
+    display: block;
+    text-align: left;
+}
+.settings-container .settings-form  .address-field-change-button span.details {
+    flex-grow: 1;
+}
+.settings-container .settings-form .address-field-change-button span.icon {
+    font-size: 1.25rem;
+    padding: 0 18px;
+}
+.settings-container .settings-form .address-field-change-button span.landmark-label {
+    font-size: 1.25rem;
+}
+.settings-container .settings-form  .address-field-change-button span.address-label {
+    font-size: 0.875rem;
+}
