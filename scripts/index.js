@@ -8,7 +8,8 @@ var regions = Object.keys(location_list);
 /** API ENDPOINTS */
 var LOGIN_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/login';
 var SIGN_UP_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/register';
-var ENCRYPT_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/encrypt'
+var ENCRYPT_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/encrypt';
+var CHECK_ADDRESS_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/address';
 
 /** SOURCE LOCATION */
 var HOMEPAGE_SOURCE_LOCATION = '/';
@@ -132,12 +133,15 @@ function login(pin_code) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
-function register(email, mobileNumber, location, landmark) {
+function register(email, mobileNumber, location, landmark, data) {
     var payload = {
         email: email,
         mobileNumber: mobileNumber,
         address: location,
-        landmark: landmark
+        landmark: landmark,
+        lat: data.lat ? data.lat : '',
+        lng: data.lng ? data.lng : '',
+        kmZero: data.kmZero ? data.kmZero : ''
     }
     var options = {
         method: 'POST',
@@ -166,6 +170,47 @@ function register(email, mobileNumber, location, landmark) {
                     showSuccessAlertWithConfirmButton(function () {
                         loadPageInDefault();
                     }, 'Sign Up Successful', 'Please check your Teams for your Pin Code to login', 'Back to Login');
+                }
+            }, DELAY_TIME_IN_MILLISECONDS);
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = HOMEPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
+}
+function checkAddress(email, mobileNumber, landmark, location) {
+    var payload = {
+        address: location,
+        landmark: landmark
+    }
+    var options = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    };
+
+    fetch(CHECK_ADDRESS_API_ENDPONT, options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            delay(function () {
+                hideActivityIndicator();
+
+                if (data.code === 400) {
+                    showErrorAlertWithConfirmButton(function () {
+                        sign_up_button.disabled = false;
+                        back_to_login_view_button.disabled = false;
+                        user_sign_up_email.disabled = false;
+                        user_sign_up_mobile_number.disabled = false;
+                    }, 'Error 404', 'No location found with address provided', 'Done');
+                } else {
+                    register(email, mobileNumber, location, landmark, data);
                 }
             }, DELAY_TIME_IN_MILLISECONDS);
         })
@@ -324,19 +369,20 @@ function onRegister() {
     var numberPattern = /(9[0-9]{9})/g;
     var email = user_sign_up_email.value;
     var mobile_number = user_sign_up_mobile_number.value;
-    var landmark = landmark_field.innerHTML;
-    var location = address_field.innerHTML;
+    var landmark = landmark_field.value;
+    var location = address_field.value;
     var isValidEmail = emailPattern.test(email) === true;
     var isValidMobileNumber = phonePattern.test(mobile_number) === true || numberPattern.test(mobile_number);
 
     if (isValidEmail & isValidMobileNumber) {
         showActivityIndicator();
+
         sign_up_button.disabled = true;
         back_to_login_view_button.disabled = true;
         user_sign_up_email.disabled = true;
         user_sign_up_mobile_number.disabled = true;
 
-        register(email, mobile_number, location, landmark);
+        checkAddress(email, mobile_number, landmark, location);
     } else if (!isValidEmail) {
         highlightRegisterErrorInput(true, false, false);
     } else if (!isValidMobileNumber) {
