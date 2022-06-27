@@ -5,6 +5,7 @@ var CURRENT_APP_VERSION_KEY = 'current_app_version';
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
 var regions = Object.keys(location_list);
+var account_id, account_mobile_number, account_address, account_landmark, account_scoreboard;
 
 var RIDER_BOOKING_HISTORY_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/rider';
 var GET_TRIP_BY_ID_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
@@ -12,6 +13,9 @@ var UPDATE_TRIP_BY_ID_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-
 var DRIVER_BOOKINGS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/driver';
 var CONFIRM_OR_CANCEL_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
 var PLAY_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/play';
+var CHECK_ADDRESS_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/address';
+var GET_USER_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/profile';
+var UPDATE_USER_INFO_API_ENPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/profile';
 
 /** SOURCE LOCATION */
 var HOMEPAGE_SOURCE_LOCATION = '/';
@@ -251,11 +255,7 @@ function reloadCurrentPage() {
     showProfileNavbar();
     showMainBottomNavbar();
     hideAllPageContainers();
-
-    delay(function () {
-        showMainAccountPageContainer();
-        hideActivityIndicator();
-    }, DELAY_TIME_IN_MILLISECONDS);
+    getUserInfo();
 }
 
 function loadBookingButtons(e) {
@@ -279,10 +279,10 @@ function loadUserDetails() {
     document.querySelector('.user-role').innerHTML = user_data.jobTitle ? user_data.jobTitle : 'CEB employee';
     document.querySelector('.user-position').innerHTML = user_data.jobTitle ? user_data.jobTitle : 'Cebu Pacifir Air, Inc.';
 
-    document.querySelector('.points-count').innerHTML = user_data.scoreboard && user_data.scoreboard.points ? user_data.scoreboard.points : 0;
-    document.querySelector('.dtp-count').innerHTML = user_data.scoreboard && user_data.scoreboard.dtp ? user_data.scoreboard.dtp : 0;
-    document.querySelector('.badges-count').innerHTML = user_data.scoreboard && user_data.scoreboard.badges ? user_data.scoreboard.badges : 0;
-    document.querySelector('.items-count').innerHTML = user_data.scoreboard && user_data.scoreboard.items ? user_data.scoreboard.items : 0;
+    document.querySelector('.points-count').innerHTML = account_scoreboard && account_scoreboard.points ? account_scoreboard.points : 0;
+    document.querySelector('.dtp-count').innerHTML = account_scoreboard && account_scoreboard.dtp ? account_scoreboard.dtp : 0;
+    document.querySelector('.badges-count').innerHTML = account_scoreboard && account_scoreboard.badges ? account_scoreboard.badges : 0;
+    document.querySelector('.items-count').innerHTML = account_scoreboard && account_scoreboard.items ? account_scoreboard.items : 0;
 }
 function getRiderBookingsHistory() {
     var email = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email;
@@ -488,32 +488,128 @@ function confirmOrCancelBooking(_id, status, tripID) {
         });
 }
 
-function updateUserInfo(phoneNumber, landmark, address){
+function getUserInfo() {
+    fetch(GET_USER_API_ENDPOINT + '/' + JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            delay(function () {
+                showMainAccountPageContainer();
+                hideActivityIndicator();
+                account_id = data._id;
+                account_mobile_number = data.mobileNumber;
+                account_address = data.address;
+                account_landmark = data.landmark;
+                account_scoreboard = data.scoreboard;
+            }, DELAY_TIME_IN_MILLISECONDS);
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = HOMEPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
+}
+
+function checkAddress(account_id, mobileNumber, landmark, location) {
     var payload = {
-        "mobileNumber": phoneNumber,
-        "landmark": landmark,
-        "address": address
-    };
+        address: location,
+        landmark: landmark
+    }
     var options = {
         method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    };
+
+    fetch(CHECK_ADDRESS_API_ENDPONT, options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            delay(function () {
+                hideActivityIndicator();
+
+                if (data.code === 400) {
+                    showErrorAlertWithConfirmButton(function () {
+                        sign_up_button.disabled = false;
+                        back_to_login_view_button.disabled = false;
+                        user_sign_up_email.disabled = false;
+                        user_sign_up_mobile_number.disabled = false;
+                    }, 'Error 404', 'No location found with address provided', 'Done');
+                } else {
+                    updateUserInfo(account_id, mobileNumber, landmark, location, data);
+                }
+            }, DELAY_TIME_IN_MILLISECONDS);
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = HOMEPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
+}
+
+function updateUserInfo(account_id, mobileNumber, landmark, address, data) {
+    var payload = {
+        mobileNumber: mobileNumber,
+        landmark: landmark,
+        address: address,
+        lat: data.lat ? data.lat : '',
+        lng: data.lng ? data.lng : '',
+        kmZero: data.kmZero ? data.kmZero : ''
+    };
+    var options = {
+        method: 'PUT',
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(payload)
     };
 
-    console.log(options);
+    fetch(UPDATE_USER_INFO_API_ENPOINT + '/' + account_id, options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            delay(function () {
+                hideActivityIndicator();
+        
+                driver_contact_no.disabled = false;
+                update_account_button.disabled = false;
+        
+                if (data.code === 400) {
+                    showErrorAlertWithConfirmButton(function () {
+                        sign_up_button.disabled = false;
+                        back_to_login_view_button.disabled = false;
+                        user_sign_up_email.disabled = false;
+                        user_sign_up_mobile_number.disabled = false;
+                    }, 'Error 400', 'Account update failed', 'Done');
+                } else {
+                    var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
 
-    // TODO - Add Update user here
+                    user_login_data.mobileNumber = mobileNumber;
+                    user_login_data.address = address;
+                    user_login_data.landmark = landmark;
 
-    delay(function () {
-        hideActivityIndicator();
+                    localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(user_login_data));
 
-        driver_contact_no.disabled = false;
-        update_account_button.disabled = false;
-
-        showSuccessAlertWithConfirmButton(function () {
-            reloadCurrentPage();
-        }, 'Account Updated Successfully', '', 'Done');
-    }, DELAY_TIME_IN_MILLISECONDS);
+                    showSuccessAlertWithConfirmButton(function () {
+                        reloadCurrentPage();
+                    }, 'Account Updated Successfully', '', 'Done');
+                }
+            }, DELAY_TIME_IN_MILLISECONDS);
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = HOMEPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
 }
 
 function confirmOrCancelTripBooking(bookingID, tripID, userEmail, bookingStatus){
@@ -573,8 +669,7 @@ function onUpdateAccount() {
             update_account_button.disabled = true;
 
             showActivityIndicator();
-
-            updateUserInfo(driver_contact_no.value, landmark_field.value, address_field.value);
+            checkAddress(account_id, driver_contact_no.value, landmark_field.value, address_field.value);
         }, 'Update Account', 'Are you sure you want to continue?', 'Yes', 'No');
     }
 }
@@ -623,25 +718,23 @@ function onSettings() {
         hideActivityIndicator();
         settings_container.style.display = 'block';
 
-        var user_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
-
         new Cleave(driver_contact_no, {
             numericOnly: true,
             blocks: [0, 3, 3, 4],
             delimiters: ['', ' ', ' ']
         });
 
-        driver_contact_no.value = user_data.mobileNumber ? user_data.mobileNumber : '';
-        update_account_button.disabled = user_data.mobileNumber && user_data.address && user_data.landmark ? false : true;
+        driver_contact_no.value = account_mobile_number ? account_mobile_number : '';
+        update_account_button.disabled = account_mobile_number && account_address && account_landmark ? false : true;
 
-        landmark_field.value = user_data.landmark ? user_data.landmark : '';
-        address_field.value = user_data.address ? user_data.address : '';
+        landmark_field.value = account_landmark ? account_landmark : '';
+        address_field.value = account_address ? account_address : '';
 
-        address_label.innerHTML = user_data.address ? user_data.address : 'Region, province, municipality, baranagy';
-        landmark_label.innerHTML = user_data.landmark ? user_data.landmark : 'Landmark';
-        target_location_landmark.value = landmark_field.value = user_data.landmark ? user_data.landmark : '';
+        address_label.innerHTML = account_address ? account_address : 'Region, province, municipality, baranagy';
+        landmark_label.innerHTML = account_landmark ? account_landmark : 'Landmark';
+        target_location_landmark.value = landmark_field.value = account_landmark ? account_landmark : '';
 
-        var location = user_data.address ? user_data.address.split(', ') : '';
+        var location = account_address ? account_address.split(', ') : '';
 
         if (location && location.length > 3) {
             target_location_region.innerHTML = '<option value="" disabled>Select a Region</div>';
@@ -659,7 +752,7 @@ function onSettings() {
         } else {
             loadDefaultSelectedLocationFields();
         }
-    }, DELAY_TIME_IN_MILLISECONDS)
+    }, DELAY_TIME_IN_MILLISECONDS);
 }
 function onLogout() {
     showQuestionAlertWithButtons(function () {
