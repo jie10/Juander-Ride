@@ -27,7 +27,7 @@
 
 
 .account-menu-list-container {
-    padding: 0 0 36px 0;
+    padding: 0 0 75px 0;
 }
 .account-menu-list-container .container {
     width: 480px !important;
@@ -239,6 +239,7 @@
 }
 .settings-container .settings-form  .address-field-change-button span.details {
     flex-grow: 1;
+    overflow: hidden;
 }
 .settings-container .settings-form .address-field-change-button span.icon {
     font-size: 1.25rem;
@@ -246,6 +247,7 @@
 }
 .settings-container .settings-form .address-field-change-button span.landmark-label {
     font-size: 1.25rem;
+    word-wrap: break-word;
 }
 .settings-container .settings-form  .address-field-change-button span.address-label {
     font-size: 0.875rem;
