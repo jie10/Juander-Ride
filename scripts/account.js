@@ -5,7 +5,7 @@ var CURRENT_APP_VERSION_KEY = 'current_app_version';
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
 var regions = Object.keys(location_list);
-var account_id, account_mobile_number, account_address, account_landmark, account_scoreboard;
+var account_id, account_mobile_number, account_address, account_landmark, account_scoreboard, account_location_data;
 
 var RIDER_BOOKING_HISTORY_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/rider';
 var GET_TRIP_BY_ID_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
@@ -513,7 +513,7 @@ function getUserInfo() {
         });
 }
 
-function checkAddress(account_id, mobileNumber, landmark, location) {
+function checkAddress(landmark, location) {
     var payload = {
         address: location,
         landmark: landmark
@@ -536,13 +536,21 @@ function checkAddress(account_id, mobileNumber, landmark, location) {
 
                 if (data.code === 400) {
                     showErrorAlertWithConfirmButton(function () {
-                        sign_up_button.disabled = false;
-                        back_to_login_view_button.disabled = false;
-                        user_sign_up_email.disabled = false;
-                        user_sign_up_mobile_number.disabled = false;
+                        target_location_landmark.disabled = false;
+                        target_location_region.disabled = false;
+                        target_location_province.disabled = false;
+                        target_location_municipality.disabled = false;
+                        target_location_barangay.disabled = false;
+                        address_confirm_button.disabled = false;
                     }, 'Error 404', 'No location found with address provided', 'Done');
                 } else {
-                    updateUserInfo(account_id, mobileNumber, landmark, location, data);
+                    target_location_landmark.disabled = false;
+                    target_location_region.disabled = false;
+                    target_location_province.disabled = false;
+                    target_location_municipality.disabled = false;
+                    target_location_barangay.disabled = false;
+                    address_confirm_button.disabled = false;
+                    account_location_data = data;
                 }
             }, DELAY_TIME_IN_MILLISECONDS);
         })
@@ -555,14 +563,14 @@ function checkAddress(account_id, mobileNumber, landmark, location) {
         });
 }
 
-function updateUserInfo(account_id, mobileNumber, landmark, address, data) {
+function updateUserInfo(account_id, mobileNumber, landmark, address, d) {
     var payload = {
         mobileNumber: mobileNumber,
         landmark: landmark,
         address: address,
-        lat: data.lat ? data.lat : '',
-        lng: data.lng ? data.lng : '',
-        kmZero: data.kmZero ? data.kmZero : ''
+        lat: d.lat ? d.lat : '',
+        lng: d.lng ? d.lng : '',
+        kmZero: d.kmZero ? d.kmZero : ''
     };
     var options = {
         method: 'PUT',
@@ -590,11 +598,14 @@ function updateUserInfo(account_id, mobileNumber, landmark, address, data) {
                     }, 'Error 400', 'Account update failed', 'Done');
                 } else {
                     var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
-
+                    console.log(d)
                     user_login_data.mobileNumber = mobileNumber;
                     user_login_data.address = address;
                     user_login_data.landmark = landmark;
-
+                    user_login_data.kmZero = d.kmZero;
+                    user_login_data.lat = d.lat;
+                    user_login_data.lng = d.lng;
+                    console.log(user_login_data)
                     localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(user_login_data));
 
                     showSuccessAlertWithConfirmButton(function () {
@@ -669,7 +680,8 @@ function onUpdateAccount() {
             update_account_button.disabled = true;
 
             showActivityIndicator();
-            checkAddress(account_id, driver_contact_no.value, landmark_field.value, address_field.value);
+            console.log(account_location_data)
+            updateUserInfo(account_id, driver_contact_no.value, landmark_field.value, address_field.value, account_location_data);
         }, 'Update Account', 'Are you sure you want to continue?', 'Yes', 'No');
     }
 }
@@ -731,7 +743,8 @@ function onSettings() {
         address_field.value = account_address ? account_address : '';
 
         address_label.innerHTML = account_address ? account_address : 'Region, province, municipality, baranagy';
-        landmark_label.innerHTML = account_landmark ? account_landmark : 'Landmark';
+        landmark_label.innerHTML = account_landmark ? account_landmark : 'No Landmark';
+        landmark_label.style.color = account_landmark ? '#212529': '#cccccc';
         target_location_landmark.value = landmark_field.value = account_landmark ? account_landmark : '';
 
         var location = account_address ? account_address.split(', ') : '';
@@ -910,11 +923,19 @@ address_confirm_button.addEventListener('click', function () {
     landmark_label.innerHTML = target_location_landmark.value;
     address_label.innerHTML = target_location_region.value + ', ' + target_location_province.value + ', ' + target_location_municipality.value + ', ' + target_location_barangay.value;
     onUpdateAccountRequiredFields();
+    showActivityIndicator();
+    target_location_landmark.disabled = true;
+    target_location_region.disabled = true;
+    target_location_province.disabled = true;
+    target_location_municipality.disabled = true;
+    target_location_barangay.disabled = true;
+    address_confirm_button.disabled = true;
+    checkAddress(landmark_field.value, address_field.value);
 });
 
 address_field_change_button.addEventListener('click', function () {
     address_label.innerHTML = address_field.value  ? address_field.value  : 'Region, province, municipality, baranagy';
-    landmark_label.innerHTML = landmark_field.value ? landmark_field.value : 'Landmark';
+    landmark_label.innerHTML = landmark_field.value ? landmark_field.value : 'No Landmark';
     target_location_landmark.value = landmark_field.value ? landmark_field.value : '';
 
     var location = address_field.value  ? address_field.value .split(', ') : '';
@@ -935,6 +956,8 @@ address_field_change_button.addEventListener('click', function () {
     } else {
         loadDefaultSelectedLocationFields();
     }
+
+    enableAddressConfirmButton();
 })
 
 document.addEventListener('DOMContentLoaded', function () {

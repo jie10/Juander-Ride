@@ -128,4 +128,10 @@
         width: 100% !important;
         padding: 0;
     }
+    .settings-container .settings-form .address-field-change-button span.landmark-label {
+        font-size: 1rem;
+    }
+    .settings-container .settings-form  .address-field-change-button span.address-label {
+        font-size: 0.75rem;
+    }
 }
