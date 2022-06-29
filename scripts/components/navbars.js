@@ -13,7 +13,9 @@ function showSecondaryTopNavbar() {
     main_top_navbar.style.display = 'none';
     secondary_top_navbar.style.display = 'flex';
 }
-
+function hideMainTopNavbar () {
+    main_top_navbar.style.display = 'none';
+}
 function hideMainBottomNavbar () {
     main_bottom_navbar.style.display = 'none';
 }

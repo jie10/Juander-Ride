@@ -58,6 +58,9 @@
     .carpool-ride-list-container .navigate-container .container {
         width: 300px !important;
     }
+    .update-new-address-container .container {
+        width: 380px !important;
+    }
     .carpool-ride-list-container .driver-pool-results .container {
         width: 100% !important;
         padding: 0;
@@ -126,6 +129,15 @@
     .carpool-on-booking-container .current-booking-item {
         width: 300px;
     }
+    .create-trip-container .address-confirm-button {
+        width: 80%;
+    }
+    .create-trip-container .address-remove-button {
+        width: 80%;
+    }
+    .update-new-address-container .new-address-confirm-button {
+        width: 80%;
+    }
 }
 @media only screen and (max-width: 320px) {
     /** BOTTOM NAVBAR */
@@ -170,11 +182,21 @@
         width: 100% !important;
         padding: 0;
     }
+    .update-new-address-container .container {
+        width: 100% !important;
+        padding: 0;
+    }
     .create-trip-container .container {
         width: 100% !important;
         padding: 0;
     }
     .on-trip-driver-container .driver-trip-buttons-container .container {
         width: 200px !important;
+    }
+    .create-trip-container .address-field-change-button span.landmark-label {
+        font-size: 1rem;
+    }
+    .create-trip-container .address-field-change-button span.address-label {
+        font-size: 0.75rem;
     }
 }

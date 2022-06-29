@@ -18,12 +18,18 @@
 
 .carpool-container,
 .shuttle-container,
-.user-account-container {
+.user-account-container,
+.update-new-address-container {
     display: none;
     padding: 0 !important;
 }
 .tab-page-active {
     display: block;
+}
+.update-new-address-container .container {
+    width: 400px;
+    margin: 50px auto;
+    text-align: center;
 }
 
 
@@ -337,6 +343,47 @@
 .create-trip-container .create-trip-button {
     margin: 24px 0;
     width: 100%;
+}
+.create-trip-container .address-field-change-button {
+    padding: 16px 0;
+    width: 100%;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+}
+.create-trip-container .address-field-change-button span {
+    display: block;
+    text-align: left;
+}
+.create-trip-container .address-field-change-button span.details {
+    flex-grow: 1;
+    overflow: hidden;
+}
+.create-trip-container .address-field-change-button span.icon {
+    font-size: 1.25rem;
+    padding: 0 18px;
+}
+.create-trip-container .address-field-change-button span.landmark-label {
+    font-size: 1.25rem;
+    word-wrap: break-word;
+}
+.create-trip-container .address-field-change-button span.address-label {
+    font-size: 0.875rem;
+}
+.create-trip-container .address-field-change-button-group button {
+    margin: 0 0 16px 0; 
+}
+.create-trip-container .address-confirm-button {
+    width: 60%;
+    margin: 8px auto;
+}
+.create-trip-container .address-remove-button {
+    width: 60%;
+    margin: 8px auto;
+}
+
+.update-new-address-container .new-address-confirm-button {
+    width: 60%;
+    margin: 8px auto;
 }
 
 .on-trip-driver-container .container {
