@@ -4,6 +4,7 @@ var USER_LOGIN_DATA_KEY = 'user_login_data';
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
 var regions = Object.keys(location_list);
+var account_location_data;
 
 /** API ENDPOINTS */
 var LOGIN_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/login';
@@ -133,15 +134,15 @@ function login(pin_code) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
-function register(email, mobileNumber, location, landmark, data) {
+function register(email, mobileNumber, location, landmark, d) {
     var payload = {
         email: email,
         mobileNumber: mobileNumber,
         address: location,
         landmark: landmark,
-        lat: data.lat ? data.lat : '',
-        lng: data.lng ? data.lng : '',
-        kmZero: data.kmZero ? data.kmZero : ''
+        lat: d.lat ? d.lat : '',
+        lng: d.lng ? d.lng : '',
+        kmZero: d.kmZero ? d.kmZero : ''
     }
     var options = {
         method: 'POST',
@@ -167,6 +168,10 @@ function register(email, mobileNumber, location, landmark, data) {
                         user_sign_up_mobile_number.disabled = false;
                     }, 'Error ' + data.code, data.message, 'Close');
                 } else {
+                    sign_up_button.disabled = false;
+                    back_to_login_view_button.disabled = false;
+                    user_sign_up_email.disabled = false;
+                    user_sign_up_mobile_number.disabled = false;
                     showSuccessAlertWithConfirmButton(function () {
                         loadPageInDefault();
                     }, 'Sign Up Successful', 'Please check your Teams for your Pin Code to login', 'Back to Login');
@@ -181,7 +186,7 @@ function register(email, mobileNumber, location, landmark, data) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
-function checkAddress(email, mobileNumber, landmark, location) {
+function checkAddress(landmark, location) {
     var payload = {
         address: location,
         landmark: landmark
@@ -204,13 +209,22 @@ function checkAddress(email, mobileNumber, landmark, location) {
 
                 if (data.code === 400) {
                     showErrorAlertWithConfirmButton(function () {
-                        sign_up_button.disabled = false;
-                        back_to_login_view_button.disabled = false;
-                        user_sign_up_email.disabled = false;
-                        user_sign_up_mobile_number.disabled = false;
+                        target_location_landmark.disabled = false;
+                        target_location_region.disabled = false;
+                        target_location_province.disabled = false;
+                        target_location_municipality.disabled = false;
+                        target_location_barangay.disabled = false;
+                        address_confirm_button.disabled = false;
                     }, 'Error 404', 'No location found with address provided', 'Done');
                 } else {
-                    register(email, mobileNumber, location, landmark, data);
+                    target_location_landmark.disabled = false;
+                    target_location_region.disabled = false;
+                    target_location_province.disabled = false;
+                    target_location_municipality.disabled = false;
+                    target_location_barangay.disabled = false;
+                    address_confirm_button.disabled = false;
+                    landmark_label.style.color = landmark_field.value ? '#212529': '#cccccc';
+                    account_location_data = data;
                 }
             }, DELAY_TIME_IN_MILLISECONDS);
         })
@@ -231,7 +245,7 @@ function onLoginView() {
     sign_up_button.disabled = true;
     landmark_field.value = "";
     address_field.value = "";
-    landmark_label.innerHTML = 'Landmark';
+    landmark_label.innerHTML = 'No Landmark';
     address_label.innerHTML = 'Region, province, municipality, barangay';
 }
 function onRegisterView() {
@@ -382,7 +396,7 @@ function onRegister() {
         user_sign_up_email.disabled = true;
         user_sign_up_mobile_number.disabled = true;
 
-        checkAddress(email, mobile_number, landmark, location);
+        register(email, mobile_number, location, landmark, account_location_data);
     } else if (!isValidEmail) {
         highlightRegisterErrorInput(true, false, false);
     } else if (!isValidMobileNumber) {
@@ -463,7 +477,8 @@ address_close_button.addEventListener('click', function () {
 
 address_field_change_button.addEventListener('click', function () {
     address_label.innerHTML = address_field.value  ? address_field.value  : 'Region, province, municipality, baranagy';
-    landmark_label.innerHTML = landmark_field.value ? landmark_field.value : 'Landmark';
+    landmark_label.innerHTML = landmark_field.value ? landmark_field.value : 'No Landmark';
+
     target_location_landmark.value = landmark_field.value ? landmark_field.value : '';
 
     var location = address_field.value  ? address_field.value .split(', ') : '';
@@ -490,8 +505,17 @@ address_confirm_button.addEventListener('click', function () {
     landmark_field.value = target_location_landmark.value;
     address_field.value = target_location_region.value + ', ' + target_location_province.value + ', ' + target_location_municipality.value + ', ' + target_location_barangay.value;
     landmark_label.innerHTML = target_location_landmark.value;
+
     address_label.innerHTML = target_location_region.value + ', ' + target_location_province.value + ', ' + target_location_municipality.value + ', ' + target_location_barangay.value;
     onRegisterTyping();
+    showActivityIndicator();
+    target_location_landmark.disabled = true;
+    target_location_region.disabled = true;
+    target_location_province.disabled = true;
+    target_location_municipality.disabled = true;
+    target_location_barangay.disabled = true;
+    address_confirm_button.disabled = true;
+    checkAddress(landmark_field.value, address_field.value);
 });
 
 document.addEventListener('DOMContentLoaded', function () {
