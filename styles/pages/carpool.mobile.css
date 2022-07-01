@@ -13,10 +13,7 @@
 @media only screen and (max-width: 600px) {
     /** CARPOOL */
     .carpool-ride-list-container .navigate-container {
-        bottom: 56px;
-    }
-    .carpool-ride-list-container .navigate-container .container {
-        width: 350px !important;
+        bottom: 0;
     }
     .carpool-ride-list-container .driver-pool-results .container {
         width: 80% !important;
@@ -31,7 +28,7 @@
         width: 80% !important;
     }
     .share-a-ride-container .navigate-container {
-        bottom: 56px;
+        bottom: 0;
     }
     .share-a-ride-container .navigate-container .container {
         width: 350px !important;
@@ -56,7 +53,10 @@
         font-size: 0.75rem;
     }
     .carpool-ride-list-container .navigate-container .container {
-        width: 300px !important;
+        width: 90% !important;
+    }
+    .carpool-ride-list-container .address-field-change-button {
+        padding: 10px 0;
     }
     .update-new-address-container .container {
         width: 380px !important;
@@ -97,7 +97,10 @@
         font-size: 0.75rem;
     }
     .share-a-ride-container .navigate-container .container {
-        width: 300px !important;
+        width: 90% !important;
+    }
+    .share-a-ride-container .address-field-change-button {
+        padding: 10px 0;
     }
     .on-trip-driver-container .driver-trip-buttons-container .container {
         width: 100% !important;
@@ -157,7 +160,7 @@
         margin: auto;
     }
     .carpool-ride-list-container .navigate-container .container {
-        width: 100% !important;
+        width: 95% !important;
         padding: 0;
     }
     .carpool-ride-list-container .driver-pool-results {
@@ -179,7 +182,7 @@
         margin-bottom: 4px;
     }
     .share-a-ride-container .navigate-container .container {
-        width: 100% !important;
+        width: 95% !important;
         padding: 0;
     }
     .update-new-address-container .container {
@@ -197,6 +200,18 @@
         font-size: 1rem;
     }
     .create-trip-container .address-field-change-button span.address-label {
+        font-size: 0.75rem;
+    }
+    .carpool-ride-list-container .address-field-change-button span.landmark-label {
+        font-size: 1rem;
+    }
+    .carpool-ride-list-container .address-field-change-button span.address-label {
+        font-size: 0.75rem;
+    }
+    .share-a-ride-container .address-field-change-button span.landmark-label {
+        font-size: 1rem;
+    }
+    .share-a-ride-container .address-field-change-button span.address-label {
         font-size: 0.75rem;
     }
 }

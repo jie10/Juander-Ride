@@ -64,15 +64,24 @@
                     </div>
                     <div class="carpool-ride-list-container" id="carpool_ride_list_container" style="display: block;">
                         <div class="navigate-container container-fluid" id="find_carpool_navigate_container" style="display: none;">
-                            <div class="container">
+                            <div class="container" style="position: absolute; top: 0; left: 50%; transform: translate(-50%, -20px);">
                                 <div class="row mb-4">
                                     <div class="col-12">
-                                        <input type="text" class="form-control" placeholder="Where to go?" aria-label="Search target location" aria-describedby="search-target-location" id="search_target_location" autocomplete="off">
+                                        <input type="text" class="form-control" placeholder="Where to?" aria-label="Search target location" aria-describedby="search-target-location" id="search_target_location" autocomplete="off">
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md d-grid gap-2 d-block">
-                                        <button type="button" class="btn btn-primary rounded-pill mx-4 mx-sm-5" id="find_pool_rider_button" disabled>Find Carpool Driver</button>
+                            </div>
+                            <div class="container" >
+                                <div class="mb-4 find-carpool-address-list" id="find_carpool_address_list">
+                                    <div class="col-12" style="border-bottom: 1px solid #F1F0F0;">
+                                        <button type="button" class="btn btn-outline address-field-change-button d-flex flex-row align-items-center" id="find_carpool_address_01">
+                                            <span class="icon"><i class="fa-solid fa-location-dot"></i></span>
+                                            <span class="details">
+                                                <span class="landmark-label" id="landmark_label">Landmark</span>
+                                                <span class="address-label" id="address_label">Region, province, municipality, barangay</span>
+                                            </span>
+                                            <span class="icon"><i class="fa-solid fa-arrow-right"></i></span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -217,15 +226,24 @@
                     </div>
                     <div class="share-a-ride-container" id="share_a_ride_container" style="display: none;">
                         <div class="navigate-container container-fluid" id="share_ride_navigate_container" style="display: none;">
-                            <div class="container">
+                            <div class="container" style="position: absolute; top: 0; left: 50%; transform: translate(-50%, -20px);">
                                 <div class="row mb-4">
                                     <div class="col-12">
-                                        <input type="text" class="form-control" placeholder="Where to go?" aria-label="Search target location" aria-describedby="search-target-location" id="search_target_location_driver" autocomplete="off">
+                                        <input type="text" class="form-control" placeholder="Where to?" aria-label="Search target location" aria-describedby="search-target-location" id="search_target_location_driver" autocomplete="off">
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md d-grid gap-2 d-block">
-                                        <button type="button" class="btn btn-primary rounded-pill mx-4 mx-sm-5" id="share_pool_ride_button_rider" disabled>Share Pool Ride</button>
+                            </div>
+                            <div class="container" >
+                                <div class="mb-4 share-carpool-address-list" id="share_carpool_address_list">
+                                    <div class="col-12" style="border-bottom: 1px solid #F1F0F0;">
+                                        <button type="button" class="btn btn-outline address-field-change-button d-flex flex-row align-items-center" id="share_carpool_address_01">
+                                            <span class="icon"><i class="fa-solid fa-location-dot"></i></span>
+                                            <span class="details">
+                                                <span class="landmark-label" id="landmark_label">Landmark</span>
+                                                <span class="address-label" id="address_label">Region, province, municipality, barangay</span>
+                                            </span>
+                                            <span class="icon"><i class="fa-solid fa-arrow-right"></i></span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

@@ -125,16 +125,22 @@
 }
 .carpool-ride-list-container .navigate-container {
     background-color: #FFFFFF;
-    position: absolute;
+    position: fixed;
     left: 50%;
     transform: translate(-50%, 0);
-    bottom: 56px;
+    bottom: 0;
     border-top: 1px solid #C0CED8;
-    padding: 40px 20px;
+    padding: 40px 20px 60px 20px;
     z-index: 1;
+    max-height: 60vh;
 }
 .carpool-ride-list-container .navigate-container .container {
-    width: 380px !important;
+    width: 400px !important;
+}
+.carpool-ride-list-container .navigate-container .find-carpool-address-list {
+    height: 50vh;
+    overflow: auto;
+    padding-bottom: 60px;
 }
 .carpool-ride-list-container .driver-pool-results {
     padding: 60px 0;
@@ -157,6 +163,31 @@
 }
 .carpool-ride-list-container .driver-pool-results .carpool-driver-to-choose-button .h6{
     font-weight: 700;
+}
+.carpool-ride-list-container .address-field-change-button {
+    padding: 10px 0;
+}
+.carpool-ride-list-container .address-field-change-button span {
+    display: block;
+    text-align: left;
+}
+.carpool-ride-list-container .address-field-change-button span.details {
+    flex-grow: 1;
+    overflow: hidden;
+}
+.carpool-ride-list-container .address-field-change-button span.icon {
+    font-size: 1.25rem;
+    padding: 0 18px;
+}
+.carpool-ride-list-container .address-field-change-button span.landmark-label {
+    font-size: 1.25rem;
+    word-wrap: break-word;
+}
+.carpool-ride-list-container .address-field-change-button span.address-label {
+    font-size: 0.875rem;
+}
+.carpool-ride-list-container .address-field-change-button-group button {
+    margin: 0 0 16px 0; 
 }
 .show-confirm-carpool-driver-container {
     height: 85vh;
@@ -315,16 +346,47 @@
 /** CARPOOL - SHARE A RIDE */
 .share-a-ride-container .navigate-container {
     background-color: #FFFFFF;
-    position: absolute;
+    position: fixed;
     left: 50%;
     transform: translate(-50%, 0);
-    bottom: 56px;
+    bottom: 0;
     border-top: 1px solid #C0CED8;
-    padding: 40px 20px;
+    padding: 40px 20px 60px 20px;
     z-index: 1;
+    max-height: 60vh;
+}
+.share-a-ride-container .navigate-container .share-carpool-address-list {
+    height: 50vh;
+    overflow: auto;
+    padding-bottom: 60px;
 }
 .share-a-ride-container .navigate-container .container {
     width: 380px !important;
+}
+.share-a-ride-container .address-field-change-button {
+    padding: 10px 0;
+}
+.share-a-ride-container .address-field-change-button span {
+    display: block;
+    text-align: left;
+}
+.share-a-ride-container .address-field-change-button span.details {
+    flex-grow: 1;
+    overflow: hidden;
+}
+.share-a-ride-container .address-field-change-button span.icon {
+    font-size: 1.25rem;
+    padding: 0 18px;
+}
+.share-a-ride-container .address-field-change-button span.landmark-label {
+    font-size: 1.25rem;
+    word-wrap: break-word;
+}
+.share-a-ride-container .address-field-change-button span.address-label {
+    font-size: 0.875rem;
+}
+.share-a-ride-container .address-field-change-button-group button {
+    margin: 0 0 16px 0; 
 }
 
 .create-trip-container {

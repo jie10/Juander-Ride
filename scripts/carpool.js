@@ -7,6 +7,7 @@ var USER_DATA_TRIP_CHECK = 'user_data_trip_check';
 var USER_DATA_BOOKING_CHECK = 'user_data_booking_check';
 var CURRENT_APP_VERSION_KEY = 'current_app_version';
 var USER_LOGIN_DATA_KEY = 'user_login_data';
+var CREATED_TRIPS_HISTORY_LIST = 'created_trips_history_list'
 
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
@@ -15,6 +16,8 @@ var MS_TEAMS_SEND_MESSAGE_TO_USER_LINK_URL = 'https://teams.microsoft.com/l/chat
 var PHONE_CALL_TO_USER_LINK_URL = 'tel:+';
 var driver_stops = [];
 var is_new_driver_stop = false;
+var find_carpool_search_key;
+var share_carpool_search_key;
 
 /** API ENDPOINTS */
 var UPDATE_TRIP_STATUS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip/status';
@@ -71,6 +74,9 @@ var new_target_location_province = document.getElementById('new_target_location_
 var new_target_location_municipality = document.getElementById('new_target_location_municipality');
 var new_target_location_barangay = document.getElementById('new_target_location_barangay');
 var new_address_confirm_button = document.getElementById('new_address_confirm_button');
+
+var find_carpool_address_list = document.getElementById('find_carpool_address_list');
+var share_carpool_address_list = document.getElementById('share_carpool_address_list');
 
 var _cacheExpiry = -(1/60); // 1 minute
 
@@ -563,10 +569,12 @@ function loadMainPage() {
     showShareRideNavigateContainer();
     showMoreCarpoolButtonsContainer();
     showShareRideNavigateContainer();
+
     search_target_location.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
     search_target_location_driver.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
-    find_pool_rider_button.disabled = user_login_data && user_login_data.address ? false : true;
-    share_pool_ride_button_rider.disabled = user_login_data && user_login_data.address ? false : true;
+
+    loadFindCreatedTripsHistoryList();
+
     carpool_on_booking_container.style.display = 'none';
 }
 
@@ -799,13 +807,13 @@ var show_confirm_carpool_rider = document.getElementById('show_confirm_carpool_r
 var search_target_location = document.getElementById('search_target_location');
 
 var more_carpool_buttons = document.getElementById('more_carpool_buttons');
-var find_pool_rider_button = document.getElementById('find_pool_rider_button');
+
 var trip_completed_button = document.getElementById('trip_completed_button');
 var join_pool_rider_button = document.getElementById('join_pool_rider_button');
 
 function getCarpoolRideList() {
     var email = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email;
-    var pointA = search_target_location.value;
+    var pointA = find_carpool_search_key;
     var options = {
         method: 'POST',
         headers: {
@@ -1019,7 +1027,69 @@ function loadCarpoolOnTripScreen(rider) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
+function findCarppolFromHistory(e) {
+    var element = e.id.split('_');
+    var _id = element[element.length - 1];
+    var created_trips_history = localStorage.getItem(CREATED_TRIPS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(CREATED_TRIPS_HISTORY_LIST)) : null;
 
+    if(created_trips_history) {
+        find_carpool_search_key = created_trips_history[_id].landmark + ', ' + created_trips_history[_id].address;
+        onFindCarpoolRide();
+    }
+}
+function shareCarppolFromHistory(e) {
+    var element = e.id.split('_');
+    var _id = element[element.length - 1];
+    var created_trips_history = localStorage.getItem(CREATED_TRIPS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(CREATED_TRIPS_HISTORY_LIST)) : null;
+
+    if(created_trips_history) {
+        share_carpool_search_key = created_trips_history[_id].landmark + ', ' + created_trips_history[_id].address;
+        onMoreShareRide();
+    }
+}
+function loadFindCreatedTripsHistoryList() {
+    var created_trips_history = localStorage.getItem(CREATED_TRIPS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(CREATED_TRIPS_HISTORY_LIST)) : null;
+
+    if (created_trips_history) {
+        find_carpool_address_list.innerHTML = '';
+        find_carpool_address_list.innerHTML = created_trips_history.map(function (trip, i) {
+            return '<div class=\"col-12\" style=\"border-bottom: 1px solid #F1F0F0;\">' +
+                        '<button type=\"button\" class=\"btn btn-outline address-field-change-button d-flex flex-row align-items-center\" id=\"find_carpool_address_' + i + '\" onclick=\"findCarppolFromHistory(this)\">' +
+                            '<span class=\"icon\"><i class=\"fa-solid fa-location-dot\"></i></span>' +
+                            '<span class=\"details\">' +
+                                '<span class=\"landmark-label\" id=\"landmark_label\">' + trip.landmark + '</span>' +
+                                '<span class=\"address-label\" id=\"address_label\">' + trip.address + '</span>' +
+                            '</span>' +
+                            '<span class=\"icon\"><i class=\"fa-solid fa-arrow-right\"></i></span>' +
+                        '</button>' +
+                    '</div>';
+        }).join('');
+    } else {
+        find_carpool_address_list.innerHTML = '';
+    }
+}
+
+function loadShareCreatedTripsHistoryList() {
+    var created_trips_history = localStorage.getItem(CREATED_TRIPS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(CREATED_TRIPS_HISTORY_LIST)) : null;
+
+    if (created_trips_history) {
+        share_carpool_address_list.innerHTML = '';
+        share_carpool_address_list.innerHTML = created_trips_history.map(function (trip, i) {
+            return '<div class=\"col-12\" style=\"border-bottom: 1px solid #F1F0F0;\">' +
+                        '<button type=\"button\" class=\"btn btn-outline address-field-change-button d-flex flex-row align-items-center\" id=\"share_carpool_address_' + i + '\" onclick=\"shareCarppolFromHistory(this)\">' +
+                            '<span class=\"icon\"><i class=\"fa-solid fa-location-dot\"></i></span>' +
+                            '<span class=\"details\">' +
+                                '<span class=\"landmark-label\" id=\"landmark_label\">' + trip.landmark + '</span>' +
+                                '<span class=\"address-label\" id=\"address_label\">' + trip.address + '</span>' +
+                            '</span>' +
+                            '<span class=\"icon\"><i class=\"fa-solid fa-arrow-right\"></i></span>' +
+                        '</button>' +
+                    '</div>';
+        }).join('');
+    } else {
+        share_carpool_address_list.innerHTML = '';
+    }
+}
 
 function onCarpoolRidelist () {
     var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
@@ -1029,7 +1099,8 @@ function onCarpoolRidelist () {
     }
 
     search_target_location.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
-    find_pool_rider_button.disabled = user_login_data && user_login_data.address ? false : true;
+
+    loadFindCreatedTripsHistoryList();
 
     carpool_ride_list_button.classList.add('active-tab-button');
     showCarpoolRideListContainer();
@@ -1039,9 +1110,7 @@ function onFindCarpoolRide () {
     // Check if there is an existing shuttle booking
     var localBooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING))
     if(localBooking != null){
-        showErrorAlertWithConfirmButton(function () {
-
-        }, 'Error', 'You have an existing shuttle booking', 'Ok');
+        showErrorAlertWithConfirmButton(function () {}, 'Error', 'You have an existing shuttle booking', 'Ok');
     }else{
         showActivityIndicator();
         showSecondaryTopNavbar();
@@ -1060,19 +1129,16 @@ function onJoinPoolRider (rider) {
         loadCarpoolOnTripScreen(rider);
     }
 }
-function onFindPoolRiderButtonState(e) {
-    e.preventDefault();
-
-    if (e.target.value.length > 0) {
-        find_pool_rider_button.disabled = false;
-    } else {
-        find_pool_rider_button.disabled = true;
-    }
-}
 
 carpool_ride_list_button.addEventListener('click', onCarpoolRidelist);
-find_pool_rider_button.addEventListener('click', onFindCarpoolRide);
-search_target_location.addEventListener('keyup', onFindPoolRiderButtonState);
+
+search_target_location.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        find_carpool_search_key = event.target.value;
+        onFindCarpoolRide();
+    }
+});
 
 
 /** SHARE-A-RIDE */
@@ -1081,7 +1147,6 @@ var share_ride_navigate_container = document.getElementById('share_ride_navigate
 var create_trip_container = document.getElementById('create_trip_container');
 var on_trip_driver_container = document.getElementById('on_trip_driver_container');
 
-var share_pool_ride_button_rider = document.getElementById('share_pool_ride_button_rider');
 var search_target_location_driver = document.getElementById('search_target_location_driver');
 var driver_available_seats = document.getElementById('driver_available_seats');
 var driver_contact_no = document.getElementById('driver_contact_no');
@@ -1141,39 +1206,52 @@ function createTrip() {
         },
         body: JSON.stringify(payload)
     };
+    var created_trips_history = localStorage.getItem(CREATED_TRIPS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(CREATED_TRIPS_HISTORY_LIST)) : null;
 
-    fetch(CREATE_TRIP_API_ENDPOINT, options)
-        .then(getResJSON)
-        .then(function (data) {
+    if (created_trips_history) {
+        created_trips_history.push(driver_stops[0]);
+        localStorage.setItem(CREATED_TRIPS_HISTORY_LIST, JSON.stringify(created_trips_history));
+    } else {
+        var arr = [];
+        arr.push(driver_stops[0])
+
+        localStorage.setItem(CREATED_TRIPS_HISTORY_LIST, JSON.stringify(arr));
+    }
+            hideActivityIndicator();
+            create_trip_container.querySelector('form').style.display = 'block';
+
+    // fetch(CREATE_TRIP_API_ENDPOINT, options)
+    //     .then(getResJSON)
+    //     .then(function (data) {
         
-            //var localTripObj = {
-            //    data: data,
-            //    createdAt: DATETIMESERVICE.getDateTime()
-            //}
-            //localStorage.setItem(DRIVER_TRIP, JSON.stringify(localTripObj));
-            hideActivityIndicator();
-            create_trip_container.querySelector('form').style.display = 'block';
-            showSuccessAlertWithConfirmButton(function () {
-                console.log('create trip');
-                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-            }, 'Trip has been created', '', 'Done');
-        })
-        .catch(function (err) {
-            console.error(err);
-            hideActivityIndicator();
-            create_trip_container.querySelector('form').style.display = 'block';
-            showErrorAlertWithConfirmButton(function () {
-                target_location_region.disabled = false;
-                target_location_province.disabled = false;
-                target_location_municipality.disabled = false;
-                target_location_barangay.disabled = false;
-                driver_available_seats.disabled = false;
-                departure_date_picker.disabled = false;
-                departure_time_picker.disabled = false;
-                driver_contact_no.disabled = false;
-                create_trip_button.disabled = true;
-            }, 'Error 500', 'Internal server error', 'Refresh');
-        });
+    //         //var localTripObj = {
+    //         //    data: data,
+    //         //    createdAt: DATETIMESERVICE.getDateTime()
+    //         //}
+    //         //localStorage.setItem(DRIVER_TRIP, JSON.stringify(localTripObj));
+    //         hideActivityIndicator();
+    //         create_trip_container.querySelector('form').style.display = 'block';
+    //         showSuccessAlertWithConfirmButton(function () {
+    //             console.log('create trip');
+    //             window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+    //         }, 'Trip has been created', '', 'Done');
+    //     })
+    //     .catch(function (err) {
+    //         console.error(err);
+    //         hideActivityIndicator();
+    //         create_trip_container.querySelector('form').style.display = 'block';
+    //         showErrorAlertWithConfirmButton(function () {
+    //             target_location_region.disabled = false;
+    //             target_location_province.disabled = false;
+    //             target_location_municipality.disabled = false;
+    //             target_location_barangay.disabled = false;
+    //             driver_available_seats.disabled = false;
+    //             departure_date_picker.disabled = false;
+    //             departure_time_picker.disabled = false;
+    //             driver_contact_no.disabled = false;
+    //             create_trip_button.disabled = true;
+    //         }, 'Error 500', 'Internal server error', 'Refresh');
+    //     });
 }
 function startTrip(_id, riders) {
     var payload = {
@@ -1511,7 +1589,6 @@ function selectAddressField(e) {
     var element = e.id.split('_');
     var _id = element[element.length - 1];
     var targetLocation = driver_stops[_id];
-    console.log(targetLocation)
     var landmark = targetLocation ? targetLocation.landmark : '';
     var location = targetLocation ? targetLocation.address.split(', ') : '';
 
@@ -1549,7 +1626,8 @@ function onShareCarpoolRide () {
     }
 
     search_target_location_driver.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
-    share_pool_ride_button_rider.disabled = user_login_data && user_login_data.address ? false : true;
+
+    loadShareCreatedTripsHistoryList();
 
     share_a_ride_button.classList.add('active-tab-button');
     showShareARideContainer();
@@ -1559,9 +1637,7 @@ function onMoreShareRide() {
     // check if there is an existing shuttle booking
     var localBooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING))
     if(localBooking != null){
-        showErrorAlertWithConfirmButton(function () {
-
-        }, 'Error', 'You have an existing shuttle booking', 'Ok');
+        showErrorAlertWithConfirmButton(function () {}, 'Error', 'You have an existing shuttle booking', 'Ok');
     }else{
         var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
 
@@ -1570,7 +1646,7 @@ function onMoreShareRide() {
         hideMainBottomNavbar();
         showCreateTripContainer();
 
-        var target_location = search_target_location_driver.value;
+        var target_location = share_carpool_search_key;
 
         driver_stops.push({
             landmark: target_location.split(', ').length > 4 ? target_location.split(', ')[0] : JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).landmark ? JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).landmark : '',
@@ -1717,15 +1793,6 @@ function onCompleteTrip(_id, riders) {
         }, 'Complete Trip', 'Are you sure you want to continue?', 'Yes', 'No');
     }
 }
-function onSharePoolRideButtonState(e) {
-    e.preventDefault();
-
-    if (e.target.value.length > 0) {
-        share_pool_ride_button_rider.disabled = false;
-    } else {
-        share_pool_ride_button_rider.disabled = true;
-    }
-}
 function onCreateTripRequiredFields() {
     var validAddressFields = driver_stops.filter(function (stop) {
                                 return stop.address && stop.landmark;
@@ -1815,13 +1882,19 @@ function onSelectNewMunicipality (selectedRegion, selectedProvince, selectedMuni
 }
 
 share_a_ride_button.addEventListener('click', onShareCarpoolRide);
-share_pool_ride_button_rider.addEventListener('click', onMoreShareRide);
 create_trip_button.addEventListener('click', onCreateTrip);
-search_target_location_driver.addEventListener('keyup', onSharePoolRideButtonState);
 driver_available_seats.addEventListener('change', onCreateTripRequiredFields);
 departure_date_picker.addEventListener('change', onCreateTripRequiredFields);
 departure_time_picker.addEventListener('change', onCreateTripRequiredFields);
 driver_contact_no.addEventListener('keyup', onCreateTripRequiredFields);
+
+search_target_location_driver.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        share_carpool_search_key = event.target.value;
+        onMoreShareRide();
+    }
+});
 
 add_new_stops_button.addEventListener('click', function () {
     is_new_driver_stop = true;
