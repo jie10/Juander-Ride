@@ -1066,7 +1066,7 @@ function loadFindCreatedTripsHistoryList() {
                     '</div>';
         }).join('');
     } else {
-        find_carpool_address_list.innerHTML = '';
+        find_carpool_address_list.innerHTML = '<p class=\"absolute-center\">No created trips yet</p>';;
     }
 }
 
@@ -1088,7 +1088,7 @@ function loadShareCreatedTripsHistoryList() {
                     '</div>';
         }).join('');
     } else {
-        share_carpool_address_list.innerHTML = '';
+        share_carpool_address_list.innerHTML = '<p class=\"absolute-center\">No created trips yet</p>';
     }
 }
 
