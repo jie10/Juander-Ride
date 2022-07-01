@@ -467,11 +467,12 @@ function getDriverTripSessionAPI(trip) {
     var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
     var drivernameArr = trip.fullname.split(' ');
     var origin = trip.origin;
+    var landmark = trip.landmark;
     var bookingName = capitalize(drivernameArr[drivernameArr.length - 1])  + ' Ride';
 
     document.getElementById('on_driver_trip_booking_name').innerHTML = bookingName;
     document.getElementById('on_driver_trip_departure_datetime').innerHTML = capitalize(timeFromNow) + ' ' + timeFromNowFormat;
-    document.getElementById('on_driver_trip_location').innerHTML = origin;
+    document.getElementById('on_driver_trip_location').innerHTML = '<span style=\"font-weight: 700;\">' + landmark + '</span>' + '<br/> ' + '<span style=\"font-size: 0.75rem;\">' + origin + '</span>';
     document.getElementById('on_driver_trip_departure_time').innerHTML = "<span style='font-weight: bold;'>Departure: </span>" + departureTime;
     document.getElementById('on_driver_trip_seat_number').innerHTML = trip.seatCount + '/' + trip.seats;
 
@@ -1209,49 +1210,54 @@ function createTrip() {
     var created_trips_history = localStorage.getItem(CREATED_TRIPS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(CREATED_TRIPS_HISTORY_LIST)) : null;
 
     if (created_trips_history) {
-        created_trips_history.push(driver_stops[0]);
-        localStorage.setItem(CREATED_TRIPS_HISTORY_LIST, JSON.stringify(created_trips_history));
+        var checkForDuplicates = created_trips_history.findIndex(function (trip) {
+            var combined = trip.landmark + ', ' + trip.address;
+            var currentTrip = driver_stops[0].landmark + ', ' + driver_stops[0].address;
+            return combined.toLowerCase() === currentTrip.toLowerCase();
+        });
+
+        if (checkForDuplicates < 0) {
+            created_trips_history.push(driver_stops[0]);
+            localStorage.setItem(CREATED_TRIPS_HISTORY_LIST, JSON.stringify(created_trips_history));
+        }
     } else {
         var arr = [];
         arr.push(driver_stops[0])
-
         localStorage.setItem(CREATED_TRIPS_HISTORY_LIST, JSON.stringify(arr));
     }
+
+    fetch(CREATE_TRIP_API_ENDPOINT, options)
+        .then(getResJSON)
+        .then(function (data) {
+        
+            //var localTripObj = {
+            //    data: data,
+            //    createdAt: DATETIMESERVICE.getDateTime()
+            //}
+            //localStorage.setItem(DRIVER_TRIP, JSON.stringify(localTripObj));
             hideActivityIndicator();
             create_trip_container.querySelector('form').style.display = 'block';
-
-    // fetch(CREATE_TRIP_API_ENDPOINT, options)
-    //     .then(getResJSON)
-    //     .then(function (data) {
-        
-    //         //var localTripObj = {
-    //         //    data: data,
-    //         //    createdAt: DATETIMESERVICE.getDateTime()
-    //         //}
-    //         //localStorage.setItem(DRIVER_TRIP, JSON.stringify(localTripObj));
-    //         hideActivityIndicator();
-    //         create_trip_container.querySelector('form').style.display = 'block';
-    //         showSuccessAlertWithConfirmButton(function () {
-    //             console.log('create trip');
-    //             window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-    //         }, 'Trip has been created', '', 'Done');
-    //     })
-    //     .catch(function (err) {
-    //         console.error(err);
-    //         hideActivityIndicator();
-    //         create_trip_container.querySelector('form').style.display = 'block';
-    //         showErrorAlertWithConfirmButton(function () {
-    //             target_location_region.disabled = false;
-    //             target_location_province.disabled = false;
-    //             target_location_municipality.disabled = false;
-    //             target_location_barangay.disabled = false;
-    //             driver_available_seats.disabled = false;
-    //             departure_date_picker.disabled = false;
-    //             departure_time_picker.disabled = false;
-    //             driver_contact_no.disabled = false;
-    //             create_trip_button.disabled = true;
-    //         }, 'Error 500', 'Internal server error', 'Refresh');
-    //     });
+            showSuccessAlertWithConfirmButton(function () {
+                console.log('create trip');
+                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+            }, 'Trip has been created', '', 'Done');
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            create_trip_container.querySelector('form').style.display = 'block';
+            showErrorAlertWithConfirmButton(function () {
+                target_location_region.disabled = false;
+                target_location_province.disabled = false;
+                target_location_municipality.disabled = false;
+                target_location_barangay.disabled = false;
+                driver_available_seats.disabled = false;
+                departure_date_picker.disabled = false;
+                departure_time_picker.disabled = false;
+                driver_contact_no.disabled = false;
+                create_trip_button.disabled = true;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
 }
 function startTrip(_id, riders) {
     var payload = {
