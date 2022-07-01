@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juander Ride</title>
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="../images/icons/juander-icon.png" />
+    <!-- BOOTSTRAP 5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Raleway);
+
+body {
+  color: #333;
+  background: #fcfcfc;
+  font-family: 'Raleway', sans-serif;
+  overflow-x: hidden;
+}
+
+.faq-header{
+  font-size: 2rem;
+  border-bottom: 1px dotted #ccc;
+  padding: 24px;
+  font-weight: 700;
+}
+
+.faq-content {
+  margin: 0 auto;
+}
+
+.faq-question {
+  padding: 20px 0;
+  border-bottom: 1px dotted #ccc;
+}
+
+.panel-title {
+  font-size: 24px;
+  width: 100%;
+  position: relative;
+  margin: 0;
+  padding: 10px 10px 0 48px;
+  display: block;
+  cursor: pointer;
+}
+
+.panel-content {
+  font-size: 20px;
+  padding: 0px 14px;
+  margin: 0 40px;
+  height: 0;
+  overflow: hidden;
+  z-index: -1;
+  position: relative;
+  opacity: 0;
+  -webkit-transition: .4s ease;
+  -moz-transition: .4s ease;
+  -o-transition: .4s ease;
+  transition: .4s ease;
+}
+
+.panel:checked ~ .panel-content{
+  height: auto;
+  opacity: 1;
+  padding: 14px;
+}
+
+.plus {
+  position: absolute;
+  margin-left: 20px;
+  margin-top: 4px;
+  z-index: 5;
+  font-size: 42px;
+  line-height: 100%;
+  -webkit-user-select: none;    
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-transition: .2s ease;
+  -moz-transition: .2s ease;
+  -o-transition: .2s ease;
+  transition: .2s ease;
+}
+
+.panel:checked ~ .plus {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.panel {
+  display: none;
+}
+
+@media only screen and (max-width: 480px) {
+  .faq-header{
+      font-size: 1.5rem;
+  }
+  .faq-question .panel-title {
+      font-size: 1rem;
+  }
+  .faq-question .panel-content {
+      font-size: 0.875rem;
+  }
+}
+    </style>
+</head>
+<body>
+  <div class="container">
+    <div class="faq-header">Frequently Asked Questions</div>
+
+    <div class="faq-content">
+      <div class="faq-question">
+        <input id="q1" type="checkbox" class="panel">
+        <div class="plus">+</div>
+        <label for="q1" class="panel-title">Question number one?</label>
+        <div class="panel-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tellus metus, molestie vitae lacinia tempus, gravida ut augue. Ut sit amet augue nisi. Duis lectus ante, consectetur et rutrum id, mollis eget tellus. In et commodo erat. Donec ullamcorper diam quis sem convallis, ac varius est eleifend. Quisque eleifend vitae odio id consectetur. Duis rhoncus urna vitae iaculis tincidunt. Morbi justo ante, vehicula eu massa eget, iaculis pellentesque neque.</div>
+      </div>
+      
+      <div class="faq-question">
+        <input id="q2" type="checkbox" class="panel">
+        <div class="plus">+</div>
+        <label for="q2" class="panel-title">Question number two?</label>
+        <div class="panel-content">Sed posuere viverra eros, sed porta odio vulputate et. Nulla facilisi. Aenean sit amet nibh eget erat volutpat semper a quis quam. Praesent lobortis malesuada libero, at hendrerit orci tempus sed. Donec non est massa. Etiam hendrerit sollicitudin tortor, at gravida risus lacinia vitae. Aliquam vel ipsum molestie, pretium diam in, finibus orci. Sed pharetra consequat felis, vitae viverra nisi imperdiet non. Donec eros neque, fermentum id sollicitudin ut, molestie vel enim.</div>
+      </div>
+      
+      <div class="faq-question">
+        <input id="q3" type="checkbox" class="panel">
+        <div class="plus">+</div>
+        <label for="q3" class="panel-title">Question number three?</label>
+        <div class="panel-content">Proin posuere lectus orci, ut condimentum leo sollicitudin ac. Proin eu nulla eget magna sagittis accumsan ac facilisis sapien. Etiam justo elit, pulvinar quis enim sed, varius suscipit mi. Donec semper vitae nibh sit amet gravida. Sed felis tellus, posuere nec luctus quis, finibus at risus. Pellentesque ut ullamcorper augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Ut tincidunt libero sit amet tellus auctor, in accumsan enim commodo. Sed nec sapien lacus. Etiam nisi diam, sagittis a ultrices nec, placerat non odio. Donec vitae nunc lacus. Morbi luctus volutpat ante cursus mollis.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
