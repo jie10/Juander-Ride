@@ -28,7 +28,7 @@ var sign_up_view_button = document.getElementById('sign_up_view_button');
 var back_to_login_view_button = document.getElementById('back_to_login_view_button');
 var login_button = document.getElementById('login_button');
 var sign_up_button = document.getElementById('sign_up_button');
-var forgot_pin_code_button = document.getElementById('forgot_pin_code_button');
+// var forgot_pin_code_button = document.getElementById('forgot_pin_code_button');
 
 var target_location_landmark = document.getElementById('target_location_landmark');
 var target_location_region = document.getElementById('target_location_region');
@@ -429,7 +429,7 @@ user_sign_up_mobile_number.addEventListener('keyup', onRegisterTyping);
 
 login_button.addEventListener('click', onLogin);
 sign_up_button.addEventListener('click', onRegister);
-forgot_pin_code_button.addEventListener('click', onForgotPinCode);
+// forgot_pin_code_button.addEventListener('click', onForgotPinCode);
 
 target_location_region.addEventListener('change', function (e) {
     onSelectRegion (e.target.value);

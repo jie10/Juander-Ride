@@ -42,7 +42,7 @@ var settings_container = document.getElementById('settings_container');
 
 var driver_contact_no = document.getElementById('driver_contact_no');
 var update_account_button = document.getElementById('update_account_button');
-var reset_pin_code_button = document.getElementById('reset_pin_code_button');
+// var reset_pin_code_button = document.getElementById('reset_pin_code_button');
 
 var activity_indicator = document.getElementById('activity_indicator');
 
@@ -871,7 +871,7 @@ logout_button.addEventListener('click', onLogout);
 
 driver_contact_no.addEventListener('keyup', onUpdateAccountRequiredFields);
 update_account_button.addEventListener('click', onUpdateAccount);
-reset_pin_code_button.addEventListener('click', onResetPinCode);
+// reset_pin_code_button.addEventListener('click', onResetPinCode);
 
 target_location_region.addEventListener('change', function (e) {
     onSelectRegion (e.target.value);
