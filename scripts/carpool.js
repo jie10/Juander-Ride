@@ -77,6 +77,8 @@ var new_address_confirm_button = document.getElementById('new_address_confirm_bu
 
 var find_carpool_address_list = document.getElementById('find_carpool_address_list');
 var share_carpool_address_list = document.getElementById('share_carpool_address_list');
+var search_target_location_button = document.getElementById('search_target_location_button');
+var search_target_location_driver_button = document.getElementById('search_target_location_driver_button');
 
 var _cacheExpiry = -(1/60); // 1 minute
 
@@ -1141,6 +1143,12 @@ search_target_location.addEventListener("keypress", function(event) {
     }
 });
 
+search_target_location_button.addEventListener("click", function(event) {
+    event.preventDefault();
+    find_carpool_search_key = event.target.value;
+    onFindCarpoolRide();
+});
+
 
 /** SHARE-A-RIDE */
 var share_ride_navigate_container = document.getElementById('share_ride_navigate_container');
@@ -1900,6 +1908,12 @@ search_target_location_driver.addEventListener("keypress", function(event) {
         share_carpool_search_key = event.target.value;
         onMoreShareRide();
     }
+});
+
+search_target_location_driver_button.addEventListener("click", function(event) {
+    event.preventDefault();
+    share_carpool_search_key = event.target.value;
+    onMoreShareRide();
 });
 
 add_new_stops_button.addEventListener('click', function () {
