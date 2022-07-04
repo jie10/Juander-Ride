@@ -79,7 +79,6 @@ var new_address_confirm_button = document.getElementById('new_address_confirm_bu
 
 var find_carpool_address_list = document.getElementById('find_carpool_address_list');
 var share_carpool_address_list = document.getElementById('share_carpool_address_list');
-var search_target_location_button = document.getElementById('search_target_location_button');
 var search_target_location_driver_button = document.getElementById('search_target_location_driver_button');
 var find_carpool_saved_places = document.getElementById('find_carpool_saved_places');
 var close_saved_places_button = document.getElementById('close_saved_places_button');
@@ -577,8 +576,8 @@ function loadMainPage() {
     showShareRideNavigateContainer();
     showMoreCarpoolButtonsContainer();
     showShareRideNavigateContainer();
-
-    search_target_location.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
+    search_target_location.value = '';
+    search_fq_target_location.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
     search_target_location_driver.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
 
     loadFindCreatedTripsHistoryList();
@@ -1091,8 +1090,6 @@ function loadSavedBookingsList() {
     var saved_bookings_history = localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST)) : null;
 
     if (saved_bookings_history) {
-        search_fq_target_location.disabled = false;
-        search_fq_target_location_button.disabled = false;
         document.querySelector('.frequently-used-list h4').style.display = 'block';
         frequently_used_address_list.innerHTML = '';
         frequently_used_address_list.innerHTML = saved_bookings_history.map(function (trip, i) {
@@ -1108,8 +1105,6 @@ function loadSavedBookingsList() {
                     '</div>';
         }).join('');
     } else {
-        search_fq_target_location.disabled = true;
-        search_fq_target_location_button.disabled = true;
         document.querySelector('.frequently-used-list h4').style.display = 'none';
         frequently_used_address_list.innerHTML = '<p class=\"absolute-center\" style=\"font-size: 0.75rem; text-align: center;\">No saved bookings found</p>';
     }
@@ -1178,7 +1173,8 @@ function onCarpoolRidelist () {
         share_a_ride_button.classList.remove('active-tab-button');
     }
 
-    search_target_location.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
+    search_target_location.value = '';
+    search_fq_target_location.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
 
     loadFindCreatedTripsHistoryList();
 
@@ -1213,29 +1209,22 @@ function onJoinPoolRider (rider) {
 carpool_ride_list_button.addEventListener('click', onCarpoolRidelist);
 
 search_target_location.addEventListener("keypress", function() {
+    var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
     hideMainBottomNavbar();
     hideMainTopNavbar();
     find_carpool_navigate_container.style.display = 'none';
     find_carpool_saved_places.style.display = 'block';
-    search_fq_target_location.value = search_target_location.value;
+    search_fq_target_location.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
     loadSavedBookingsList();
 });
 
 search_target_location.addEventListener("click", function() {
+    var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
     hideMainBottomNavbar();
     hideMainTopNavbar();
     find_carpool_navigate_container.style.display = 'none';
     find_carpool_saved_places.style.display = 'block';
-    search_fq_target_location.value = search_target_location.value;
-    loadSavedBookingsList();
-});
-
-search_target_location_button.addEventListener("click", function(e) {
-    hideMainBottomNavbar();
-    hideMainTopNavbar();
-    find_carpool_navigate_container.style.display = 'none';
-    find_carpool_saved_places.style.display = 'block';
-    search_fq_target_location.value = search_target_location.value;
+    search_fq_target_location.value = user_login_data && user_login_data.address && user_login_data.landmark ? user_login_data.landmark + ', ' + user_login_data.address : user_login_data && user_login_data.address ? user_login_data.address : '';
     loadSavedBookingsList();
 });
 
