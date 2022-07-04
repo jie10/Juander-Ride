@@ -142,6 +142,24 @@
     overflow: auto;
     padding-bottom: 60px;
 }
+.carpool-ride-list-container .saved-places-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #FFFFFF;
+    padding: 16px 8px;
+    z-index: 2;
+}
+.carpool-ride-list-container .saved-places-container .container {
+    width: 400px !important;
+}
+.carpool-ride-list-container .navigate-container .frequently-used-address-list {
+    height: 50vh;
+    overflow: auto;
+    padding-bottom: 60px;
+}
 .carpool-ride-list-container .driver-pool-results {
     padding: 60px 0;
 }

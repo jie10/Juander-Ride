@@ -73,18 +73,18 @@
                                 </div>
                             </div>
                             <div class="container" >
-                                <div class="mb-4 find-carpool-address-list" id="find_carpool_address_list">
-                                    <div class="col-12" style="border-bottom: 1px solid #F1F0F0;">
-                                        <button type="button" class="btn btn-outline address-field-change-button d-flex flex-row align-items-center" id="find_carpool_address_01">
-                                            <span class="icon"><i class="fa-solid fa-location-dot"></i></span>
-                                            <span class="details">
-                                                <span class="landmark-label" id="landmark_label">Landmark</span>
-                                                <span class="address-label" id="address_label">Region, province, municipality, barangay</span>
-                                            </span>
-                                            <span class="icon"><i class="fa-solid fa-arrow-right"></i></span>
-                                        </button>
-                                    </div>
-                                </div>
+                                <div class="mb-4 find-carpool-address-list" id="find_carpool_address_list"></div>
+                            </div>
+                        </div>
+                        <div class="saved-places-container container-fluid" id="find_carpool_saved_places" style="display: none;">
+                            <div class="input-group">
+                                <button class="btn btn-outlined" type="button" id="close_saved_places_button"><i class="fa-solid fa-chevron-left"></i></button>
+                                <input type="text" class="form-control" placeholder="Where to?" aria-label="Search target location" aria-describedby="search-target-location" id="search_fq_target_location" autocomplete="off">
+                                <button class="btn btn-secondary" type="button" id="search_fq_target_location_button"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                            <div class="container frequently-used-list" >
+                                <h4 class="highlight" style="margin: 16px 0;">Frequently Used</h4>
+                                <div class="mb-4 frequently-used-address-list" id="frequently_used_address_list"></div>
                             </div>
                         </div>
                         <div class="driver-pool-results" style="display: none;" id="driver_pool_results_container" style="display: none;">

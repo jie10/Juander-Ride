@@ -7,7 +7,8 @@ var USER_DATA_TRIP_CHECK = 'user_data_trip_check';
 var USER_DATA_BOOKING_CHECK = 'user_data_booking_check';
 var CURRENT_APP_VERSION_KEY = 'current_app_version';
 var USER_LOGIN_DATA_KEY = 'user_login_data';
-var CREATED_TRIPS_HISTORY_LIST = 'created_trips_history_list'
+var CREATED_TRIPS_HISTORY_LIST = 'created_trips_history_list';
+var SAVED_BOOKINGS_HISTORY_LIST = 'saved_bookings_history_list'
 
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
@@ -80,6 +81,10 @@ var find_carpool_address_list = document.getElementById('find_carpool_address_li
 var share_carpool_address_list = document.getElementById('share_carpool_address_list');
 var search_target_location_button = document.getElementById('search_target_location_button');
 var search_target_location_driver_button = document.getElementById('search_target_location_driver_button');
+var find_carpool_saved_places = document.getElementById('find_carpool_saved_places');
+var close_saved_places_button = document.getElementById('close_saved_places_button');
+var search_fq_target_location = document.getElementById('search_fq_target_location');
+var search_fq_target_location_button = document.getElementById('search_fq_target_location_button');
 
 var _cacheExpiry = -(1/60); // 1 minute
 
@@ -1007,6 +1012,32 @@ function loadCarpoolOnTripScreen(rider) {
 
             if (data) {
                 console.log('loadCarpoolOnTripScreen'); 
+                var saved_bookings_history = localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST)) : null;
+
+                if (saved_bookings_history) {
+                    var checkForDuplicates = saved_bookings_history.findIndex(function (trip) {
+                        var combined = trip.landmark + ', ' + trip.address;
+                        var currentTrip = rider.landmark + ', ' + rider.origin;
+
+                        return combined.toLowerCase() === currentTrip.toLowerCase();
+                    });
+        
+                    if (checkForDuplicates < 0) {
+                        saved_bookings_history.push({
+                            landmark: rider.landmark,
+                            address: rider.origin
+                        });
+                        localStorage.setItem(SAVED_BOOKINGS_HISTORY_LIST, JSON.stringify(saved_bookings_history));
+                    }
+                } else {
+                    var arr = [];
+                    arr.push({
+                        landmark: rider.landmark,
+                        address: rider.origin
+                    });
+                    localStorage.setItem(SAVED_BOOKINGS_HISTORY_LIST, JSON.stringify(arr));
+                }
+
                 localStorage.setItem(DRIVER_BOOKING, JSON.stringify(data));
                 var localBooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING))
                 if (localBooking.status === 0 || localBooking.status === 1 || localBooking.status === 4) {
@@ -1042,6 +1073,45 @@ function shareCarppolFromHistory(e) {
     if(created_trips_history) {
         share_carpool_search_key = created_trips_history[_id].landmark + ', ' + created_trips_history[_id].address;
         onMoreShareRide();
+    }
+}
+function findCarpoolFromSavedBookings(e) {
+    var element = e.id.split('_');
+    var _id = element[element.length - 1];
+    var saved_bookings_history = localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST)) : null;
+
+    if(saved_bookings_history) {
+        find_carpool_search_key = saved_bookings_history[_id].landmark + ', ' + saved_bookings_history[_id].address;
+        find_carpool_navigate_container.style.display = 'block';
+        find_carpool_saved_places.style.display = 'none';
+        onFindCarpoolRide();
+    }
+}
+function loadSavedBookingsList() {
+    var saved_bookings_history = localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST)) : null;
+
+    if (saved_bookings_history) {
+        search_fq_target_location.disabled = false;
+        search_fq_target_location_button.disabled = false;
+        document.querySelector('.frequently-used-list h4').style.display = 'block';
+        frequently_used_address_list.innerHTML = '';
+        frequently_used_address_list.innerHTML = saved_bookings_history.map(function (trip, i) {
+            return '<div class=\"col-12\" style=\"border-bottom: 1px solid #F1F0F0;\">' +
+                        '<button type=\"button\" class=\"btn btn-outline address-field-change-button d-flex flex-row align-items-center\" id=\"find_carpool_booking_address_' + i + '\" onclick=\"findCarpoolFromSavedBookings(this)\">' +
+                            '<span class=\"icon\"><i class=\"fa-solid fa-location-dot\"></i></span>' +
+                            '<span class=\"details\">' +
+                                '<span class=\"landmark-label\" id=\"landmark_label\">' + trip.landmark + '</span>' +
+                                '<span class=\"address-label\" id=\"address_label\">' + trip.address + '</span>' +
+                            '</span>' +
+                            '<span class=\"icon\"><i class=\"fa-solid fa-arrow-right\"></i></span>' +
+                        '</button>' +
+                    '</div>';
+        }).join('');
+    } else {
+        search_fq_target_location.disabled = true;
+        search_fq_target_location_button.disabled = true;
+        document.querySelector('.frequently-used-list h4').style.display = 'none';
+        frequently_used_address_list.innerHTML = '<p class=\"absolute-center\" style=\"font-size: 0.75rem; text-align: center;\">No saved bookings found</p>';
     }
 }
 function loadFindCreatedTripsHistoryList() {
@@ -1142,17 +1212,55 @@ function onJoinPoolRider (rider) {
 
 carpool_ride_list_button.addEventListener('click', onCarpoolRidelist);
 
-search_target_location.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        find_carpool_search_key = event.target.value;
+search_target_location.addEventListener("keypress", function() {
+    hideMainBottomNavbar();
+    hideMainTopNavbar();
+    find_carpool_navigate_container.style.display = 'none';
+    find_carpool_saved_places.style.display = 'block';
+    search_fq_target_location.value = search_target_location.value;
+    loadSavedBookingsList();
+});
+
+search_target_location.addEventListener("click", function() {
+    hideMainBottomNavbar();
+    hideMainTopNavbar();
+    find_carpool_navigate_container.style.display = 'none';
+    find_carpool_saved_places.style.display = 'block';
+    search_fq_target_location.value = search_target_location.value;
+    loadSavedBookingsList();
+});
+
+search_target_location_button.addEventListener("click", function(e) {
+    hideMainBottomNavbar();
+    hideMainTopNavbar();
+    find_carpool_navigate_container.style.display = 'none';
+    find_carpool_saved_places.style.display = 'block';
+    search_fq_target_location.value = search_target_location.value;
+    loadSavedBookingsList();
+});
+
+close_saved_places_button.addEventListener("click", function(e) {
+    e.preventDefault();
+    find_carpool_navigate_container.style.display = 'block';
+    find_carpool_saved_places.style.display = 'none';
+    reloadCurrentPage(true);
+});
+
+search_fq_target_location.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        find_carpool_search_key = e.target.value;
+        find_carpool_navigate_container.style.display = 'block';
+        find_carpool_saved_places.style.display = 'none';
         onFindCarpoolRide();
     }
 });
 
-search_target_location_button.addEventListener("click", function(event) {
-    event.preventDefault();
-    find_carpool_search_key = search_target_location.value;
+search_fq_target_location_button.addEventListener("click", function(e) {
+    e.preventDefault();
+    find_carpool_search_key = search_fq_target_location.value;
+    find_carpool_navigate_container.style.display = 'block';
+    find_carpool_saved_places.style.display = 'none';
     onFindCarpoolRide();
 });
 

@@ -55,6 +55,9 @@
     .carpool-ride-list-container .navigate-container .container {
         width: 90% !important;
     }
+    .carpool-ride-list-container .saved-places-container .container {
+        width: 90% !important;
+    }
     .carpool-ride-list-container .address-field-change-button {
         padding: 10px 0;
     }
@@ -160,6 +163,10 @@
         margin: auto;
     }
     .carpool-ride-list-container .navigate-container .container {
+        width: 95% !important;
+        padding: 0;
+    }
+    .carpool-ride-list-container .saved-places-container .container {
         width: 95% !important;
         padding: 0;
     }
