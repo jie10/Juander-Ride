@@ -674,6 +674,7 @@ document.addEventListener('DOMContentLoaded', function () {
         JUANDERSERVICE.userShuttleCheck(userObj['email'])
         .then(getResJSON)
         .then(function (data) {
+            console.log(data['booking'].status)
             // console.log(data)
             if(data['trip'] == null && data['booking'] == null){
                 // check if there is a recent booking
@@ -682,7 +683,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if(data['booking'] != null){
 
-                if(data['booking']['tripStatus'] === 4){
+                if(data['booking']['tripStatus'] === 4 || data['booking']['tripStatus'] === 2){
                     localStorage.setItem(DRIVER_BOOKING, null);
                     reloadTripList();
                 }else{
