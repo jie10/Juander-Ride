@@ -8,9 +8,10 @@ var USER_DATA_BOOKING_CHECK = 'user_data_booking_check';
 var CURRENT_APP_VERSION_KEY = 'current_app_version';
 var USER_LOGIN_DATA_KEY = 'user_login_data';
 var CREATED_TRIPS_HISTORY_LIST = 'created_trips_history_list';
-var SAVED_BOOKINGS_HISTORY_LIST = 'saved_bookings_history_list'
+var SAVED_BOOKINGS_HISTORY_LIST = 'saved_bookings_history_list';
 
 /** CONSTANT VALUES */
+var _AES = 'technologyandinnovations';
 var DELAY_TIME_IN_MILLISECONDS = 1000;
 var regions = Object.keys(location_list);
 var MS_TEAMS_SEND_MESSAGE_TO_USER_LINK_URL = 'https://teams.microsoft.com/l/chat/0/0?users=';
@@ -57,6 +58,7 @@ var back_to_previous_page_button = document.getElementById('back_to_previous_pag
 var driver_trip_predeparture_btn = document.getElementById('driver_trip_predeparture_btn');
 var driver_trip_start_btn = document.getElementById('driver_trip_start_btn');
 var driver_trip_cancel_btn = document.getElementById('driver_trip_cancel_btn');
+var driver_trip_generate_qrcode_btn = document.getElementById('driver_trip_generate_qrcode_btn');
 var driver_trip_complete_btn = document.getElementById('driver_trip_complete_btn');
 var driver_trip_booking_list = document.getElementById('driver_trip_booking_list');
 
@@ -203,6 +205,7 @@ function getTripStatusPopup(tripID, status, riders, payload = null) {
                 driver_trip_predeparture_btn.disabled = true;
                 driver_trip_start_btn.disabled = true;
                 driver_trip_cancel_btn.disabled = true;
+                driver_trip_generate_qrcode_btn.disabled = true;
                 driver_trip_complete_btn.disabled = true;
                 startTrip(tripID, riders);
             }, 'Trip Pending', 'Would you like to start your trip?', 'Yes', 'No');
@@ -212,6 +215,7 @@ function getTripStatusPopup(tripID, status, riders, payload = null) {
                 showActivityIndicator();
                 driver_trip_predeparture_btn.disabled = true;
                 driver_trip_start_btn.disabled = true;
+                driver_trip_generate_qrcode_btn.disabled = true;
                 driver_trip_cancel_btn.disabled = true;
                 driver_trip_complete_btn.disabled = true;
 
@@ -223,6 +227,7 @@ function getTripStatusPopup(tripID, status, riders, payload = null) {
                 showActivityIndicator();
                 driver_trip_predeparture_btn.disabled = true;
                 driver_trip_start_btn.disabled = true;
+                driver_trip_generate_qrcode_btn.disabled = true;
                 driver_trip_cancel_btn.disabled = true;
                 driver_trip_complete_btn.disabled = true;
                 cancelTrip(tripID, riders);
@@ -235,6 +240,7 @@ function getTripStatusPopup(tripID, status, riders, payload = null) {
                 driver_trip_predeparture_btn.disabled = true;
                 driver_trip_start_btn.disabled = true;
                 driver_trip_cancel_btn.disabled = true;
+                driver_trip_generate_qrcode_btn.disabled = true;
                 driver_trip_complete_btn.disabled = true;
                 confirmTripBooking(payload);
             }, 'Confirm Booking', 'Would you like to confirm this booking?', 'Yes', 'No');
@@ -244,7 +250,6 @@ function getTripStatusPopup(tripID, status, riders, payload = null) {
 }
 
 function getRiderBookingsStatusAPI(booking) {
-    // console.log('shall pass too', booking)
     if(booking['booktype'] == 0){
         var timeFromNowFormat = moment(booking.departTime).utc().format('MMMM D YYYY  h:mm a');
         var timeFromNow = moment(new Date(timeFromNowFormat)).fromNow();
@@ -413,7 +418,6 @@ function addBooking(payload, status) {
     var name = ''
     var location = ''
     var statusMessage = ''
-    
     switch(status) {
       case -1:
         listStyle = 'list-item-vacant'
@@ -485,12 +489,27 @@ function getDriverTripSessionAPI(trip) {
     if (tripStatus === 1) {
         driver_trip_predeparture_btn.style.display = 'none';
         driver_trip_start_btn.style.display = 'none';
+        driver_trip_generate_qrcode_btn.style.display = 'block';
         driver_trip_cancel_btn.style.display = 'none';
         driver_trip_complete_btn.style.display = 'block';
+
+        var qrcode = new QRCode(document.getElementById("trip_qr_code"), {
+            width: 220,
+	        height: 220,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+
+        var encrypted = CryptoJS.AES.encrypt(tripID, _AES).toString();
+
+        qrcode.clear(); // clear the code.
+        qrcode.makeCode(encrypted); // make another code.
     } else if (tripStatus === 0) {
         // driver_trip_predeparture_btn.style.display = 'block';
         driver_trip_start_btn.style.display = 'block';
         driver_trip_cancel_btn.style.display = 'block';
+        driver_trip_generate_qrcode_btn.style.display = 'none';
         driver_trip_complete_btn.style.display = 'none';
     }
 
@@ -558,7 +577,7 @@ function getDriverTripSessionAPI(trip) {
     });
     driver_trip_cancel_btn.addEventListener('click', function (e) {
         return getTripStatusPopup(tripID, 3, trip.riders);
-    });driver_trip_complete_btn
+    });
     driver_trip_complete_btn.addEventListener('click', function (e) {
         return getTripStatusPopup(tripID, 2, trip.riders);
     });
@@ -1391,11 +1410,13 @@ function startTrip(_id, riders) {
             driver_trip_predeparture_btn.disabled = true;
             driver_trip_start_btn.disabled = true;
             driver_trip_cancel_btn.disabled = true;
+            driver_trip_generate_qrcode_btn.disabled = false;
             driver_trip_complete_btn.disabled = false;
 
             driver_trip_predeparture_btn.style.display = 'none';
             driver_trip_start_btn.style.display = 'none';
             driver_trip_cancel_btn.style.display = 'none';
+            driver_trip_generate_qrcode_btn.style.display = 'block';
             driver_trip_complete_btn.style.display = 'block';
 
             hideActivityIndicator();

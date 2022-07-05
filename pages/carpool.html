@@ -21,6 +21,8 @@
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <!-- CRYPTO JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <!-- QRCode JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- CLEAVE JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js" integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- MOMENT JS -->
@@ -363,16 +365,68 @@
                                 </div>
                             </div>
                             <div id="driver_trip_booking_list" class="driver-trip-booking-list" style="display: none;"></div>
-                            <div class="driver-trip-buttons-container" style="position: fixed; width: 100%; bottom: 0; left: 0; right: 0; margin-bottom: 55px; padding: 20px 0 36px 0;">
+                            <div class="driver-trip-buttons-container" style="position: fixed; width: 100%; bottom: 0; left: 0; right: 0; margin-bottom: 55px; padding: 20px 0;">
                                 <div class="container">
-                                    <div class="row driver-trip-buttons">
-                                        <button id="driver_trip_predeparture_btn" type="button" class="col-12 btn btn-primary" style="background-color: #eaeaea; border-color: #eaeaea; border-radius: 24px; display: none; color: #929292;">Pre-Departure</button>
-                                        <button id="driver_trip_start_btn" type="button" class="col-12 btn btn-primary" style="background-color: #eaeaea; border-color: #eaeaea; border-radius: 24px; display: none; color: #929292;">Start</button>
-                                        <button id="driver_trip_complete_btn" type="button" class="col-12 btn btn-primary" style="background-color: #05a5df; border-color: #05a5df; border-radius: 24px; display: none;">Complete</button>
-                                        <button id="driver_trip_cancel_btn" type="button" class="col-12 btn btn-outlined" style="color: #9d9d9d; border-radius: 24px; display: none;">Cancel</button>
+                                    <div class="row driver-trip-buttons d-flex justify-content-center">
+                                        <button id="driver_trip_predeparture_btn" type="button" class="col-4 btn btn-primary" style="background-color: #eaeaea; border-color: #eaeaea; display: none; color: #929292;">
+                                            <span class="icon">
+                                                <i class="fa-solid fa-megaphone"></i>
+                                            </span>
+                                            <span class="label">
+                                                Pre-Departure
+                                            </span>
+                                        </button>
+                                        <button id="driver_trip_start_btn" type="button" class="col-4 btn btn-primary" style="background-color: #05a5df; color: #f7f7f7; border-color: #eaeaea; display: none;">
+                                            <span class="icon">
+                                                <i class="fa-solid fa-car-on"></i>
+                                            </span>
+                                            <span class="label">
+                                                Start
+                                            </span>
+                                        </button>
+                                        <button id="driver_trip_complete_btn" type="button" class="col-4 btn btn-primary" style="background-color: #05a5df; border-color: #05a5df; display: none;">
+                                            <span class="icon">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </span>
+                                            <span class="label">
+                                                Finish
+                                            </span>
+                                        </button>
+                                        <button id="driver_trip_generate_qrcode_btn" type="button" class="col-4 btn btn-primary" style="background-color: #9d9d9d; border-color: #9d9d9d; color: #f7f7f7; display: none;" data-bs-toggle="modal" data-bs-target="#show-driver-qr-code">
+                                            <span class="icon">
+                                                <i class="fa-solid fa-qrcode"></i>
+                                            </span>
+                                            <span class="label">
+                                                QR
+                                            </span>
+                                        </button>
+                                        <button id="driver_trip_cancel_btn" type="button" class="col-4 btn btn-outlined" style="color: #9d9d9d; background-color: #eaeaea; display: none;">
+                                            <span class="icon">
+                                                <i class="fa-solid fa-ban"></i>
+                                            </span>
+                                            <span class="label">
+                                                Cancel
+                                            </span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal" id="show-driver-qr-code" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-fullscreen">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" style="font-weight: 700;">Trip QR Code</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div id="trip_qr_code" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <p style="font-size: 0.75rem; text-align: center;">Update passenger's booking by scanning QR code for current trip</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                         </div>
                     </div>
                 </div>

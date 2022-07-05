@@ -113,9 +113,6 @@
         width: 100% !important;
         padding: 0;
     }
-    .on-trip-driver-container .driver-trip-buttons-container .container {
-        width: 240px !important;
-    }
     .carpool-container .more-carpool-buttons button {
         font-size: 0.75rem;
     }
@@ -200,9 +197,6 @@
         width: 100% !important;
         padding: 0;
     }
-    .on-trip-driver-container .driver-trip-buttons-container .container {
-        width: 200px !important;
-    }
     .create-trip-container .address-field-change-button span.landmark-label {
         font-size: 1rem;
     }
@@ -220,5 +214,11 @@
     }
     .share-a-ride-container .address-field-change-button span.address-label {
         font-size: 0.75rem;
+    }
+    .on-trip-driver-container .driver-trip-buttons button span {
+        font-size: 0.75rem;
+    }
+    .on-trip-driver-container .driver-trip-buttons button span.icon {
+        font-size: 1.5rem;
     }
 }
