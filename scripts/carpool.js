@@ -1419,6 +1419,19 @@ function startTrip(_id, riders) {
             driver_trip_generate_qrcode_btn.style.display = 'block';
             driver_trip_complete_btn.style.display = 'block';
 
+            var qrcode = new QRCode(document.getElementById("trip_qr_code"), {
+                width: 220,
+                height: 220,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+    
+            var encrypted = CryptoJS.AES.encrypt(tripID, _AES).toString();
+    
+            qrcode.clear(); // clear the code.
+            qrcode.makeCode(encrypted); // make another code.
+
             hideActivityIndicator();
 
             localStorage.setItem(DRIVER_TRIP_STATUS_KEY, 'ongoing');
