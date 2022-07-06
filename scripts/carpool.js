@@ -37,6 +37,9 @@ var CHECK_ADDRESS_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-j
 var GET_USER_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/profile';
 var UPDATE_USER_INFO_API_ENPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/profile';
 var GET_CURRENT_TRIPS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip/current';
+var GET_BOOKING_BY_RIDER_AND_TRIP_ID_API_ENPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/rider';
+var UPDATE_PASSENGER_BOOKING_API_ENPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
+var JUANDER_CONFIRM_CARPOOL_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/server';
 
 /** SOURCE LOCATION */
 var HOMEPAGE_SOURCE_LOCATION = '../index.html';
@@ -94,6 +97,16 @@ var _cacheExpiry = -(1/60); // 1 minute
 function getResJSON(result) {
     return result.json();
 }
+
+function downloadURI(uri, name) {
+    var link = document.createElement("a");
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    delete link;
+};
 
 function getStatusIndicator(status) {
     switch(status) {
@@ -161,7 +174,171 @@ function getStatusIndicator(status) {
     }
 }
 
-function getStatusPopup(bookingID, status, driverEmail, tripID, userEmail) {
+function updateRiderBookingByTripID(rider_email, status, tripID, rider_fullname) {
+    fetch(GET_BOOKING_BY_RIDER_AND_TRIP_ID_API_ENPOINT + '/' + rider_email + '/trip/' + tripID)
+        .then(getResJSON)
+        .then(function (data) {
+            if (data && data.length > 0) {
+                var booking = data[0];
+
+                var bookingID = booking._id;
+                var payload = { status: status };
+                var options = {
+                    method: 'PUT',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                };
+                fetch(UPDATE_PASSENGER_BOOKING_API_ENPOINT + '/' + bookingID, options)
+                    .then(getResJSON)
+                    .then(function (data) {
+                        if (data) {
+                            var newPayload = {
+                                action: "JUANDER_CONFIRM_CARPOOL",
+                                params: {tripID: tripID, email: rider_email, fullname: rider_fullname, status: status},
+                            };
+                            var newOptions = {
+                                method: 'POST',
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(newPayload)
+                            };
+    
+                            fetch(JUANDER_CONFIRM_CARPOOL_API_ENDPOINT, newOptions)
+                                .then(getResJSON)
+                                .then(function (data) {
+                                    showSuccessAlertWithConfirmButton(function () {
+                                        window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                                    }, 'Your booking is now ongoing', '', 'Done');
+                                })
+                                .catch(function (err) {
+                                    console.error(err);
+                                    hideActivityIndicator();
+                                    showErrorAlertWithConfirmButton(function () {
+                                        window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                                    }, 'Error 500', 'Internal server error', 'Refresh');
+                                });
+                        }
+                    })
+                    .catch(function (err) {
+                        console.error(err);
+                        hideActivityIndicator();
+                        showErrorAlertWithConfirmButton(function () {
+                            window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                        }, 'Error 500', 'Internal server error', 'Refresh');
+                    });
+            } else {
+                hideActivityIndicator();
+                showErrorAlertWithConfirmButton(function () {
+                    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                }, 'Error 404', 'No trip found', 'Refresh');
+            }
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
+}
+
+function generateTripCode(tripID) {
+    var qrcode = new QRCode(document.getElementById("trip_qr_code"), {
+        width: 220,
+        height: 220,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+
+    var encrypted = CryptoJS.AES.encrypt(tripID, _AES).toString();
+
+    qrcode.clear();
+    qrcode.makeCode(encrypted);
+
+    document.getElementById('download_trip_qr_code').addEventListener('click', function () {
+        htmlToImage.toPng(document.getElementById('trip_qr_code_container'))
+            .then(function (dataUrl) {
+                downloadURI(dataUrl, 'trip_qr_code.png');
+            })
+            .catch(function (error) {
+                console.error('oops, something went wrong!', error);
+                showErrorAlertWithConfirmButton(function () {
+                    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                }, 'Error 500', error, 'Refresh');
+            });
+    });
+}
+
+function scanTripQRCode (rider_email, currentTripID, userFullName) {
+    var lastResult, countResults = 0;
+
+    Html5Qrcode.getCameras().then(devices => {
+        if (devices && devices.length) {
+            var _scanner = new Html5Qrcode("scan_trip_qr_code");
+            var cameraId = devices[devices.length - 1].id;
+            var config = {
+                fps: 10,
+                qrbox: { width: 110, height: 110 }
+            };
+
+            _scanner.start(
+                cameraId, 
+                config,
+                function (decodedText, decodedResult) {
+                    if (decodedText !== lastResult) {
+                        ++countResults;
+                        lastResult = decodedText;
+
+                        _scanner.stop().then((ignore) => {
+                            _scanner.clear();
+                            var scannedData = lastResult;
+                            var decrypted = CryptoJS.AES.decrypt(scannedData, _AES).toString(CryptoJS.enc.Utf8);
+
+                            if (decrypted === currentTripID) {
+                                updateRiderBookingByTripID(rider_email, 3, decrypted, userFullName);
+                            } else {
+                                showErrorAlertWithConfirmButton(function() {}, 'Scan failed', 'Invalid QR code used', 'Okay');
+                            }
+
+                            var myModalEl = document.getElementById('scan-driver-qr-code');
+                            var modal = bootstrap.Modal.getInstance(myModalEl)
+                            modal.hide();
+                        }).catch((err) => {
+                            console.error(err);
+
+                            showErrorAlertWithConfirmButton(function() {
+                                reloadCurrentPage();
+                            }, 'Scan failed', err, 'Okay');
+                        });
+                    }
+                },
+                function (err) {})
+                .catch((err) => {
+                    console.error(err);
+
+                    showErrorAlertWithConfirmButton(function() {
+                        reloadCurrentPage();
+                    }, 'Scan failed', err, 'Okay');
+                });
+        } else {
+            // document.getElementById('scan_ticket_reader').style.display = 'none';
+            // qr_scan_status.style.display = 'block';
+            // qr_scan_status.innerHTML = '<b>Error!</b> No cameras found';
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        // document.getElementById('scan_ticket_reader').style.display = 'none';
+        // qr_scan_status.style.display = 'block';
+        // qr_scan_status.innerHTML = '<b>Error!</b> Camera permission blocked';
+    });
+}
+
+function getStatusPopup(bookingID, status, driverEmail, tripID, userEmail, userFullName) {
     switch(status) {
         case 0:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
@@ -169,9 +346,16 @@ function getStatusPopup(bookingID, status, driverEmail, tripID, userEmail) {
             }, 'Booking Pending', 'Waiting for driver to confirm', 'Cancel Booking');
             break;
         case 1:
-            showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
-                cancelTripBooking(bookingID, tripID, userEmail);
-            }, 'Booking confirmed', 'Driver has confirmed your booking request', 'Cancel Booking');
+            showInfoAlertWithConfirmAndDenyButton(function () {
+                new bootstrap.Modal(document.getElementById('scan-driver-qr-code'), {
+                    keyboard: false
+                }).show();
+
+                scanTripQRCode(userEmail, tripID, userFullName);
+            },
+            function () {
+                cancelTripBooking(bookingID, tripID, userEmail, userFullName);
+            }, 'Booking confirmed', 'Driver has confirmed your booking request', 'Scan QR Code', 'Cancel Booking');
             break;
         case 2:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
@@ -182,9 +366,8 @@ function getStatusPopup(bookingID, status, driverEmail, tripID, userEmail) {
             break;
         case 3:
             showQuestionAlertWithButtons(function () {
-                completeTripBooking(bookingID, tripID, userEmail);
+                completeTripBooking(bookingID, tripID, userEmail, userFullName);
             }, 'Booking Ongoing', "Do you want to complete the trip now?", 'Yes', 'No')
-
             break;
         case 4:
             showInfoAlertWithConfirmAndCloseButtonsHTML(function () {
@@ -195,6 +378,35 @@ function getStatusPopup(bookingID, status, driverEmail, tripID, userEmail) {
             break;
         default: break;
     }
+}
+
+function updatePassengerBookingsStatus (tripID, rider_email, rider_fullname, status, callback) {
+    var newPayload = {
+        action: "JUANDER_CONFIRM_CARPOOL",
+        params: {tripID: tripID, email: rider_email, fullname: rider_fullname, status: status}
+    };
+
+    var newOptions = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newPayload)
+    };
+
+    fetch(JUANDER_CONFIRM_CARPOOL_API_ENDPOINT, newOptions)
+        .then(getResJSON)
+        .then(function (data) {
+            hideActivityIndicator();
+            callback();
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
 }
 
 function getTripStatusPopup(tripID, status, riders, payload = null) {
@@ -286,12 +498,12 @@ function getRiderBookingsStatusAPI(booking) {
 
             if((duration - 8) < 0.5){
                 // rider cant cancel booking
-                getStatusPopup(booking._id == undefined ? booking['bookingID'] : booking._id, booking.status, booking.driver, booking.tripID, booking.email);
+                getStatusPopup(booking._id == undefined ? booking['bookingID'] : booking._id, booking.status, booking.driver, booking.tripID, booking.email, booking.ridername);
             }else{
                 if (booking.status === 4) {
                     showSuccessAlertWithConfirmButton(function () {}, 'Ongoing Trip with Driver', 'Enjoy your carpool ride experience', 'Okay') 
                 } else {
-                    getStatusPopup(booking._id == undefined ? booking['bookingID'] : booking._id, booking.status, booking.driver, booking.tripID, booking.email);
+                    getStatusPopup(booking._id == undefined ? booking['bookingID'] : booking._id, booking.status, booking.driver, booking.tripID, booking.email, booking.ridername);
                 }
             }
         });
@@ -322,11 +534,12 @@ function confirmTripBooking(payload){
     fetch(PLAY_BOOKING_API_ENDPOINT, options)
         .then(getResJSON)
         .then(function (data) {
-            delay(function () {
-                // call from api
-                console.log('confirmTripBooking');
-                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-            }, DELAY_TIME_IN_MILLISECONDS);
+            hideActivityIndicator();
+            updatePassengerBookingsStatus(payload.tripID, payload.email, payload.fullName, 1, function () {
+                showSuccessAlertWithConfirmButton(function () {
+                    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                }, 'Booking Ongoing', 'You are on your way to your destination', 'Done');
+            });
         })
         .catch(function (err) {
             console.error(err);
@@ -337,7 +550,7 @@ function confirmTripBooking(payload){
         });
 }
 
-function cancelTripBooking(bookingID, tripID, userEmail){
+function cancelTripBooking(bookingID, tripID, userEmail, userFullName){
     showActivityIndicator();
 
     var payload = {
@@ -356,13 +569,14 @@ function cancelTripBooking(bookingID, tripID, userEmail){
     fetch(PLAY_BOOKING_API_ENDPOINT, options)
         .then(getResJSON)
         .then(function (data) {
-
-            delay(function () {
-                localStorage.setItem(DRIVER_BOOKING, null)
-                hideActivityIndicator();
-                loadMainPage(); 
-                //window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-            }, DELAY_TIME_IN_MILLISECONDS);
+            hideActivityIndicator();
+            updatePassengerBookingsStatus(payload.tripID, payload.email, userFullName, 2, function () {
+                localStorage.setItem(DRIVER_BOOKING, null);
+                showSuccessAlertWithConfirmButton(function () {
+                    loadMainPage(); 
+                    //window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                }, 'Booking Cancelled', 'You have cancelled your booking request', 'Done');
+            });
         })
         .catch(function (err) {
             console.error(err);
@@ -373,7 +587,7 @@ function cancelTripBooking(bookingID, tripID, userEmail){
         });
 }
 
-function completeTripBooking(bookingID, tripID, userEmail){
+function completeTripBooking(bookingID, tripID, userEmail, userFullName){
     showActivityIndicator();
 
     var payload = {
@@ -392,12 +606,14 @@ function completeTripBooking(bookingID, tripID, userEmail){
     fetch(PLAY_BOOKING_API_ENDPOINT, options)
         .then(getResJSON)
         .then(function (data) {
-
-            delay(function () {
-                localStorage.setItem(DRIVER_BOOKING, null)
-                loadMainPage(); 
-                //window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-            }, DELAY_TIME_IN_MILLISECONDS);
+            hideActivityIndicator();
+            updatePassengerBookingsStatus(payload.tripID, payload.email, userFullName, 4, function () {
+                localStorage.setItem(DRIVER_BOOKING, null);
+                showSuccessAlertWithConfirmButton(function () {
+                    loadMainPage(); 
+                    // window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                }, 'Booking Completed', 'You have completed your trip', 'Done');
+            });
         })
         .catch(function (err) {
             console.error(err);
@@ -437,6 +653,18 @@ function addBooking(payload, status) {
         location = payload.destination
         statusMessage = 'confirmed'
         break;
+      case 3:
+            listStyle = 'list-item-ongoing'
+            name = payload.fullName.split(" ")[0]
+            location = payload.destination
+            statusMessage = 'ongoing'
+            break;
+        case 4:
+            listStyle = 'list-item-ongoing'
+            name = payload.fullName.split(" ")[0]
+            location = payload.destination
+            statusMessage = 'completed'
+        break;
       default:
         listStyle = 'list-item'
         name = payload.fullName.split(" ")[0]
@@ -468,7 +696,7 @@ function getDriverTripSessionAPI(trip) {
     driver_trip_booking_list.style.display = 'block';
     hideMoreCarpoolButtonsContainer();
     showOnTripDriverContainer();
-    
+
     var tripID = trip._id;
     var seats = trip.seats;
     var tripStatus = trip.status;
@@ -493,18 +721,7 @@ function getDriverTripSessionAPI(trip) {
         driver_trip_cancel_btn.style.display = 'none';
         driver_trip_complete_btn.style.display = 'block';
 
-        var qrcode = new QRCode(document.getElementById("trip_qr_code"), {
-            width: 220,
-	        height: 220,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
-
-        var encrypted = CryptoJS.AES.encrypt(tripID, _AES).toString();
-
-        qrcode.clear(); // clear the code.
-        qrcode.makeCode(encrypted); // make another code.
+        generateTripCode(tripID);
     } else if (tripStatus === 0) {
         // driver_trip_predeparture_btn.style.display = 'block';
         driver_trip_start_btn.style.display = 'block';
@@ -522,7 +739,7 @@ function getDriverTripSessionAPI(trip) {
 
     trip.riders.map(rider => {
         rider['tripID'] = tripID;
-        addBooking(rider, 1);
+        addBooking(rider, rider.status);
         seats -= 1;
     });
 
@@ -1419,18 +1636,7 @@ function startTrip(_id, riders) {
             driver_trip_generate_qrcode_btn.style.display = 'block';
             driver_trip_complete_btn.style.display = 'block';
 
-            var qrcode = new QRCode(document.getElementById("trip_qr_code"), {
-                width: 220,
-                height: 220,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-    
-            var encrypted = CryptoJS.AES.encrypt(tripID, _AES).toString();
-    
-            qrcode.clear(); // clear the code.
-            qrcode.makeCode(encrypted); // make another code.
+            generateTripCode(_id);
 
             hideActivityIndicator();
 

@@ -525,6 +525,7 @@
 
 .on-trip-driver-container .driver-trip-booking-list .list-item .on-driver-trip-booking-status p {
     background-color: #c6c6c6; padding: 0; border-radius: 10px; width: 100px; height: 18px; text-align: center; font-size: 0.7em;
+    font-weight: 700;
 }
 
 
@@ -554,7 +555,38 @@
 }
 
 .on-trip-driver-container .driver-trip-booking-list .list-item-confirmed .on-driver-trip-booking-status p {
-    background-color: #fff; padding: 0; border-radius: 10px; width: 100px; height: 18px; text-align: center; font-size: 0.7em;
+    background-color: #fff; padding: 0; border-radius: 10px; width: 100px; height: 18px; text-align: center; font-size: 0.7em; font-weight: 700;
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-ongoing {
+    display: flex;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border: 1px solid #05a5df;
+    background-color: rgb(234, 246, 248);
+    padding: 8px 0;
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-ongoing .on-driver-trip-rider {
+    flex-grow: 4;
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-ongoing .on-driver-trip-rider-name {
+    padding: 10px 0 0 16px; margin: 0; line-height: 1em; font-size: 1.2rem; font-weight: bold; color: #000000; 
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-ongoing .on-driver-trip-rider-location {
+    padding: 0 0 0 16px; margin: 0; line-height: 1.1em; font-size: 0.8rem; color: #000000; 
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-ongoing .on-driver-trip-booking-status {
+    flex-grow: 1; display: flex; justify-content: flex-end; margin: 10px 10px 0 0;
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-ongoing .on-driver-trip-booking-status p {
+    background-color: rgb(0, 97, 168); padding: 0; border-radius: 10px; width: 100px; height: 18px; text-align: center; font-size: 0.7em;
+    font-weight: 700;
+    color: rgb(234, 246, 248);
 }
 
 .on-trip-driver-container .driver-trip-buttons-container {
@@ -578,4 +610,11 @@
 }
 .on-trip-driver-container .driver-trip-buttons button span.icon {
     font-size: 1.5rem;
+}
+
+#trip_qr_code_container {
+    pointer-events: none;
+    background-color: white;
+    width: fit-content;
+    padding: 16px;
 }

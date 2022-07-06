@@ -84,6 +84,25 @@ function showInfoAlertWithConfirmButton(callback, title, text, confirmButtonText
     });
 }
 
+function showInfoAlertWithConfirmAndDenyButton(confirmCallback, denyCallback, title, text, confirmButtonText, denyButtonText) {
+    Swal.fire({
+        icon: 'info',
+        title: title,
+        text: text,
+        showDenyButton: true,
+        confirmButtonText: confirmButtonText,
+        denyButtonText: denyButtonText,
+        showCloseButton: true,
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            confirmCallback();
+        } else if (result.isDenied) {
+            denyCallback();
+        }
+    });
+}
+
 function showInfoAlertWithConfirmAndCloseButtonsHTML(callback, title, html, confirmButtonText) {
     Swal.fire({
         icon: 'info',
