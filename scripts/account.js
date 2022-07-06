@@ -16,6 +16,7 @@ var PLAY_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-j
 var CHECK_ADDRESS_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/address';
 var GET_USER_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/profile';
 var UPDATE_USER_INFO_API_ENPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/profile';
+var RESET_PIN_CODE_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/forgot';
 
 /** SOURCE LOCATION */
 var HOMEPAGE_SOURCE_LOCATION = '/';
@@ -42,7 +43,7 @@ var settings_container = document.getElementById('settings_container');
 
 var driver_contact_no = document.getElementById('driver_contact_no');
 var update_account_button = document.getElementById('update_account_button');
-// var reset_pin_code_button = document.getElementById('reset_pin_code_button');
+var reset_pin_code_button = document.getElementById('reset_pin_code_button');
 
 var activity_indicator = document.getElementById('activity_indicator');
 
@@ -61,9 +62,6 @@ var address_field_change_button = document.getElementById('address_field_change_
 
 function logoutCurrentSession() {
     delay(function () {
-        localStorage.removeItem(USER_LOGIN_DATA_KEY);
-        localStorage.removeItem(CURRENT_APP_VERSION_KEY);
-        
         // Clear local storage
         localStorage.clear();
         
@@ -397,7 +395,6 @@ function getDriverBookings() {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
-
 function confirmOrCancelBooking(_id, status, tripID) {
     var email = document.getElementById(_id + '_rider').innerHTML;
 
@@ -487,7 +484,50 @@ function confirmOrCancelBooking(_id, status, tripID) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
+function resetPinCode (email) {
+    var options = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email: email })
+    };
 
+    fetch(RESET_PIN_CODE_API_ENDPONT, options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            delay(function () {
+                if (data.code === 400) {
+                    hideActivityIndicator();
+                    showErrorAlertWithConfirmButton(function () {
+                        driver_contact_no.disabled = false;
+                        update_account_button.disabled = false;
+                        address_field_change_button.disabled = false;
+                        reset_pin_code_button.disabled = false;
+                    }, 'Error ' + data.code, data.message, 'Close');
+                } else {
+                    hideActivityIndicator();
+                    showSuccessAlertWithConfirmButton(function () {
+                        driver_contact_no.disabled = false;
+                        update_account_button.disabled = false;
+                        address_field_change_button.disabled = false;
+                        reset_pin_code_button.disabled = false;
+                        showActivityIndicator();
+                        logoutCurrentSession();
+                    }, 'New PIN Code sent', 'Please wait for a message via MS Teams', 'Done');
+                }
+            }, DELAY_TIME_IN_MILLISECONDS);
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
+}
 function getUserInfo() {
     fetch(GET_USER_API_ENDPOINT + '/' + JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email)
         .then(function (result) {
@@ -598,14 +638,14 @@ function updateUserInfo(account_id, mobileNumber, landmark, address, d) {
                     }, 'Error 400', 'Account update failed', 'Done');
                 } else {
                     var user_login_data = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
-                    console.log(d)
+
                     user_login_data.mobileNumber = mobileNumber;
                     user_login_data.address = address;
                     user_login_data.landmark = landmark;
                     user_login_data.kmZero = d.kmZero;
                     user_login_data.lat = d.lat;
                     user_login_data.lng = d.lng;
-                    console.log(user_login_data)
+
                     localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(user_login_data));
 
                     showSuccessAlertWithConfirmButton(function () {
@@ -680,20 +720,20 @@ function onUpdateAccount() {
             update_account_button.disabled = true;
 
             showActivityIndicator();
-            console.log(account_location_data)
             updateUserInfo(account_id, driver_contact_no.value, landmark_field.value, address_field.value, account_location_data);
         }, 'Update Account', 'Are you sure you want to continue?', 'Yes', 'No');
     }
 }
 
 function onResetPinCode() {
-    showInputTextFieldAlertWithConfirmAndCancelButton(function() {
-        /** TODO - Add PIN code verification to check if correct or not */
-        showSuccessAlertWithConfirmButton(function () {
-            showActivityIndicator();
-            logoutCurrentSession();
-        }, 'New PIN Code sent', 'Please wait for a message via MS Teams', 'Done');
-    },  /(^([A-z]|[0-9]){0,6})$/, 'Reset PIN Code', 'Current PIN Code', 6, 'Reset', 'Please choose a valid pin code');
+    showInputTextFieldAlertWithConfirmAndCancelButton(function(email) {
+        showActivityIndicator();
+        driver_contact_no.disabled = true;
+        update_account_button.disabled = true;
+        address_field_change_button.disabled = true;
+        reset_pin_code_button.disabled = true;
+        resetPinCode(email);
+    },  /(@cebupacificair.com)/gi, 'Reset PIN Code', 'Your Email', 150, 'Send', 'Please choose a valid email');
 }
 
 function onUpdateAccountRequiredFields() {
@@ -871,7 +911,7 @@ logout_button.addEventListener('click', onLogout);
 
 driver_contact_no.addEventListener('keyup', onUpdateAccountRequiredFields);
 update_account_button.addEventListener('click', onUpdateAccount);
-// reset_pin_code_button.addEventListener('click', onResetPinCode);
+reset_pin_code_button.addEventListener('click', onResetPinCode);
 
 target_location_region.addEventListener('change', function (e) {
     onSelectRegion (e.target.value);
