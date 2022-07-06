@@ -189,7 +189,7 @@ function showInputTextFieldAlertWithConfirmAndCancelButton (callback, inputPatte
         }
       }).then((result) => {
         if (result.isConfirmed) {
-            callback();
+            callback(result.value);
         }
       });
 }

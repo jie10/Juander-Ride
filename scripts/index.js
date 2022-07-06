@@ -11,6 +11,7 @@ var LOGIN_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-
 var SIGN_UP_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/register';
 var ENCRYPT_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/encrypt';
 var CHECK_ADDRESS_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/address';
+var FORGOT_PIN_CODE_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/forgot';
 
 /** SOURCE LOCATION */
 var HOMEPAGE_SOURCE_LOCATION = '/';
@@ -28,7 +29,7 @@ var sign_up_view_button = document.getElementById('sign_up_view_button');
 var back_to_login_view_button = document.getElementById('back_to_login_view_button');
 var login_button = document.getElementById('login_button');
 var sign_up_button = document.getElementById('sign_up_button');
-// var forgot_pin_code_button = document.getElementById('forgot_pin_code_button');
+var forgot_pin_code_button = document.getElementById('forgot_pin_code_button');
 
 var target_location_landmark = document.getElementById('target_location_landmark');
 var target_location_region = document.getElementById('target_location_region');
@@ -236,6 +237,44 @@ function checkAddress(landmark, location) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
+function forgotPinCode (email) {
+    var options = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email: email })
+    };
+
+    fetch(FORGOT_PIN_CODE_API_ENDPONT, options)
+        .then(function (result) {
+            return result.json();
+        })
+        .then(function (data) {
+            delay(function () {
+                if (data.code === 400) {
+                    hideActivityIndicator();
+                    showErrorAlertWithConfirmButton(function () {
+                        user_pin_code.disabled = false;
+                        login_button.disabled = false;
+                    }, 'Error ' + data.code, data.message, 'Close');
+                } else {
+                    hideActivityIndicator();
+                    showSuccessAlertWithConfirmButton(function () {
+                        user_pin_code.disabled = false;
+                        login_button.disabled = false;
+                    }, 'New PIN Code sent', 'Please wait for a message via MS Teams', 'Done');
+                }
+            }, DELAY_TIME_IN_MILLISECONDS);
+        })
+        .catch(function (err) {
+            console.error(err);
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = HOMEPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
+}
 
 function onLoginView() {
     login_viewcontroller.style.display = 'block';
@@ -406,10 +445,12 @@ function onRegister() {
     }
 }
 function onForgotPinCode() {
-    showInputTextFieldAlertWithConfirmAndCancelButton(function() {
-        /** TODO - Add email verification to check if account exists or not */
-        showSuccessAlertWithConfirmButton(function () {}, 'New PIN Code sent', 'Please wait for a message via MS Teams', 'Done');
-    },  /(@cebupacificair.com)/gi, 'Forgot PIN Code', 'Email', 150, 'Send', 'Please choose a valid email');
+    showInputTextFieldAlertWithConfirmAndCancelButton(function(email) {
+        showActivityIndicator();
+        user_pin_code.disabled = true;
+        login_button.disabled = true;
+        forgotPinCode(email);
+    },  /(@cebupacificair.com)/gi, 'Forgot PIN Code', 'Your Email', 150, 'Send', 'Please choose a valid email');
 }
 
 function enableAddressConfirmButton () {
@@ -429,7 +470,7 @@ user_sign_up_mobile_number.addEventListener('keyup', onRegisterTyping);
 
 login_button.addEventListener('click', onLogin);
 sign_up_button.addEventListener('click', onRegister);
-// forgot_pin_code_button.addEventListener('click', onForgotPinCode);
+forgot_pin_code_button.addEventListener('click', onForgotPinCode);
 
 target_location_region.addEventListener('change', function (e) {
     onSelectRegion (e.target.value);
