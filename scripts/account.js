@@ -32,6 +32,7 @@ var main_bottom_navbar = document.getElementById('main_bottom_navbar');
 
 var my_trips_button = document.getElementById('my_trips_button');
 var my_bookings_button = document.getElementById('my_bookings_button');
+var read_faq_button = document.getElementById('read_faq_button');
 var settings_button = document.getElementById('settings_button');
 var logout_button = document.getElementById('logout_button');
 var back_to_previous_page_button = document.getElementById('back_to_previous_page_button');
@@ -40,6 +41,7 @@ var account_page_body_container = document.getElementById('account_page_body_con
 var my_trips_container = document.getElementById('my_trips_container');
 var my_bookings_container = document.getElementById('my_bookings_container');
 var settings_container = document.getElementById('settings_container');
+var faqs_container = document.getElementById('faqs_container');
 
 var driver_contact_no = document.getElementById('driver_contact_no');
 var update_account_button = document.getElementById('update_account_button');
@@ -222,6 +224,7 @@ function showMainAccountPageContainer() {
     my_trips_container.style.display = 'none';
     my_bookings_container.style.display = 'none';
     settings_container.style.display = 'none';
+    faqs_container.style.display = 'none';
 }
 function showMyTripsPageContainer() {
     account_page_body_container.style.display = 'none';
@@ -230,6 +233,10 @@ function showMyTripsPageContainer() {
 function showMyBookingsPageContainer() {
     account_page_body_container.style.display = 'none';
     my_bookings_container.style.display = 'block';
+}
+function showFAQsPageContainer() {
+    account_page_body_container.style.display = 'none';
+    faqs_container.style.display = 'block';
 }
 
 /** TEMPORARY FILE */
@@ -760,6 +767,17 @@ function onMyBookings() {
     showActivityIndicator();
     getDriverBookings();
 }
+function onFAQs() {
+    showSecondaryTopNavbar();
+    hideMainBottomNavbar();
+    hideAllPageContainers();
+    showActivityIndicator();
+
+    delay(function () {
+        hideActivityIndicator();
+        faqs_container.style.display = 'block';
+    }, DELAY_TIME_IN_MILLISECONDS);
+}
 function onSettings() {
     showSecondaryTopNavbar();
     hideMainBottomNavbar();
@@ -906,6 +924,7 @@ function enableAddressConfirmButton () {
 back_to_previous_page_button.addEventListener('click', reloadCurrentPage);
 my_trips_button.addEventListener('click', onMyTrips);
 my_bookings_button.addEventListener('click', onMyBookings);
+read_faq_button.addEventListener('click', onFAQs);
 settings_button.addEventListener('click', onSettings);
 logout_button.addEventListener('click', onLogout);
 

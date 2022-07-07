@@ -73,6 +73,19 @@
         width: 300px !important;
         padding: 0;
     }
+
+    .faqs-container .faq-header{
+        font-size: 1.5rem;
+    }
+    .faqs-container .faq-question .panel-title {
+        font-size: 1rem;
+    }
+    .faqs-container .faq-question .panel-content {
+        font-size: 0.875rem;
+    }
+    .faqs-container .panel:checked ~ .panel-content {
+        padding: 14px 0;
+    }
 }
 @media only screen and (max-width: 320px) {
     .account-page-body-container {
@@ -133,5 +146,10 @@
     }
     .settings-container .settings-form  .address-field-change-button span.address-label {
         font-size: 0.75rem;
+    }
+
+    .faqs-container .panel:checked ~ .panel-content {
+        margin: 0 0 0 45px;
+        padding: 14px 0;
     }
 }
