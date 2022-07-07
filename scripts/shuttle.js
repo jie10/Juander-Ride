@@ -674,7 +674,7 @@ document.addEventListener('DOMContentLoaded', function () {
         JUANDERSERVICE.userShuttleCheck(userObj['email'])
         .then(getResJSON)
         .then(function (data) {
-            console.log(data['booking'].status)
+            console.log(data['booking'])
             // console.log(data)
             if(data['trip'] == null && data['booking'] == null){
                 // check if there is a recent booking
