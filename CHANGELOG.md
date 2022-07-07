@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - update user info (Settings page) with Check Address
   - FAQ page (template only)
   - feature: Reset Pin Code
+  - feature: FAQs should be shown as screen instead of another page
 
 - Index
   - Create UI for address fields (sign up form)
@@ -38,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Carpool
   - label for on driver trip (to view landmark and address)
   - Revamp: carpool trip process (with qr scan) - driver and passenger perspective
+  - Suggested list of rides on Find Carpool should book passenger automatically
 
 - Account
   - Modify CheckAddress and Update Account - Account Settings
@@ -55,14 +57,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - show created trips related issues
   - qr code does not generate after trip creation (except when page is reloaded)
   - fix UI issue on when showing loader after creating trip
+  - fix UI issue: adjust spaces on list of suggested rides (find carpool) - (30px left and right)
 
 - Shuttle
   - shuttle status won't expire (cache issue)
   - cannot load shuttle rides
-
-
-
-
 
 ## [0.0.5-alpha] - 2022-06-15
 
