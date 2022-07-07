@@ -1219,6 +1219,87 @@ function hideDriverPoolResultsContainer () {
     driver_pool_results_container.style.display = 'none';
 }
 
+function bookRideFromSuggestedRides(rider) {
+    var passenger = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
+    var payload = {
+        "tripID": rider.tripID,
+        "email": passenger.email,
+        "ridername": passenger.displayName,
+        "driver": rider.driver,
+        "drivername": rider.drivername,
+        "destination": rider.destination,
+        "booktype": 0
+    }
+    var options = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    };
+
+    fetch(BOOK_RIDE_API_ENDPOINT, options)
+        .then(getResJSON)
+        .then(function (data) {
+            if (data) {
+                hideActivityIndicator();
+
+                var saved_bookings_history = localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST)) : null;
+
+                if (saved_bookings_history) {
+                    var checkForDuplicates = saved_bookings_history.findIndex(function (trip) {
+                        var combined = trip.landmark + ', ' + trip.address;
+                        var currentTrip = rider.landmark + ', ' + rider.origin;
+
+                        return combined.toLowerCase() === currentTrip.toLowerCase();
+                    });
+        
+                    if (checkForDuplicates < 0) {
+                        saved_bookings_history.push({
+                            landmark: rider.landmark,
+                            address: rider.origin
+                        });
+                        localStorage.setItem(SAVED_BOOKINGS_HISTORY_LIST, JSON.stringify(saved_bookings_history));
+                    }
+                } else {
+                    var arr = [];
+                    arr.push({
+                        landmark: rider.landmark,
+                        address: rider.origin
+                    });
+                    localStorage.setItem(SAVED_BOOKINGS_HISTORY_LIST, JSON.stringify(arr));
+                }
+
+                localStorage.setItem(DRIVER_BOOKING, JSON.stringify(data));
+
+                var localBooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING));
+
+                if (localBooking.status === 0 || localBooking.status === 1 || localBooking.status === 4) {
+                    var localBookingObj = {
+                        data: localBooking,
+                        createdAt: DATETIMESERVICE.getDateTime()
+                    }
+                    
+                    localStorage.setItem(DRIVER_BOOKING, JSON.stringify(localBookingObj))
+                    getRiderBookingsStatusAPI(localBooking)
+                } else {
+                    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                }
+            } else {
+                hideActivityIndicator();
+                showErrorAlertWithConfirmButton(function () {
+                    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                }, 'Error 404', 'No trip found', 'Refresh');
+            }
+        })
+        .catch(function (err) {
+            console.error(err);
+	        hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+            }, 'Error 500', 'Internal server error', 'Refresh');
+        });
+}
 function loadCarpoolOnTripScreen(rider) {
     var tripID = rider._id;
     var passenger = JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY));
@@ -1297,8 +1378,17 @@ function loadCarpoolOnTripScreen(rider) {
         });
 }
 function findCarppolFromHistory(e) {
-    find_carpool_search_key = e.querySelector('.landmark-label').innerHTML + ', ' + e.querySelector('.address-label').innerHTML;
-    onFindCarpoolRide();
+    var rider = {
+        tripID: e.querySelector('.trip-id-label').value,
+        driver: e.querySelector('.trip-driver-email-label').value,
+        drivername: e.querySelector('.trip-driver-fullname-label').value,
+        landmark: e.querySelector('.landmark-label').innerHTML,
+        origin: e.querySelector('.address-label').innerHTML,
+        destination: e.querySelector('.landmark-label').innerHTML + ', ' + e.querySelector('.address-label').innerHTML
+    };
+
+    showActivityIndicator();
+    bookRideFromSuggestedRides(rider);
 }
 function shareCarppolFromHistory(e) {
     var element = e.id.split('_');
@@ -1360,6 +1450,9 @@ function loadFindCreatedTripsHistoryList() {
                                 '<button type=\"button\" class=\"btn btn-outline address-field-change-button d-flex flex-row align-items-center\" id=\"find_carpool_address_' + i + '\" onclick=\"findCarppolFromHistory(this)\">' +
                                     '<span class=\"icon\"><i class=\"fa-solid fa-location-dot\"></i></span>' +
                                     '<span class=\"details\">' +
+                                        '<input type=\"hidden\" class=\"trip-id-label\" value=\"' + trip._id + '\"/>' +
+                                        '<input type=\"hidden\" class=\"trip-driver-email-label\" value=\"' + trip.email + '\"/>' +
+                                        '<input type=\"hidden\" class=\"trip-driver-fullname-label\" value=\"' + trip.fullname + '\"/>' +
                                         '<span class=\"landmark-label\" id=\"landmark_label\">' + trip.landmark + '</span>' +
                                         '<span class=\"address-label\" id=\"address_label\">' + trip.origin + '</span>' +
                                     '</span>' +
@@ -1586,7 +1679,6 @@ function createTrip() {
             hideActivityIndicator();
             create_trip_container.querySelector('form').style.display = 'block';
             showSuccessAlertWithConfirmButton(function () {
-                console.log('create trip');
                 window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
             }, 'Trip has been created', '', 'Done');
         })
