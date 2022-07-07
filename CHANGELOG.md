@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - buttons for carpool page (initial target location)
   - show created trips - Get Current Trips endpoint - Find Carpool
   - Saved Places - Pick Frequently Used places - Find Carpool
+  - add depart time to list (suggested rides) - Find Carpool
 
 - Account
   - Create UI for address fields (update account Form)
@@ -40,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - label for on driver trip (to view landmark and address)
   - Revamp: carpool trip process (with qr scan) - driver and passenger perspective
   - Suggested list of rides on Find Carpool should book passenger automatically
+  - new trip creation rule: driver can create trip from 30 minutes to 12 hours before the departure time set - Create Trip
 
 - Account
   - Modify CheckAddress and Update Account - Account Settings
