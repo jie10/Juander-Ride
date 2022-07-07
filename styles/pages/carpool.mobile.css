@@ -225,4 +225,7 @@
         font-size: 1rem;
         padding: 0 20px;
     }
+    .carpool-ride-list-container .address-field-change-button span.depart-time-label {
+        font-size: 0.625rem;
+    }
 }

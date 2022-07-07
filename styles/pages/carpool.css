@@ -204,6 +204,9 @@
 .carpool-ride-list-container .address-field-change-button span.address-label {
     font-size: 0.875rem;
 }
+.carpool-ride-list-container .address-field-change-button span.depart-time-label {
+    font-size: 0.75rem;
+}
 .carpool-ride-list-container .address-field-change-button-group button {
     margin: 0 0 16px 0; 
 }

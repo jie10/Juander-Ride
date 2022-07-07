@@ -1455,6 +1455,7 @@ function loadFindCreatedTripsHistoryList() {
                                         '<input type=\"hidden\" class=\"trip-driver-fullname-label\" value=\"' + trip.fullname + '\"/>' +
                                         '<span class=\"landmark-label\" id=\"landmark_label\">' + trip.landmark + '</span>' +
                                         '<span class=\"address-label\" id=\"address_label\">' + trip.origin + '</span>' +
+                                        '<span class=\"depart-time-label\" id=\"depart_time_label\">Departs at ' + moment(trip.departTime).utc().format('h:mm a') + ' ' + (moment(trip.departTime) < moment().utc().endOf('day') ? 'today' : 'tomorrow') + '</span>' +
                                     '</span>' +
                                     '<span class=\"icon\"><i class=\"fa-solid fa-arrow-right\"></i></span>' +
                                 '</button>' +
