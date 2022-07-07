@@ -5,6 +5,65 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.6-alpha] - 2022-07-07
+
+## Added
+
+- Carpool
+  - Create UI for address fields (create trip form)
+  - Add landmark field on Create Trip
+  - new feature: show created trips
+  - message for no created trips yet
+  - buttons for carpool page (initial target location)
+  - show created trips - Get Current Trips endpoint - Find Carpool
+  - Saved Places - Pick Frequently Used places - Find Carpool
+
+- Account
+  - Create UI for address fields (update account Form)
+  - FAQ button on account menu list
+  - address and landmark field on Update Account UI
+  - padding to make account page content scrollable (to fit on other mobile screen)
+  - update user info (Settings page) with Check Address
+  - FAQ page (template only)
+  - feature: Reset Pin Code
+
+- Index
+  - Create UI for address fields (sign up form)
+  - functionality to edit previous entered target location and landmark
+  - check address API connect before register user
+  - feature: forgot Pin Code
+
+### Changed
+
+- Carpool
+  - label for on driver trip (to view landmark and address)
+  - Revamp: carpool trip process (with qr scan) - driver and passenger perspective
+
+- Account
+  - Modify CheckAddress and Update Account - Account Settings
+
+- Index
+  - label and placeholder as target location - Sign up form
+  - placeholder for mobile phone and target location fields - Sign up form
+  - UI for address fields - Sign Up form
+  - Modify landmark label style (work-wrap)
+  - Modify CheckAddress and Sign Up form - Sign Up
+
+### Issues fixed
+
+- Carpool
+  - show created trips related issues
+  - qr code does not generate after trip creation (except when page is reloaded)
+  - fix UI issue on when showing loader after creating trip
+
+- Shuttle
+  - shuttle status won't expire (cache issue)
+  - cannot load shuttle rides
+
+
+
+
+
 ## [0.0.5-alpha] - 2022-06-15
 
 ### Changed
