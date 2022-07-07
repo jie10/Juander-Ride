@@ -2179,7 +2179,7 @@ function onCreateTrip() {
     var duration = moment.duration(givenDate.diff(current)).asHours();
 
     var isValidDepartureDateTime = givenDate.isValid();
-    var isWithinScopeDuration = duration >= 0.5 && duration <= 5 ? true : false;
+    var isWithinScopeDuration = duration >= 0.5 && duration <= 12 ? true : false;
 
     var isSeatMaxLength = parseInt(driver_available_seats.value) > 0 && parseInt(driver_available_seats.value) <= 30;
 
@@ -2190,7 +2190,7 @@ function onCreateTrip() {
     } else if (!isSeatMaxLength) {
         showErrorAlert('Invalid seat number', 'Seat numbers can be only up to 30');
     } else if (!isWithinScopeDuration || !isValidDepartureDateTime) {
-        showErrorAlert('Invalid departure time', 'Departure must be set at least 30 minutes up to 5 hours from current date and time');
+        showErrorAlert('Invalid departure time', 'Departure must be set at least 30 minutes up to 12 hours from current date and time');
     } else {
         showQuestionAlertWithButtons(function () {
             target_location_region.disabled = true;
