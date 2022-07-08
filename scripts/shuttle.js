@@ -32,6 +32,7 @@ var scanner_success_viewcontroller = document.getElementById('scanner_success_vi
 var scanner_continue_btn = document.getElementById('scanner_continue_btn');
 var scanner_success_viewcontroller_title = document.getElementById('scanner_success_viewcontroller_title');
 var scanner_success_viewcontroller_message = document.getElementById('scanner_success_viewcontroller_message');
+var scanner_success_viewcontroller_trip_title = document.getElementById('scanner_success_viewcontroller_trip_title');
 
 var shuttle_ride_card = document.getElementById('shuttle_ride_card');
 var shuttle_ride_card_container = document.getElementById('shuttle_ride_card_container');
@@ -204,7 +205,7 @@ function onScannerConfirm (e) {
             "booktype": _payload['tripType']
         })
     };
-    
+
     fetch('https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book', options)
         .then(function (result) {
             return result.json();
@@ -212,11 +213,14 @@ function onScannerConfirm (e) {
         .then(function (data) {
             if(data != undefined){        
                 if(data['code'] == 400){
+                    console.log(data)
+                    scanner_success_viewcontroller_trip_title.innerHTML = _payload.fullname;
                     scanner_success_viewcontroller_title.innerHTML = "Oops!";
                     scanner_success_viewcontroller_message.innerHTML = data['message'];
                 }
-                
+
                 setTimeout(() => {
+                    scanner_success_viewcontroller_trip_title.innerHTML = _payload.fullname;
                     scanner_confirm_viewcontroller.style.visibility = "collapse";
                     scanner_success_viewcontroller.style.visibility = "visible";
                     activity_indicator.style.visibility = "collapse";
