@@ -228,4 +228,20 @@
     .carpool-ride-list-container .address-field-change-button span.depart-time-label {
         font-size: 0.625rem;
     }
+
+    .new-feature-modal .modal-title {
+        font-size: 1.25rem !important;
+    }
+    .new-feature-modal .feature-container {
+        margin: 0 auto 24px auto;
+    }
+    .new-feature-modal .feature-container h4 {
+        font-size: 1rem;
+    }
+    .new-feature-modal .feature-container p {
+        font-size: 0.75rem;
+    }
+    .new-feature-modal .feature-container .image-container {
+        width: 200px;
+    }
 }

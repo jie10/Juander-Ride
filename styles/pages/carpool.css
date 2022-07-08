@@ -621,3 +621,18 @@
     width: fit-content;
     padding: 16px;
 }
+
+.new-feature-modal .feature-container {
+    margin: 0 auto 48px auto;
+}
+.new-feature-modal .feature-container .image-container {
+    height: 100%;
+    width: 300px;
+    margin: 16px auto;
+}
+.new-feature-modal .feature-container .image-container img {
+    width: 100%;
+}
+.new-feature-modal .modal-footer {
+    padding: 0 0.75rem 0.75rem 0.75rem;
+}

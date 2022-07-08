@@ -9,6 +9,7 @@ var CURRENT_APP_VERSION_KEY = 'current_app_version';
 var USER_LOGIN_DATA_KEY = 'user_login_data';
 var CREATED_TRIPS_HISTORY_LIST = 'created_trips_history_list';
 var SAVED_BOOKINGS_HISTORY_LIST = 'saved_bookings_history_list';
+var NEW_VERSION_LOADED_KEY = 'is_new_version_loaded';
 
 /** CONSTANT VALUES */
 var _AES = 'technologyandinnovations';
@@ -2004,6 +2005,15 @@ function checkAddress(landmark, location) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
+function checkAnnouncements() {
+    if (!localStorage.getItem(NEW_VERSION_LOADED_KEY)) {
+        new bootstrap.Modal(new_feature_modal, {
+            keyboard: false
+        }).show();
+
+        localStorage.setItem(NEW_VERSION_LOADED_KEY, true);
+    }
+}
 function checkNewAddress(landmark, location) {
     var payload = {
         address: location,
@@ -2555,7 +2565,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // console.log('booking', bookingFromCache())
         // console.log('trip', tripFromCache())
         reloadCurrentPage(true);
-        
+        checkAnnouncements();
     } else {
         moveToLoginPage();
         localStorage.removeItem(CURRENT_APP_VERSION_KEY);
