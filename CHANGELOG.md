@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - show created trips - Get Current Trips endpoint - Find Carpool
   - Saved Places - Pick Frequently Used places - Find Carpool
   - add depart time to list (suggested rides) - Find Carpool
+  - Join ride ui after tapping suggested ride - Find Carpool
 
 - Account
   - Create UI for address fields (update account Form)
@@ -64,6 +65,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shuttle
   - shuttle status won't expire (cache issue)
   - cannot load shuttle rides
+  - Wrong title when successful scan in shuttle
+
+- Account
+  - Points does not reflect on Account page
 
 ## [0.0.5-alpha] - 2022-06-15
 
