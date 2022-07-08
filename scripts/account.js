@@ -246,6 +246,9 @@ function showActivityIndicator() {
 function hideAllPageContainers() {
     account_page_body_container.style.display = 'none';
     my_bookings_container.style.display = 'none';
+    my_trips_container.style.display = 'none';
+    faqs_container.style.display = 'none';
+    settings_container.style.display = 'none';
 }
 function hideActivityIndicator() {
     activity_indicator.style.visibility = "collapse";
@@ -256,11 +259,10 @@ function hideMainBottomNavbar() {
 }
 
 function reloadCurrentPage() {
-    showActivityIndicator();
     showProfileNavbar();
     showMainBottomNavbar();
     hideAllPageContainers();
-    getUserInfo();
+    account_page_body_container.style.display = 'block';
 }
 
 function loadBookingButtons(e) {
@@ -549,6 +551,8 @@ function getUserInfo() {
                 account_address = data.address;
                 account_landmark = data.landmark;
                 account_scoreboard = data.scoreboard;
+
+                loadUserDetails();
             }, DELAY_TIME_IN_MILLISECONDS);
         })
         .catch(function (err) {
@@ -825,6 +829,17 @@ function onSettings() {
         }
     }, DELAY_TIME_IN_MILLISECONDS);
 }
+function onAccountPage() {
+    // showSecondaryTopNavbar();
+    // hideMainBottomNavbar();
+    // hideAllPageContainers();
+    // showActivityIndicator();
+
+    // delay(function () {
+    //     hideActivityIndicator();
+    //     faqs_container.style.display = 'block';
+    // }, DELAY_TIME_IN_MILLISECONDS);
+}
 function onLogout() {
     showQuestionAlertWithButtons(function () {
         showActivityIndicator();
@@ -1027,7 +1042,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (checkCurrentSession()) {
         checkAppVersion(function () {
             document.querySelector('.account-page-container').style.display = 'block';
-            loadUserDetails();
+            getUserInfo();
             reloadCurrentPage();
         }, moveToLoginPage);
     } else {
