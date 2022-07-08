@@ -20,6 +20,7 @@ var driver_stops = [];
 var is_new_driver_stop = false;
 var find_carpool_search_key;
 var share_carpool_search_key;
+var current_trips = [];
 
 /** API ENDPOINTS */
 var UPDATE_TRIP_STATUS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip/status';
@@ -1377,18 +1378,82 @@ function loadCarpoolOnTripScreen(rider) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
-function findCarppolFromHistory(e) {
-    var rider = {
-        tripID: e.querySelector('.trip-id-label').value,
-        driver: e.querySelector('.trip-driver-email-label').value,
-        drivername: e.querySelector('.trip-driver-fullname-label').value,
-        landmark: e.querySelector('.landmark-label').innerHTML,
-        origin: e.querySelector('.address-label').innerHTML,
-        destination: e.querySelector('.landmark-label').innerHTML + ', ' + e.querySelector('.address-label').innerHTML
-    };
+function bookCarpoolFromSuggestedRides(e) {
+    var emptySeatBlock = '<div class=\"col-4 col-md-3\">'
+                                + '<div class=\"avatar-container\">'
+                                +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
+                                + '</div>'
+                                + '<p class=\"text-muted avatar-name avatar-name-unavailable\">Empty Seat</p>'
+                            + '</div>';
+    var tripID = e.id.split('_')[e.id.split('_').length - 1];
+    var currentTrip = current_trips.filter(function(trip) { return trip._id === tripID })[0];
 
-    showActivityIndicator();
-    bookRideFromSuggestedRides(rider);
+    var rider_location = currentTrip.origin.split(', ');
+    var location = rider_location[rider_location.length - 1];
+    var target_location = currentTrip.landmark + ', ' + currentTrip.origin;
+    var is_pool_available = currentTrip.seats > 0 ? 'Available' : 'Unavailable';
+    var rider_passengers = currentTrip.riders ? currentTrip.riders : null;
+    var rider_passengers_count = rider_passengers ? rider_passengers.length : 0;
+
+    var rider_phone_number = currentTrip.phone ? '+' + currentTrip.phone : '#';
+    var rider_teams_email = currentTrip.email ? currentTrip.email : '#';
+    var rider_department = currentTrip.department ? currentTrip.department : 'Cebu Pacific Air Inc.';
+    var rider_fullname = currentTrip.fullname ? currentTrip.fullname : 'Unknown';
+    var rider_depart_time = currentTrip.departTime ? moment(currentTrip.departTime).utc().format('h:mm a') : 'Unknown';
+    var rider_passengers = currentTrip.riders ? currentTrip.riders : null;
+
+    var offcanvas_rider_is_available = document.querySelector('.offcanvas_rider_is_available')
+    var offcanvas_phone_number = document.querySelector('.offcanvas_phone_number');
+    var offcanvas_rider_passengers_list = document.querySelector('.offcanvas_rider_passengers_list');
+
+    document.querySelector('.offcanvas_rider_fullname').innerHTML = rider_fullname;
+    document.querySelector('.offcanvas_rider_location').innerHTML = location;
+    document.querySelector('.offcanvas_rider_department').innerHTML = rider_department;
+    document.querySelector('.offcanvas_seats_count').innerHTML = currentTrip.seats === 1 ? ' seat available' : ' seats available';
+    document.querySelector('.offcanvas_departure_time').innerHTML = rider_depart_time;
+    document.querySelector('.offcanvas_target_location').innerHTML = target_location;
+    document.querySelector('.offcanvas_teams_email a').href = MS_TEAMS_SEND_MESSAGE_TO_USER_LINK_URL + rider_teams_email;
+
+    offcanvas_rider_is_available.innerHTML = is_pool_available;
+    offcanvas_phone_number.href = 'tel:' + rider_phone_number;
+    offcanvas_phone_number.innerHTML = rider_phone_number;
+
+    if (offcanvas_rider_is_available.classList.contains('bg-primary') && currentTrip.seats < 1) {
+        offcanvas_rider_is_available.classList.remove('bg-primary');
+        offcanvas_rider_is_available.classList.add('bg-secondary');
+    } else {
+        offcanvas_rider_is_available.classList.add('bg-primary');
+        offcanvas_rider_is_available.classList.remove('bg-secondary');
+    }
+
+    if (rider_passengers_count > 0) {
+        var blocks = '';
+
+        for (var i = 0; i < currentTrip.seatCount; i++) {
+            blocks += emptySeatBlock;
+        }
+
+        offcanvas_rider_passengers_list.innerHTML = rider_passengers.map(function (passenger) {
+            return '<div class=\"col-3\">'
+                            + '<div class=\"avatar-container\">'
+                            +     '<img class=\"avata\" src=\"../images/sample/no-avatar.png\" />'
+                            + '</div>'
+                            + '<p class=\"text-muted avatar-name\">' + passenger.email + '</p>'
+                        + '</div>';
+            }).join('') + blocks;
+    } else {
+        var totalEmptySeats = currentTrip.seatCount - rider_passengers_count;
+        var blocks = '';
+
+        for (var i = 0; i < totalEmptySeats; i++) {
+            blocks += emptySeatBlock;
+        }
+
+        document.querySelector('.offcanvas_seats_count').innerHTML = totalEmptySeats + ' seats available';
+        offcanvas_rider_passengers_list.innerHTML = blocks;
+    }
+
+    join_pool_rider_button.addEventListener('click', onJoinPoolRider(currentTrip));
 }
 function shareCarppolFromHistory(e) {
     var element = e.id.split('_');
@@ -1444,15 +1509,13 @@ function loadFindCreatedTripsHistoryList() {
             });
 
             if (current_created_trips && current_created_trips.length > 0) {
+                current_trips = current_created_trips;
                 find_carpool_address_list.innerHTML = '';
                 find_carpool_address_list.innerHTML = current_created_trips.map(function (trip, i) {
                     return '<div class=\"col-12\" style=\"border-bottom: 1px solid #F1F0F0;\">' +
-                                '<button type=\"button\" class=\"btn btn-outline address-field-change-button d-flex flex-row align-items-center\" id=\"find_carpool_address_' + i + '\" onclick=\"findCarppolFromHistory(this)\">' +
+                                '<button type=\"button\" class=\"btn btn-outline address-field-change-button d-flex flex-row align-items-center\" id=\"find_carpool_address_' + trip._id + '\" onclick=\"bookCarpoolFromSuggestedRides(this)\" data-bs-toggle="offcanvas" data-bs-target="#show_confirm_carpool_rider" aria-controls="show_confirm_carpool_rider">' +
                                     '<span class=\"icon\"><i class=\"fa-solid fa-location-dot\"></i></span>' +
                                     '<span class=\"details\">' +
-                                        '<input type=\"hidden\" class=\"trip-id-label\" value=\"' + trip._id + '\"/>' +
-                                        '<input type=\"hidden\" class=\"trip-driver-email-label\" value=\"' + trip.email + '\"/>' +
-                                        '<input type=\"hidden\" class=\"trip-driver-fullname-label\" value=\"' + trip.fullname + '\"/>' +
                                         '<span class=\"landmark-label\" id=\"landmark_label\">' + trip.landmark + '</span>' +
                                         '<span class=\"address-label\" id=\"address_label\">' + trip.origin + '</span>' +
                                         '<span class=\"depart-time-label\" id=\"depart_time_label\">Departs at ' + moment(trip.departTime).utc().format('h:mm a') + ' ' + (moment(trip.departTime) < moment().utc().endOf('day') ? 'today' : 'tomorrow') + '</span>' +
@@ -1531,6 +1594,7 @@ function onJoinPoolRider (rider) {
         showMainBottomNavbar();
         showMainTopNavbar();
         showActivityIndicator();
+        hideMoreCarpoolButtonsContainer();
         join_pool_rider_button.disabled = true;
         loadCarpoolOnTripScreen(rider);
     }
