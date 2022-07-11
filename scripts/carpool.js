@@ -15,6 +15,7 @@ var DRIVER_TRIP_KEY = 'driver_trip';
 var SHUTTLE_TRIPS_KEY = 'shuttle_trips';
 var SHUTTLE_BOOKING_KEY = 'shuttle_booking';
 var IS_ADVERTISEMENTS_LOADED_KEY = 'is_advertisements_loaded';
+var FROM_LOGIN_TO_SPLASH = 'from_login_to_splash';
 
 /** CONSTANT VALUES */
 var _AES = 'technologyandinnovations';
@@ -320,6 +321,7 @@ function scanTripQRCode (rider_email, currentTripID, userFullName) {
                             console.error(err);
 
                             showErrorAlertWithConfirmButton(function() {
+                                showActivityIndicator();
                                 reloadCurrentPage();
                             }, 'Scan failed', err, 'Okay');
                         });
@@ -330,6 +332,7 @@ function scanTripQRCode (rider_email, currentTripID, userFullName) {
                     console.error(err);
 
                     showErrorAlertWithConfirmButton(function() {
+                        showActivityIndicator();
                         reloadCurrentPage();
                     }, 'Scan failed', err, 'Okay');
                 });
@@ -907,8 +910,6 @@ function tripFromCache(){
 }
 
 function reloadCurrentPage(fromApi) {
-    showActivityIndicator();
-
     delay(function () {
         if(fromApi){
             driver_pool_results_container.innerHTML = '';
@@ -1052,6 +1053,7 @@ function moveToLoginPage() {
 function onBackToPreviousPage() {
     driver_stops = [];
     address_field_change_button_group.innerHTML = "";
+    showActivityIndicator();
     reloadCurrentPage(true);
 }
 
@@ -1642,6 +1644,7 @@ close_saved_places_button.addEventListener("click", function(e) {
     e.preventDefault();
     find_carpool_navigate_container.style.display = 'block';
     find_carpool_saved_places.style.display = 'none';
+    showActivityIndicator();
     reloadCurrentPage(true);
 });
 
@@ -2588,14 +2591,22 @@ new_feature_modal_close_button.addEventListener('click', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('.carpool-page-container').style.display = 'none';
-    showActivityIndicator();
-
     if (checkCurrentSession()) {
-        // console.log('booking', bookingFromCache())
-        // console.log('trip', tripFromCache())
+
+        if (localStorage.getItem(FROM_LOGIN_TO_SPLASH)) {
+            document.getElementById('splash_screen').style.display = 'block';
+            document.getElementById('splash_screen').classList.add('animate__slideOutLeft');
+            localStorage.removeItem(FROM_LOGIN_TO_SPLASH);
+        } else {
+            document.querySelector('.carpool-page-container').style.display = 'none';
+            showActivityIndicator();
+        }
+
         reloadCurrentPage(true);
         checkNewFeatures();
+        // console.log('booking', bookingFromCache())
+        // console.log('trip', tripFromCache())
+
     } else {
         moveToLoginPage();
         localStorage.removeItem(CURRENT_APP_VERSION_KEY);

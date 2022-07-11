@@ -1,5 +1,7 @@
 /** LOCAL STORAGE */
 var USER_LOGIN_DATA_KEY = 'user_login_data';
+var FROM_LOGIN_TO_SPLASH = 'from_login_to_splash';
+var FROM_LOGOUT_TO_SPLASH = 'from_logout_to_splash';
 
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
@@ -66,6 +68,15 @@ function checkExistingSession() {
     if (user_login_data) {
         moveToHomepage();
     } else {
+        if (localStorage.getItem(FROM_LOGOUT_TO_SPLASH)) {
+            localStorage.removeItem(FROM_LOGOUT_TO_SPLASH);
+            document.getElementById('splash_screen').classList.remove('animate__slideOutLeft');
+            document.getElementById('splash_screen').style.display = 'none';
+        } else {
+            document.getElementById('splash_screen').classList.add('animate__slideOutLeft');
+            document.getElementById('splash_screen').style.display = 'block';
+        }
+
         loadPageInDefault();
     }
 }
@@ -122,9 +133,10 @@ function login(pin_code) {
                 }, 'Error ' + data.code, data.message, 'Close');
             } else {
                 localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(data));
+                document.getElementById('splash_screen').style.display = 'block';
                 document.getElementById('splash_screen').classList.remove('animate__slideOutLeft');
                 document.getElementById('splash_screen').classList.add('animate__slideInLeft');
-            
+                localStorage.setItem(FROM_LOGIN_TO_SPLASH, true);
                 delay(function () {
                     moveToHomepage();
                 }, 3000);

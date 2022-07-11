@@ -33,10 +33,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- ROLLDATE-->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/rolldate@3.1.2/dist/rolldate.min.js"></script>
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <!-- CUSTOM CSS -->
     <link href="../styles/default.css" rel="stylesheet" type="text/css"/>
     <link href="../styles/utils/helpers.css" rel="stylesheet" type="text/css"/>
     <link href="../styles/lib/swal2.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles/components/splash-screen.css" rel="stylesheet" type="text/css"/>
     <link href="../styles/components/top-navbar.css" rel="stylesheet" type="text/css"/>
     <link href="../styles/components/bottom-navbar.css" rel="stylesheet" type="text/css"/>
     <link href="../styles/pages/carpool.css" rel="stylesheet" type="text/css"/>
@@ -44,6 +47,12 @@
 </head>
 <body>
     <div class="container-fluid d-flex flex-column carpool-page-container" style="min-height: 100vh; display: none;">
+        <div id="splash_screen" class="splash-screen animate__animated animate__delay-2s" style="display: none;">
+            <div class="logo-container animate__animated animate__fadeIn">
+                <img class="logo" src="../images/icons/splash_screen.png" alt="app logo" />
+                <h1 class="brand-name">Juander</h1>
+            </div>
+        </div>
         <div class="row main-top-navbar" id="main_top_navbar" style="display: none;">
             <div class="col"></div>
             <div class="col-6 d-flex my-auto justify-content-center">

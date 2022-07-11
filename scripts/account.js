@@ -6,6 +6,7 @@ var DRIVER_TRIP_KEY = 'driver_trip';
 var SHUTTLE_TRIPS_KEY = 'shuttle_trips';
 var SHUTTLE_BOOKING_KEY = 'shuttle_booking';
 var IS_ADVERTISEMENTS_LOADED_KEY = 'is_advertisements_loaded';
+var FROM_LOGOUT_TO_SPLASH = 'from_logout_to_splash';
 
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
@@ -71,6 +72,7 @@ function logoutCurrentSession() {
     delay(function () {
         // Clear local storage
         // localStorage.clear();
+        localStorage.setItem(FROM_LOGOUT_TO_SPLASH, true);
         localStorage.removeItem(USER_LOGIN_DATA_KEY);
         localStorage.removeItem(CURRENT_APP_VERSION_KEY);
         localStorage.removeItem(USER_BOOKING_KEY);
