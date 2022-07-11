@@ -9,6 +9,10 @@
     .carpool-rides-list .item .main-details .icon {
         font-size: 3rem;
     }
+    .advertisement-modal .carousel-item img {
+        width: 50%;
+        margin: auto;
+    }
 }
 @media only screen and (max-width: 600px) {
     /** CARPOOL */
@@ -32,6 +36,10 @@
     }
     .share-a-ride-container .navigate-container .container {
         width: 350px !important;
+    }
+    .advertisement-modal .carousel-item img {
+        width: 100%;
+        margin: 0;
     }
 }
 @media only screen and (max-width: 480px) {
@@ -140,6 +148,9 @@
     }
     .update-new-address-container .new-address-confirm-button {
         width: 80%;
+    }
+    .advertisement-modal .carousel-item img {
+        height: 80%;
     }
 }
 @media only screen and (max-width: 320px) {

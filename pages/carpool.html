@@ -509,20 +509,19 @@
                 <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_o8zsifcp.json" background="transparent" speed="1" style="width: 160px; height: 160px;" loop autoplay></lottie-player>
             </div>
         </div>
-        <div class="modal new-feature-modal" id="new_feature_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="new_feature_modal_label" aria-hidden="true">
+        <div class="modal new-feature-modal carousel-dark slide" id="new_feature_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="new_feature_modal_label" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen">
               <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title highlight">What's New?</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" id="new_feature_modal_close_button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        
-                        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
-                            <div class="carousel-inner">
-                              <div class="carousel-item mx-auto active" style="text-align: center;">
-                                <div class="feature-container">
+                <div class="modal-body" style="padding: 0;">
+                    <div class="container-fluid" style="height: 100%;">
+                        <div id="carousel_new_features" class="carousel slide" data-bs-ride="true"  style="height: 100%;">
+                            <div class="carousel-inner" style="height: 100%;">
+                              <div class="carousel-item active" data-bs-interval="2000" style="text-align: center; height: 100%; padding-top: 16px; overflow: auto;">
+                                <div class="feature-container d-block">
                                     <h4 class="highlight">New Sign Up form</h4>
                                     <p>Our sign up form has a new look in which new users can easily fill out before account creation</p>
                                     <div class="image-container">
@@ -530,8 +529,8 @@
                                     </div>
                                 </div>
                               </div>
-                              <div class="carousel-item mx-auto" style="text-align: center;">
-                                <div class="feature-container">
+                              <div class="carousel-item " style="text-align: center; height: 100%; padding-top: 16px; overflow: auto;">
+                                <div class="feature-container d-block">
                                     <h4 class="highlight">New Create Trip form</h4>
                                     <p>As a driver, you can now specify your location and add stops along the way for your current trip. You can also set a trip 30 minutes up to 12 hours before your chosen departure date and time.</p>
                                     <div class="image-container">
@@ -539,8 +538,8 @@
                                     </div>
                                 </div>
                               </div>
-                              <div class="carousel-item mx-auto" style="text-align: center;">
-                                <div class="feature-container">
+                              <div class="carousel-item " style="text-align: center; height: 100%; padding-top: 16px; overflow: auto;">
+                                <div class="feature-container d-block">
                                     <h4 class="highlight">Find Carpool - New look</h4>
                                     <p>Find a carpool ride now with ease via searching from your preferred location or previous bookings. You can also book a carpool ride with suggested list.</p>
                                     <div class="image-container">
@@ -551,28 +550,19 @@
                                     </div>
                                 </div>
                               </div>
-                              <div class="carousel-item mx-auto" style="text-align: center;">
-                                <div class="feature-container">
+                              <div class="carousel-item " style="text-align: center; height: 100%; padding-top: 16px; overflow: auto;">
+                                <div class="feature-container d-block">
                                     <h4 class="highlight">Share Carpool - New look</h4>
-                                    <p>Share a carpool ride has never been easier! You can now let your passengers scan your trip QR code after confirming their booking request.</p>
-                                    <div class="image-container">
-                                        <img src="" alt="" />
-                                    </div>
-                                    <div class="image-container">
-                                        <img src="../images/new_features/new-feature-06_share-carpool-page_01.png" alt="Share Carpool 01" />
-                                    </div>
+                                    <p>You can now let your passengers scan your trip QR code after confirming their booking request.</p>
                                     <div class="image-container">
                                         <img src="../images/new_features/new-feature-06_share-carpool-page_01_01.png" alt="Share Carpool 02" />
                                     </div>
                                     <div class="image-container">
                                         <img src="../images/new_features/new-feature-06_share-carpool-page_02.png" alt="Share Carpool 03" />
                                     </div>
-                                    <div class="image-container">
-                                        <img src="../images/new_features/new-feature-06_share-carpool-page_02_01.png" alt="Share Carpool 04" />
-                                    </div>
                                 </div>
                               </div>
-                              <div class="carousel-item mx-auto" style="text-align: center;">
+                              <div class="carousel-item " style="text-align: center; height: 100%; padding-top: 16px; overflow: auto;">
                                 <div class="feature-container">
                                     <h4 class="highlight">FAQs (Frequently Asked Questions</h4>
                                     <p>You can now look for FAQs for some basic information on how to use Juander.</p>
@@ -581,7 +571,7 @@
                                     </div>
                                 </div>
                               </div>
-                              <div class="carousel-item mx-auto" style="text-align: center;">
+                              <div class="carousel-item " style="text-align: center; height: 100%; padding-top: 16px; overflow: auto;">
                                 <div class="feature-container">
                                     <h4 class="highlight">Settings</h4>
                                     <p>Settings is now available so you can update your mobile number and preferred location. You may also reset your pin code by providing your email for confirmation. Wait for a message with your new PIN code via Teams.</p>
@@ -590,7 +580,7 @@
                                     </div>
                                 </div>
                               </div>
-                              <div class="carousel-item mx-auto" style="text-align: center;">
+                              <div class="carousel-item " style="text-align: center; height: 100%; padding-top: 16px; overflow: auto;">
                                 <div class="feature-container">
                                     <h4 class="highlight">Forgot Pin Code</h4>
                                     <p>Forgot Pin Code is now available whenever you forgot your pin code before login. All you need to do is enter your email. Wait for a message with your new PIN code via Teams.</p>
@@ -600,14 +590,22 @@
                                 </div>
                               </div>
                             </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel_new_features" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carousel_new_features" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                             <div class="carousel-indicators" style="position: fixed; bottom: 0; left: 0;">
-                                <button type="button" style="background-color: #373737; color: #f7f7f7;" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                <button type="button" style="background-color: #373737; color: #f7f7f7;" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                <button type="button" style="background-color: #373737; color: #f7f7f7;" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                <button type="button" style="background-color: #373737; color: #f7f7f7;" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                                <button type="button" style="background-color: #373737; color: #f7f7f7;" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
-                                <button type="button" style="background-color: #373737; color: #f7f7f7;" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
-                                <button type="button" style="background-color: #373737; color: #f7f7f7;" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="6" aria-label="Slide 7"></button>
+                                <button type="button" data-bs-target="#carousel_new_features" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                <button type="button"  data-bs-target="#carousel_new_features" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                <button type="button"  data-bs-target="#carousel_new_features" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                <button type="button" data-bs-target="#carousel_new_features" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                                <button type="button"  data-bs-target="#carousel_new_features" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                                <button type="button"  data-bs-target="#carousel_new_features" data-bs-slide-to="5" aria-label="Slide 6"></button>
+                                <button type="button"  data-bs-target="#carousel_new_features" data-bs-slide-to="6" aria-label="Slide 7"></button>
                             </div>
                         </div>
                     </div>
@@ -617,7 +615,50 @@
                 </div>
               </div>
             </div>
-          </div>
+        </div>
+        <div class="modal advertisement-modal carousel-dark slide" id="advertisement_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="advertisement_modal_label" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+              <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title highlight">Announcements</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                <div class="modal-body" style="padding: 0;">
+                    <div class="container-fluid" style="height: 100%;">
+                        <div id="carousel_advertisement" class="carousel slide" data-bs-ride="true" style="height: 100%;">
+                            <div class="carousel-inner" style="height: 100%;">
+                                <div class="carousel-item active" data-bs-interval="2000" style="height: 100%;">
+                                    <div class="d-flex flex-column justify-content-center" style="height: 100%;">
+                                        <img src="../images/advertisement/advertise_01.jpg" class="d-block" alt="...">
+                                    </div>
+                                </div>
+                                <div class="carousel-item" style="height: 100%;">
+                                    <div class="d-flex flex-column justify-content-center" style="height: 100%;">
+                                        <img src="../images/advertisement/advertise_02.png" class="d-block" alt="...">
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel_advertisement" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carousel_advertisement" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                            <div class="carousel-indicators" style="position: fixed; bottom: 0; left: 0;">
+                                <button type="button" style="background-color: #373737; color: #f7f7f7;" data-bs-target="#carousel_advertisement" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                <button type="button" style="background-color: #373737; color: #f7f7f7;" data-bs-target="#carousel_advertisement" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="visibility: hidden;">Close</button>
+                </div>
+              </div>
+            </div>
+        </div>
     </div>
     <script type="text/javascript" src="../scripts/data/location.js"></script>
     <script type="text/javascript" src="../scripts/helpers.js"></script>

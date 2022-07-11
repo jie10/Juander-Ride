@@ -1,6 +1,11 @@
 /** LOCAL STORAGE */
 var USER_LOGIN_DATA_KEY = 'user_login_data';
 var CURRENT_APP_VERSION_KEY = 'current_app_version';
+var USER_BOOKING_KEY = 'user_booking';
+var DRIVER_TRIP_KEY = 'driver_trip';
+var SHUTTLE_TRIPS_KEY = 'shuttle_trips';
+var SHUTTLE_BOOKING_KEY = 'shuttle_booking';
+var IS_ADVERTISEMENTS_LOADED_KEY = 'is_advertisements_loaded';
 
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
@@ -65,7 +70,14 @@ var address_field_change_button = document.getElementById('address_field_change_
 function logoutCurrentSession() {
     delay(function () {
         // Clear local storage
-        localStorage.clear();
+        // localStorage.clear();
+        localStorage.removeItem(USER_LOGIN_DATA_KEY);
+        localStorage.removeItem(CURRENT_APP_VERSION_KEY);
+        localStorage.removeItem(USER_BOOKING_KEY);
+        localStorage.removeItem(DRIVER_TRIP_KEY);
+        localStorage.removeItem(SHUTTLE_TRIPS_KEY);
+        localStorage.removeItem(SHUTTLE_BOOKING_KEY);
+        localStorage.removeItem(IS_ADVERTISEMENTS_LOADED_KEY);
         
         moveToLoginPage();
     }, DELAY_TIME_IN_MILLISECONDS);

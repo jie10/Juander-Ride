@@ -623,16 +623,25 @@
 }
 
 .new-feature-modal .feature-container {
-    margin: 0 auto 48px auto;
+    margin: 24px auto;
 }
 .new-feature-modal .feature-container .image-container {
     height: 100%;
-    width: 300px;
-    margin: 16px auto;
+    width: 280px;
+    margin: 16px auto 32px auto;
 }
 .new-feature-modal .feature-container .image-container img {
     width: 100%;
+    pointer-events: none;
 }
 .new-feature-modal .modal-footer {
+    padding: 0 0.75rem 0.75rem 0.75rem;
+}
+.advertisement-modal .carousel-item img {
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+}
+.advertisement-modal .modal-footer {
     padding: 0 0.75rem 0.75rem 0.75rem;
 }

@@ -10,6 +10,11 @@ var USER_LOGIN_DATA_KEY = 'user_login_data';
 var CREATED_TRIPS_HISTORY_LIST = 'created_trips_history_list';
 var SAVED_BOOKINGS_HISTORY_LIST = 'saved_bookings_history_list';
 var NEW_VERSION_LOADED_KEY = 'is_new_version_loaded';
+var USER_BOOKING_KEY = 'user_booking';
+var DRIVER_TRIP_KEY = 'driver_trip';
+var SHUTTLE_TRIPS_KEY = 'shuttle_trips';
+var SHUTTLE_BOOKING_KEY = 'shuttle_booking';
+var IS_ADVERTISEMENTS_LOADED_KEY = 'is_advertisements_loaded';
 
 /** CONSTANT VALUES */
 var _AES = 'technologyandinnovations';
@@ -91,6 +96,8 @@ var find_carpool_saved_places = document.getElementById('find_carpool_saved_plac
 var close_saved_places_button = document.getElementById('close_saved_places_button');
 var search_fq_target_location = document.getElementById('search_fq_target_location');
 var search_fq_target_location_button = document.getElementById('search_fq_target_location_button');
+
+var new_feature_modal_close_button = document.getElementById('new_feature_modal_close_button');
 
 var _cacheExpiry = -(1/60); // 1 minute
 
@@ -1030,7 +1037,15 @@ function reloadCurrentPage(fromApi) {
 
 function moveToLoginPage() {
     // Clear local storage
-    localStorage.clear();
+    // localStorage.clear();
+    localStorage.removeItem(USER_LOGIN_DATA_KEY);
+    localStorage.removeItem(CURRENT_APP_VERSION_KEY);
+    localStorage.removeItem(USER_BOOKING_KEY);
+    localStorage.removeItem(DRIVER_TRIP_KEY);
+    localStorage.removeItem(SHUTTLE_TRIPS_KEY);
+    localStorage.removeItem(SHUTTLE_BOOKING_KEY);
+    localStorage.removeItem(IS_ADVERTISEMENTS_LOADED_KEY);
+    localStorage.removeItem(NEW_VERSION_LOADED_KEY);
     window.location.href = HOMEPAGE_SOURCE_LOCATION;
 }
 
@@ -2005,13 +2020,24 @@ function checkAddress(landmark, location) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
-function checkAnnouncements() {
+function checkNewFeatures() {
     if (!localStorage.getItem(NEW_VERSION_LOADED_KEY)) {
         new bootstrap.Modal(new_feature_modal, {
             keyboard: false
         }).show();
 
         localStorage.setItem(NEW_VERSION_LOADED_KEY, true);
+    } else {
+        checkAnnouncements();
+    }
+}
+function checkAnnouncements() {
+    if (!localStorage.getItem(IS_ADVERTISEMENTS_LOADED_KEY)) {
+        new bootstrap.Modal(advertisement_modal, {
+            keyboard: false
+        }).show();
+
+        localStorage.setItem(IS_ADVERTISEMENTS_LOADED_KEY, true);
     }
 }
 function checkNewAddress(landmark, location) {
@@ -2557,6 +2583,10 @@ new_address_confirm_button.addEventListener('click', function () {
     checkNewAddress(landmark, address);
 });
 
+new_feature_modal_close_button.addEventListener('click', function() {
+    checkAnnouncements();
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.carpool-page-container').style.display = 'none';
     showActivityIndicator();
@@ -2565,7 +2595,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // console.log('booking', bookingFromCache())
         // console.log('trip', tripFromCache())
         reloadCurrentPage(true);
-        checkAnnouncements();
+        checkNewFeatures();
     } else {
         moveToLoginPage();
         localStorage.removeItem(CURRENT_APP_VERSION_KEY);
