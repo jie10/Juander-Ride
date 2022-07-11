@@ -21,15 +21,24 @@
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <!-- CRYPTO JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <!-- CUSTOM CSS -->
     <link href="./styles/utils/helpers.css" rel="stylesheet" type="text/css"/>
     <link href="./styles/default.css" rel="stylesheet" type="text/css"/>
-    <link href="../styles/lib/swal2.css" rel="stylesheet" type="text/css"/>
+    <link href="./styles/lib/swal2.css" rel="stylesheet" type="text/css"/>
+    <link href="./styles/components/splash-screen.css" rel="stylesheet" type="text/css"/>
     <link href="./styles/index.css" rel="stylesheet" type="text/css" />
     <link href="./styles/index.mobile.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <div class="container-fluid index-page-container">
+        <div id="splash_screen" class="splash-screen animate__animated animate__slideOutLeft animate__delay-2s">
+            <div class="logo-container animate__animated animate__fadeIn">
+                <img class="logo" src="./images/icons/splash_screen.png" alt="app logo" />
+                <h1 class="brand-name">Juander</h1>
+            </div>
+        </div>
         <div id="login_viewcontroller" style="display: none;">
             <div class="container">
                 <header class="login-header"></header>

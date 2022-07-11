@@ -71,7 +71,9 @@ function checkExistingSession() {
 }
 
 function moveToHomepage() {
-    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+    delay(function () {
+        window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+    }, DELAY_TIME_IN_MILLISECONDS);
 }
 
 function loadDefaultSelectedLocationFields() {
@@ -113,19 +115,18 @@ function login(pin_code) {
             return result.json();
         })
         .then(function (data) {
-            delay(function () {
-                if (data.code === 400) {
-                    hideActivityIndicator();
-                    showErrorAlertWithConfirmButton(function () {
-                        user_pin_code.disabled = false;
-                        login_button.disabled = false;
-                    }, 'Error ' + data.code, data.message, 'Close');
-                } else {
-                    // Encrypt data
-                    localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(data));
-                    moveToHomepage();
-                }
-            }, DELAY_TIME_IN_MILLISECONDS);
+            hideActivityIndicator();
+            if (data.code === 400) {
+                showErrorAlertWithConfirmButton(function () {
+                    user_pin_code.disabled = false;
+                    login_button.disabled = false;
+                }, 'Error ' + data.code, data.message, 'Close');
+            } else {
+                document.getElementById('splash_screen').classList.remove('animate__slideOutLeft');
+                document.getElementById('splash_screen').classList.add('animate__slideInLeft');
+                // localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(data));
+                // moveToHomepage();
+            }
         })
         .catch(function (err) {
             console.error(err);
