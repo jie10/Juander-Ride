@@ -71,9 +71,7 @@ function checkExistingSession() {
 }
 
 function moveToHomepage() {
-    delay(function () {
-        window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-    }, DELAY_TIME_IN_MILLISECONDS);
+    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
 }
 
 function loadDefaultSelectedLocationFields() {
@@ -115,22 +113,25 @@ function login(pin_code) {
             return result.json();
         })
         .then(function (data) {
-            hideActivityIndicator();
             if (data.code === 400) {
                 showErrorAlertWithConfirmButton(function () {
                     user_pin_code.disabled = false;
                     login_button.disabled = false;
+                    sign_up_view_button.disabled = false;
+                    forgot_pin_code_button.disabled = false;
                 }, 'Error ' + data.code, data.message, 'Close');
             } else {
+                localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(data));
                 document.getElementById('splash_screen').classList.remove('animate__slideOutLeft');
                 document.getElementById('splash_screen').classList.add('animate__slideInLeft');
-                // localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(data));
-                // moveToHomepage();
+            
+                delay(function () {
+                    moveToHomepage();
+                }, 3000);
             }
         })
         .catch(function (err) {
             console.error(err);
-            hideActivityIndicator();
             showErrorAlertWithConfirmButton(function () {
                 window.location.href = HOMEPAGE_SOURCE_LOCATION;
             }, 'Error 500', 'Internal server error', 'Refresh');
@@ -410,7 +411,8 @@ function onLogin() {
     if (pincodePattern.test(pincode) === true) {
         user_pin_code.disabled = true;
         login_button.disabled = true;
-        showActivityIndicator();
+        sign_up_view_button.disabled = true;
+        forgot_pin_code_button.disabled = true;
 
         login(pincode);
     } else {
