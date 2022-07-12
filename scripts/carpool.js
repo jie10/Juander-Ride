@@ -9,7 +9,7 @@ var CURRENT_APP_VERSION_KEY = 'current_app_version';
 var USER_LOGIN_DATA_KEY = 'user_login_data';
 var CREATED_TRIPS_HISTORY_LIST = 'created_trips_history_list';
 var SAVED_BOOKINGS_HISTORY_LIST = 'saved_bookings_history_list';
-var NEW_VERSION_LOADED_KEY = 'is_new_version_loaded';
+var NEW_FEATURES_LOADED_KEY = 'is_new_features_loaded';
 var USER_BOOKING_KEY = 'user_booking';
 var DRIVER_TRIP_KEY = 'driver_trip';
 var SHUTTLE_TRIPS_KEY = 'shuttle_trips';
@@ -48,6 +48,7 @@ var GET_CURRENT_TRIPS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-
 var GET_BOOKING_BY_RIDER_AND_TRIP_ID_API_ENPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book/rider';
 var UPDATE_PASSENGER_BOOKING_API_ENPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
 var JUANDER_CONFIRM_CARPOOL_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/server';
+var CURRENT_BROADCAST_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-jspot-api/broadcast/current';
 
 /** SOURCE LOCATION */
 var HOMEPAGE_SOURCE_LOCATION = '../index.html';
@@ -97,8 +98,6 @@ var find_carpool_saved_places = document.getElementById('find_carpool_saved_plac
 var close_saved_places_button = document.getElementById('close_saved_places_button');
 var search_fq_target_location = document.getElementById('search_fq_target_location');
 var search_fq_target_location_button = document.getElementById('search_fq_target_location_button');
-
-var new_feature_modal_close_button = document.getElementById('new_feature_modal_close_button');
 
 var _cacheExpiry = -(1/60); // 1 minute
 
@@ -1046,7 +1045,7 @@ function moveToLoginPage() {
     localStorage.removeItem(SHUTTLE_TRIPS_KEY);
     localStorage.removeItem(SHUTTLE_BOOKING_KEY);
     localStorage.removeItem(IS_ADVERTISEMENTS_LOADED_KEY);
-    localStorage.removeItem(NEW_VERSION_LOADED_KEY);
+    localStorage.removeItem(NEW_FEATURES_LOADED_KEY);
     window.location.href = HOMEPAGE_SOURCE_LOCATION;
 }
 
@@ -2023,25 +2022,63 @@ function checkAddress(landmark, location) {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
-function checkNewFeatures() {
-    if (!localStorage.getItem(NEW_VERSION_LOADED_KEY)) {
-        new bootstrap.Modal(new_feature_modal, {
-            keyboard: false
-        }).show();
 
-        localStorage.setItem(NEW_VERSION_LOADED_KEY, true);
-    } else {
-        checkAnnouncements();
-    }
-}
 function checkAnnouncements() {
-    if (!localStorage.getItem(IS_ADVERTISEMENTS_LOADED_KEY)) {
-        new bootstrap.Modal(advertisement_modal, {
-            keyboard: false
-        }).show();
-
-        localStorage.setItem(IS_ADVERTISEMENTS_LOADED_KEY, true);
-    }
+    fetch(CURRENT_BROADCAST_API_ENDPOINT)
+        .then(getResJSON)
+        .then(function (data) {
+            if (data) {
+                if (data.type === 0) {
+                    if (!localStorage.getItem(IS_ADVERTISEMENTS_LOADED_KEY) || localStorage.getItem(IS_ADVERTISEMENTS_LOADED_KEY) !== data._id) {
+                        var carouselItems = data.sections && data.sections.length > 0 ? data.sections.map(function(section, i) {
+                            return '<div class=\"carousel-item' + (i === 0 ? ' active\" data-bs-interval=\"2000\"': '\" ') + 'style=\"text-align: center; height: 100%; padding-top: 16px; overflow: auto;\">' +
+                                        '<div class="d-flex flex-column justify-content-center" style="height: 100%;">' +
+                                            '<img src=\"' + section.imageUrl + '\" class=\"d-block\" alt=\"' + section.title + '\">' +
+                                        '</div>' +
+                                    '</div>';
+                        }).join('') : '';
+                        var carouselButtons = data.sections && data.sections.length > 0 ? data.sections.map(function(section, i) {
+                            return '<button type=\"button\" data-bs-target=\"#carousel_advertisement\" data-bs-slide-to=\"' + i + '\" ' + (i === 0 ? 'class=\"active\" aria-current=\"true\"' : '') + ' aria-label=\"Slide ' + (i + 1) + '\"></button>'
+                        }).join('') : '';
+    
+                        document.querySelector('.advertisement-modal .carousel-inner').innerHTML = carouselItems;
+                        document.querySelector('.advertisement-modal .carousel-indicators').innerHTML = carouselButtons;
+    
+                        new bootstrap.Modal(advertisement_modal, {
+                            keyboard: false
+                        }).show();
+                
+                        localStorage.setItem(IS_ADVERTISEMENTS_LOADED_KEY, data._id);
+                    }
+                } else {
+                    if (!localStorage.getItem(NEW_FEATURES_LOADED_KEY) || localStorage.getItem(NEW_FEATURES_LOADED_KEY) !== data._id) {
+                        var carouselItems = data.sections && data.sections.length > 0 ? data.sections.map(function(section, i) {
+                            return '<div class=\"carousel-item' + (i === 0 ? ' active\" data-bs-interval=\"2000\"': '\" ') + 'style=\"text-align: center; height: 100%; padding-top: 16px; overflow: auto;\">' +
+                                        '<div class=\"feature-container d-block\">' +
+                                            '<h4 class=\"highlight\">' + section.title + '</h4>' +
+                                            '<p>' + section.details + '</p>' +
+                                            '<div class=\"image-container\">' +
+                                                '<img src=\"' + section.imageUrl + '\" style=\"width: 180px; height: 280px;\" alt=\"new sign up form\" />' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>';
+                        }).join('') : '';
+                        var carouselButtons = data.sections && data.sections.length > 0 ? data.sections.map(function(section, i) {
+                            return '<button type=\"button\" data-bs-target=\"#carousel_new_features\" data-bs-slide-to=\"' + i + '\" ' + (i === 0 ? 'class=\"active\" aria-current=\"true\"' : '') + ' aria-label=\"Slide ' + (i + 1) + '\"></button>'
+                        }).join('') : '';
+    
+                        document.querySelector('.new-feature-modal .carousel-inner').innerHTML = carouselItems;
+                        document.querySelector('.new-feature-modal .carousel-indicators').innerHTML = carouselButtons;
+    
+                        new bootstrap.Modal(new_feature_modal, {
+                            keyboard: false
+                        }).show();
+                
+                        localStorage.setItem(NEW_FEATURES_LOADED_KEY, data._id);
+                    } else {}
+                }
+            }
+        })
 }
 function checkNewAddress(landmark, location) {
     var payload = {
@@ -2586,10 +2623,6 @@ new_address_confirm_button.addEventListener('click', function () {
     checkNewAddress(landmark, address);
 });
 
-new_feature_modal_close_button.addEventListener('click', function() {
-    checkAnnouncements();
-});
-
 document.addEventListener('DOMContentLoaded', function () {
     if (checkCurrentSession()) {
 
@@ -2603,7 +2636,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         reloadCurrentPage(true);
-        checkNewFeatures();
+        checkAnnouncements();
         // console.log('booking', bookingFromCache())
         // console.log('trip', tripFromCache())
 
