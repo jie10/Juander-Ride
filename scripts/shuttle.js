@@ -4,6 +4,7 @@ var DRIVER_TRIP = 'driver_trip';
 var DRIVER_BOOKING = 'user_booking';
 var SHUTTLE_TRIPS = 'shuttle_trips';
 var SHUTTLE_BOOKING = 'shuttle_booking';
+var FROM_INDEX_TO_ROUTE_KEY = 'from_index_to_route_key';
 
 /** API ENDPOINTS */
 var UPDATE_BOOKING_STATUS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
@@ -598,7 +599,7 @@ function getStatusPopup(bookingStatus, driverPhoneNumber, bookingID) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+function loadShuttlePage() {
     var _payload = {}
 
     shuttle_ride_card.addEventListener("click", onShuttleCardTap.bind(event, _payload), false);
@@ -666,7 +667,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 1000);  
         }
     }
-    
 
     if(!_hasShuttleBooking && !_hasCarpoolTrip){
         activity_indicator.style.visibility = "visible";
@@ -721,6 +721,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
     }
+}
 
+function moveToIndexPage() {
+    window.location.href = INDEX_SOURCE_LOCATION;
+}
 
+document.addEventListener('DOMContentLoaded', function () {
+    checkAppVersion(function () {
+        if (checkCurrentSession()) {
+            loadShuttlePage();
+        } else {
+            moveToIndexPage();
+        }
+    }, function () {
+        moveToIndexPage();
+    });
 });

@@ -6,7 +6,7 @@ var USER_LOGIN_DATA_KEY = 'user_login_data';
 var CHECK_APP_VERSION_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/version';
 
 /** SOURCE LOCATION */
-var HOMEPAGE_SOURCE_LOCATION = '../index.html';
+var INDEX_SOURCE_LOCATION = '../index.html';
 
 function checkAppVersion (successCallback, failedCallback) {
     fetch(CHECK_APP_VERSION_API_ENDPOINT)
@@ -23,16 +23,14 @@ function checkAppVersion (successCallback, failedCallback) {
             } else if (currect_app_version_from_server && (currect_app_version_from_server === parseInt(current_app_version))) {
                 successCallback();
             } else {
-                localStorage.removeItem(CURRENT_APP_VERSION_KEY);
-                localStorage.removeItem(USER_LOGIN_DATA_KEY);
-
+                localStorage.clear();
                 failedCallback();
             }
         })
         .catch(function (err) {
             console.error(err);
             showErrorAlertWithConfirmButton(function () {
-                window.location.href = HOMEPAGE_SOURCE_LOCATION;
+                window.location.href = INDEX_SOURCE_LOCATION;
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }

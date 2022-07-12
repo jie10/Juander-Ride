@@ -6,7 +6,6 @@ var DRIVER_TRIP_KEY = 'driver_trip';
 var SHUTTLE_TRIPS_KEY = 'shuttle_trips';
 var SHUTTLE_BOOKING_KEY = 'shuttle_booking';
 var IS_ADVERTISEMENTS_LOADED_KEY = 'is_advertisements_loaded';
-var FROM_LOGOUT_TO_SPLASH = 'from_logout_to_splash';
 
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
@@ -25,7 +24,7 @@ var UPDATE_USER_INFO_API_ENPOINT = 'https://cebupacificair-dev.apigee.net/ceb-po
 var RESET_PIN_CODE_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/forgot';
 
 /** SOURCE LOCATION */
-var HOMEPAGE_SOURCE_LOCATION = '/';
+var INDEX_SOURCE_LOCATION = '../index.html';
 var ACCOUNTPAGE_SOURCE_LOCATION = '../pages/account.html';
 
 /** COMPONENTS */
@@ -69,20 +68,21 @@ var address_field = document.getElementById('address_field');
 var address_field_change_button = document.getElementById('address_field_change_button');
 
 function logoutCurrentSession() {
+
+    document.getElementById('splash_screen').style.display = 'block';
+    document.getElementById('splash_screen').classList.add('animate__slideInLeft');
+    // Clear local storage
+    // localStorage.clear();
+    localStorage.removeItem(USER_LOGIN_DATA_KEY);
+    localStorage.removeItem(USER_BOOKING_KEY);
+    localStorage.removeItem(DRIVER_TRIP_KEY);
+    localStorage.removeItem(SHUTTLE_TRIPS_KEY);
+    localStorage.removeItem(SHUTTLE_BOOKING_KEY);
+    localStorage.removeItem(IS_ADVERTISEMENTS_LOADED_KEY);
+
     delay(function () {
-        // Clear local storage
-        // localStorage.clear();
-        localStorage.setItem(FROM_LOGOUT_TO_SPLASH, true);
-        localStorage.removeItem(USER_LOGIN_DATA_KEY);
-        localStorage.removeItem(CURRENT_APP_VERSION_KEY);
-        localStorage.removeItem(USER_BOOKING_KEY);
-        localStorage.removeItem(DRIVER_TRIP_KEY);
-        localStorage.removeItem(SHUTTLE_TRIPS_KEY);
-        localStorage.removeItem(SHUTTLE_BOOKING_KEY);
-        localStorage.removeItem(IS_ADVERTISEMENTS_LOADED_KEY);
-        
-        moveToLoginPage();
-    }, DELAY_TIME_IN_MILLISECONDS);
+        moveToIndexPage();
+    }, 2000);
 }
 function loadDefaultSelectedLocationFields() {
     target_location_region.innerHTML = regions.map(function (region, i) {
@@ -221,8 +221,8 @@ function getBookingStatusIndicator(status) {
         default: return null;
     }
 }
-function moveToLoginPage() {
-    window.location.href = HOMEPAGE_SOURCE_LOCATION;
+function moveToIndexPage() {
+    window.location.href = INDEX_SOURCE_LOCATION;
 }
 
 function showProfileNavbar() {
@@ -573,7 +573,7 @@ function getUserInfo() {
             console.error(err);
             hideActivityIndicator();
             showErrorAlertWithConfirmButton(function () {
-                window.location.href = HOMEPAGE_SOURCE_LOCATION;
+                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
@@ -623,7 +623,7 @@ function checkAddress(landmark, location) {
             console.error(err);
             hideActivityIndicator();
             showErrorAlertWithConfirmButton(function () {
-                window.location.href = HOMEPAGE_SOURCE_LOCATION;
+                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
@@ -683,7 +683,7 @@ function updateUserInfo(account_id, mobileNumber, landmark, address, d) {
             console.error(err);
             hideActivityIndicator();
             showErrorAlertWithConfirmButton(function () {
-                window.location.href = HOMEPAGE_SOURCE_LOCATION;
+                window.location.href = ACCOUNTPAGE_SOURCE_LOCATION;
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
@@ -856,7 +856,6 @@ function onAccountPage() {
 }
 function onLogout() {
     showQuestionAlertWithButtons(function () {
-        showActivityIndicator();
         logoutCurrentSession();
     }, 'Log out', 'Are you sure you want to continue?', 'Yes', 'No');
 }
@@ -1053,14 +1052,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     showActivityIndicator();
 
-    if (checkCurrentSession()) {
-        checkAppVersion(function () {
+    checkAppVersion(function () {
+        if (checkCurrentSession()) {
             document.querySelector('.account-page-container').style.display = 'block';
             getUserInfo();
             reloadCurrentPage();
-        }, moveToLoginPage);
-    } else {
-        moveToLoginPage();
-        localStorage.removeItem(CURRENT_APP_VERSION_KEY);
-    }
+        } else {
+            moveToIndexPage();
+        }
+    }, function () {
+        moveToIndexPage();
+    });
 });

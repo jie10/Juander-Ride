@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juander Ride</title>
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="../images/icons/juander-icon.png" />
+    <!-- FONTAWESOME-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- BOOTSTRAP 5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <!-- SWAL 2-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.css" integrity="sha512-y4S4cBeErz9ykN3iwUC4kmP/Ca+zd8n8FDzlVbq5Nr73gn1VBXZhpriQ7avR+8fQLpyq4izWm0b8s6q4Vedb9w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js" integrity="sha512-7x7HoEikRZhV0FAORWP+hrUzl75JW/uLHBbg2kHnPdFmScpIeHY0ieUVSacjusrKrlA/RsA2tDOBvisFmKc3xw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <!-- CLEAVE JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js" integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- LOTTIE -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <!-- CRYPTO JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- CUSTOM CSS -->
+    <link href="../styles/utils/helpers.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles/default.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles/lib/swal2.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles/components/splash-screen.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles/pages/login.css" rel="stylesheet" type="text/css" />
+    <link href="../styles/pages/login.mobile.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container-fluid index-page-container">
+        <div id="splash_screen" class="splash-screen animate__animated animate__delay-1s" style="display: none;">
+            <div class="logo-container">
+                <img class="logo" src="../images/icons/splash_screen.png" alt="app logo" />
+                <h1 class="brand-name">Juander</h1>
+            </div>
+        </div>
+        <div id="login_viewcontroller" style="display: none;">
+            <div class="container">
+                <header class="login-header"></header>
+                <section class="login-form-container">
+                    <div class="welcome-rems text-center">
+                        <p class="pagename">Welcome to Juander</p>
+                        <p class="pagedescription">Transportation for EveryJuan</p>
+                    </div>
+                    <form class="row g-3 login-form">
+                        <div class="col">
+                            <label for="user_pin_code" class="form-label login-pin-code-input-label">Pin Code</label>
+                            <input type="text" class="form-control login-pin-code-input" id="user_pin_code" name="user_pin_code" placeholder="Enter your Pin Code" autocomplete="off" maxlength="6">
+                            <div class="invalid-feedback">Please choose a valid pin code</div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-center mt-4">
+                          <button type="button" class="btn btn-primary login-button" id="login_button">Login</button>
+                        </div>
+                        <div class="col-12 d-flex justify-content-center">
+                            <button type="button" class="btn btn-secondary sign-up-view-button" id="sign_up_view_button" style="text-decoration: none;">Sign Up</button>
+                          </div>
+                        <div class="col-12 d-flex justify-content-center">
+                          <button type="button" class="btn btn-outlined" id="forgot_pin_code_button">Forgot PIN Code</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+        <div id="sign_up_viewcontroller" class="sign-up-view-controller" style="display: none;">
+            <div class="container">
+                <header class="sign-up-header">
+                    <button type="button" class="btn btn-outlined back-to-login-view-button" id="back_to_login_view_button">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <span class="display-6 absolute-center page-title">Create account</span>
+                </header>
+                <section class="sign-up-form-container">
+                    <form class="row g-3 sign-up-form">
+                        <div class="col-12">
+                            <label for="user_sign_up_email" class="form-label sign-up-email-input-label">Email</label>
+                            <input type="email" class="form-control sign-up-email-input" id="user_sign_up_email" name="user_sign_up_email" placeholder="Enter your CEB Email" autocomplete="off" maxlength="50" />
+                            <div class="invalid-feedback">Please choose a valid email</div>
+                        </div>
+                        <div class="col-12">
+                            <label for="user_sign_up_mobile_number" class="form-label sign-up-mobile-number-input-label">Mobile Number</label>
+                            <input type="text" class="form-control sign-up-mobile-number-input" id="user_sign_up_mobile_number" name="user_sign_up_mobile_number" placeholder="917 346 9999" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" autocomplete="off" maxlength="30" />
+                            <div class="invalid-feedback">Please choose a valid mobile number</div>
+                        </div>
+                        <div class="col-12" style="margin: 16px 0;">
+                            <label class="form-label highlight" style="margin: 0;">Target Location</label>
+                            <p class="text-muted" style="font-size: 0.75rem; margin: 8px 0 12px 0;">Your preferred pickup or drop off used in carpool matching</p>
+                            <button type="button" class="btn btn-outline address-field-change-button d-flex flex-row align-items-center" id="address_field_change_button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                <span class="icon"><i class="fa-solid fa-location-dot"></i></span>
+                                <span class="details">
+                                    <span class="landmark-label" id="landmark_label" style="color: #cccccc;">No Landmark</span>
+                                    <span class="address-label" id="address_label">Region, province, municipality, barangay</span>
+                                </span>
+                                <span class="icon"><i class="fa-solid fa-arrow-right"></i></span>
+                            </button>
+                            <input type="hidden" id="landmark_field" />
+                            <input type="hidden" id="address_field" />
+                            <div class="modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-fullscreen-md-down">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title highlight">Target Location</h5>
+                                    <button type="button" class="btn-close" id="address_close_button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" style="padding: 2rem 1.5rem;">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input autocomplete="off" type="text" class="form-control mb-3" id="target_location_landmark" placeholder="Enter a Landmark" maxlength="250" />
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <select class="form-select mb-3" id="target_location_region" aria-label="Region">
+                                                <option value="" selected disabled>Select a Region</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <select class="form-select mb-3" id="target_location_province" aria-label="Province">
+                                                <option value="" selected disabled>Select a Province</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <select class="form-select mb-3" id="target_location_municipality" aria-label="Municipality">
+                                                <option value="" selected disabled>Select a Municipality</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <select class="form-select mb-3" id="target_location_barangay" aria-label="Barangay">
+                                                <option value="" selected disabled>Select a Barangay</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-center mt-5">
+                                            <button type="button" class="btn btn-primary address-confirm-button" id="address_confirm_button" data-bs-dismiss="modal" disabled>Confirm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-center mt-5">
+                          <button type="button" class="btn btn-primary sign-up-button" id="sign_up_button" disabled>Sign Up</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+        <div id="activity_indicator" style="position: absolute; width: 100%; height: 100%; z-index: 1; top: 0; left: 0; background-color: #fff; visibility: collapse; opacity: 1;">
+            <div style="display: flex; align-content: center; justify-content: center; align-items: center; height: 100%;">
+                <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_o8zsifcp.json" background="transparent" speed="1" style="width: 160px; height: 160px;" loop autoplay></lottie-player>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="../scripts/data/location.js"></script>
+    <script type="text/javascript" src="../scripts/helpers.js"></script>
+    <script type="text/javascript" src="../scripts/utils.js"></script>
+    <script type="text/javascript" src="../scripts/components/lib/alerts.js"></script>
+    <script type="text/javascript" src="../scripts/components/lib/activity_indicator.js"></script>
+    <script type="text/javascript" src="../scripts/login.js"></script>
+</body>
+</html>

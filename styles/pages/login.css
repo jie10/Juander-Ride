@@ -6,7 +6,7 @@
 
 /** LOGIN PAGE */
 .index-page-container .login-header {
-    background-image: url('../images/sample/login-header.png');
+    background-image: url('../../images/sample/login-header.png');
     background-size: cover;
     -o-background-size: cover;
     -moz-background-size: cover;

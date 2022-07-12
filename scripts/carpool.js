@@ -16,6 +16,7 @@ var SHUTTLE_TRIPS_KEY = 'shuttle_trips';
 var SHUTTLE_BOOKING_KEY = 'shuttle_booking';
 var IS_ADVERTISEMENTS_LOADED_KEY = 'is_advertisements_loaded';
 var FROM_LOGIN_TO_SPLASH = 'from_login_to_splash';
+var FROM_INDEX_TO_ROUTE_KEY = 'from_index_to_route_key';
 
 /** CONSTANT VALUES */
 var _AES = 'technologyandinnovations';
@@ -51,7 +52,7 @@ var JUANDER_CONFIRM_CARPOOL_API_ENDPOINT = 'https://cebupacificair-dev.apigee.ne
 var CURRENT_BROADCAST_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-jspot-api/broadcast/current';
 
 /** SOURCE LOCATION */
-var HOMEPAGE_SOURCE_LOCATION = '../index.html';
+var LOGIN_SOURCE_LOCATION = '../pages/login.html';
 var ACCOUNTPAGE_SOURCE_LOCATION = '../pages/account.html';
 var CARPOOLPAGE_SOURCE_LOCATION = '../pages/carpool.html';
 
@@ -919,18 +920,6 @@ function reloadCurrentPage(fromApi) {
             JUANDERSERVICE.userStatusCheck(email)
             .then(getResJSON)
             .then(function (data) {
-                var currect_app_version_from_server = data.version;
-                var current_app_version = localStorage.getItem(CURRENT_APP_VERSION_KEY) ;
-    
-                if (currect_app_version_from_server && !current_app_version) {
-                    localStorage.setItem(CURRENT_APP_VERSION_KEY, currect_app_version_from_server);
-                } else if (currect_app_version_from_server && (currect_app_version_from_server === parseInt(current_app_version))) {
-                    
-                } else {
-                    localStorage.removeItem(CURRENT_APP_VERSION_KEY);
-                    localStorage.removeItem(USER_LOGIN_DATA_KEY);
-                    moveToLoginPage()
-                }
                 // console.log('begin', data)
                 if (!JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).landmark) {
                     hideMainTopNavbar();
@@ -1035,18 +1024,8 @@ function reloadCurrentPage(fromApi) {
     }, DELAY_TIME_IN_MILLISECONDS);
 }
 
-function moveToLoginPage() {
-    // Clear local storage
-    // localStorage.clear();
-    localStorage.removeItem(USER_LOGIN_DATA_KEY);
-    localStorage.removeItem(CURRENT_APP_VERSION_KEY);
-    localStorage.removeItem(USER_BOOKING_KEY);
-    localStorage.removeItem(DRIVER_TRIP_KEY);
-    localStorage.removeItem(SHUTTLE_TRIPS_KEY);
-    localStorage.removeItem(SHUTTLE_BOOKING_KEY);
-    localStorage.removeItem(IS_ADVERTISEMENTS_LOADED_KEY);
-    localStorage.removeItem(NEW_FEATURES_LOADED_KEY);
-    window.location.href = HOMEPAGE_SOURCE_LOCATION;
+function moveToIndexPage() {
+    window.location.href = INDEX_SOURCE_LOCATION;
 }
 
 function onBackToPreviousPage() {
@@ -1941,7 +1920,7 @@ function updateUserInfo(account_id, landmark, location, data) {
             console.error(err);
             hideActivityIndicator();
             showErrorAlertWithConfirmButton(function () {
-                window.location.href = HOMEPAGE_SOURCE_LOCATION;
+                window.location.href = LOGIN_SOURCE_LOCATION;
             }, 'Error 500', 'Internal server error', 'Refresh');
         });
 }
@@ -2624,24 +2603,29 @@ new_address_confirm_button.addEventListener('click', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (checkCurrentSession()) {
-
-        if (localStorage.getItem(FROM_LOGIN_TO_SPLASH)) {
-            document.getElementById('splash_screen').style.display = 'block';
-            document.getElementById('splash_screen').classList.add('animate__slideOutLeft');
-            localStorage.removeItem(FROM_LOGIN_TO_SPLASH);
+    checkAppVersion(function () {
+        if (checkCurrentSession()) {
+            if (localStorage.getItem(FROM_LOGIN_TO_SPLASH)) {
+                document.getElementById('splash_screen').style.display = 'block';
+                document.getElementById('splash_screen').classList.add('animate__slideOutLeft');
+                localStorage.removeItem(FROM_LOGIN_TO_SPLASH);
+            } else if (localStorage.getItem(FROM_INDEX_TO_ROUTE_KEY)) {
+                document.getElementById('splash_screen').style.display = 'block';
+                document.getElementById('splash_screen').classList.add('animate__slideOutLeft');
+                localStorage.removeItem(FROM_INDEX_TO_ROUTE_KEY);
+            } else {
+                document.querySelector('.carpool-page-container').style.display = 'none';
+                showActivityIndicator();
+            }
+    
+            reloadCurrentPage(true);
+            checkAnnouncements();
+            // console.log('booking', bookingFromCache())
+            // console.log('trip', tripFromCache())
         } else {
-            document.querySelector('.carpool-page-container').style.display = 'none';
-            showActivityIndicator();
+            moveToIndexPage();
         }
-
-        reloadCurrentPage(true);
-        checkAnnouncements();
-        // console.log('booking', bookingFromCache())
-        // console.log('trip', tripFromCache())
-
-    } else {
-        moveToLoginPage();
-        localStorage.removeItem(CURRENT_APP_VERSION_KEY);
-    }
+    }, function () {
+        moveToIndexPage();
+    });
 });
