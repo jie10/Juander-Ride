@@ -4,7 +4,6 @@ var DRIVER_TRIP = 'driver_trip';
 var DRIVER_BOOKING = 'user_booking';
 var SHUTTLE_TRIPS = 'shuttle_trips';
 var SHUTTLE_BOOKING = 'shuttle_booking';
-var FROM_INDEX_TO_ROUTE_KEY = 'from_index_to_route_key';
 
 /** API ENDPOINTS */
 var UPDATE_BOOKING_STATUS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';

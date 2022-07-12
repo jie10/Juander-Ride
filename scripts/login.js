@@ -1,7 +1,5 @@
 /** LOCAL STORAGE */
 var USER_LOGIN_DATA_KEY = 'user_login_data';
-var FROM_LOGIN_TO_SPLASH = 'from_login_to_splash';
-var FROM_INDEX_TO_ROUTE_KEY = 'from_index_to_route_key';
 
 /** CONSTANT VALUES */
 var DELAY_TIME_IN_MILLISECONDS = 1000;
@@ -110,13 +108,7 @@ function login(pin_code) {
                 }, 'Error ' + data.code, data.message, 'Close');
             } else {
                 localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(data));
-                document.getElementById('splash_screen').style.display = 'block';
-                document.getElementById('splash_screen').classList.remove('animate__fadeOut');
-                document.getElementById('splash_screen').classList.add('animate__fadeIn');
-                localStorage.setItem(FROM_LOGIN_TO_SPLASH, true);
-                delay(function () {
-                    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-                }, 3000);
+                window.location.href = INDEX_SOURCE_LOCATION;
             }
         })
         .catch(function (err) {
@@ -552,14 +544,5 @@ address_confirm_button.addEventListener('click', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (localStorage.getItem(FROM_INDEX_TO_ROUTE_KEY)) {
-        document.getElementById('splash_screen').style.display = 'block';
-        document.getElementById('splash_screen').classList.add('animate__fadeOut');
-        localStorage.removeItem(FROM_INDEX_TO_ROUTE_KEY);
-    } else {
-        document.getElementById('splash_screen').classList.remove('animate__fadeOut');
-        document.getElementById('splash_screen').style.display = 'none';
-    }
-
     loadPageInDefault();
 });

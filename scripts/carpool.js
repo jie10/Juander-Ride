@@ -15,8 +15,6 @@ var DRIVER_TRIP_KEY = 'driver_trip';
 var SHUTTLE_TRIPS_KEY = 'shuttle_trips';
 var SHUTTLE_BOOKING_KEY = 'shuttle_booking';
 var IS_ADVERTISEMENTS_LOADED_KEY = 'is_advertisements_loaded';
-var FROM_LOGIN_TO_SPLASH = 'from_login_to_splash';
-var FROM_INDEX_TO_ROUTE_KEY = 'from_index_to_route_key';
 
 /** CONSTANT VALUES */
 var _AES = 'technologyandinnovations';
@@ -2605,18 +2603,8 @@ new_address_confirm_button.addEventListener('click', function () {
 document.addEventListener('DOMContentLoaded', function () {
     checkAppVersion(function () {
         if (checkCurrentSession()) {
-            if (localStorage.getItem(FROM_LOGIN_TO_SPLASH)) {
-                document.getElementById('splash_screen').style.display = 'block';
-                document.getElementById('splash_screen').classList.add('animate__fadeOut');
-                localStorage.removeItem(FROM_LOGIN_TO_SPLASH);
-            } else if (localStorage.getItem(FROM_INDEX_TO_ROUTE_KEY)) {
-                document.getElementById('splash_screen').style.display = 'block';
-                document.getElementById('splash_screen').classList.add('animate__fadeOut');
-                localStorage.removeItem(FROM_INDEX_TO_ROUTE_KEY);
-            } else {
-                document.querySelector('.carpool-page-container').style.display = 'none';
-                showActivityIndicator();
-            }
+            document.querySelector('.carpool-page-container').style.display = 'none';
+            showActivityIndicator();
     
             reloadCurrentPage(true);
             checkAnnouncements();

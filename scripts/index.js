@@ -1,6 +1,5 @@
 /** LOCAL STORAGE */
 var USER_LOGIN_DATA_KEY = 'user_login_data';
-var FROM_INDEX_TO_ROUTE_KEY = 'from_index_to_route_key';
 var DRIVER_TRIP = 'driver_trip';
 var DRIVER_BOOKING = 'user_booking';
 var CURRENT_APP_VERSION_KEY = 'current_app_version';
@@ -33,8 +32,6 @@ function moveToLoginPage() {
 document.addEventListener('DOMContentLoaded', function () {
     var current_user_session = checkCurrentSession();
 
-    localStorage.setItem(FROM_INDEX_TO_ROUTE_KEY, true);
-
     if (current_user_session) {
         moveToCarpoolPage();
     } else {
@@ -45,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.removeItem(SHUTTLE_TRIPS_KEY);
         localStorage.removeItem(SHUTTLE_BOOKING_KEY);
         localStorage.removeItem(IS_ADVERTISEMENTS_LOADED_KEY);
-        localStorage.removeItem(NEW_FEATURES_LOADED_KEY);
         moveToLoginPage();
     }
 });

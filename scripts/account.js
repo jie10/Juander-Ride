@@ -68,9 +68,6 @@ var address_field = document.getElementById('address_field');
 var address_field_change_button = document.getElementById('address_field_change_button');
 
 function logoutCurrentSession() {
-
-    document.getElementById('splash_screen').style.display = 'block';
-    document.getElementById('splash_screen').classList.add('animate__fadeIn');
     // Clear local storage
     // localStorage.clear();
     localStorage.removeItem(USER_LOGIN_DATA_KEY);
@@ -80,9 +77,7 @@ function logoutCurrentSession() {
     localStorage.removeItem(SHUTTLE_BOOKING_KEY);
     localStorage.removeItem(IS_ADVERTISEMENTS_LOADED_KEY);
 
-    delay(function () {
-        moveToIndexPage();
-    }, 2000);
+    moveToIndexPage();
 }
 function loadDefaultSelectedLocationFields() {
     target_location_region.innerHTML = regions.map(function (region, i) {
