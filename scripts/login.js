@@ -111,8 +111,8 @@ function login(pin_code) {
             } else {
                 localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(data));
                 document.getElementById('splash_screen').style.display = 'block';
-                document.getElementById('splash_screen').classList.remove('animate__slideOutLeft');
-                document.getElementById('splash_screen').classList.add('animate__slideInLeft');
+                document.getElementById('splash_screen').classList.remove('animate__fadeOut');
+                document.getElementById('splash_screen').classList.add('animate__fadeIn');
                 localStorage.setItem(FROM_LOGIN_TO_SPLASH, true);
                 delay(function () {
                     window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
@@ -554,10 +554,10 @@ address_confirm_button.addEventListener('click', function () {
 document.addEventListener('DOMContentLoaded', function () {
     if (localStorage.getItem(FROM_INDEX_TO_ROUTE_KEY)) {
         document.getElementById('splash_screen').style.display = 'block';
-        document.getElementById('splash_screen').classList.add('animate__slideOutLeft');
+        document.getElementById('splash_screen').classList.add('animate__fadeOut');
         localStorage.removeItem(FROM_INDEX_TO_ROUTE_KEY);
     } else {
-        document.getElementById('splash_screen').classList.remove('animate__slideOutLeft');
+        document.getElementById('splash_screen').classList.remove('animate__fadeOut');
         document.getElementById('splash_screen').style.display = 'none';
     }
 

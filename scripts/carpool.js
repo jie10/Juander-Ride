@@ -2607,11 +2607,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (checkCurrentSession()) {
             if (localStorage.getItem(FROM_LOGIN_TO_SPLASH)) {
                 document.getElementById('splash_screen').style.display = 'block';
-                document.getElementById('splash_screen').classList.add('animate__slideOutLeft');
+                document.getElementById('splash_screen').classList.add('animate__fadeOut');
                 localStorage.removeItem(FROM_LOGIN_TO_SPLASH);
             } else if (localStorage.getItem(FROM_INDEX_TO_ROUTE_KEY)) {
                 document.getElementById('splash_screen').style.display = 'block';
-                document.getElementById('splash_screen').classList.add('animate__slideOutLeft');
+                document.getElementById('splash_screen').classList.add('animate__fadeOut');
                 localStorage.removeItem(FROM_INDEX_TO_ROUTE_KEY);
             } else {
                 document.querySelector('.carpool-page-container').style.display = 'none';

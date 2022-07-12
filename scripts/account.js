@@ -70,7 +70,7 @@ var address_field_change_button = document.getElementById('address_field_change_
 function logoutCurrentSession() {
 
     document.getElementById('splash_screen').style.display = 'block';
-    document.getElementById('splash_screen').classList.add('animate__slideInLeft');
+    document.getElementById('splash_screen').classList.add('animate__fadeIn');
     // Clear local storage
     // localStorage.clear();
     localStorage.removeItem(USER_LOGIN_DATA_KEY);
