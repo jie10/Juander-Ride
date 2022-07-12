@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Pop-up UI for New Features with condition: only show new features pop-up once within user session
   - Pop-up UI for Advertisements with condition: show advertisements everytime the user log in
   - Connect API endpoint for announcements (new features and advertisements)
+  - Change Splash Screen animation from slideIn/slideOut to fadeIn/fadeOut
 
 ### Changed
 
