@@ -31,14 +31,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - feature: FAQs should be shown as screen instead of another page
   - Add FAQ information - Account via FAQ
 
-- Index
+- Login (formerly Index)
   - Create UI for address fields (sign up form)
   - functionality to edit previous entered target location and landmark
   - check address API connect before register user
   - feature: forgot Pin Code
 
 - Others
+  - Add splash screen as Index Page with sequences and transitions for all pages
+  - Create new page for login and sign up
+
+- Others
   - Pop-up UI for New Features with condition: only show new features pop-up once within user session
+  - Pop-up UI for Advertisements with condition: show advertisements everytime the user log in
+  - Connect API endpoint for announcements (new features and advertisements)
 
 ### Changed
 
