@@ -108,7 +108,7 @@ function login(pin_code) {
                 }, 'Error ' + data.code, data.message, 'Close');
             } else {
                 localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(data));
-                window.location.href = INDEX_SOURCE_LOCATION;
+                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
             }
         })
         .catch(function (err) {
@@ -544,5 +544,14 @@ address_confirm_button.addEventListener('click', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    loadPageInDefault();
+    checkAppVersion(function () {
+        if (checkCurrentSession()) {
+            window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+        } else {
+            loadPageInDefault();
+        }
+    }, function () {
+        window.location.href = LOGIN_SOURCE_LOCATION;
+    });
+
 });
