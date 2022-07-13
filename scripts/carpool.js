@@ -2008,7 +2008,7 @@ function checkAnnouncements() {
                 if (data.type === 0) {
                     if (!localStorage.getItem(IS_ADVERTISEMENTS_LOADED_KEY) || localStorage.getItem(IS_ADVERTISEMENTS_LOADED_KEY) !== data._id) {
                         var carouselItems = data.sections && data.sections.length > 0 ? data.sections.map(function(section, i) {
-                            return '<div class=\"carousel-item' + (i === 0 ? ' active\" data-bs-interval=\"2000\"': '\" ') + 'style=\"text-align: center; height: 100%; padding-top: 16px; overflow: auto;\">' +
+                            return '<div class=\"carousel-item' + (i === 0 ? ' active\" data-bs-interval=\"2000\"': '\" ') + 'style=\"text-align: center; height: 100%; overflow: auto;\">' +
                                         '<div class="d-flex flex-column justify-content-center" style="height: 100%;">' +
                                             '<img src=\"' + section.imageUrl + '\" class=\"d-block\" alt=\"' + section.title + '\">' +
                                         '</div>' +
@@ -2030,13 +2030,13 @@ function checkAnnouncements() {
                 } else {
                     if (!localStorage.getItem(NEW_FEATURES_LOADED_KEY) || localStorage.getItem(NEW_FEATURES_LOADED_KEY) !== data._id) {
                         var carouselItems = data.sections && data.sections.length > 0 ? data.sections.map(function(section, i) {
-                            return '<div class=\"carousel-item' + (i === 0 ? ' active\" data-bs-interval=\"2000\"': '\" ') + 'style=\"text-align: center; height: 100%; padding-top: 16px; overflow: auto;\">' +
+                            return '<div class=\"carousel-item' + (i === 0 ? ' active\" data-bs-interval=\"2000\"': '\" ') + 'style=\"text-align: center; overflow: auto;\">' +
                                         '<div class=\"feature-container d-block\">' +
+                                            '<div class=\"image-container\">' +
+                                                '<img src=\"' + section.imageUrl + '\" alt=\"new sign up form\" />' +
+                                            '</div>' +
                                             '<h4 class=\"highlight\">' + section.title + '</h4>' +
                                             '<p>' + section.details + '</p>' +
-                                            '<div class=\"image-container\">' +
-                                                '<img src=\"' + section.imageUrl + '\" style=\"width: 180px; height: 280px;\" alt=\"new sign up form\" />' +
-                                            '</div>' +
                                         '</div>' +
                                     '</div>';
                         }).join('') : '';

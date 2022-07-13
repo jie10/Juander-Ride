@@ -3,15 +3,14 @@
     .carpool-rides-list .item .details {
         text-align: center;
     }
+    .advertisement-modal .carousel-item img {
+        width: 100%;
+    }
 }
 @media only screen and (max-width: 1080px) {
     /** CARPOOL */
     .carpool-rides-list .item .main-details .icon {
         font-size: 3rem;
-    }
-    .advertisement-modal .carousel-item img {
-        width: 50%;
-        margin: auto;
     }
 }
 @media only screen and (max-width: 600px) {
@@ -40,6 +39,9 @@
     .advertisement-modal .carousel-item img {
         width: 100%;
         margin: 0;
+    }
+    .new-feature-modal .feature-container .image-container img {
+        width: 100%;
     }
 }
 @media only screen and (max-width: 480px) {
@@ -152,6 +154,22 @@
     .advertisement-modal .carousel-item img {
         height: 80%;
     }
+    .new-feature-modal .modal-title {
+        font-size: 16px;
+    }
+    .new-feature-modal .feature-container {
+        margin: 0 auto;
+    }
+    .new-feature-modal .feature-container h4 {
+        font-size: 14px;
+    }
+    .new-feature-modal .feature-container p {
+        font-size: 12px;
+        width: 80%;
+    }
+    .advertisement-modal .modal-title {
+        font-size: 16px;
+    }
 }
 @media only screen and (max-width: 320px) {
     /** BOTTOM NAVBAR */
@@ -240,11 +258,11 @@
         font-size: 0.625rem;
     }
 
-    .new-feature-modal .modal-title {
-        font-size: 1.25rem !important;
-    }
     .new-feature-modal .feature-container {
         margin: 0 auto 24px auto;
+    }
+    .new-feature-modal .feature-container .image-container {
+        height: 300px;
     }
     .new-feature-modal .feature-container h4 {
         font-size: 1rem;
@@ -252,7 +270,21 @@
     .new-feature-modal .feature-container p {
         font-size: 0.75rem;
     }
+    .new-feature-modal .feature-container p {
+        width: 85%;
+    }
+    .advertisement-modal .carousel-item img {
+        width: 100%;
+    }
+}
+@media only screen and (min-width: 1280px) {
+    .advertisement-modal .carousel-item img {
+        width: 60%;
+        margin: auto;
+    }
+}
+@media only screen and (max-height: 600px) {
     .new-feature-modal .feature-container .image-container {
-        width: 200px;
+        height: 300px;
     }
 }
