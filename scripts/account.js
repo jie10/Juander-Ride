@@ -26,6 +26,7 @@ var RESET_PIN_CODE_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-
 /** SOURCE LOCATION */
 var INDEX_SOURCE_LOCATION = '../index.html';
 var ACCOUNTPAGE_SOURCE_LOCATION = '../pages/account.html';
+var LOGIN_SOURCE_LOCATION = '../pages/login.html';
 
 /** COMPONENTS */
 var NO_RESULTS_FOUND = "<p class=\"text-muted absolute-center text-center\" style=\"font-weight: 700; font-size: 1rem;\">No results found</p>";
@@ -77,7 +78,11 @@ function logoutCurrentSession() {
     localStorage.removeItem(SHUTTLE_BOOKING_KEY);
     localStorage.removeItem(IS_ADVERTISEMENTS_LOADED_KEY);
 
-    moveToIndexPage();
+    showActivityIndicator();
+
+    delay(function () {
+        window.location.href = LOGIN_SOURCE_LOCATION;
+    }, 1000);
 }
 function loadDefaultSelectedLocationFields() {
     target_location_region.innerHTML = regions.map(function (region, i) {
