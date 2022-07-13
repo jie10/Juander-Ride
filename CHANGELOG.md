@@ -58,12 +58,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Account
   - Modify CheckAddress and Update Account - Account Settings
 
-- Index
+- Login
   - label and placeholder as target location - Sign up form
   - placeholder for mobile phone and target location fields - Sign up form
   - UI for address fields - Sign Up form
   - Modify landmark label style (work-wrap)
   - Modify CheckAddress and Sign Up form - Sign Up
+
+- Index
+  - Change image for splash screen logo
+
+- Others
+  - resize screens in what's news and advertisements with correct aspectio
 
 ### Issues fixed
 
@@ -80,6 +86,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Account
   - Points does not reflect on Account page
+
+- Others
+  - remove splash screen after login
+  - logout should redirect to login page (don't show splash screen)
 
 ## [0.0.5-alpha] - 2022-06-15
 
