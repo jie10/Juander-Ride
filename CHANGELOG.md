@@ -54,6 +54,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Revamp: carpool trip process (with qr scan) - driver and passenger perspective
   - Suggested list of rides on Find Carpool should book passenger automatically
   - new trip creation rule: driver can create trip from 30 minutes to 12 hours before the departure time set - Create Trip
+  - Remove QR scan process in Carpool
+  - Driver can now confirm, upate to ongoing and complete a booking request of a passenger
+  - Changed colors for status: Confirmed and Completed
+  - Added some delays of 2s right after booking request changes
 
 - Account
   - Modify CheckAddress and Update Account - Account Settings
