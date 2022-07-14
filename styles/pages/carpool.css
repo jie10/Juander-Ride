@@ -592,6 +592,37 @@
     color: rgb(234, 246, 248);
 }
 
+.on-trip-driver-container .driver-trip-booking-list .list-item-completed {
+    display: flex;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border: 1px solid rgb(90, 169, 73);
+    background-color: rgb(236, 245, 228);
+    padding: 8px 0;
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-completed .on-driver-trip-rider {
+    flex-grow: 4;
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-completed .on-driver-trip-rider-name {
+    padding: 10px 0 0 16px; margin: 0; line-height: 1em; font-size: 1.2rem; font-weight: bold; color: #000000; 
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-completed .on-driver-trip-rider-location {
+    padding: 0 0 0 16px; margin: 0; line-height: 1.1em; font-size: 0.8rem; color: #000000; 
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-completed .on-driver-trip-booking-status {
+    flex-grow: 1; display: flex; justify-content: flex-end; margin: 10px 10px 0 0;
+}
+
+.on-trip-driver-container .driver-trip-booking-list .list-item-completed .on-driver-trip-booking-status p {
+    background-color: rgb(90, 169, 73); padding: 0; border-radius: 10px; width: 100px; height: 18px; text-align: center; font-size: 0.7em;
+    font-weight: 700;
+    color: rgb(234, 246, 248);
+}
+
 .on-trip-driver-container .driver-trip-buttons-container {
     padding: 20px 20px 10px 20px;
     background-color: #F7F7F7;
