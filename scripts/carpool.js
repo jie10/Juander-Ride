@@ -777,8 +777,6 @@ function addBooking(payload, status, tripStatus) {
         booking.addEventListener("click", onBookingSelect.bind(event, payload), false);
     } else if (status === 1) {
         booking.addEventListener("click", onBookingUpdate.bind(event, payload), false);
-    } else if (status === 3) {
-        booking.addEventListener("click", onBookingComplete.bind(event, payload), false);
     }
     
     booking.innerHTML = "<div class='on-driver-trip-rider'>"
