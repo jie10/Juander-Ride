@@ -855,9 +855,9 @@ function getDriverTripSessionAPI(trip) {
     // if all passengers are confirmed, driver can start the ride
     // driver_trip_start_btn.disabled = trip.riders.length > 0 ? false : true;
     // if all passengers are updated to completed status, driver can complete the ride
-    // driver_trip_complete_btn.disabled = trip.riders.filter(function (rider) {
-    //                                         return rider.status === 4;
-    //                                     }).length === trip.riders.length ? false : true;
+    driver_trip_complete_btn.disabled = trip.riders.filter(function (rider) {
+                                            return rider.status === 3 || rider.status === 4;
+                                        }).length === trip.riders.length ? false : true;
 
     if(trip.riders.length > 0){
         driver_trip_predeparture_btn.style.backgroundColor = "#05a5df"
