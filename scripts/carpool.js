@@ -27,6 +27,7 @@ var is_new_driver_stop = false;
 var find_carpool_search_key;
 var share_carpool_search_key;
 var current_trips = [];
+var pending_riders_count;
 
 /** API ENDPOINTS */
 var UPDATE_TRIP_STATUS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip/status';
@@ -415,15 +416,27 @@ function updatePassengerBookingsStatus (tripID, rider_email, rider_fullname, sta
 function getTripStatusPopup(tripID, status, riders, payload) {
     switch(status) {
         case 1:
-            showQuestionAlertWithButtons(function () {
-                showActivityIndicator();
-                driver_trip_predeparture_btn.disabled = true;
-                driver_trip_start_btn.disabled = true;
-                driver_trip_cancel_btn.disabled = true;
-                driver_trip_generate_qrcode_btn.disabled = true;
-                driver_trip_complete_btn.disabled = true;
-                startTrip(tripID, riders);
-            }, 'Trip Pending', 'Would you like to start your trip?', 'Yes', 'No');
+            if (pending_riders_count > 0) {
+                showQuestionAlertWithButtons(function () {
+                    showActivityIndicator();
+                    driver_trip_predeparture_btn.disabled = true;
+                    driver_trip_start_btn.disabled = true;
+                    driver_trip_cancel_btn.disabled = true;
+                    driver_trip_generate_qrcode_btn.disabled = true;
+                    driver_trip_complete_btn.disabled = true;
+                    startTrip(tripID, riders);
+                }, 'You have ' + pending_riders_count + ' pending ' + (pending_riders_count > 1 ? 'requests' : 'request'), 'Would you still like to start your trip?', 'Yes', 'No');
+            } else {
+                showQuestionAlertWithButtons(function () {
+                    showActivityIndicator();
+                    driver_trip_predeparture_btn.disabled = true;
+                    driver_trip_start_btn.disabled = true;
+                    driver_trip_cancel_btn.disabled = true;
+                    driver_trip_generate_qrcode_btn.disabled = true;
+                    driver_trip_complete_btn.disabled = true;
+                    startTrip(tripID, riders);
+                }, 'Trip Pending', 'Would you like to start your trip?', 'Yes', 'No');
+            }
             break;
         case 2:
             showQuestionAlertWithButtons(function () {
@@ -508,7 +521,6 @@ function getRiderBookingsStatusAPI(booking) {
         document.querySelector('.current-booking-item .datetime').innerHTML = capitalize(timeFromNow) + ' ' + timeFromNowFormat;
         document.querySelector('.current-booking-item .destination').innerHTML = booking.destination;
         document.querySelector('.current-booking-item .seat-number').innerHTML = booking.seatCount + ' / ' + booking.seats + ' seats';
-
 
         if(booking.tripStatus == 1){
             document.querySelector('.current-booking-item').style.color = '#ffffff';
@@ -798,6 +810,9 @@ function getDriverTripSessionAPI(trip) {
     var origin = trip.origin;
     var landmark = trip.landmark;
     var bookingName = capitalize(drivernameArr[drivernameArr.length - 1])  + ' Ride';
+
+    pending_riders_count = trip.temp.length;
+
     document.getElementById('on_driver_trip_booking_name').innerHTML = bookingName;
     document.getElementById('on_driver_trip_departure_datetime').innerHTML = capitalize(timeFromNow) + ' ' + timeFromNowFormat;
     document.getElementById('on_driver_trip_location').innerHTML = '<span style=\"font-weight: 700;\">' + landmark + '</span>' + '<br/> ' + '<span style=\"font-size: 0.75rem;\">' + origin + '</span>';
@@ -840,13 +855,11 @@ function getDriverTripSessionAPI(trip) {
 
     driver_trip_predeparture_btn.disabled = trip.riders.length > 0 ? false : true;
     // if all passengers are confirmed, driver can start the ride
-    driver_trip_start_btn.disabled = trip.riders.filter(function (rider) {
-                                        return rider.status === 1;
-                                    }).length > 0 && trip.riders.length > 0 ? false : true;
+    // driver_trip_start_btn.disabled = trip.riders.length > 0 ? false : true;
     // if all passengers are updated to completed status, driver can complete the ride
-    driver_trip_complete_btn.disabled = trip.riders.filter(function (rider) {
-                                            return rider.status === 4;
-                                        }).length === trip.riders.length ? false : true;
+    // driver_trip_complete_btn.disabled = trip.riders.filter(function (rider) {
+    //                                         return rider.status === 4;
+    //                                     }).length === trip.riders.length ? false : true;
 
     if(trip.riders.length > 0){
         driver_trip_predeparture_btn.style.backgroundColor = "#05a5df"
