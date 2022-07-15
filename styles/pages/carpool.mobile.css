@@ -110,7 +110,8 @@
         font-size: 0.75rem;
     }
     .share-a-ride-container .navigate-container .container {
-        width: 90% !important;
+        width: 100% !important;
+        padding: 0;
     }
     .share-a-ride-container .address-field-change-button {
         padding: 10px 0;
@@ -213,10 +214,6 @@
     }
     .carpool-on-booking-container .current-booking-item .header {
         margin-bottom: 4px;
-    }
-    .share-a-ride-container .navigate-container .container {
-        width: 100% !important;
-        padding: 0;
     }
     .update-new-address-container .container {
         width: 100% !important;
