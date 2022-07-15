@@ -851,7 +851,7 @@ function getDriverTripSessionAPI(trip) {
         addBooking(rider, -1, trip.status);
     }
 
-    driver_trip_predeparture_btn.disabled = trip.riders.length > 0 ? false : true;
+    // driver_trip_predeparture_btn.disabled = trip.riders.length > 0 ? false : true;
     // if all passengers are confirmed, driver can start the ride
     // driver_trip_start_btn.disabled = trip.riders.length > 0 ? false : true;
     // if all passengers are updated to completed status, driver can complete the ride
