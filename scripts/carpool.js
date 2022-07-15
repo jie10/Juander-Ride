@@ -28,6 +28,7 @@ var find_carpool_search_key;
 var share_carpool_search_key;
 var current_trips = [];
 var pending_riders_count;
+var latest_driver_trip_datetime;
 
 /** API ENDPOINTS */
 var UPDATE_TRIP_STATUS_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip/status';
@@ -181,6 +182,50 @@ function getStatusIndicator(status) {
             }
         default: return null;
     }
+}
+
+function checkCurrentTripUpdateStatus(tripID) {
+    fetch(VIEW_DRIVER_TRIPS_API_ENDPOINT + '/' + JSON.parse(localStorage.getItem(USER_LOGIN_DATA_KEY)).email)
+    .then(getResJSON)
+    .then(function (data) {
+        if (data && data.length > 0) {
+            var currentTrip = data.filter(function (trip) {
+                return trip._id === tripID
+            });
+
+            if (currentTrip && currentTrip.length > 0) {
+                hideActivityIndicator();
+
+                if (currentTrip[0].updatedAt !== latest_driver_trip_datetime) {
+                    getDriverTripSessionAPI(currentTrip[0]);
+                } else {
+                    showInfoAlertWithConfirmButtonHTML(function () {
+                        showActivityIndicator();
+                        delay(function () {
+                            checkCurrentTripUpdateStatus(tripID);
+                        }, 1000);
+                    }, 'Updating booking request', 'Waiting for server to finish process. Please check again later', 'Reload');
+                }
+            } else {
+                hideActivityIndicator();
+                showErrorAlertWithConfirmButton(function () {
+                    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                }, 'Error 404', 'No trip found', 'Refresh');
+            }
+        } else {
+            hideActivityIndicator();
+            showErrorAlertWithConfirmButton(function () {
+                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+            }, 'Error 404', 'No trip found', 'Refresh');
+        }
+    })
+    .catch(function (err) {
+        console.error(err);
+        hideActivityIndicator();
+        showErrorAlertWithConfirmButton(function () {
+            window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+        }, 'Error 500', 'Internal server error', 'Refresh');
+    });
 }
 
 function updateRiderBookingByTripID(rider_email, status, tripID, rider_fullname) {
@@ -402,7 +447,12 @@ function updatePassengerBookingsStatus (tripID, rider_email, rider_fullname, sta
         .then(getResJSON)
         .then(function (data) {
             hideActivityIndicator();
-            callback();
+
+            if (data.code === 200) {
+                callback();
+            } else {
+                showErrorAlertWithConfirmButton(function () {}, 'Error 400', 'Something went wrong. Please try again', 'Okay');
+            }
         })
         .catch(function (err) {
             console.error(err);
@@ -574,16 +624,21 @@ function confirmTripBooking(payload){
         .then(getResJSON)
         .then(function (data) {
             console.log(data)
-            hideActivityIndicator();
-            updatePassengerBookingsStatus(payload.tripID, payload.email, payload.fullName, 1, function () {
-                showSuccessAlertWithConfirmButton(function () {
-                    showActivityIndicator();
+            if (data && data.code !== 400) {
+                updatePassengerBookingsStatus(payload.tripID, payload.email, payload.fullName, 1, function () {
+                    showSuccessAlertWithConfirmButton(function () {
+                        var trip = JSON.parse(localStorage.getItem('driver_trip'));
 
-                    delay(function () {
-                        window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-                    }, 2000);
-                }, 'Booking Confirmed', 'Booking request has been confirmed', 'Done');
-            });
+                        latest_driver_trip_datetime = trip.data.updatedAt;
+
+                        showActivityIndicator();
+                        checkCurrentTripUpdateStatus(payload.tripID);
+                    }, 'Booking Confirmed', 'Booking request has been confirmed', 'Done');
+                });
+            } else {
+                hideActivityIndicator();
+                showErrorAlertWithConfirmButton(function () {}, 'Error 400', 'Something went wrong. Please try again', 'Okay');
+            }
         })
         .catch(function (err) {
             console.error(err);
@@ -644,7 +699,7 @@ function ongoingTripBooking(payload){
         "tripID": payload.tripID,
         "status": 3
     }
-    console.log(objPayload)
+
     var options = {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
@@ -654,16 +709,26 @@ function ongoingTripBooking(payload){
     fetch(PLAY_BOOKING_API_ENDPOINT, options)
         .then(getResJSON)
         .then(function (data) {
-            hideActivityIndicator();
-            updatePassengerBookingsStatus(payload.tripID, payload.email, payload.fullName, 3, function () {
-                showSuccessAlertWithConfirmButton(function () {
-                    showActivityIndicator();
+            console.log(data)
+            if (data && data.code !== 400) {
+                hideActivityIndicator();
 
-                    delay(function () {
-                        window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-                    }, 2000);
-                }, 'Booking Ongoing', 'Booking request has been updated', 'Done');
-            });
+                updatePassengerBookingsStatus(payload.tripID, payload.email, payload.fullName, 3, function () {
+                    console.log('yes')
+                    showSuccessAlertWithConfirmButton(function () {
+                        var trip = JSON.parse(localStorage.getItem('driver_trip'));
+
+                        latest_driver_trip_datetime = trip.data.updatedAt;
+
+                        showActivityIndicator();
+                        checkCurrentTripUpdateStatus(payload.tripID);
+                    }, 'Booking Ongoing', 'Booking request has been updated', 'Done');
+                });
+            } else {
+                hideActivityIndicator();
+                console.log('no')
+                showErrorAlertWithConfirmButton(function () {}, 'Error 400', 'Something went wrong. Please try again', 'Okay');
+            }
         })
         .catch(function (err) {
             console.error(err);
@@ -795,6 +860,8 @@ function getDriverTripSessionAPI(trip) {
     carpool_main_page.style.display = 'block';
     carpool_ride_list_container.style.display = 'none';
     driver_trip_booking_list.style.display = 'block';
+    driver_trip_booking_list.innerHTML = '';
+
     hideMoreCarpoolButtonsContainer();
     showOnTripDriverContainer();
 
@@ -853,7 +920,7 @@ function getDriverTripSessionAPI(trip) {
 
     // driver_trip_predeparture_btn.disabled = trip.riders.length > 0 ? false : true;
     // if all passengers are confirmed, driver can start the ride
-    // driver_trip_start_btn.disabled = trip.riders.length > 0 ? false : true;
+    driver_trip_start_btn.disabled = false;
     // if all passengers are updated to completed status, driver can complete the ride
     driver_trip_complete_btn.disabled = trip.riders.filter(function (rider) {
                                             return rider.status === 3 || rider.status === 4;
@@ -1170,7 +1237,7 @@ function getCarpoolRideList() {
             hideActivityIndicator();
             showDriverPoolListContainer();
 
-            if (data.length > 0) {
+            if (data && data.length > 0) {
                 driver_pool_results_container.innerHTML = '<div class=\"container\">' + '<div class=\"list-group\">' + data.filter(function (driver) {
                     return driver.email !== email;
                 }).map(function (driver, i) {
@@ -1419,8 +1486,7 @@ function loadCarpoolOnTripScreen(rider) {
             // hideActivityIndicator();
             join_pool_rider_button.disabled = false;
 
-            if (data) {
-                console.log('loadCarpoolOnTripScreen'); 
+            if (data && data.code !== 400) {
                 var saved_bookings_history = localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST) ? JSON.parse(localStorage.getItem(SAVED_BOOKINGS_HISTORY_LIST)) : null;
 
                 if (saved_bookings_history) {
@@ -1459,7 +1525,9 @@ function loadCarpoolOnTripScreen(rider) {
                     getRiderBookingsStatusAPI(localBooking)
                 }
                 // window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-            } else {}
+            } else {
+                showErrorAlertWithConfirmButton(function () {}, 'Error 400', 'Something went wrong. Please try again', 'Okay');
+            }
         })
         .catch(function (err) {
             console.error(err);
@@ -1670,6 +1738,7 @@ function onCarpoolRidelist () {
 function onFindCarpoolRide () {
     // Check if there is an existing shuttle booking
     var localBooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING))
+
     if(localBooking != null){
         showErrorAlertWithConfirmButton(function () {}, 'Error', 'You have an existing shuttle booking', 'Ok');
     }else{
