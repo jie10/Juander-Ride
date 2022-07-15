@@ -76,7 +76,7 @@
                             <div class="container" style="position: absolute; top: 0; left: 50%; transform: translate(-50%, -20px);">
                                 <div class="row mb-4">
                                     <div class="col-10 mx-auto">
-                                        <input type="text" class="form-control" placeholder="Where to?" aria-label="Search target location" aria-describedby="search-target-location" id="search_target_location" autocomplete="off">
+                                        <input type="text" class="form-control" placeholder="Where to?" aria-label="Search target location" aria-describedby="search-target-location" id="search_target_location" style="cursor: pointer;" autocomplete="off" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -86,12 +86,12 @@
                         </div>
                         <div class="saved-places-container container-fluid" id="find_carpool_saved_places" style="display: none;">
                             <div class="input-group">
-                                <button class="btn btn-outlined" type="button" id="close_saved_places_button"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button class="btn btn-outlined" type="button" id="close_saved_places_button" style="padding: 0 20px;"><i class="fa-solid fa-chevron-left"></i></button>
                                 <input type="text" class="form-control" placeholder="Where to?" aria-label="Search target location" aria-describedby="search-target-location" id="search_fq_target_location" autocomplete="off">
                                 <button class="btn btn-secondary" type="button" id="search_fq_target_location_button"><i class="fa-solid fa-chevron-right"></i></button>
                             </div>
                             <div class="container frequently-used-list" >
-                                <h4 class="highlight" style="margin: 16px 0;">Frequently Used</h4>
+                                <h4 class="highlight" style="margin: 32px 0 16px 8px;">Frequently Used</h4>
                                 <div class="mb-4 frequently-used-address-list" id="frequently_used_address_list"></div>
                             </div>
                         </div>
