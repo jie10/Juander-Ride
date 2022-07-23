@@ -585,7 +585,7 @@
 }
 
 .on-trip-driver-container .driver-trip-booking-list .list-item-ongoing .on-driver-trip-rider-location {
-    padding: 0 0 0 16px; margin: 0; line-height: 1.1em; font-size: 0.8rem; color: #000000; 
+    padding: 0 0 0 16px; margin: 0 0 8px 0; line-height: 1.1em; font-size: 0.8rem; color: #000000; 
 }
 
 .on-trip-driver-container .driver-trip-booking-list .list-item-ongoing .on-driver-trip-booking-status {
@@ -616,7 +616,7 @@
 }
 
 .on-trip-driver-container .driver-trip-booking-list .list-item-completed .on-driver-trip-rider-location {
-    padding: 0 0 0 16px; margin: 0; line-height: 1.1em; font-size: 0.8rem; color: #000000; 
+    padding: 0 0 0 16px; margin: 0 0 8px 0; line-height: 1.1em; font-size: 0.8rem; color: #000000; 
 }
 
 .on-trip-driver-container .driver-trip-booking-list .list-item-completed .on-driver-trip-booking-status {
