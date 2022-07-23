@@ -40,6 +40,7 @@ var MATCH_TRIP_DYNAMIC_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb
 var BOOK_RIDE_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/book';
 var CREATE_TRIP_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip';
 var PLAY_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/play';
+var TRIP_BOOKING_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/trip/book';
 var USER_STATUS_CHECK_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/auth/check';
 var POST_DRIVER_TRIPS_PREDEPARTURE_API_ENDPOINT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/messaging';
 var CHECK_ADDRESS_API_ENDPONT = 'https://cebupacificair-dev.apigee.net/ceb-poc-juander-api/address';
@@ -464,6 +465,7 @@ function updatePassengerBookingsStatus (tripID, rider_email, rider_fullname, sta
 }
 
 function getTripStatusPopup(tripID, status, riders, payload) {
+    console.log('getTripStatusPopup')
     switch(status) {
         case 1:
             if (pending_riders_count > 0) {
@@ -514,6 +516,8 @@ function getTripStatusPopup(tripID, status, riders, payload) {
         // booking pop-ups
         case 4:
             showQuestionAlertWithButtons(function () {
+                // GOLD
+                console.log('confirm booking');
                 showActivityIndicator();
                 driver_trip_predeparture_btn.disabled = true;
                 driver_trip_start_btn.disabled = true;
@@ -604,49 +608,108 @@ function getRiderBookingsStatusAPI(booking) {
     }
 }
 
-function confirmTripBooking(payload){
-    showActivityIndicator();
-
-    var objPayload = {
-        "email": payload.email,
-        "bookID": payload.bookingID,
-        "tripID": payload.tripID,
-        "status": 1
-    }
+function updateDriverUI(payload, status){
+    driver_trip_booking_list.innerHTML = '';
     
-    var options = {
-        method: 'POST',
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(objPayload)
-    };
-
-    fetch(PLAY_BOOKING_API_ENDPOINT, options)
-        .then(getResJSON)
-        .then(function (data) {
-            console.log(data)
-            if (data && data.code !== 400) {
-                updatePassengerBookingsStatus(payload.tripID, payload.email, payload.fullName, 1, function () {
-                    showSuccessAlertWithConfirmButton(function () {
-                        var trip = JSON.parse(localStorage.getItem('driver_trip'));
-
-                        latest_driver_trip_datetime = trip.data.updatedAt;
-
-                        showActivityIndicator();
-                        checkCurrentTripUpdateStatus(payload.tripID);
-                    }, 'Booking Confirmed', 'Booking request has been confirmed', 'Done');
-                });
-            } else {
-                hideActivityIndicator();
-                showErrorAlertWithConfirmButton(function () {}, 'Error 400', 'Something went wrong. Please try again', 'Okay');
-            }
-        })
-        .catch(function (err) {
-            console.error(err);
-            hideActivityIndicator();
-            showErrorAlertWithConfirmButton(function () {
-                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-            }, 'Error 500', 'Internal server error', 'Refresh');
+    var localTrip = JSON.parse(localStorage.getItem(DRIVER_TRIP))
+    localTrip = localTrip['data']
+    // console.log(localTrip)
+    
+    if(payload['tripID'] == localTrip['_id']){
+        var email, riderName, driverName;
+        var _seats = localTrip['seats']
+        var newTemp = []
+        var newRider = localTrip['riders']
+        
+        driverName = localTrip['fullname']
+        
+        if(status == 1){
+            localTrip['temp'].map(temp => {
+                if(temp['bookingID'] == payload['bookingID']){
+                    temp['status'] = status
+                    email = temp['email']
+                    riderName = temp['fullName']
+                    newRider.push(temp)
+                    localTrip['temp'].pop(temp)
+                }
+            })
+            
+            newTemp = localTrip['temp']
+        }else{
+            newRider.map(rider => {
+                if(rider['bookingID'] == payload['bookingID']){
+                    rider['status'] = status
+                    email = rider['email']
+                    riderName = rider['fullName']
+                }
+            })
+        }
+        
+        // Create trip seats
+        newTemp.map(rider => {
+            rider['tripID'] = payload.tripID;
+            addBooking(rider, 0, payload.status);
+            _seats -= 1;
         });
+
+        newRider.map(rider => {
+            rider['tripID'] = payload.tripID;
+            addBooking(rider, rider['status'], payload.status);
+            _seats -= 1;
+        });
+
+        for (let i = 0; i < _seats; i++) { 
+            var rider = {}
+            addBooking(rider, -1, payload.status);
+        }
+        
+        console.log('local trip status', localTrip['status'])
+        
+        var objPayload = {
+            "tripID": localTrip['_id'],
+            "temp": newTemp,
+            "riders": newRider,
+            "tripStatus": payload['status'],
+            "seatCount": _seats,
+            "bookID": payload['bookingID'],
+            "bookStatus": status,
+            "email": email,
+            "riderName": riderName,
+            "driverName": driverName
+        }
+        
+        var options = {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(objPayload)
+        };
+
+        fetch(TRIP_BOOKING_API_ENDPOINT, options)
+            .then(getResJSON)
+            .then(function (data) {
+                if (data) {
+                    localTrip['temp'] = newTemp
+                    localTrip['riders'] = newRider
+                    localStorage.setItem(DRIVER_TRIP, JSON.stringify({'data': localTrip}))
+                    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                } else {
+                    hideActivityIndicator();
+                    showErrorAlertWithConfirmButton(function () {}, 'Error 400', 'Something went wrong. Please try again', 'Okay');
+                }
+            })
+            .catch(function (err) {
+                console.error(err);
+                hideActivityIndicator();
+                showErrorAlertWithConfirmButton(function () {
+                    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                }, 'Error 500', 'Internal server error', 'Refresh');
+            });
+    }
+}
+
+function confirmTripBooking(payload){
+    // GOLD
+    updateDriverUI(payload, 1)
 }
 
 function cancelTripBooking(bookingID, tripID, userEmail, userFullName){
@@ -691,52 +754,8 @@ function cancelTripBooking(bookingID, tripID, userEmail, userFullName){
 }
 
 function ongoingTripBooking(payload){
-    showActivityIndicator();
-
-    var objPayload = {
-        "email": payload.email,
-        "bookID": payload.bookingID,
-        "tripID": payload.tripID,
-        "status": 3
-    }
-
-    var options = {
-        method: 'POST',
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(objPayload)
-    };
-
-    fetch(PLAY_BOOKING_API_ENDPOINT, options)
-        .then(getResJSON)
-        .then(function (data) {
-            console.log(data)
-            if (data && data.code !== 400) {
-                hideActivityIndicator();
-
-                updatePassengerBookingsStatus(payload.tripID, payload.email, payload.fullName, 3, function () {
-                    console.log('yes')
-                    showSuccessAlertWithConfirmButton(function () {
-                        var trip = JSON.parse(localStorage.getItem('driver_trip'));
-
-                        latest_driver_trip_datetime = trip.data.updatedAt;
-
-                        showActivityIndicator();
-                        checkCurrentTripUpdateStatus(payload.tripID);
-                    }, 'Booking Ongoing', 'Booking request has been updated', 'Done');
-                });
-            } else {
-                hideActivityIndicator();
-                console.log('no')
-                showErrorAlertWithConfirmButton(function () {}, 'Error 400', 'Something went wrong. Please try again', 'Okay');
-            }
-        })
-        .catch(function (err) {
-            console.error(err);
-            hideActivityIndicator();
-            showErrorAlertWithConfirmButton(function () {
-                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
-            }, 'Error 500', 'Internal server error', 'Refresh');
-        });
+    // GOLD
+    updateDriverUI(payload, 3)
 }
 
 function completeTripBooking(bookingID, tripID, userEmail, userFullName){
@@ -884,6 +903,7 @@ function getDriverTripSessionAPI(trip) {
     document.getElementById('on_driver_trip_departure_time').innerHTML = "<span style='font-weight: bold;'>Departure: </span>" + departureTime;
     document.getElementById('on_driver_trip_seat_number').innerHTML = trip.seatCount + '/' + trip.seats;
 
+    // GOLD
     if (tripStatus === 1) {
         driver_trip_predeparture_btn.style.display = 'none';
         driver_trip_start_btn.style.display = 'none';
@@ -922,9 +942,11 @@ function getDriverTripSessionAPI(trip) {
     // if all passengers are confirmed, driver can start the ride
     driver_trip_start_btn.disabled = false;
     // if all passengers are updated to completed status, driver can complete the ride
+    // GOLD
+    /*
     driver_trip_complete_btn.disabled = trip.riders.filter(function (rider) {
                                             return rider.status === 3 || rider.status === 4;
-                                        }).length === trip.riders.length ? false : true;
+                                        }).length === trip.riders.length ? false : true;*/
 
     if(trip.riders.length > 0){
         driver_trip_predeparture_btn.style.backgroundColor = "#05a5df"
@@ -971,7 +993,24 @@ function getDriverTripSessionAPI(trip) {
         return getTripStatusPopup(tripID, 3, trip.riders);
     });
     driver_trip_complete_btn.addEventListener('click', function (e) {
-        return getTripStatusPopup(tripID, 2, trip.riders);
+        // GOLD
+        // check if there are trips that is not in ongoing status
+        var localTrip = JSON.parse(localStorage.getItem(DRIVER_TRIP))
+        localTrip = localTrip['data']
+        
+        var riderCount = 0
+        
+        localTrip['riders'].map(rider => {
+            if(rider['status'] == 1){
+                riderCount++
+            }
+        })
+        
+        if(riderCount > 0){
+            showErrorAlertWithConfirmButton(function () {}, 'Trip Confirmed', 'Make confirmed trip status ongoing to finish the trip', 'Ok');
+        }else{
+            return getTripStatusPopup(tripID, 2, trip.riders);
+        }
     });
 
     delay(function () {
@@ -1112,7 +1151,7 @@ function reloadCurrentPage(fromApi) {
 
                     if(data['trip'] == null && data['booking'] == null){
                         hideActivityIndicator();
-                            loadMainPage();  
+                        loadMainPage();  
                         // Check if there is data in the localstorage and if time elapse is less than 3 minutes
                         var localTrip = JSON.parse(localStorage.getItem(DRIVER_TRIP))
                         var localBooking = JSON.parse(localStorage.getItem(DRIVER_BOOKING))
