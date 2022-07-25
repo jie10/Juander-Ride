@@ -648,7 +648,7 @@ function updateDriverUI(payload, status){
         newTemp.map(rider => {
             rider['tripID'] = payload.tripID;
             addBooking(rider, 0, payload.status);
-            _seats -= 1;
+            // _seats -= 1;
         });
 
         newRider.map(rider => {
@@ -662,8 +662,6 @@ function updateDriverUI(payload, status){
             addBooking(rider, -1, payload.status);
         }
         
-        console.log('local trip status', localTrip['status'])
-        
         var objPayload = {
             "tripID": localTrip['_id'],
             "temp": newTemp,
@@ -676,8 +674,6 @@ function updateDriverUI(payload, status){
             "riderName": riderName,
             "driverName": driverName
         }
-        
-        console.log(objPayload)
         
         var options = {
             method: 'POST',
@@ -897,7 +893,7 @@ function getDriverTripSessionAPI(trip) {
     var bookingName = capitalize(drivernameArr[drivernameArr.length - 1])  + ' Ride';
 
     pending_riders_count = trip.temp.length;
-
+    console.log('trip', trip)
     document.getElementById('on_driver_trip_booking_name').innerHTML = bookingName;
     document.getElementById('on_driver_trip_departure_datetime').innerHTML = capitalize(timeFromNow) + ' ' + timeFromNowFormat;
     document.getElementById('on_driver_trip_location').innerHTML = '<span style=\"font-weight: 700;\">' + landmark + '</span>' + '<br/> ' + '<span style=\"font-size: 0.75rem;\">' + origin + '</span>';
@@ -1979,10 +1975,12 @@ function startTrip(_id, riders) {
         },
         body: JSON.stringify(payload)
     };
-
+    console.log('startTrip')
     fetch(UPDATE_TRIP_STATUS_API_ENDPOINT, options)
         .then(getResJSON)
         .then(function (data) {
+            console.log(data)
+            console.log('after startTrip')
             driver_trip_predeparture_btn.disabled = true;
             driver_trip_start_btn.disabled = true;
             driver_trip_cancel_btn.disabled = true;
@@ -1998,8 +1996,11 @@ function startTrip(_id, riders) {
             generateTripCode(_id);
 
             hideActivityIndicator();
-
+            var localTrip = JSON.parse(localStorage.getItem(DRIVER_TRIP))
+            localTrip['data']['status'] = 1;
+            localStorage.setItem(DRIVER_TRIP, JSON.stringify({'data': localTrip}));
             localStorage.setItem(DRIVER_TRIP_STATUS_KEY, 'ongoing');
+            window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
         })
         .catch(function (err) {
             console.error(err);
@@ -2184,7 +2185,10 @@ function checkAddress(landmark, location) {
                     if (is_new_driver_stop) {
                         driver_stops.push({
                             landmark: landmark,
-                            address: location
+                            address: location,
+                            lat: data.lat,
+                            lng: data.lng,
+                            kmZero: data.kmZero
                         });
                         is_new_driver_stop = false;
                     } else {
