@@ -613,7 +613,7 @@ function updateDriverUI(payload, status){
     
     var localTrip = JSON.parse(localStorage.getItem(DRIVER_TRIP))
     localTrip = localTrip['data']
-    // console.log(localTrip)
+    //console.log(localTrip)
     
     if(payload['tripID'] == localTrip['_id']){
         var email, riderName, driverName;
@@ -630,11 +630,10 @@ function updateDriverUI(payload, status){
                     email = temp['email']
                     riderName = temp['fullName']
                     newRider.push(temp)
-                    localTrip['temp'].pop(temp)
+                }else{
+                    newTemp.push(temp)
                 }
             })
-            
-            newTemp = localTrip['temp']
         }else{
             newRider.map(rider => {
                 if(rider['bookingID'] == payload['bookingID']){
@@ -669,7 +668,7 @@ function updateDriverUI(payload, status){
             "tripID": localTrip['_id'],
             "temp": newTemp,
             "riders": newRider,
-            "tripStatus": payload['status'],
+            "tripStatus": localTrip['status'],
             "seatCount": _seats,
             "bookID": payload['bookingID'],
             "bookStatus": status,
@@ -677,6 +676,8 @@ function updateDriverUI(payload, status){
             "riderName": riderName,
             "driverName": driverName
         }
+        
+        console.log(objPayload)
         
         var options = {
             method: 'POST',
