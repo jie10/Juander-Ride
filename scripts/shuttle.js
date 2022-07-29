@@ -480,7 +480,7 @@ function addTrip(payload) {
     + "</div>"
     + "<div style='flex-grow: 2; text-align: end'>"
     + "<p style='margin: 18px 24px 0 0; padding: 0; line-height: 1em; font-size: 1.8rem; font-weight: bold;'>" + payload['seats'] + "</p>"
-    + "<p style='padding: 0; margin: 0; line-height: 1em; font-size: 0.8rem; margin-right: 24px;'>seats</p>"
+    + "<p style='padding: 0; margin: 0; line-height: 1em; font-size: 0.8rem; display: flex; display:-webkit-flex; justify-content: flex-end;'><span style='margin: 8px 14px 0 0; text-align: center; width: 50px; overflow: hidden; display: block; word-wrap: break-word;'>seats available</span></p>"
     + "</div>"
     + "</div>"
 
