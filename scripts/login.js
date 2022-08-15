@@ -108,7 +108,9 @@ function login(pin_code) {
                 }, 'Error ' + data.code, data.message, 'Close');
             } else {
                 localStorage.setItem(USER_LOGIN_DATA_KEY, JSON.stringify(data));
-                window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                setTimeout(function () {
+                    window.location.href = CARPOOLPAGE_SOURCE_LOCATION;
+                }, 3000);
             }
         })
         .catch(function (err) {

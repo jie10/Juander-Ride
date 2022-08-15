@@ -11,7 +11,7 @@ var NEW_FEATURES_LOADED_KEY = 'is_new_features_loaded';
 var IS_ADVERTISEMENTS_LOADED_KEY = 'is_advertisements_loaded';
 
 /** CONSTANT VALUES */
-var DELAY_TIME_IN_MILLISECONDS = 1000;
+var DELAY_TIME_IN_MILLISECONDS = 3000;
 
 /** SOURCE LOCATION */
 var CARPOOLPAGE_SOURCE_LOCATION = './pages/carpool.html';
