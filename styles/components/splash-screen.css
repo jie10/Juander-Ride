@@ -16,7 +16,7 @@
 }
 
 .splash-screen .logo-container img.logo {
-    width: 180px;
+    width: 320px;
     height: 100%;
     pointer-events: none;
     border-radius: 8px;
@@ -36,7 +36,7 @@
 }
 @media only screen and (max-width: 320px) {
     .splash-screen .logo-container img.logo {
-        width: 120px;
+        width: 180px;
     }
     .splash-screen .logo-container h1.brand-name {
         font-size: 24px;
